@@ -66,22 +66,22 @@ configurations {
 }
 
 dependencies {
-	annotationProcessor('org.projectlombok:lombok')
-	compileOnly('org.projectlombok:lombok')
-	implementation ('org.springframework.boot:spring-boot-starter-data-jpa')
-	implementation ('org.springframework.boot:spring-boot-starter-mail')
-	implementation ('org.springframework.boot:spring-boot-starter-security')
-	implementation ('org.springframework.boot:spring-boot-starter-thymeleaf')
-	implementation ('org.springframework.boot:spring-boot-starter-web')
-	implementation ('org.springframework.session:spring-session-core')
-	developmentOnly('org.springframework.boot:spring-boot-devtools')
-	runtimeOnly ('org.postgresql:postgresql')
-	compileOnly ('org.projectlombok:lombok')
-    testImplementation('junit:junit')
-    testImplementation('org.mockito:mockito-core')
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
-    testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
-	testImplementation ('org.springframework.security:spring-security-test')
+  annotationProcessor('org.projectlombok:lombok')
+  compileOnly('org.projectlombok:lombok')
+  compileOnly('org.projectlombok:lombok')
+  developmentOnly('org.springframework.boot:spring-boot-devtools')
+  implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+  implementation('org.springframework.boot:spring-boot-starter-mail')
+  implementation('org.springframework.boot:spring-boot-starter-security')
+  implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+  implementation('org.springframework.boot:spring-boot-starter-web')
+  implementation('org.springframework.session:spring-session-core')
+  runtimeOnly('org.postgresql:postgresql')
+  testImplementation('junit:junit')
+  testImplementation('org.mockito:mockito-core')
+  testImplementation('org.springframework.boot:spring-boot-starter-test')
+  testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
+  testImplementation('org.springframework.security:spring-security-test')
 }
 
 bootRun {
