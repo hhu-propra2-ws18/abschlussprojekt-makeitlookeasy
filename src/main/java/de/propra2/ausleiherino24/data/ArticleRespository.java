@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.Respositories;
+package de.propra2.ausleiherino24.data;
 
 import de.propra2.ausleiherino24.model.Article;
 import org.springframework.data.repository.CrudRepository;
