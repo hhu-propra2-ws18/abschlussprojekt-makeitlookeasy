@@ -13,33 +13,33 @@ public class MainController {
 	// TODO: Add link to repository/service here.
 	
 	// TODO: Link overview.
-	@GetMapping
+	@GetMapping("/")
 	public ModelAndView index() {
 		ModelAndView mav = new ModelAndView("index");
 		return mav;
 	}
 	
 	// TODO: Add all cases.
-	@GetMapping
+	@GetMapping("/overview")
 	public ModelAndView displayAllArticles() {
 		ModelAndView mav = new ModelAndView("overview");
 		return mav;
 	}
 	
-	// TODO: Catch, if case/article not in database. Add article.
-	@GetMapping
-	public ModelAndView displayArticle(@RequestParam Long id) {
-		//Article article = caseRepository.getById(id).getArticle();
+	// TODO: Catch, if case not in database. Add case.
+	@GetMapping("/article")
+	public ModelAndView displayArticle(@RequestParam("id") Long id) {
+		//Case case = caseRepository.getById(id);
 		
 		ModelAndView mav = new ModelAndView("article");
-		//mav.addObject("article", article);
+		//mav.addObject("case", case);
 		return mav;
 	}
 	
 	
 	// TODO: Catch, if case/article not in database. Add user.
-	@GetMapping
-	public ModelAndView displayUserProfile(@RequestParam Long id) {
+	@GetMapping("/user")
+	public ModelAndView displayUserProfile(@RequestParam("id") Long id) {
 		//User user = userRepository.getById(id);
 		
 		ModelAndView mav = new ModelAndView("profile");
@@ -48,24 +48,24 @@ public class MainController {
 	}
 	
 	// TODO : Add case.
-	@GetMapping
-	public ModelAndView createNewCase() {
+	@GetMapping("/newArticle")
+	public ModelAndView createNewCaseAndArticle() {
 		ModelAndView mav = new ModelAndView("profile");
 		//mav.addObject("user", new Case());
 		return mav;
 	}
 	
 	// TODO: Specify template to return => adjust returned model. (AFTER .hmtl is complete)
-	@PostMapping
-	public ModelAndView saveNewCase() {
+	@PostMapping("/saveNewArticle")
+	public ModelAndView saveNewCaseAndArticle() {
 		ModelAndView mav = new ModelAndView("profile");
 		//mav.addObject("object", object);
 		return mav;
 	}
 	
 	// TODO: Specify template to return => adjust returned model. (AFTER .hmtl is complete)
-	@PutMapping
-	public ModelAndView saveEditedCase() {
+	@PutMapping("/saveEditedArticle")
+	public ModelAndView saveEditedCaseAndArticle() {
 		ModelAndView mav = new ModelAndView("");
 		//mav.addObject("object", object);
 		return mav;
