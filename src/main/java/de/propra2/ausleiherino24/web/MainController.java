@@ -50,7 +50,7 @@ public class MainController {
 	// TODO : Add case.
 	@GetMapping("/newArticle")
 	public ModelAndView createNewCaseAndArticle() {
-		ModelAndView mav = new ModelAndView("profile");
+		ModelAndView mav = new ModelAndView("article");
 		//mav.addObject("user", new Case());
 		return mav;
 	}
@@ -58,7 +58,7 @@ public class MainController {
 	// TODO: Specify template to return => adjust returned model. (AFTER .hmtl is complete)
 	@PostMapping("/saveNewArticle")
 	public ModelAndView saveNewCaseAndArticle() {
-		ModelAndView mav = new ModelAndView("profile");
+		ModelAndView mav = new ModelAndView("article");
 		//mav.addObject("object", object);
 		return mav;
 	}
@@ -66,7 +66,7 @@ public class MainController {
 	// TODO: Specify template to return => adjust returned model. (AFTER .hmtl is complete)
 	@PutMapping("/saveEditedArticle")
 	public ModelAndView saveEditedCaseAndArticle() {
-		ModelAndView mav = new ModelAndView("");
+		ModelAndView mav = new ModelAndView("article");
 		//mav.addObject("object", object);
 		return mav;
 	}
