@@ -4,11 +4,9 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
-@Entity
 @Data
 @Entity
 public class Article {
