@@ -3,16 +3,22 @@ package de.propra2.ausleiherino24.model;
 import lombok.Data;
 
 import javax.persistence.Id;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
+@Entity
 @Data
 public class User {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 	
 	String username;
 	
-	String first;
-	String last;
+	String password;
+
+	String email;
 	
 }

@@ -1,7 +1,5 @@
 package de.propra2.ausleiherino24.model;
 
-import lombok.Data;
-
 import javax.persistence.Id;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,31 +8,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.OneToOne;
 
+import lombok.Data;
+
 @Entity
 @Data
-public class Case {
-	
+public class Person {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 
-	String title;
-
-	Long startTime;
-
-	Long endTime;
-
-	int price;
-
-	int deposit;
-
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	User owner;
+	User user;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	User receiver;
+	String firstName;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	Article article;
+	String lastName;
+
+	String contact;
 
 }
