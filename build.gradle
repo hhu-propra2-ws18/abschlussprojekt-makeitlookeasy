@@ -75,6 +75,7 @@ dependencies {
   implementation('org.springframework.boot:spring-boot-starter-web')
   implementation('org.springframework.session:spring-session-core')
   runtimeOnly('org.postgresql:postgresql')
+  runtimeOnly('com.h2database:h2')
   spotbugsPlugins('com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1')
   testImplementation('junit:junit')
   testImplementation('org.mockito:mockito-core')
