@@ -17,14 +17,12 @@ public class CaseService {
 	}
 
 	//Fügt einen Artikel einer Person hinzu, welcher frei zum Verleih ist
-	public void addArticleToLend(Long owner, Article article, String title, Long starttime, Long endtime, int price, int deposit){
+	public void addArticleToLend(Long owner, Article article, String title, int price, int deposit){
 		Case c = new Case();
 		c.setArticle(article);
 		c.setDeposit(deposit);
-		c.setEndTime(endtime);
 		c.setOwner(owner);
 		c.setPrice(price);
-		c.setStartTime(starttime);
 		c.setTitle(title);
 
 		caseRepository.save(c);
@@ -58,5 +56,16 @@ public class CaseService {
 	//Gibt alle Cases zurück, wo die Person sich von jemanden etwas geliehen hat
 	public ArrayList<Case> getLendCasesFromPersonReceiver(Long personId){
 		return caseRepository.findByReceiver(personId);
+	}
+
+	//Erwartet Case mit wo Artikel verliehen werden kann. Case wird modifiziert, dass es nun verliehen ist.
+	public void lendArticleToPerson(Long caseId, Long receiverId, Long starttime, Long endtime) {
+		if(!caseRepository.findById(caseId).isPresent()) return;
+		Case c = caseRepository.findById(caseId).get();
+		c.setReceiver(receiverId);
+		c.setStartTime(starttime);
+		c.setEndTime(endtime);
+
+		caseRepository.save(c);
 	}
 }
