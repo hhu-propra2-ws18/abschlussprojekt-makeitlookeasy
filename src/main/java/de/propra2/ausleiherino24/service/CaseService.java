@@ -3,6 +3,7 @@ package de.propra2.ausleiherino24.service;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
+import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,7 +19,7 @@ public class CaseService {
 	}
 
 	//Fügt einen Artikel einer Person hinzu, welcher frei zum Verleih ist
-	public void addCaseForNewArticle(Long owner, Article article, String title, int price, int deposit){
+	public void addCaseForNewArticle(User owner, Article article, String title, int price, int deposit){
 		Case c = new Case();
 		c.setArticle(article);
 		c.setDeposit(deposit);
@@ -56,10 +57,10 @@ public class CaseService {
 	}
 
 	//Erwartet Case mit wo Artikel verliehen werden kann. Case wird modifiziert, dass es nun verliehen ist.
-	public void lendArticleToPerson(Long caseId, Long receiverId, Long starttime, Long endtime) {
+	public void lendArticleToPerson(Long caseId, User receiver, Long starttime, Long endtime) {
 		if(!caseRepository.findById(caseId).isPresent()) return;
 		Case c = caseRepository.findById(caseId).get();
-		c.setReceiver(receiverId);
+		c.setReceiver(receiver);
 		c.setStartTime(starttime);
 		c.setEndTime(endtime);
 
