@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class MainController {
-<<<<<<< HEAD
 	/*
 	MainController manages all actions that are available to every visitor of the platform.
 	This does not include signup/login.
@@ -27,34 +26,21 @@ public class MainController {
 	public MainController(CaseRepository caseRepository) {
 		this.caseRepository = caseRepository;
 	}
-	
-=======
-
-	// TODO: Add link to repository/service here.
-	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
 
 	// TODO: Link overview.
->>>>>>> frontDev
 	@GetMapping("/")
 	public ModelAndView index() {
 		ModelAndView mav = new ModelAndView("index");
 		return mav;
 	}
-<<<<<<< HEAD
-	
-=======
 
-	// TODO: Add all cases.
->>>>>>> frontDev
+	// TODO: Add all cases
 	@GetMapping("/overview")
 	public ModelAndView displayAllArticles() {
 		ModelAndView mav = new ModelAndView("overview");
 		mav.addObject("all", caseRepository.findAll());
 		return mav;
 	}
-
-<<<<<<< HEAD
-=======
 
 	@GetMapping("/login")
 	public ModelAndView getLogin(Model model){
@@ -69,6 +55,4 @@ public class MainController {
 		} else
 				return "redirect:/acessed/admin/index";
 	}
-
->>>>>>> frontDev
 }

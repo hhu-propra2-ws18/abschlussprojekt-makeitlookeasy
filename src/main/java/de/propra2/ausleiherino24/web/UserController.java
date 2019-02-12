@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/accessed/user")
 public class UserController {
-<<<<<<< HEAD
 	/*
 	UserController manages all requests that are exclusively available to logged-in users of the platform, except article/case handling.
 	This includes signup, login, and profile management.
@@ -33,23 +32,10 @@ public class UserController {
 	public ModelAndView displayUserProfile(@RequestParam("id") Long id) {
 		// TODO: Add user.
 		User user = userRepository.getById(id);
-		
-=======
-
-	// TODO: Add link to repository/service here.
-	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
-
-	// TODO: Catch, if case/article not in database. Add user.
-	@GetMapping("/user")
-	public ModelAndView displayUserProfile(@RequestParam("id") Long id) {
-		//User user = userRepository.getById(id);
-
->>>>>>> frontDev
 		ModelAndView mav = new ModelAndView("profile");
 		mav.addObject("user", user);
 		return mav;
 	}
-<<<<<<< HEAD
 	
 	@GetMapping("/signup")
 	public ModelAndView signupView() {
@@ -60,13 +46,10 @@ public class UserController {
 	public ModelAndView loginView() {
 		return new ModelAndView("login");
 	}
-	
-=======
 
 	@GetMapping("/index")
 	public String getIndex() {
 		return "/accessed/user/index";
 	}
 
->>>>>>> frontDev
 }
