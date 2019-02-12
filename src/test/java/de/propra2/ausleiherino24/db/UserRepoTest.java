@@ -1,0 +1,72 @@
+package de.propra2.ausleiherino24.db;
+
+import de.propra2.ausleiherino24.data.UserRespository;
+import de.propra2.ausleiherino24.model.User;
+import org.assertj.core.api.Assertions;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Arrays;
+import java.util.List;
+
+@RunWith(SpringRunner.class)
+@DataJpaTest
+@ActiveProfiles(profiles = "test")
+
+public class UserRepoTest {
+	@Autowired
+	private UserRespository users;
+
+	private User user1;
+	private User user2;
+
+	@Before
+	public void init(){
+		user1 = new User();
+		user1.setUsername("foo");
+		user1.setPassword("password");
+		user1.setEmail("bar@baz.com");
+		users.save(user1);
+
+		user2 = new User();
+		user2.setUsername("baz");
+		user2.setPassword("secret");
+		user2.setEmail("foo@bar.net");
+	}
+
+	@Test
+	public void databaseShouldSaveEntities(){
+		users.saveAll(Arrays.asList(user1, user2));
+
+		List<User> us = users.findAll();
+		Assertions.assertThat(us.size()).isEqualTo(2);
+		Assertions.assertThat(us.get(0)).isEqualTo(user1);
+		Assertions.assertThat(us.get(1)).isEqualTo(user2);
+	}
+
+	@Test
+	public void databaseShouldRemoveCorrectEntity(){
+		users.saveAll(Arrays.asList(user1, user2));
+
+		users.delete(user1);
+
+		List<User> us = users.findAll();
+		Assertions.assertThat(us.size()).isOne();
+		Assertions.assertThat(us.get(0)).isEqualTo(user2);
+	}
+
+	@Test
+	public void databaseShouldReturnCountOfTwoIfDatabaseHasTwoEntries(){
+		users.saveAll(Arrays.asList(user1, user2));
+
+		List<User> us = users.findAll();
+		Assertions.assertThat(users.count()).isEqualTo(2);
+	}
+
+
+}
