@@ -2,7 +2,6 @@ package de.propra2.ausleiherino24.web;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
-import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import org.slf4j.Logger;
@@ -19,7 +18,6 @@ public class CaseController {
 	 */
 	
 	// TODO: Add link to repository/service here.
-	private UserRepository userRepository;
 	private ArticleRepository articleRepository;
 	private CaseRepository caseRepository;
 	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
@@ -80,8 +78,8 @@ public class CaseController {
 		articleRepository.save(article);
 		LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
 		
-		ModelAndView mav = new ModelAndView("profile");
-		mav.addObject("user", user);
+		ModelAndView mav = new ModelAndView("index");
+		//mav.addObject("user", user);
 		return mav;
 	}
 	

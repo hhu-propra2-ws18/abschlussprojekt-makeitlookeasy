@@ -22,7 +22,7 @@ public class Case {
 
 	int deposit;
 
-	Boolean active;
+	public Boolean active;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	User owner;

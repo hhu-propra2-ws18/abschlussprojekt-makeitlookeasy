@@ -11,4 +11,3 @@ public class Ausleiherino24Application {
 	}
 
 }
-
