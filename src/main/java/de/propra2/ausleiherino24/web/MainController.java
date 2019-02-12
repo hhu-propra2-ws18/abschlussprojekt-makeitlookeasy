@@ -29,7 +29,11 @@ public class MainController {
 
 	// TODO: Link overview.
 	@GetMapping("/")
-	public ModelAndView index() {
+	public ModelAndView index(HttpServletRequest request, Model model) {
+		if(request.isUserInRole(HttpServletRequest.BASIC_AUTH))
+			model.addAttribute("loggedIn", true);
+		else
+			model.addAttribute("loggedIn", false);
 		ModelAndView mav = new ModelAndView("index");
 		return mav;
 	}
