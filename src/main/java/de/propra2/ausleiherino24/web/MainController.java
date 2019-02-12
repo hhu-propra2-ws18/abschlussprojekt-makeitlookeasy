@@ -18,10 +18,10 @@ public class MainController {
 	MainController manages all actions that are available to every visitor of the platform.
 	This does not include signup/login.
 	 */
-	
+
 	private final CaseRepository caseRepository;
 	private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
-	
+
 	@Autowired
 	public MainController(CaseRepository caseRepository) {
 		this.caseRepository = caseRepository;
@@ -58,5 +58,11 @@ public class MainController {
 			return "redirect:/accessed/user/index";
 		} else
 			return "redirect:/acessed/admin/index";
+	}
+
+	@GetMapping("/signup")
+	public ModelAndView getRegistration(Model model){
+		ModelAndView mav = new ModelAndView("registration");
+		return mav;
 	}
 }
