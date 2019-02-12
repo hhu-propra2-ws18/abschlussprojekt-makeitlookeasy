@@ -3,8 +3,8 @@ package de.propra2.ausleiherino24.propayhandler;
 import java.util.ArrayList;
 import java.util.List;
 
-class Account {
-	public Account(String account,double number){
+class PPAccount {
+	public PPAccount(String account, double number){
 		this.account = account;
 		this.number = number;
 		this.reservations = new ArrayList<>();

@@ -14,14 +14,26 @@ public class ReservationHandler {
 	private AccountHandler accountHandler = new AccountHandler();
 
 	public boolean createReservation(String sourceUser, String targetUser, double amount){
+
 		if(accountHandler.hasValidFunds(sourceUser,amount)) {
+
 			ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 			restTemplate = new RestTemplate(requestFactory);
 			HttpEntity<Double> request = new HttpEntity<>(amount);
+
 			ResponseEntity<Double> responseEntity = restTemplate.exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}", HttpMethod.POST, request, Double.class, sourceUser, targetUser);
+
 			return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity.getStatusCode().equals(HttpStatus.CREATED);
 		}
 		return false;
 	}
+	public boolean releaseReservation(String account, int id){
+		ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+		restTemplate = new RestTemplate(requestFactory);
+		HttpEntity<Integer> request = new HttpEntity<>(id);
 
+		ResponseEntity<Integer> responseEntity = restTemplate.exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST, request, Integer.class, account);
+
+		return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity.getStatusCode().equals(HttpStatus.CREATED);
+	}
 }

@@ -14,27 +14,35 @@ public class AccountHandler {
 
 	public boolean hasValidFunds(String accountName, double requestedFunds){
 		double reserved = 0;
-		Account account = restTemplate.getForObject(ACCOUNT_URL +"/{account}",Account.class, accountName);
+		PPAccount account = restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, accountName);
+
 		for(Reservation r : account.getReservations()){
 			reserved+=r.number;
 		}
+
 		return account.getAmount() - reserved >= requestedFunds;
 	}
 
 	public boolean addFunds(String username, double amount){
+
 		ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 		restTemplate = new RestTemplate(requestFactory);
 		HttpEntity<Double> request = new HttpEntity<>(amount);
+
 		ResponseEntity<Double> responseEntity = restTemplate.exchange(ACCOUNT_URL +"/{account}", HttpMethod.POST, request, Double.class, username);
+
 		return responseEntity.getStatusCode().equals(HttpStatus.OK);
 	}
 
 	public boolean transferFunds(String sourceUser, String targetUser, double amount){
+
 		if(hasValidFunds(sourceUser,amount)) {
 			ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 			restTemplate = new RestTemplate(requestFactory);
 			HttpEntity<Double> request = new HttpEntity<>(amount);
+
 			ResponseEntity<Double> responseEntity = restTemplate.exchange(ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}", HttpMethod.POST, request, Double.class, sourceUser, targetUser);
+
 			return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity.getStatusCode().equals(HttpStatus.CREATED);
 		}
 		return false;
