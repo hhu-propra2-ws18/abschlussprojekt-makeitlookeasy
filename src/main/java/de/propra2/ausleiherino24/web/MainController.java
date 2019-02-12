@@ -5,6 +5,7 @@ import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class MainController {
 
 	@Autowired
 	PersonRepository personRepository;
+
+	@Autowired
+	UserService userService;
 
 	private final CaseRepository caseRepository;
 	private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
@@ -77,13 +81,9 @@ public class MainController {
 
 	@RequestMapping("/registernewuser")
 	public ModelAndView registerNewUser(Person person, User user,Model model){
-		Person personactual = person;
-		User useractual = user;
-		person.setUser(user);
-		user.setRole("user");
-		personRepository.save(personactual);
-		userRepository.save(useractual);
+		userService.creatUserWithProfil(user,person);
 		ModelAndView mvw = new ModelAndView("login");
+		model.addAttribute("registration");
 		return mvw;
 	}
 }
