@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.OneToOne;
+import java.util.function.LongFunction;
 
 @Data
 @Entity
@@ -29,10 +30,10 @@ public class Case {
 	int deposit;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	User owner;
+	Long owner;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	User receiver;
+	Long receiver;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	Article article;

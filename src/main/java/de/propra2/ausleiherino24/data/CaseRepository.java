@@ -7,4 +7,8 @@ import java.util.ArrayList;
 
 public interface CaseRepository extends CrudRepository<Case, Long> {
 	ArrayList<Case> findAll();
+
+	ArrayList<Case> findByOwner(Long id);
+
+	ArrayList<Case> findByReceiver(Long id);
 }
