@@ -7,10 +7,6 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Component
 public class Initializer implements ServletContextInitializer{
@@ -19,7 +15,7 @@ public class Initializer implements ServletContextInitializer{
 	UserRepository userRepository;
 
 	@Override
-	public void onStartup(final ServletContext servletContext) throws ServletException {
+	public void onStartup(final ServletContext servletContext){
 		userRepository.deleteAll();
 		User user = new User();
 		user.setUsername("user");
