@@ -8,20 +8,25 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MainController {
+	/*
+	MainController manages all GET requests that are available to every visitor/user of the platform.
+	No POSTs or PUTs are being handled by this class.
+	 */
 	
 	// TODO: Add link to repository/service here.
 	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
 	
-	// TODO: Link overview.
 	@GetMapping("/")
 	public ModelAndView index() {
+		// TODO: Link overview.
 		ModelAndView mav = new ModelAndView("index");
 		return mav;
 	}
 	
-	// TODO: Add all cases.
+
 	@GetMapping("/overview")
 	public ModelAndView displayAllArticles() {
+		// TODO: Add all cases.
 		ModelAndView mav = new ModelAndView("overview");
 		return mav;
 	}
