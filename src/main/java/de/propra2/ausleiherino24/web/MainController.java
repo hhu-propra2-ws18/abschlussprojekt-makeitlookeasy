@@ -14,7 +14,8 @@ public class MainController {
 	 */
 	
 	// TODO: Add link to repository/service here.
-	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
+	private CaseRepository caseRepository;
+	private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 	
 	@GetMapping("/")
 	public ModelAndView index() {
