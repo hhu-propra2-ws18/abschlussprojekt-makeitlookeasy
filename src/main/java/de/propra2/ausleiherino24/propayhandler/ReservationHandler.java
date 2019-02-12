@@ -27,13 +27,23 @@ public class ReservationHandler {
 		}
 		return false;
 	}
-	public boolean releaseReservation(String account, int id){
+	public boolean releaseReservation(String account, int reservationId){
 		ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 		restTemplate = new RestTemplate(requestFactory);
-		HttpEntity<Integer> request = new HttpEntity<>(id);
+		HttpEntity<Integer> request = new HttpEntity<>(reservationId);
 
 		ResponseEntity<Integer> responseEntity = restTemplate.exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST, request, Integer.class, account);
 
 		return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity.getStatusCode().equals(HttpStatus.CREATED);
 	}
+	public boolean punishReservation(String account, int reservationId){
+		ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+		restTemplate = new RestTemplate(requestFactory);
+		HttpEntity<Integer> request = new HttpEntity<>(reservationId);
+
+		ResponseEntity<Integer> responseEntity = restTemplate.exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST, request, Integer.class, account);
+
+		return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity.getStatusCode().equals(HttpStatus.CREATED);
+	}
+
 }
