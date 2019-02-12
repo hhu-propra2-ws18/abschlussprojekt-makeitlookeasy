@@ -1,5 +1,7 @@
 package de.propra2.ausleiherino24.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class CaseController {
 	
 	// TODO: Add link to repository/service here.
+	// TODO: Log creation/updates.
+	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
 	
 	// TODO: Catch, if case not in database. Add case.
 	@GetMapping("/article")
@@ -35,6 +39,7 @@ public class CaseController {
 	public ModelAndView saveNewCaseAndArticle() {
 		ModelAndView mav = new ModelAndView("article");
 		//mav.addObject("object", object);
+		LOGGER.info("New article saved successfully.");
 		return mav;
 	}
 	
@@ -43,6 +48,7 @@ public class CaseController {
 	public ModelAndView saveEditedCaseAndArticle() {
 		ModelAndView mav = new ModelAndView("article");
 		//mav.addObject("object", object);
+		LOGGER.info("Article edited successfully.");
 		return mav;
 	}
 	
