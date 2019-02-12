@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html class="text-center" xmlns:th="http://www.w3.org/2005/Atom">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>AbschlussProjekt</title>
+    <link rel="stylesheet" th:href="@{~/static/vendor/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{~/static/vendor/fontawesome/fonts/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{~/static/css/loginstyles.min.css}">
+</head>
+
+<body class="text-center" style="background-color: rgb(255,255,255);"><img src="img/mainpage/logo.jpg" style="width: 250px;height: 250px;margin-top: 40px;"><div class="login-card" style="font-family:Roboto, sans-serif;">
+    <p class="profile-name-card"><i class="fa fa-unlock-alt d-inline" style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i></p>
+    <form class="form-signin">
+      <span class="reauth-email" style="margin:11px;"></span>
+      <input class="form-control" type="email" required placeholder="Email address" autofocus id="inputEmail" />
+      <input class="form-control" type="password" required placeholder="Password" id="inputPassword"/>
+      <button class="btn btn-primary btn-block btn-lg btn-signin" type="submit" style="font-family:Roboto, sans-serif;font-size:16px;font-weight:normal;font-style:normal;">Sign in</button>
+    </form>
+    <p class="text-center" style="color:rgb(73,80,87);font-size:11px;">Restricted Area</p>
+</div>
+    <script th:href="@{~/static/vendor/jquer/js/jquery.min.js}"></script>
+    <script th:href="@{~/static/vendor/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+
+</html>
