@@ -1,14 +1,15 @@
 version: '3.5'
 services:
-#  propay:  propay
-#    image: propay
-#    container_name: propay
-#    restart: always
-#    ports:
-#      - "8080:80"
-#    depends_on:
-#      - ausleiherino
-
+  propay: propay
+      image: propra/propay
+      container_name: propay
+      restart: always
+      ports:
+        - "8888:8888"
+      volume:
+        -  ./data:/code/data
+#      depends_on:
+#        - ausleiherino
 
 #  ausleiherino:
 #    container_name: ausleiherino
