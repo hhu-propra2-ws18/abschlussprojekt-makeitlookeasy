@@ -274,3 +274,5 @@ gradle-app.setting
 /nbdist/
 /.nb-gradle/
 
+# Jenkins
+/jenkins_home
