@@ -8,22 +8,28 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MainController {
-	
+
 	// TODO: Add link to repository/service here.
 	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
-	
+
 	// TODO: Link overview.
 	@GetMapping("/")
 	public ModelAndView index() {
 		ModelAndView mav = new ModelAndView("index");
 		return mav;
 	}
-	
+
 	// TODO: Add all cases.
 	@GetMapping("/overview")
 	public ModelAndView displayAllArticles() {
 		ModelAndView mav = new ModelAndView("overview");
 		return mav;
 	}
-	
+
+	@GetMapping("/login")
+	public ModelAndView showLogin() {
+		ModelAndView mav = new ModelAndView("login");
+		return mav;
+	}
+
 }
