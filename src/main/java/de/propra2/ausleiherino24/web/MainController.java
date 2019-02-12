@@ -1,6 +1,10 @@
 package de.propra2.ausleiherino24.web;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.PersonRepository;
+import de.propra2.ausleiherino24.data.UserRepository;
+import de.propra2.ausleiherino24.model.Person;
+import de.propra2.ausleiherino24.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,11 @@ public class MainController {
 	MainController manages all actions that are available to every visitor of the platform.
 	This does not include signup/login.
 	 */
+	@Autowired
+	UserRepository userRepository;
+
+	@Autowired
+	PersonRepository personRepository;
 
 	private final CaseRepository caseRepository;
 	private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
@@ -64,5 +73,17 @@ public class MainController {
 	public ModelAndView getRegistration(Model model){
 		ModelAndView mav = new ModelAndView("registration");
 		return mav;
+	}
+
+	@RequestMapping("/registernewuser")
+	public ModelAndView registerNewUser(Person person, User user,Model model){
+		Person personactual = person;
+		User useractual = user;
+		person.setUser(user);
+		user.setRole("user");
+		personRepository.save(personactual);
+		userRepository.save(useractual);
+		ModelAndView mvw = new ModelAndView("login");
+		return mvw;
 	}
 }
