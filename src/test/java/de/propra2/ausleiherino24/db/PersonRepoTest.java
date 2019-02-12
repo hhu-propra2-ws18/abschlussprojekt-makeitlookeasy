@@ -1,6 +1,6 @@
 package de.propra2.ausleiherino24.db;
 
-import de.propra2.ausleiherino24.data.PersonRespository;
+import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import org.assertj.core.api.Assertions;
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class PersonRepoTest {
 	@Autowired
-	private PersonRespository persons;
+	private PersonRepository persons;
 
 	private Person person1;
 	private Person person2;

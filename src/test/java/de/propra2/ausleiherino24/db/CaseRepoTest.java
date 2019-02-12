@@ -1,6 +1,6 @@
 package de.propra2.ausleiherino24.db;
 
-import de.propra2.ausleiherino24.data.CaseRespository;
+import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.User;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class CaseRepoTest {
 	@Autowired
-	private CaseRespository cases;
+	private CaseRepository cases;
 
 	private Case case1;
 	private Case case2;

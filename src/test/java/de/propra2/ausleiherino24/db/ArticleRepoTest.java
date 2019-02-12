@@ -1,6 +1,6 @@
 package de.propra2.ausleiherino24.db;
 
-import de.propra2.ausleiherino24.data.ArticleRespository;
+import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ArticleRepoTest {
 	@Autowired
-	private ArticleRespository articles;
+	private ArticleRepository articles;
 
 	private Article article1;
 	private Article article2;
