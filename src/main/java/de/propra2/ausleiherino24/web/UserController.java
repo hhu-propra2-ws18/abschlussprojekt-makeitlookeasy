@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

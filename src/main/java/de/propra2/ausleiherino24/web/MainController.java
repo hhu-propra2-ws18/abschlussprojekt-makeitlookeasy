@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.data.CaseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
