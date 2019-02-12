@@ -1,6 +1,8 @@
 # Created by https://www.gitignore.io/api/linux,macos,maven,gradle,windows,eclipse,netbeans,jetbrains+all
 # Edit at https://www.gitignore.io/?templates=linux,macos,maven,gradle,windows,eclipse,netbeans,jetbrains+all
 
+jenkins_home/
+
 ### Eclipse ###
 
 .metadata
