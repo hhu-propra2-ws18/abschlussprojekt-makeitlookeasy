@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController {
 	/*
 	UserController manages all requests that are exclusively available to logged-in users of the platform, except article/case handling.
-	This includes login, profile management.
+	This includes signup, login, and profile management.
 	 */
 	
 	// TODO: Add link to repository/service here.
@@ -19,12 +19,22 @@ public class UserController {
 	
 	@GetMapping("/user")
 	public ModelAndView displayUserProfile(@RequestParam("id") Long id) {
-		// TODO: Catch, if case/article not in database. Add user.
+		// TODO: Add user.
 		//User user = userRepository.getById(id);
 		
 		ModelAndView mav = new ModelAndView("profile");
 		//mav.addObject("user", user);
 		return mav;
+	}
+	
+	@GetMapping("/signup")
+	public ModelAndView signupView() {
+		return new ModelAndView("signup");
+	}
+	
+	@GetMapping("/login")
+	public ModelAndView loginView() {
+		return new ModelAndView("login");
 	}
 	
 }

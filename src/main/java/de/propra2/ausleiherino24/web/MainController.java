@@ -9,8 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController {
 	/*
-	MainController manages all GET requests that are available to every visitor/user of the platform.
-	No POSTs or PUTs are being handled by this class.
+	MainController manages all actions that are available to every visitor of the platform.
+	This does not include signup/login.
 	 */
 	
 	// TODO: Add link to repository/service here.
@@ -23,12 +23,11 @@ public class MainController {
 		return mav;
 	}
 	
-
 	@GetMapping("/overview")
 	public ModelAndView displayAllArticles() {
 		// TODO: Add all cases.
 		ModelAndView mav = new ModelAndView("overview");
 		return mav;
 	}
-	
+
 }

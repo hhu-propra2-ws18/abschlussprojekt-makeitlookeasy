@@ -12,4 +12,6 @@ public class MainControllerTest {
 	
 	// TODO: overview reachable
 	
+	// TODO: view article, regardless of login status
+	
 }

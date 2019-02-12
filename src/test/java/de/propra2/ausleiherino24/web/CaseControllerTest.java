@@ -8,8 +8,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @WebMvcTest
 public class CaseControllerTest {
 	
-	// TODO: view article, regardless of login status
-	
 	// TODO: create new article, when logged in
 	
 	// TODO: edit own articles
