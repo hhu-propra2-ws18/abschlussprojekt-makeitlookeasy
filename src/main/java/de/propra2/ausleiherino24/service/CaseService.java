@@ -7,6 +7,7 @@ import de.propra2.ausleiherino24.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class CaseService {
 	private CaseRepository caseRepository;
@@ -17,7 +18,7 @@ public class CaseService {
 	}
 
 	//Fügt einen Artikel einer Person hinzu, welcher frei zum Verleih ist
-	public void addArticleToLend(Long owner, Article article, String title, int price, int deposit){
+	public void addCaseForNewArticle(Long owner, Article article, String title, int price, int deposit){
 		Case c = new Case();
 		c.setArticle(article);
 		c.setDeposit(deposit);
@@ -36,21 +37,17 @@ public class CaseService {
 	//Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan verliehen ist
 	public ArrayList<Case> getLendCasesFromPersonOwner(Long personId){
 		ArrayList<Case> cases = getAllCasesFromPersonOwner(personId);
-		for (Case c :
-				cases) {
-			if (c.getReceiver() == null) cases.remove(c);
-		}
-		return cases;
+		return cases.stream()
+				.filter(c -> c.getReceiver() != null)
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	//Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan nicht verliehen ist
 	public ArrayList<Case> getFreeCasesFromPersonOwner(Long personId){
 		ArrayList<Case> cases = getAllCasesFromPersonOwner(personId);
-		for (Case c :
-				cases) {
-			if (c.getReceiver() != null) cases.remove(c);
-		}
-		return cases;
+		return cases.stream()
+				.filter(c -> c.getReceiver() == null)
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	//Gibt alle Cases zurück, wo die Person sich von jemanden etwas geliehen hat
