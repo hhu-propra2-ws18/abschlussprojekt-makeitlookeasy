@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Optional;
+
 @Controller
 public class CaseController {
 	/*
@@ -29,9 +31,11 @@ public class CaseController {
 	}
 	
 	@GetMapping("/article")
-	public ModelAndView displayArticle(@RequestParam("id") Long id) {
-		// TODO: Catch, if article not in database.
-		Article article = articleRepository.getById(id);
+	public ModelAndView displayArticle(@RequestParam("id") Long id) throws Exception {
+		Optional<Article> article = articleRepository.findById(id);
+		if (!article.isPresent()) {
+			throw new Exception("Article not found!");
+		}
 		
 		ModelAndView mav = new ModelAndView("article");
 		mav.addObject("article", article);

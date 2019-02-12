@@ -7,6 +7,4 @@ import java.util.ArrayList;
 
 public interface ArticleRepository extends CrudRepository<Article, Long> {
 	ArrayList<Article> findAll();
-	
-	Article getById(Long id);
 }
