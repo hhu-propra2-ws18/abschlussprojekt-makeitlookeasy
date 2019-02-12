@@ -19,4 +19,6 @@ public class Article {
 	String name;
 
 	String description;
+
+	Boolean active;
 }
