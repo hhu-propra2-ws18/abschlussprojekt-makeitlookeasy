@@ -1,6 +1,5 @@
-package de.propra2.ausleiherino24.db;
+package de.propra2.ausleiherino24.data;
 
-import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import org.assertj.core.api.Assertions;

@@ -1,6 +1,5 @@
-package de.propra2.ausleiherino24.db;
+package de.propra2.ausleiherino24.data;
 
-import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
