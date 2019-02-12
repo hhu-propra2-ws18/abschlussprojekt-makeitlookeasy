@@ -39,18 +39,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		http.authorizeRequests()
-				.antMatchers("/accessed/**").hasRole("user")
-				.antMatchers("/admin/**").hasRole("admin")
-				.anyRequest().permitAll()
-				.and()
+				.antMatchers("/accessed").denyAll()
+				.antMatchers("/accessed/user/**").hasRole("user")
+				.antMatchers("/accessed/admin/**").hasRole("admin")
+					.anyRequest().permitAll()
+					.and()
 				.formLogin()
-				.loginPage("/login.html")
-				.defaultSuccessUrl("/accessed/index",true)
-				.failureUrl("/login.html")
-				.permitAll()
-				.and()
-				.exceptionHandling().accessDeniedPage("/login.html")
-				.and()
+					.loginPage("/login")
+					.permitAll()
+					.defaultSuccessUrl("/default",true)
+					.and()
 				.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");
 
 

@@ -21,6 +21,13 @@ public class Initializer implements ServletContextInitializer{
 		user.setUsername("user");
 		user.setPassword("password");
 		user.setEmail("user@mail.com");
+		user.setRole("user");
+		User user2 = new User();
+		user2.setUsername("admin");
+		user2.setPassword("password");
+		user2.setEmail("useradmin@mail.com");
+		user2.setRole("admin");
+		userRepository.save(user2);
 		userRepository.save(user);
 	}
 }

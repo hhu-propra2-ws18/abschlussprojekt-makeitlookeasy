@@ -1,6 +1,7 @@
 package de.propra2.ausleiherino24.model;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 
@@ -13,10 +14,12 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@Column(unique = true)
 	private String username;
 
 	private String password;
 
+	@Column(unique = true)
 	private String email;
 
 	private String role;

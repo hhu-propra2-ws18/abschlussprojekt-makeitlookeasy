@@ -3,8 +3,12 @@ package de.propra2.ausleiherino24.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class MainController {
@@ -26,10 +30,19 @@ public class MainController {
 		return mav;
 	}
 
+
 	@GetMapping("/login")
-	public ModelAndView showLogin() {
+	public ModelAndView getLogin(Model model){
 		ModelAndView mav = new ModelAndView("login");
 		return mav;
+	}
+
+	@RequestMapping("/default")
+	public String defaultAfterLogin(HttpServletRequest request) {
+		if (request.isUserInRole("ROLE_user")) {
+			return "redirect:/accessed/user/index";
+		} else
+				return "redirect:/acessed/admin/index";
 	}
 
 }
