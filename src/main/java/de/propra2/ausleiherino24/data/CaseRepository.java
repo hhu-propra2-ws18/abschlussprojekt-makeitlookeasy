@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
 
-public interface CaseRespository extends CrudRepository<Case, Long> {
+public interface CaseRepository extends CrudRepository<Case, Long> {
 	ArrayList<Case> findAll();
 }

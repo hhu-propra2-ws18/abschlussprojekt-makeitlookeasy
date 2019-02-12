@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
 
-public interface UserRespository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
 	ArrayList<User> findAll();
 }
