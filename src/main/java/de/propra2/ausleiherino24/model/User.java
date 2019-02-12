@@ -2,28 +2,33 @@ package de.propra2.ausleiherino24.model;
 
 import lombok.Data;
 
-import javax.persistence.Id;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 @Data
 @Entity
+@Table(name="userDB")
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	Long id;
+	private Long id;
 
-	String username;
+	private String username;
 
-	String password;
+	private String password;
 
-	String email;
+	private String email;
 
-	String role;
+	private String role;
 
 	public User(User user) {
+		this.username = user.getUsername();
+		this.password = user.getPassword();
+		this.email = user.getEmail();
+		this.role = user.getRole();
+	}
+
+	public User(){
 
 	}
 }

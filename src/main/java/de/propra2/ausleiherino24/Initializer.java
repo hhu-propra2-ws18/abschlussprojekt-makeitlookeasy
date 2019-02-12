@@ -19,7 +19,7 @@ public class Initializer implements ServletContextInitializer{
 	UserRepository userRepository;
 
 	@Override
-	public void onStartup(final ServletContext servletContext) throws ServletException {
+	public void onStartup(final ServletContext servletContext) {
 		userRepository.deleteAll();
 		User user = new User();
 		user.setUsername("user");
