@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -15,15 +16,16 @@ public class UserController {
 	 */
 	
 	// TODO: Add link to repository/service here.
-	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
+	private UserRepository userRepository;
+	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 	
 	@GetMapping("/user")
 	public ModelAndView displayUserProfile(@RequestParam("id") Long id) {
 		// TODO: Add user.
-		//User user = userRepository.getById(id);
+		User user = userRepository.getById(id);
 		
 		ModelAndView mav = new ModelAndView("profile");
-		//mav.addObject("user", user);
+		mav.addObject("user", user);
 		return mav;
 	}
 	

@@ -1,12 +1,11 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Case;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -17,53 +16,70 @@ public class CaseController {
 	 */
 	
 	// TODO: Add link to repository/service here.
-	// TODO: Log creation/updates.
+	private UserRepository userRepository;
+	private ArticleRepository articleRepository;
+	private CaseRepository caseRepository;
 	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
 	
 	@GetMapping("/article")
 	public ModelAndView displayArticle(@RequestParam("id") Long id) {
-		// TODO: Catch, if article not in database. Add article.
-		
-		//Article article = articleRepository.getById(id);
+		// TODO: Catch, if article not in database.
+		Article article = articleRepository.getById(id);
 		
 		ModelAndView mav = new ModelAndView("article");
-		//mav.addObject("article", article);
+		mav.addObject("article", article);
 		return mav;
 	}
 	
 	@GetMapping("/newArticle")
 	public ModelAndView createNewCaseAndArticle() {
-		// TODO : Add article.
-		
 		ModelAndView mav = new ModelAndView("article");
-		//mav.addObject("article", new Article());
+		mav.addObject("article", new Article());
 		return mav;
 	}
 	
 	@PostMapping("/saveNewArticle")
-	public ModelAndView saveNewCaseAndArticle() {
-		// TODO: Specify template to return => adjust returned model. (AFTER .hmtl is complete)
-		
-		//articleRepository.save(article);
-		//LOGGER.info("New article %s [%d] saved successfully.", article.getName(), article.getId());
+	public ModelAndView saveNewCaseAndArticle(@ModelAttribute Article article) {
+		articleRepository.save(article);
+		LOGGER.info("Created article %s [ID=%L]", article.getName(), article.getId());
 		
 		ModelAndView mav = new ModelAndView("case");
-		//mav.addObject("case", new Case(article));
+		Case c = new Case();
+		c.setArticle(article);
+		mav.addObject("case", c);
 		return mav;
 	}
 	
 	@PutMapping("/saveEditedArticle")
-	public ModelAndView saveEditedCaseAndArticle() {
-		// TODO: Specify template to return => adjust returned model. (AFTER .hmtl is complete)
-		
-		//articleRepository.save(article);
-		//LOGGER.info("Article %s edited successfully.", article.toString());
+	public ModelAndView saveEditedCaseAndArticle(@ModelAttribute Article article) {
+		articleRepository.save(article);
+		LOGGER.info("Edited article %s [ID=%L]", article.getName(), article.getId());
 		
 		ModelAndView mav = new ModelAndView("article");
-		//mav.addObject("article", article);
+		mav.addObject("article", article);
 		return mav;
 	}
-	
-	
+
+	@PutMapping("/deactivateArticle")
+	public ModelAndView deactivateArticle(@ModelAttribute Article article) {
+		LOGGER.warn("Deactivating cases offering %s [ID=%L]", article.getName(), article.getId());
+		
+		Iterable<Case> allCases = caseRepository.findAll();
+		for (Case c : allCases) {
+			if (c.getArticle().equals(article)) {
+				c.active = false;
+				caseRepository.save(c);
+				LOGGER.info("Deactivated case #%L", c.getId());
+			}
+		}
+		
+		article.active = false;
+		articleRepository.save(article);
+		LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
+		
+		ModelAndView mav = new ModelAndView("profile");
+		mav.addObject("user", user);
+		return mav;
+	}
 	
 }
