@@ -1,0 +1,35 @@
+<div th:fragment="navbar">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+		<div class="container">
+			<a class="navbar-brand" href="#">Ausleiherino24</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse " id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">Home
+							<span class="sr-only">(current)</span>
+						</a>
+					</li>
+					<li class="nav-item active">
+						<a class="nav-link" href="#">About</a>
+					</li>
+					<li class="nav-item active">
+						<a class="nav-link" href="#">Services</a>
+					</li>
+					<li class="nav-item active">
+						<a class="nav-link" href="#">Contact</a>
+					</li>
+					<li>
+						<ul class="nav navbar-nav navbar-right">
+							<li><a href="/login" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px"><i class="fa fa-user-plus">Login</i></div></a></li>
+							<li><a href="/signup" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px"><i class="fa fa-sign-in">Sign-Up</i></div></a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+</div>
