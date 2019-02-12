@@ -7,10 +7,6 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Component
 public class Initializer implements ServletContextInitializer{
