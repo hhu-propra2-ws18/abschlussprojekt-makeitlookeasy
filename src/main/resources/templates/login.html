@@ -10,23 +10,32 @@
 	<link rel="stylesheet" th:href="@{~/css/loginstyles.min.css}">
 </head>
 
-<body class="text-center" style="background-color: rgb(255,255,255);"><a href="/"><img src="img/mainpage/logo.jpg" style="width: 250px;height: 250px;margin-top: 40px;"></a><div class="login-card" style="font-family:Roboto, sans-serif;">
+<body class="text-center" style="background-color: rgb(255,255,255);"><a href="/"><img src="img/mainpage/logo.jpg"
+																					   style="width: 250px;height: 250px;margin-top: 40px;"></a>
+<div class="login-card" style="font-family:Roboto, sans-serif;">
 	<!-- Offenes Schloss -->
-    <p th:if="${param.logout}" class="profile-name-card"><i class="fa fa-unlock-alt d-inline"
-															 style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i></p>
+	<p th:if="${param.logout}" class="profile-name-card"><i class="fa fa-unlock-alt d-inline"
+															style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i>
+	</p>
 	<!-- Geschlossenes Schloss -->
 	<p th:unless="${param.logout}" class="profile-name-card"><i class="fa fa-lock d-inline"
-														   style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i></p>
+																style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i>
+	</p>
 
-    <form class="form-signin" th:action="@{/login}" method="post">
+	<form class="form-signin" th:action="@{/login}" method="post">
 		<span class="reauth-email" style="margin:11px;"></span>
 		<div th:if="${param.error}" class="alert alert-danger">Invalid username or password.</div>
 		<div th:if="${param.logout}" class="alert alert-success">You have been logged out</div>
-		<input class="form-control"  required placeholder="Username" autofocus name="username" id="username" />
+		<div th:if="${param.registration}" class="alert alert-success">Your account has been created succesfully! You
+			can login now.
+		</div>
+		<input class="form-control" required placeholder="Username" autofocus name="username" id="username"/>
 		<input class="form-control" type="password" required placeholder="Password" name="password" id="password"/>
-		<button class="btn btn-primary btn-block btn-lg btn-signin" type="submit" style="font-family:Roboto, sans-serif;font-size:16px;font-weight:normal;font-style:normal;">Sign in</button>
-    </form>
-    <p class="text-center" style="color:rgb(73,80,87);font-size:11px;">Restricted Area</p>
+		<button class="btn btn-primary btn-block btn-lg btn-signin" type="submit"
+				style="font-family:Roboto, sans-serif;font-size:16px;font-weight:normal;font-style:normal;">Sign in
+		</button>
+	</form>
+	<p class="text-center" style="color:rgb(73,80,87);font-size:11px;">Restricted Area</p>
 </div>
 <div th:replace="/../fragments/footer ::footer" name="footer"></div>
 
