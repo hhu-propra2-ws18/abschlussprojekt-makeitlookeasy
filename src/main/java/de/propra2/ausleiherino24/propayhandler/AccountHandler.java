@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.proPayHandler;
+package de.propra2.ausleiherino24.propayhandler;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -22,7 +22,7 @@ public class AccountHandler {
 	}
 
 	public boolean addFunds(String username, double amount){
-		ClientHttpRequestFactory requestFactory = getClientHttpRequestFactory();
+		ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 		restTemplate = new RestTemplate(requestFactory);
 		HttpEntity<Double> request = new HttpEntity<>(amount);
 		ResponseEntity<Double> responseEntity = restTemplate.exchange(ACCOUNT_URL +"/{account}", HttpMethod.POST, request, Double.class, username);
@@ -31,7 +31,7 @@ public class AccountHandler {
 
 	public boolean transferFunds(String sourceUser, String targetUser, double amount){
 		if(hasValidFunds(sourceUser,amount)) {
-			ClientHttpRequestFactory requestFactory = getClientHttpRequestFactory();
+			ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 			restTemplate = new RestTemplate(requestFactory);
 			HttpEntity<Double> request = new HttpEntity<>(amount);
 			ResponseEntity<Double> responseEntity = restTemplate.exchange(ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}", HttpMethod.POST, request, Double.class, sourceUser, targetUser);
@@ -39,16 +39,5 @@ public class AccountHandler {
 		}
 		return false;
 	}
-
-
-
-
-
-	private ClientHttpRequestFactory getClientHttpRequestFactory() {
-		HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-
-		return clientHttpRequestFactory;
-	}
-
 
 }
