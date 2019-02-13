@@ -59,14 +59,11 @@ public class MainController {
 		return mav;
 	}
 
-<<<<<<< HEAD
 	@GetMapping("/signup")
 	public ModelAndView getRegistration(Model model){
 		return new ModelAndView("registration");
 	}
 
-=======
->>>>>>> frontDev
 	@GetMapping("/login")
 	public ModelAndView getLogin(){
 		return new ModelAndView("login");
@@ -78,12 +75,6 @@ public class MainController {
 			return "redirect:/accessed/user/index";
 		} else
 			return "redirect:/acessed/admin/index";
-	}
-
-	@GetMapping("/signup")
-	public ModelAndView getRegistration(Model model){
-		ModelAndView mav = new ModelAndView("registration");
-		return mav;
 	}
 
 	@RequestMapping("/registernewuser")
