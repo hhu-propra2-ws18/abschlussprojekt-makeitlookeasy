@@ -33,4 +33,6 @@ public class User {
 	public User(){
 
 	}
+
+	//TODO: override setPassword to hash password
 }
