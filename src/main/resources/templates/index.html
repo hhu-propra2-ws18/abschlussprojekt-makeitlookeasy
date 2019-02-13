@@ -17,7 +17,7 @@
 	<link th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}" rel="stylesheet">
 
 	<!-- Custom styles for this template -->
-	<link th:href="@{~/css/shop-homepage.css}" rel="stylesheet">
+	<link  th:href="@{~/css/shop-homepage.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -30,16 +30,8 @@
 
 	<div class="row">
 
-		<div class="col-lg-3">
-
-			<h1 style="margin-top: 50px">Categories</h1>
-			<div class="list-group">
-				<a href="#" class="list-group-item">Werkzeug</a>
-				<a href="#" class="list-group-item">Foto Equipment</a>
-				<a href="#" class="list-group-item">Spielzeug</a>
-			</div>
-
-		</div>
+		<!-- Categories -->
+		<div th:replace="/../fragments/categories ::categories" name="categorie"></div>
 		<!-- /.col-lg-3 -->
 
 		<div class="col-lg-9">
