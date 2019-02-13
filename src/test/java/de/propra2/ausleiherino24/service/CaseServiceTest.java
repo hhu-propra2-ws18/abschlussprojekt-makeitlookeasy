@@ -25,9 +25,9 @@ public class CaseServiceTest {
 	public void OwnerWithThreeCases(){
 		Article article = null;
 
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
 
 		ArrayList<Case> cases = caseService.getAllCasesFromPersonOwner(0L);
 
@@ -44,11 +44,11 @@ public class CaseServiceTest {
 	public void OwnerWithThreeCases2(){
 		Article article = null;
 
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(1L, article, "",0,0);
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(2L, article, "",0,0);
+		caseService.addCaseForNewArticle(article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
 
 		ArrayList<Case> cases = caseService.getAllCasesFromPersonOwner(0L);
 
@@ -65,9 +65,9 @@ public class CaseServiceTest {
 	public void OwnerWithZeroCases(){
 		Article article = null;
 
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
 
 		ArrayList<Case> cases = caseService.getAllCasesFromPersonOwner(1L);
 

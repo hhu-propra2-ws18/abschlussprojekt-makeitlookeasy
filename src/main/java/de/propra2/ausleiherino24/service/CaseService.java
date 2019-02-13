@@ -20,11 +20,10 @@ public class CaseService {
 	}
 
 	//Fügt einen Artikel einer Person hinzu, welcher frei zum Verleih ist
-	public void addCaseForNewArticle(User owner, Article article, String title, int price, int deposit){
+	public void addCaseForNewArticle(Article article, String title, int price, int deposit){
 		Case c = new Case();
 		c.setArticle(article);
 		c.setDeposit(deposit);
-		c.setOwner(owner);
 		c.setPrice(price);
 		c.setTitle(title);
 
@@ -59,7 +58,8 @@ public class CaseService {
 
 	//Erwartet Case mit wo Artikel verliehen werden kann. Case wird modifiziert, dass es nun verliehen ist.
 	public void lendArticleToPerson(Long caseId, User receiver, Long starttime, Long endtime) {
-		if(!caseRepository.findById(caseId).isPresent()) return;
+		if(!(caseRepository.findById(caseId).isPresent())) return;
+
 		Case c = caseRepository.findById(caseId).get();
 		c.setReceiver(receiver);
 		c.setStartTime(starttime);
