@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -59,10 +60,6 @@ public class MainController {
 		return mav;
 	}
 
-	@GetMapping("/signup")
-	public ModelAndView getRegistration(Model model){
-		return new ModelAndView("registration");
-	}
 
 	@GetMapping("/login")
 	public ModelAndView getLogin(){
@@ -80,13 +77,20 @@ public class MainController {
 	@GetMapping("/signup")
 	public ModelAndView getRegistration(Model model){
 		ModelAndView mav = new ModelAndView("registration");
+		User user = new User();
+		Person person = new Person();
+		mav.addObject(user);
+		mav.addObject(person);
 		return mav;
 	}
 
-	@RequestMapping("/registernewuser")
+	@PostMapping("/registernewuser")
 	public ModelAndView registerNewUser(Person person, User user,Model model){
+
 		userService.creatUserWithProfil(user,person);
+
 		ModelAndView mvw = new ModelAndView("login");
+
 		model.addAttribute("registration");
 		return mvw;
 	}

@@ -21,33 +21,43 @@
 			<h1>Register Form</h1>
 			<div class="form-row form-group">
 				<div class="col-sm-4 label-column"><label class="col-form-label" for="name">Username</label></div>
-				<div class="col-sm-6 input-column"><input class="form-control" type="text" required id="name" name="username">
+				<div class="col-sm-6 input-column">
+					<input class="form-control" type="text" required id="name" name="username" th:field="*{user.username}">
 				</div>
 			</div>
 			<div class="form-row form-group">
 				<div class="col-sm-4 label-column"><label class="col-form-label" for="email">Email </label></div>
-				<div class="col-sm-6 input-column"><input class="form-control" type="email" required id="email" name="email">
+				<div class="col-sm-6 input-column">
+					<input class="form-control" type="email" required id="email" name="email" th:field="*{user.email}">
 				</div>
 			</div>
 			<div class="form-row form-group">
 				<div class="col-sm-4 label-column"><label class="col-form-label" for="pawssword">Password </label></div>
-				<div class="col-sm-6 input-column"><input class="form-control" type="password" required id="pawssword"
-														  name="password"></div>
+				<div class="col-sm-6 input-column">
+					<input class="form-control" type="password" required id="pawssword" name="password" th:field="*{user.password}">
+				</div>
 			</div>
 			<div class="form-row form-group">
 				<div class="col-sm-4 label-column"><label class="col-form-label" for="firstname">Firstname</label></div>
-				<div class="col-sm-6 input-column"><input class="form-control" id="firstname" required name="firstname"></div>
+				<div class="col-sm-6 input-column">
+					<input class="form-control" id="firstname" required name="firstname" th:field="*{person.firstName}">
+				</div>
 			</div>
 			<div class="form-row form-group">
 				<div class="col-sm-4 label-column"><label class="col-form-label" for="lastname">Lastname</label></div>
-				<div class="col-sm-6 input-column"><input class="form-control" id="lastname" required name="lastname"></div>
+				<div class="col-sm-6 input-column">
+					<input class="form-control" id="lastname" required name="lastname" th:field="*{person.lastName}">
+				</div>
 			</div>
 			<div class="form-row form-group">
 				<div class="col-sm-4 label-column"><label class="col-form-label" for="kontakt">Kontakt</label></div>
-				<div class="col-sm-6 input-column"><input class="form-control" id="kontakt" required name="contact"></div>
+				<div class="col-sm-6 input-column">
+					<input class="form-control" id="kontakt" required name="contact" th:field="*{person.contact}">
+				</div>
 			</div>
-			<div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-2"><label
-					class="form-check-label" for="formCheck-2">I've read and accept the terms and conditions</label>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="formCheck-2">
+				<label class="form-check-label" for="formCheck-2">I've read and accept the terms and conditions</label>
 			</div>
 			<button class="btn btn-light submit-button" type="submit">Submit Form</button>
 		</form>
