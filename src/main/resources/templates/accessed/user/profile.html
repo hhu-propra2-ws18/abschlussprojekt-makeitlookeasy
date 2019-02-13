@@ -14,9 +14,7 @@
 	<!-- Font awesome Css-->
 	<link th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}" rel="stylesheet">
 
-
 	<!-- Custom styles for this template -->
-
 	<link  th:href="@{~/css/shop-homepage.css}" rel="stylesheet">
 
 </head>
@@ -40,41 +38,47 @@
 				<div class="form-row profile-row">
 					<div class="col-md-4 relative"></div>
 					<div class="col-md-8">
-						<h1>Mick</h1>
+						<h1>Username</h1>
 						<hr>
 						<div class="form-row">
 							<div class="col-sm-12 col-md-6">
 								<div class="form-group"><label>Firstname </label><input class="form-control" type="text"
-																						name="firstname"></div>
+																						name="firstname" disabled></div>
 							</div>
 							<div class="col-sm-12 col-md-6">
 								<div class="form-group"><label>Lastname </label><input class="form-control" type="text"
-																					   name="lastname"></div>
+																					   name="lastname" disabled></div>
 							</div>
 						</div>
 						<div class="form-group"><label>Email </label><input class="form-control" type="email" autocomplete="off"
-																			required="" name="email"></div>
+																			required="" name="email" disabled></div>
 						<div class="form-group"><label>Adresse</label><input class="form-control" type="email"
-																			 autocomplete="off" required="" name="email"></div>
-						<div class="form-row">
-							<div class="col-sm-12 col-md-6">
-								<div class="form-group"><label>Password </label><input class="form-control" type="password"
-																					   name="password" autocomplete="off"
-																					   required=""></div>
-							</div>
-							<div class="col-sm-12 col-md-6">
-								<div class="form-group"><label>Confirm Password</label><input class="form-control"
-																							  type="password" name="confirmpass"
-																							  autocomplete="off" required="">
-								</div>
-							</div>
-						</div>
+																			 autocomplete="off" required="" name="email" disabled></div>
 						<hr>
+						<div>
+							<h4>All articles</h4>
+							<ul >
+								<li>Cras justo odio</li>
+								<li>Dapibus ac facilisis in</li>
+								<li>Morbi leo risus</li>
+								<li>Porta ac consectetur ac</li>
+								<li>Vestibulum at eros</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
+</div>
+<div class="dropdown">
+	<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+	</button>
+	<ul class="dropdown-menu">
+		<li><a href="#">HTML</a></li>
+		<li><a href="#">CSS</a></li>
+		<li><a href="#">JavaScript</a></li>
+	</ul>
 </div>
 <div class="container profile profile-view" id="profile">
 
@@ -83,6 +87,7 @@
 <div th:replace="/../fragments/footer ::footer" name="footer"></div>
 
 <script th:href="@{~/vendor/jquery/jquery.min.js}"></script>
+<script th:href="@{~/vendor/bootstrap/js/bootstrap.min.js}"></script>
 <script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>
