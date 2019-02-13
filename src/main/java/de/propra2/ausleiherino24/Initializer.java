@@ -7,7 +7,7 @@ import de.propra2.ausleiherino24.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
-import com.github.javafaker.Faker;
+//import com.github.javafaker.Faker;
 
 import javax.servlet.ServletContext;
 import java.util.Locale;
@@ -18,13 +18,13 @@ public class Initializer implements ServletContextInitializer{
 
 	private final UserRepository userRepository;
 	private final ArticleRepository articleRepository;
-	
+
 	@Autowired
 	public Initializer(UserRepository userRepository, ArticleRepository articleRepository) {
 		this.userRepository = userRepository;
 		this.articleRepository = articleRepository;
 	}
-	
+
 	@Override
 	public void onStartup(final ServletContext servletContext) {
 		initTestUser();
@@ -33,12 +33,12 @@ public class Initializer implements ServletContextInitializer{
 
 	private void initTestArticle() {
 		articleRepository.deleteAll();
-		Faker faker = new Faker(Locale.GERMAN);
+		//Faker faker = new Faker(Locale.GERMAN);
 		IntStream.range(0, 15).mapToObj(value -> {
 			Article article = new Article();
 			article.setActive(true);
-			article.setName(faker.beer().name());
-			article.setDescription(String.join("\n", faker.lorem().paragraph(5)));
+			//article.setName(faker.beer().name());
+			//article.setDescription(String.join("\n", faker.lorem().paragraph(5)));
 			return article;
 		}).forEach(this.articleRepository::save);
 	}
