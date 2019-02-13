@@ -13,11 +13,15 @@ import java.util.Optional;
 public interface CaseRepository extends CrudRepository<Case, Long> {
 	ArrayList<Case> findAll();
 
-	@Query("SELECT c FROM Case c WHERE c.receiver.id = :user.id")
+	@Query("SELECT c FROM Case c WHERE c.receiver = :user")
 	ArrayList<Case> findByReceiver(@Param("user") User user);
 
 	@Query("SELECT c FROM #{#entityName} c WHERE c.article.owner = :owner")
 	ArrayList<Case> findByOwner(@Param("owner") User Owner);
 
 	Optional<Case> findByArticle(Article article);
+
+	//Optional<Case> findByArticleOwnerId(Long id);
+	
+	//Optional<Case> findByReceiverId(Long id);
 }
