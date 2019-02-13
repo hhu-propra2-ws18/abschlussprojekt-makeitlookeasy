@@ -11,8 +11,9 @@ import java.util.ArrayList;
 public interface CaseRepository extends CrudRepository<Case, Long> {
 	ArrayList<Case> findAll();
 
-	@Query("SELECT c FROM Case c WHERE c.article.owner = :owner")
-	ArrayList<Case> findByOwner(@Param("owner") User Owner);
+	@Query("SELECT c FROM Case c WHERE c.article.owner.id = :user.id")
+	ArrayList<Case> findByOwner(@Param("user") User user);
 
-	ArrayList<Case> findByReceiver(User Receiver);
+	@Query("SELECT c FROM Case c WHERE c.receiver.id = :user.id")
+	ArrayList<Case> findByReceiver(@Param("user") User user);
 }
