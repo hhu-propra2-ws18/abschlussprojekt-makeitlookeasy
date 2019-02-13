@@ -3,6 +3,7 @@ package de.propra2.ausleiherino24.web;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.RoleService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,13 +36,10 @@ public class MainController {
 	// Display main page and check for authenticated user.
 	@GetMapping("/")
 	public ModelAndView index(HttpServletRequest request) {
+		// TODO: Link overview.
 		ModelAndView mav = new ModelAndView("index");
-		if(request.isUserInRole(HttpServletRequest.BASIC_AUTH))
-			mav.addObject("loggedIn", true);
-		else
-			mav.addObject("loggedIn", false);
-		
 		mav.addObject("all", articleService.getAllNonActiveArticles());
+		mav.addObject("role", RoleService.getUserRole(request));
 		return mav;
 	}
 	

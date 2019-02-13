@@ -1,34 +1,28 @@
 <div th:fragment="navbar">
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="#"><img src="/img/mainpage/logoOhneSchrift.jpg" style="width: 50px;"></img></a>
+			<a class="navbar-brand" href="/"><img src="/img/mainpage/logoOhneSchrift.jpg" style="width: 50px;">Ausleiherino24</img></a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse " id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active">
-						<a class="nav-link" href="#">Home
-							<span class="sr-only">(current)</span>
-						</a>
-					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="#">About</a>
-					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="#">Services</a>
-					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="#">Contact</a>
-					</li>
 					<li>
-						<ul th:if=${loggedIn==false} class="nav navbar-nav navbar-right">
-							<li><a href="/login" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px"><i class="fa fa-user-plus ">Login</i></div></a></li>
-							<li><a href="/signup" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px"><i class="fa fa-sign-in ">Sign-Up</i></div></a></li>
-						</ul>
-						<ul th:unless=${loggedIn==false} class="nav navbar-nav navbar-right">
+						<ul th:if='${role.equals("user")}' class="nav navbar-nav navbar-right">
+							<li><div class="text-white"
+									 style="margin-top:7px;margin-left:5px;margin-right:5px">Logged in as User</div></li>
 							<li><a href="/login?logout" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px">
 								<i class="fa fa-user-plus ">Logout</i></div></a></li>
+						</ul>
+						<ul th:if='${role.equals("admin")}' class="nav navbar-nav navbar-right">
+							<li><div class="text-white"
+									 style="margin-top:7px;margin-left:5px;margin-right:5px">Logged in as Admin</div></li>
+							<li><a href="/login?logout" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px">
+								<i class="fa fa-user-plus ">Logout</i></div></a></li>
+						</ul>
+						<ul th:if='${role.equals("")}' class="nav navbar-nav navbar-right">
+							<li><a href="/login" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px"><i class="fa fa-user-plus ">Login</i></div></a></li>
+							<li><a href="/signup" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px"><i class="fa fa-sign-in ">Sign-Up</i></div></a></li>
 						</ul>
 
 					</li>

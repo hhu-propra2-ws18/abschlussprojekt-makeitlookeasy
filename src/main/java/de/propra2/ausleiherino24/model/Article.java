@@ -14,6 +14,7 @@ public class Article {
 
 	String name;
 
+	@Lob
 	String description;
 
 	// If this is true the article is not available for rental ("deleted")
