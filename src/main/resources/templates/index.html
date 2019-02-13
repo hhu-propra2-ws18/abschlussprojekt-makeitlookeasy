@@ -69,7 +69,7 @@
 						<a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
 						<div class="card-body">
 							<h4 class="card-title">
-								<a th:text="${case.getArticle().getName()}" href="#">Item One</a>
+								<a th:text="${case.getArticle().getName()}" th:href="@{/article(id=${case.getArticle().getId()})}">Item One</a>
 							</h4>
 							<h5>$<span th:text="${case.getPrice()}"></span></h5>
 							<p class="card-text" th:text="${case.getArticle().getDescription()}">Beschreibung</p>
