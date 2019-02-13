@@ -40,13 +40,7 @@ public class MainController {
 			mav.addObject("loggedIn", true);
 		else
 			mav.addObject("loggedIn", false);
-		return mav;
-	}
-
-	// Display all
-	@GetMapping("/overview")
-	public ModelAndView displayAllArticles() {
-		ModelAndView mav = new ModelAndView("overview");
+		
 		mav.addObject("all", articleService.getAllNonActiveArticles());
 		return mav;
 	}

@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.Configuration;
+package de.propra2.ausleiherino24.security;
 
 
 import de.propra2.ausleiherino24.data.UserRepository;

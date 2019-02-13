@@ -77,13 +77,13 @@ public class CaseController {
 		Iterable<Case> allCases = caseRepository.findAll();
 		for (Case c : allCases) {
 			if (c.getArticle().equals(article)) {
-				c.active = false;
+				c.setActive(false);
 				caseRepository.save(c);
 				LOGGER.info("Deactivated case with ID %L", c.getId());
 			}
 		}
 		
-		article.active = false;
+		article.setActive(false);
 		articleRepository.save(article);
 		LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
 		
