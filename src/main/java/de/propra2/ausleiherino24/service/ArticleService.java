@@ -20,16 +20,15 @@ public class ArticleService {
 	
 	// Iterate through list of all articles. If article is not being rented, mark article as available and return all available articles as List<>.
 	// Possibly more efficient, if handled by SQL request (SELECT * FROM article WHERE active == TRUE AND reserved == FALSE)
-	public List<Article> getAllNonActiveArticles() {
+	public List<Article> getAllNonReservedArticles() {
 		List<Article> availableArticles = new ArrayList<>();
-		List<Article> allArticles = articleRepository.findAll();
-		if(allArticles == null)
-			allArticles = new ArrayList<>();
+		List<Article> allArticles = articleRepository.findAll().isEmpty() ? articleRepository.findAll() : new ArrayList<>();
 		
 		for (Article article : allArticles) {
+			// no duplicate, active article, not reserved
 			if (!availableArticles.contains(article)
 					&& article.getActive()
-					&& !article.getReserved()) {// no duplicate, active article, not reserved
+					&& !article.getReserved()) {
 				availableArticles.add(article);
 			}
 		}

@@ -30,7 +30,7 @@ public class MainControllerTest {
 	@MockBean UserService us;
 
 	@Test
-	public void indexStatusTest() throws Exception {
+	public void getIndex() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.view().name("index"));
@@ -48,14 +48,14 @@ public class MainControllerTest {
 //	}
 
 	@Test
-	public void getLoginStatusTest() throws Exception {
+	public void getLogin() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/login"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.view().name("login"));
 	}
 
 	@Test
-	public void getRegistrationStatusTest() throws Exception {
+	public void getRegistration() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/signup"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.view().name("registration"));

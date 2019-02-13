@@ -41,6 +41,7 @@ public class Case {
 		this.receiver = receiver;
 		this.article = article;
 	}
+	
 	//Die Konstruktion ist nötig, damit der Article stets mit geupdatet wird. Analoges ist im Article
 	//Siehe https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/
 	public void setArticle(Article article){
