@@ -30,30 +30,30 @@ public class CaseService {
 		caseRepository.save(c);
 	}
 
-	//Gibt alle Cases zurück, wo die Person der Verleihende ist
-	public ArrayList<Case> getAllCasesFromPersonOwner(Long personId){
-		return caseRepository.findByOwner(personId);
+	//Gibt alle Cases zurück, wo der User der Verleihende ist
+	public ArrayList<Case> getAllCasesFromPersonOwner(Long userId){
+		return caseRepository.findByOwner(userId);
 	}
 
-	//Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan verliehen ist
-	public ArrayList<Case> getLendCasesFromPersonOwner(Long personId){
-		ArrayList<Case> cases = getAllCasesFromPersonOwner(personId);
+	//Gibt alle Cases zurück, wo der User der Verleihende ist und der Artikel momentan verliehen ist
+	public ArrayList<Case> getLendCasesFromPersonOwner(Long userId){
+		ArrayList<Case> cases = getAllCasesFromPersonOwner(userId);
 		return cases.stream()
 				.filter(c -> c.getReceiver() != null)
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
-	//Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan nicht verliehen ist
-	public ArrayList<Case> getFreeCasesFromPersonOwner(Long personId){
-		ArrayList<Case> cases = getAllCasesFromPersonOwner(personId);
+	//Gibt alle Cases zurück, wo der User der Verleihende ist und der Artikel momentan nicht verliehen ist
+	public ArrayList<Case> getFreeCasesFromPersonOwner(Long userId){
+		ArrayList<Case> cases = getAllCasesFromPersonOwner(userId);
 		return cases.stream()
 				.filter(c -> c.getReceiver() == null)
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
-	//Gibt alle Cases zurück, wo die Person sich von jemanden etwas geliehen hat
-	public ArrayList<Case> getLendCasesFromPersonReceiver(Long personId){
-		return caseRepository.findByReceiver(personId);
+	//Gibt alle Cases zurück, wo der User sich von jemanden etwas geliehen hat
+	public ArrayList<Case> getLendCasesFromPersonReceiver(Long userId){
+		return caseRepository.findByReceiver(userId);
 	}
 
 	//Erwartet Case mit wo Artikel verliehen werden kann. Case wird modifiziert, dass es nun verliehen ist.
@@ -67,5 +67,5 @@ public class CaseService {
 
 		caseRepository.save(c);
 	}
-	
+
 }

@@ -29,7 +29,7 @@ public class CaseRepoTest {
 	@Before
 	public void init(){
 		case1 = new Case();
-		case1.setOwner(new User());
+		//case1.setOwner(new User());
 		case1.setReceiver(new User());
 		case1.setArticle(new Article());
 		case1.setPrice(80);
@@ -39,7 +39,7 @@ public class CaseRepoTest {
 		case1.setEndTime(19022019L);
 
 		case2 = new Case();
-		case2.setOwner(new User());
+		//case2.setOwner(new User());
 		case2.setReceiver(new User());
 		case2.setArticle(new Article());
 		case2.setPrice(60);
