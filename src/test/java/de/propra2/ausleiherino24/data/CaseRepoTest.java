@@ -34,7 +34,7 @@ public class CaseRepoTest {
 		case1.setArticle(new Article());
 		case1.setPrice(80);
 		case1.setDeposit(200);
-		case1.setTitle("Car");
+		//case1.setTitle("Car");
 		case1.setStartTime(12022019L);
 		case1.setEndTime(19022019L);
 
@@ -44,7 +44,7 @@ public class CaseRepoTest {
 		case2.setArticle(new Article());
 		case2.setPrice(60);
 		case2.setDeposit(150);
-		case2.setTitle("Monitor");
+		//case2.setTitle("Monitor");
 		case2.setStartTime(10022019L);
 		case2.setEndTime(15022019L);
 	}
