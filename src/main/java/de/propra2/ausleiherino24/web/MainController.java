@@ -40,9 +40,10 @@ public class MainController {
 		this.caseRepository = caseRepository;
 	}
 
-	// TODO: Link overview.
+	
 	@GetMapping("/")
 	public ModelAndView index(HttpServletRequest request, Model model) {
+		// TODO: Link overview.
 		if(request.isUserInRole(HttpServletRequest.BASIC_AUTH))
 			model.addAttribute("loggedIn", true);
 		else
@@ -50,21 +51,24 @@ public class MainController {
 		ModelAndView mav = new ModelAndView("index");
 		return mav;
 	}
-
-	// TODO: Add all cases
+	
 	@GetMapping("/overview")
 	public ModelAndView displayAllArticles() {
 		ModelAndView mav = new ModelAndView("overview");
 		mav.addObject("all", caseRepository.findAll());
 		return mav;
 	}
-
-	@GetMapping("/login")
-	public ModelAndView getLogin(Model model){
-		ModelAndView mav = new ModelAndView("login");
-		return mav;
+	
+	@GetMapping("/signup")
+	public ModelAndView getRegistration(Model model){
+		return new ModelAndView("registration");
 	}
-
+	
+	@GetMapping("/login")
+	public ModelAndView getLogin(){
+		return new ModelAndView("login");
+	}
+	
 	@RequestMapping("/default")
 	public String defaultAfterLogin(HttpServletRequest request) {
 		if (request.isUserInRole("ROLE_user")) {
@@ -72,6 +76,7 @@ public class MainController {
 		} else
 			return "redirect:/acessed/admin/index";
 	}
+<<<<<<< HEAD
 
 	@GetMapping("/signup")
 	public ModelAndView getRegistration(Model model){
@@ -86,4 +91,6 @@ public class MainController {
 		model.addAttribute("registration");
 		return mvw;
 	}
+=======
+>>>>>>> master
 }

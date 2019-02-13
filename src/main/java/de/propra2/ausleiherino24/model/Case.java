@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Data
 public class Case {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
