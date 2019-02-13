@@ -1,6 +1,6 @@
 package de.propra2.ausleiherino24;
 
-import com.github.javafaker.Faker;
+//import com.github.javafaker.Faker;
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
@@ -32,9 +32,10 @@ public class Initializer implements ServletContextInitializer{
 	@Override
 	public void onStartup(final ServletContext servletContext) {
 		initTestUser();
-		initTestArticle();
+		//initTestArticle();
 	}
 
+	/*
 	private void initTestArticle() {
 		articleRepository.deleteAll();
 		Faker faker = new Faker(Locale.GERMAN);
@@ -55,6 +56,7 @@ public class Initializer implements ServletContextInitializer{
 			caseRepository.save(aCase);
 		});
 	}
+	*/
 
 	private void initTestUser() {
 		userRepository.deleteAll();
