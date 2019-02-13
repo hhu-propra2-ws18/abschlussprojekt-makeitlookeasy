@@ -21,14 +21,14 @@ public class Initializer implements ServletContextInitializer{
 	private final UserRepository userRepository;
 	private final ArticleRepository articleRepository;
 	private final CaseRepository caseRepository;
-	
+
 	@Autowired
 	public Initializer(UserRepository userRepository, ArticleRepository articleRepository, CaseRepository caseRepository) {
 		this.userRepository = userRepository;
 		this.articleRepository = articleRepository;
 		this.caseRepository = caseRepository;
 	}
-	
+
 	@Override
 	public void onStartup(final ServletContext servletContext) {
 		initTestUser();
