@@ -2,53 +2,61 @@
 <html xmlns:th="http://www.w3.org/2005/Atom">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Untitled</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+	<title>Ausleiherino24</title>
 	<link rel="stylesheet" th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}">
 	<link rel="stylesheet" th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}">
 	<link rel="stylesheet" th:href="@{~/css/loginstyles.min.css}">
-    <link rel="stylesheet" th:href="@{~/css/registrationstyles.min.css}">
+	<link rel="stylesheet" th:href="@{~/css/registrationstyles.min.css}">
 </head>
 
 <body>
-	<!-- Navigation -->
-    <div class="row register-form" >
-        <div class="col-md-8 offset-md-2">
-            <div class="text-center"><a href="/"><img src="/img/mainpage/logo.jpg"  style="width: 250px;height: 250px;margin-top: 40px;"></a></div>
-            <form class="custom-form" style="margin-top: -58px;">
-                <h1>Register Form</h1>
-                <div class="form-row form-group">
-                    <div class="col-sm-4 label-column"><label class="col-form-label" for="name">Username</label></div>
-                    <div class="col-sm-6 input-column"><input class="form-control" type="text" id="name"></div>
-                </div>
-                <div class="form-row form-group">
-                    <div class="col-sm-4 label-column"><label class="col-form-label" for="email">Email </label></div>
-                    <div class="col-sm-6 input-column"><input class="form-control" type="email" id="email"></div>
-                </div>
-                <div class="form-row form-group">
-                    <div class="col-sm-4 label-column"><label class="col-form-label" for="pawssword">Password </label></div>
-                    <div class="col-sm-6 input-column"><input class="form-control" type="password" id="pawssword"></div>
-                </div>
-                <div class="form-row form-group">
-                    <div class="col-sm-4 label-column"><label class="col-form-label" for="firstname">Firstname</label></div>
-                    <div class="col-sm-6 input-column"><input class="form-control" id="firstname"></div>
-                </div>
-                <div class="form-row form-group">
-                    <div class="col-sm-4 label-column"><label class="col-form-label" for="lastname">Lastname</label></div>
-                    <div class="col-sm-6 input-column"><input class="form-control" id="lastname"></div>
-                </div>
-                <div class="form-row form-group">
-                    <div class="col-sm-4 label-column"><label class="col-form-label" for="kontakt">Kontakt</label></div>
-                    <div class="col-sm-6 input-column"><input class="form-control" id="kontakt"></div>
-                </div>
-                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-2"><label class="form-check-label" for="formCheck-2">I've read and accept the terms and conditions</label></div><button class="btn btn-light submit-button" type="button">Submit Form</button></form>
-        </div>
-    </div>
-	<!-- Footer -->
-	<div th:replace="/../fragments/footer ::footer" name="footer"></div>
-	<script th:href="@{~/vendor/jquer/js/jquery.min.js}"></script>
-	<script th:href="@{~/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<!-- Navigation -->
+<div class="row register-form">
+	<div class="col-md-8 offset-md-2">
+		<div class="text-center"><a href="/"><img src="/img/mainpage/logo.jpg"
+												  style="width: 250px;height: 250px;margin-top: 40px;"></a></div>
+		<form class="custom-form" method="post" action="/registernewuser" style="margin-top: -58px;">
+			<h1>Register Form</h1>
+			<div class="form-row form-group">
+				<div class="col-sm-4 label-column"><label class="col-form-label" for="name">Username</label></div>
+				<div class="col-sm-6 input-column"><input class="form-control" type="text" required id="name" name="username">
+				</div>
+			</div>
+			<div class="form-row form-group">
+				<div class="col-sm-4 label-column"><label class="col-form-label" for="email">Email </label></div>
+				<div class="col-sm-6 input-column"><input class="form-control" type="email" required id="email" name="email">
+				</div>
+			</div>
+			<div class="form-row form-group">
+				<div class="col-sm-4 label-column"><label class="col-form-label" for="pawssword">Password </label></div>
+				<div class="col-sm-6 input-column"><input class="form-control" type="password" required id="pawssword"
+														  name="password"></div>
+			</div>
+			<div class="form-row form-group">
+				<div class="col-sm-4 label-column"><label class="col-form-label" for="firstname">Firstname</label></div>
+				<div class="col-sm-6 input-column"><input class="form-control" id="firstname" required name="firstname"></div>
+			</div>
+			<div class="form-row form-group">
+				<div class="col-sm-4 label-column"><label class="col-form-label" for="lastname">Lastname</label></div>
+				<div class="col-sm-6 input-column"><input class="form-control" id="lastname" required name="lastname"></div>
+			</div>
+			<div class="form-row form-group">
+				<div class="col-sm-4 label-column"><label class="col-form-label" for="kontakt">Kontakt</label></div>
+				<div class="col-sm-6 input-column"><input class="form-control" id="kontakt" required name="contact"></div>
+			</div>
+			<div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-2"><label
+					class="form-check-label" for="formCheck-2">I've read and accept the terms and conditions</label>
+			</div>
+			<button class="btn btn-light submit-button" type="submit">Submit Form</button>
+		</form>
+	</div>
+</div>
+<!-- Footer -->
+<div th:replace="/../fragments/footer ::footer" name="footer"></div>
+<script th:href="@{~/vendor/jquer/js/jquery.min.js}"></script>
+<script th:href="@{~/vendor/bootstrap/js/bootstrap.min.js}"></script>
 </body>
 
 </html>
