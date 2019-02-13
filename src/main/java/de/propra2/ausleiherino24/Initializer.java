@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24;
 
+import com.github.javafaker.Faker;
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
@@ -7,7 +8,6 @@ import de.propra2.ausleiherino24.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
-import com.github.javafaker.Faker;
 
 import javax.servlet.ServletContext;
 import java.util.Locale;
