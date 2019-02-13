@@ -7,28 +7,16 @@
 			</button>
 			<div class="collapse navbar-collapse " id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active">
-						<a class="nav-link" href="#">Home
-							<span class="sr-only">(current)</span>
-						</a>
-					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="#">About</a>
-					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="#">Services</a>
-					</li>
-					<li class="nav-item active">
-						<a class="nav-link" href="#">Contact</a>
-					</li>
 					<li>
 						<ul th:if='${role.equals("user")}' class="nav navbar-nav navbar-right">
-							<li><div style="margin-top:7px;margin-left:5px;margin-right:5px">Logged in as User</div></li>
+							<li><div class="text-white"
+									 style="margin-top:7px;margin-left:5px;margin-right:5px">Logged in as User</div></li>
 							<li><a href="/login?logout" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px">
 								<i class="fa fa-user-plus ">Logout</i></div></a></li>
 						</ul>
 						<ul th:if='${role.equals("admin")}' class="nav navbar-nav navbar-right">
-							<li><div style="margin-top:7px;margin-left:5px;margin-right:5px">Logged in as Admin</div></li>
+							<li><div class="text-white"
+									 style="margin-top:7px;margin-left:5px;margin-right:5px">Logged in as Admin</div></li>
 							<li><a href="/login?logout" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px">
 								<i class="fa fa-user-plus ">Logout</i></div></a></li>
 						</ul>

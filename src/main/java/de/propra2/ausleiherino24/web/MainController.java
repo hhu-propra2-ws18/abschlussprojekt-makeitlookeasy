@@ -72,7 +72,7 @@ public class MainController {
 		if (request.isUserInRole("ROLE_user")) {
 			return "redirect:/accessed/user/index";
 		} else
-			return "redirect:/acessed/admin/index";
+			return "redirect:/accessed/admin/index";
 	}
 
 	@RequestMapping("/registernewuser")
