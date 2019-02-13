@@ -1,8 +1,8 @@
 package de.propra2.ausleiherino24.web;
 
-import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +23,16 @@ public class MainController {
 	 */
 	
 	private final UserService userService;
-	private final CaseRepository caseRepository;
+	private final ArticleService articleService;
 	private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
-	public MainController(CaseRepository caseRepository, UserService userService) {
-		this.caseRepository = caseRepository;
+	public MainController(UserService userService, ArticleService articleService) {
+		this.articleService = articleService;
 		this.userService = userService;
 	}
 	
+	// Display main page and check for authenticated user.
 	@GetMapping("/")
 	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("index");
@@ -42,10 +43,11 @@ public class MainController {
 		return mav;
 	}
 
+	// Display all
 	@GetMapping("/overview")
 	public ModelAndView displayAllArticles() {
 		ModelAndView mav = new ModelAndView("overview");
-		mav.addObject("all", caseRepository.findAll());
+		mav.addObject("all", articleService.getAllNonActiveArticles());
 		return mav;
 	}
 	

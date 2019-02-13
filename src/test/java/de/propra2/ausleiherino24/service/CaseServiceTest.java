@@ -5,11 +5,11 @@ import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.context.TestExecutionListeners;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CaseServiceTest {
 	private CaseRepository caseRepository;
@@ -18,7 +18,7 @@ public class CaseServiceTest {
 	@Before
 	public void setUp(){
 		caseRepository = new FakeCaseRepository();
-		caseService = new CaseService(caseRepository);
+		caseService = new CaseService(caseRepository, articleRepository);
 	}
 
 	@Test

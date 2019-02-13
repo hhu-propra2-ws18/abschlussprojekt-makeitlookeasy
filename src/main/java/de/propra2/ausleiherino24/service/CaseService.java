@@ -3,18 +3,19 @@ package de.propra2.ausleiherino24.service;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+@Service
 public class CaseService {
-	private CaseRepository caseRepository;
+	private final CaseRepository caseRepository;
 
 	@Autowired
-	public CaseService(CaseRepository caseRepository){
+	public CaseService(CaseRepository caseRepository) {
 		this.caseRepository = caseRepository;
 	}
 
@@ -66,4 +67,5 @@ public class CaseService {
 
 		caseRepository.save(c);
 	}
+	
 }

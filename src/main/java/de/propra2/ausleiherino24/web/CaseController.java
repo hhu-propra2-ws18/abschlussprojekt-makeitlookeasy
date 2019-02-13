@@ -79,7 +79,7 @@ public class CaseController {
 			if (c.getArticle().equals(article)) {
 				c.active = false;
 				caseRepository.save(c);
-				LOGGER.info("Deactivated case #%L", c.getId());
+				LOGGER.info("Deactivated case with ID %L", c.getId());
 			}
 		}
 		
