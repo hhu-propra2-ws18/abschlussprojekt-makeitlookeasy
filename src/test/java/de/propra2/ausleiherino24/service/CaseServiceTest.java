@@ -18,7 +18,7 @@ public class CaseServiceTest {
 	@Before
 	public void setUp(){
 		caseRepository = new FakeCaseRepository();
-		caseService = new CaseService(caseRepository, personRepository);
+		caseService = new CaseService(caseRepository, personRepository, articleService);
 	}
 
 	@Test
