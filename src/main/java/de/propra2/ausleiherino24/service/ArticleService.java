@@ -25,7 +25,7 @@ public class ArticleService {
 		List<Article> allArticles = articleRepository.findAll();
 		
 		for (Article article : allArticles) {
-			if (!availableArticles.contains(article) && article.active && !article.reserved) {			// no duplicate, active article, not reserved
+			if (!availableArticles.contains(article) && article.getActive() && !article.getReserved()) {			// no duplicate, active article, not reserved
 				availableArticles.add(article);
 			}
 		}
