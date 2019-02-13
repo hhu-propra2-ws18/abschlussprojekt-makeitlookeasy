@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,13 +71,13 @@ public class CaseService {
 
 		caseRepository.save(c);
 	}
-
-	public List<Case> findAllCasesWithNonActiveArticles(){
-		return articleService.getAllNonActiveArticles().stream()
+/*
+	public List<Case> findAllCasesWithNonReservedArticles(){
+		return articleService.getAllNonReservedArticles().stream()
 				.map(caseRepository::findByArticle)
 				.filter(Optional::isPresent)
 				.map(Optional::get)
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
-
+*/
 }
