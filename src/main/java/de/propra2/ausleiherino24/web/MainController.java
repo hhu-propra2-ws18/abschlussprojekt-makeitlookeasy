@@ -59,11 +59,14 @@ public class MainController {
 		return mav;
 	}
 
+<<<<<<< HEAD
 	@GetMapping("/signup")
 	public ModelAndView getRegistration(Model model){
 		return new ModelAndView("registration");
 	}
 
+=======
+>>>>>>> frontDev
 	@GetMapping("/login")
 	public ModelAndView getLogin(){
 		return new ModelAndView("login");
