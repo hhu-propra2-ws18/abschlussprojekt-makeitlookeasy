@@ -6,13 +6,12 @@ import javax.persistence.*;
 
 @Entity
 @Data
+@Table(name="caseDB")
 public class Case {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
-
-	String title;
 
 	Long startTime;
 
@@ -32,9 +31,8 @@ public class Case {
 
 	public Case(){}
 
-	public Case(Long id, String title, Long startTime, Long endTime, int price, int deposit, Boolean active, User receiver, Article article) {
+	public Case(Long id, Long startTime, Long endTime, int price, int deposit, Boolean active, User receiver, Article article) {
 		this.id = id;
-		this.title = title;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.price = price;
@@ -42,6 +40,16 @@ public class Case {
 		this.active = active;
 		this.receiver = receiver;
 		this.article = article;
+	}
+	//Die Konstruktion ist nötig, damit der Article stets mit geupdatet wird. Analoges ist im Article
+	//Siehe https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/
+	public void setArticle(Article article){
+		setArticle(article, false);
+	}
+	void setArticle(Article article, boolean repetition){
+		this.article = article;
+		if(article != null && !repetition)
+			article.setACase(this, true);
 	}
 
 	public User getOwner(){
