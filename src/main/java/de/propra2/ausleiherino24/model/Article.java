@@ -17,6 +17,11 @@ public class Article {
 	@Lob
 	String description;
 
-	public Boolean active;
-	
+	// If this is true the article is not available for rental ("deleted")
+	Boolean active;
+
+	Boolean reserved;
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	User owner;
 }

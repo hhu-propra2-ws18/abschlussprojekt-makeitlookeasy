@@ -31,7 +31,7 @@ public class UserController {
 		this.userRepository = userRepository;
 	}
 
-	@GetMapping("/user")
+	@GetMapping("/")
 	public ModelAndView displayUserProfile(@RequestParam("id") Long id) {
 		User user = userRepository.getById(id);
 

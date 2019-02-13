@@ -25,12 +25,13 @@ public class Case {
 	public Boolean active;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	User owner;
-
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	User receiver;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	Article article;
+
+	public User getOwner(){
+		return this.article.getOwner();
+	};
 
 }

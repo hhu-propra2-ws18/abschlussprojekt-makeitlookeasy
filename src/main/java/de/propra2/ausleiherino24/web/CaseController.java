@@ -74,22 +74,21 @@ public class CaseController {
 	@PutMapping("/deactivateArticle")
 	public ModelAndView deactivateArticle(@ModelAttribute Article article) {
 		LOGGER.warn("Deactivating cases offering %s [ID=%L]", article.getName(), article.getId());
-		
 		Iterable<Case> allCases = caseRepository.findAll();
 		for (Case c : allCases) {
 			if (c.getArticle().equals(article)) {
-				c.active = false;
+				c.setActive(false);
 				caseRepository.save(c);
-				LOGGER.info("Deactivated case #%L", c.getId());
+				LOGGER.info("Deactivated case with ID %L", c.getId());
 			}
 		}
 		
-		article.active = false;
+		article.setActive(false);
 		articleRepository.save(article);
 		LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
 		
 		ModelAndView mav = new ModelAndView("index");
-		//mav.addObject("user", user);
+		// TODO: Add object user to model, and display profile with userId
 		return mav;
 	}
 	
