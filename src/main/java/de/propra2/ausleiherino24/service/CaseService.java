@@ -2,7 +2,6 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
-import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.User;
@@ -10,26 +9,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class CaseService {
 	private final CaseRepository caseRepository;
 	private final PersonRepository personRepository;
+	private final ArticleService articleService;
 
 	@Autowired
-	public CaseService(CaseRepository caseRepository, PersonRepository personRepository) {
+	public CaseService(CaseRepository caseRepository, PersonRepository personRepository, ArticleService articleService) {
 		this.caseRepository = caseRepository;
 		this.personRepository = personRepository;
+		this.articleService = articleService;
 	}
 
-	//Fügt einen Artikel einer Person hinzu, welcher frei zum Verleih ist
-	public void addCaseForNewArticle(Article article, String title, int price, int deposit){
+	//Fügt einen Artikel, welcher frei zum Verleih ist, von einer Person hinzu
+	public void addCaseForNewArticle(Article article, int price, int deposit){
 		Case c = new Case();
 		c.setArticle(article);
 		c.setDeposit(deposit);
 		c.setPrice(price);
-		c.setTitle(title);
 
 		caseRepository.save(c);
 	}
@@ -70,6 +72,14 @@ public class CaseService {
 		c.setEndTime(endtime);
 
 		caseRepository.save(c);
+	}
+
+	public List<Case> findAllCasesWithNonActiveArticles(){
+		return articleService.getAllNonActiveArticles().stream()
+				.map(caseRepository::findByArticle)
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 	
 }
