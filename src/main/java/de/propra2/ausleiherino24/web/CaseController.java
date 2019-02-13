@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
@@ -50,7 +51,7 @@ public class CaseController {
 	}
 	
 	@PostMapping("/saveNewArticle")
-	public ModelAndView saveNewCaseAndArticle(@ModelAttribute Article article) {
+	public ModelAndView saveNewCaseAndArticle(@ModelAttribute @Valid Article article) {
 		articleRepository.save(article);
 		LOGGER.info("Created article %s [ID=%L]", article.getName(), article.getId());
 		
@@ -62,7 +63,7 @@ public class CaseController {
 	}
 	
 	@PutMapping("/saveEditedArticle")
-	public ModelAndView saveEditedCaseAndArticle(@ModelAttribute Article article) {
+	public ModelAndView saveEditedCaseAndArticle(@ModelAttribute @Valid Article article) {
 		articleRepository.save(article);
 		LOGGER.info("Edited article %s [ID=%L]", article.getName(), article.getId());
 		
@@ -72,7 +73,7 @@ public class CaseController {
 	}
 
 	@PutMapping("/deactivateArticle")
-	public ModelAndView deactivateArticle(@ModelAttribute Article article) {
+	public ModelAndView deactivateArticle(@ModelAttribute @Valid Article article) {
 		LOGGER.warn("Deactivating cases offering %s [ID=%L]", article.getName(), article.getId());
 		Iterable<Case> allCases = caseRepository.findAll();
 		for (Case c : allCases) {

@@ -10,11 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @Controller
 public class MainController {
@@ -51,10 +53,10 @@ public class MainController {
 
 	@RequestMapping("/default")
 	public String defaultAfterLogin(HttpServletRequest request) {
-		if (request.isUserInRole("ROLE_user")) {
-			return "redirect:/accessed/user/index";
-		} else
+		if (request.isUserInRole("ROLE_admin")) {
 			return "redirect:/accessed/admin/index";
+		} else
+			return "redirect:/accessed/user/index";
 	}
 	
 	@GetMapping("/signup")
@@ -66,10 +68,10 @@ public class MainController {
 	}
 
 	@PostMapping("/registerNewUser")
-	public ModelAndView registerNewUser(Person person, User user){
+	public ModelAndView registerNewUser(@ModelAttribute @Valid User user, @ModelAttribute @Valid Person person){
 		userService.createUserWithProfile(user,person);
 		LOGGER.info("Created new person [ID=%L] and user %s [ROLE=%s, ID=%L]", person.getId(), user.getUsername(), user.getRole(), user.getId());
 		
-		return new ModelAndView("login");
+		return new ModelAndView("redirect:/login");
 	}
 }

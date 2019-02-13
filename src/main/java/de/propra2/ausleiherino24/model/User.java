@@ -1,12 +1,16 @@
 package de.propra2.ausleiherino24.model;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
 @Entity
 @Table(name="userDB")
+@Builder
+@NoArgsConstructor
 public class User {
 
 	@Id
@@ -28,10 +32,6 @@ public class User {
 		this.password = user.getPassword();
 		this.email = user.getEmail();
 		this.role = user.getRole();
-	}
-
-	public User(){
-
 	}
 
 	//TODO: override setPassword to hash password
