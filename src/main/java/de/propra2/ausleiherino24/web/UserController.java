@@ -36,12 +36,6 @@ public class UserController {
 		return mav;
 	}
 
-	/*
-	@GetMapping("/index")
-	public String getIndex() {
-		return "/accessed/user/index";
-	}*/
-
 	@GetMapping("/index")
 	public ModelAndView getIndex() {
 		return new ModelAndView("index");
