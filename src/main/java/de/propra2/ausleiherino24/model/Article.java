@@ -24,4 +24,15 @@ public class Article {
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	User owner;
+
+	public Article(){}
+
+	public Article(Long id, String name, String description, Boolean active, Boolean reserved, User owner) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.active = active;
+		this.reserved = reserved;
+		this.owner = owner;
+	}
 }
