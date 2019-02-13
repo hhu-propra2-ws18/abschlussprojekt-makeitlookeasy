@@ -5,6 +5,7 @@ import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.RoleService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,10 +45,7 @@ public class MainController {
 	@GetMapping("/")
 	public ModelAndView index(HttpServletRequest request, Model model) {
 		// TODO: Link overview.
-		if(request.isUserInRole(HttpServletRequest.BASIC_AUTH))
-			model.addAttribute("loggedIn", true);
-		else
-			model.addAttribute("loggedIn", false);
+		model.addAttribute("role", RoleService.getUserRole(request));
 		ModelAndView mav = new ModelAndView("index");
 		return mav;
 	}
