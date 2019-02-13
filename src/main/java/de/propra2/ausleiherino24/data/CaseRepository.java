@@ -20,4 +20,8 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
 	ArrayList<Case> findByOwner(@Param("owner") User Owner);
 
 	Optional<Case> findByArticle(Article article);
+
+	//Optional<Case> findByArticleOwnerId(Long id);
+	
+	//Optional<Case> findByReceiverId(Long id);
 }
