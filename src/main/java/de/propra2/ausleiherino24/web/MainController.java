@@ -1,8 +1,6 @@
 package de.propra2.ausleiherino24.web;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
-import de.propra2.ausleiherino24.data.PersonRepository;
-import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.UserService;
@@ -10,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,34 +19,26 @@ import javax.servlet.http.HttpServletRequest;
 public class MainController {
 	/*
 	MainController manages all actions that are available to every visitor of the platform.
-	This does not include signup/login.
+	This includes basic browsing, and signup/login.
 	 */
-	@Autowired
-	UserRepository userRepository;
-
-	@Autowired
-	PersonRepository personRepository;
-
-	@Autowired
-	UserService userService;
-
+	
+	private final UserService userService;
 	private final CaseRepository caseRepository;
 	private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
-	public MainController(CaseRepository caseRepository) {
+	public MainController(CaseRepository caseRepository, UserService userService) {
 		this.caseRepository = caseRepository;
+		this.userService = userService;
 	}
-
-
+	
 	@GetMapping("/")
-	public ModelAndView index(HttpServletRequest request, Model model) {
-		// TODO: Link overview.
-		if(request.isUserInRole(HttpServletRequest.BASIC_AUTH))
-			model.addAttribute("loggedIn", true);
-		else
-			model.addAttribute("loggedIn", false);
+	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("index");
+		if(request.isUserInRole(HttpServletRequest.BASIC_AUTH))
+			mav.addObject("loggedIn", true);
+		else
+			mav.addObject("loggedIn", false);
 		return mav;
 	}
 
@@ -59,8 +48,8 @@ public class MainController {
 		mav.addObject("all", caseRepository.findAll());
 		return mav;
 	}
-
-
+	
+	/** LOGIN && SIGNUP **/
 	@GetMapping("/login")
 	public ModelAndView getLogin(){
 		return new ModelAndView("login");
@@ -71,28 +60,22 @@ public class MainController {
 		if (request.isUserInRole("ROLE_user")) {
 			return "redirect:/accessed/user/index";
 		} else
-			return "redirect:/acessed/admin/index";
+			return "redirect:/accessed/admin/index";
 	}
-
-
+	
 	@GetMapping("/signup")
-	public ModelAndView getRegistration(Model model){
+	public ModelAndView getRegistration(){
 		ModelAndView mav = new ModelAndView("registration");
-		User user = new User();
-		Person person = new Person();
-		mav.addObject(user);
-		mav.addObject(person);
+		mav.addObject("user", new User());
+		mav.addObject("person", new Person());
 		return mav;
 	}
 
-	@PostMapping("/registernewuser")
-	public ModelAndView registerNewUser(Person person, User user,Model model){
-
-		userService.creatUserWithProfil(user,person);
-
-		ModelAndView mvw = new ModelAndView("login");
-
-		model.addAttribute("registration");
-		return mvw;
+	@PostMapping("/registerNewUser")
+	public ModelAndView registerNewUser(Person person, User user){
+		userService.createUserWithProfile(user,person);
+		LOGGER.info("Created new person [ID=%L] and user %s [ROLE=%s, ID=%L]", person.getId(), user.getUsername(), user.getRole(), user.getId());
+		
+		return new ModelAndView("login");
 	}
 }

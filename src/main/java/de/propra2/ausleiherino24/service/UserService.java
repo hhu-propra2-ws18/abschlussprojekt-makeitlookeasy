@@ -20,12 +20,10 @@ public class UserService {
 		this.userRepository = userRepository;
 	}
 
-	public void creatUserWithProfil(User user, Person person){
-		Person personactual = person;
-		User useractual = user;
+	public void createUserWithProfile(User user, Person person){
 		person.setUser(user);
 		user.setRole("user");
-		personRepository.save(personactual);
-		userRepository.save(useractual);
+		personRepository.save(person);
+		userRepository.save(user);
 	}
 }
