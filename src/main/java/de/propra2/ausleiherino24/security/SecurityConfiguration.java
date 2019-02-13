@@ -23,12 +23,12 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private final CustomUserDetailsService userDetailsService;
-	
+
 	@Autowired
 	public SecurityConfiguration(CustomUserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
 	}
-	
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService)
@@ -53,9 +53,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 					.permitAll()
 					.defaultSuccessUrl("/default",true)
 					.and()
-				.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");
+				.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout");
 	}
-	
+
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
 		return new PasswordEncoder() {

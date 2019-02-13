@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Ausleiherino24</title>
+
+	<!-- Bootstrap core CSS -->
+	<link th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+
+	<!-- Font awesome Css-->
+	<link th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}" rel="stylesheet">
+
+
+
+	<!-- Custom styles for this template -->
+	<link th:href="@{~/css/shop-homepage.css}" rel="stylesheet">
+</head>
+<body>
+	<!-- Navigation -->
+	<div th:replace="/../fragments/navbar ::navbar" name="navbar"></div>
+
+	<div class="container">
+		<div class="row">
+			<!-- Categories -->
+			<div th:replace="/../fragments/categories ::categories" name="categorie"></div>
+
+			<!-- Item  -->
+			<div class="col-lg-9">
+				<div class="card mt-4">
+					<img class="card-img-top img-fluid" src="http://placehold.it/900x400" alt="">
+					<div class="card-body">
+						<h3 class="card-title">Product Name</h3>
+						<h4>24.99€ pro Tag</h4>
+						<h6>200€ Kaution</h6>
+						<p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. Totam id dolores, sint aperiam sequi pariatur praesentium animi perspiciatis molestias iure, ducimus!</p>
+
+						<div class="row">
+							<p class="card-text" style="margin-left:15px">Zur Verfügung gestellt von <a href="#">Mick Potzkai</a></p>
+							<div class="ml-auto">
+								<div class="btn btn-success " style="width:200px;margin-right:5px">Verfügbarkeit anfragen</div>
+							</div>
+						</div>
+						<p class="card-text">47877 Willich,Plutoweg 5</p>
+
+					</div>
+
+
+				</div>
+				<!-- /.card -->
+				<div class="card card-outline-secondary my-4">
+					<div class="card-header">
+						Product Reviews
+					</div>
+					<!-- Reviews, could be added soon
+					<div class="card-body">
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+						<small class="text-muted">Posted by Anonymous on 3/1/17</small>
+						<hr>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+						<small class="text-muted">Posted by Anonymous on 3/1/17</small>
+						<hr>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+						<small class="text-muted">Posted by Anonymous on 3/1/17</small>
+						<hr>
+						<a href="#" class="btn btn-success">Leave a Review</a>
+					</div> -->
+				</div>
+				<!-- /.card -->
+			</div>
+			<!-- /.col-lg-9 -->
+		</div>
+		</div>
+	</div>
+	<!-- Footer -->
+	<div th:replace="/../fragments/footer ::footer" name="footer"></div>
+<script th:href="@{~/vendor/jquery/jquery.min.js}"></script>
+<script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

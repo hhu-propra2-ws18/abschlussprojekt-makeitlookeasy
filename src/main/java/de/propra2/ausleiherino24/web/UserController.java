@@ -33,12 +33,12 @@ public class UserController {
 		this.userRepository = userRepository;
 		this.personRepository = personRepository;
 	}
-	
+
 	@GetMapping("/profile")
 	public ModelAndView displayUserProfile(@RequestParam("id") Long id, Principal principal) {
 		User user = userRepository.getById(id);
 		boolean self = principal.getName().equals(user.getUsername());	// Flag for ThymeLeaf. Enables certain profile editing options.
-		
+
 		ModelAndView mav = new ModelAndView("profile");
 		mav.addObject("user", user);
 		mav.addObject("self", self);
@@ -51,19 +51,19 @@ public class UserController {
 		LOGGER.info("Updated user profile %s [ID=%L]", user.getUsername(), user.getId());
 		personRepository.save(person);
 		LOGGER.info("Updated person profile [ID=%L]", person.getId());
-		
+
 		/*
 		ModelAndView mav = new ModelAndView("profile");
 		mav.addObject("user", user);
 		return mav;
 		*/
 	}
-	
+
 	@GetMapping("/index")
 	public ModelAndView getIndex(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("/accessed/user/index");
 		mav.addObject("role", RoleService.getUserRole(request));
 		return mav;
 	}
-	
+
 }

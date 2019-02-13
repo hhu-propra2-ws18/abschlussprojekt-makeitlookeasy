@@ -3,6 +3,7 @@ package de.propra2.ausleiherino24.web;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.RoleService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.slf4j.Logger;
@@ -26,12 +27,12 @@ public class MainController {
 	 */
 	
 	private final UserService userService;
-	private final ArticleService articleService;
+	private final CaseService caseService;
 	private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
-	public MainController(UserService userService, ArticleService articleService) {
-		this.articleService = articleService;
+	public MainController(UserService userService, CaseService caseService) {
+		this.caseService = caseService;
 		this.userService = userService;
 	}
 	
@@ -40,7 +41,7 @@ public class MainController {
 	public ModelAndView index(HttpServletRequest request) {
 		// TODO: Link overview.
 		ModelAndView mav = new ModelAndView("index");
-		mav.addObject("all", articleService.getAllNonActiveArticles());
+		mav.addObject("allCases", caseService.findAllCasesWithNonActiveArticles());
 		mav.addObject("role", RoleService.getUserRole(request));
 		return mav;
 	}
