@@ -1,33 +1,33 @@
 version: '3.5'
 services:
-  propay: propay
-      image: propra/propay
-      container_name: propay
-      restart: always
-      ports:
-        - "8888:8888"
-      volume:
-        -  ./data:/code/data
-#      depends_on:
-#        - ausleiherino
+  propay:
+    image: propra/propay:latest
+    container_name: propay
+    restart: always
+    ports:
+      - 8888:8888
+    volumes:
+      - ./propaydata:/code/data
+  #   depends_on:
+  #     - ausleiherino24
 
-#  ausleiherino:
-#    container_name: ausleiherino
-#    build: .
-#    volumes:
-#      - .:/app
-#    working_dir: /app
-#    user: appuser
-#    environment:
-#      - POSTGRES_PASSWORD=secret
-#      - POSTGRES_DB=database
-#      - POSTGRES_USER=postgres
-#    command: dockerize -wait tcp://database:5432 -timeout 600s ./gradlew bootRun
+  #  ausleiherino24:
+  #    container_name: ausleiherino
+  #    build: .
+  #    volumes:
+  #      - .:/app
+  #    working_dir: /app
+  #    user: appuser
+  #    environment:
+  #      - POSTGRES_PASSWORD=secret
+  #      - POSTGRES_DB=database
+  #      - POSTGRES_USER=postgres
+  #    command: dockerize -wait tcp://database:5432 -timeout 600s ./gradlew boot
 
   database:
     image: postgres
     restart: always
-    container_name: postgres
+    container_name: database
     ports:
       - 5432:5432
     environment:
@@ -35,62 +35,39 @@ services:
       - POSTGRES_DB=database
       - POSTGRES_USER=postgres
     volumes:
-      - database_volume:/var/lib/postgresql/data
+      - ./database:/var/lib/postgresql/data
 
-  sonar-db:
-    container_name: sonar-db
+  sonardb:
+    container_name: sonardb
     image: postgres
     hostname: pgsql-01
     ports:
       - 4321:4321
     environment:
+      - POSTGRES_PASSWORD=sonar
       - POSTGRES_DB=sonar
       - POSTGRES_USER=sonar
-      - POSTGRES_PASSWORD=sonar
+    volumes:
+      - ./sonardb:/var/lib/postgresql/data
 
-  sonar:
+  sonarqube:
     container_name: sonarqube
     image: sonarqube
     hostname: sonar-01
     links:
-      - sonar-db
+      - sonardb
     ports:
       - 9000:9000
     environment:
       - SONAR_JDBC_URL=jdbc:postgresql://pgsql-01:4321/sonar
       - SONAR_JDBC_USERNAME=sonar
       - SONAR_JDBC_PASSWORD=sonar
-      - sonardb_volume:/var/lib/postgresql/data
-
-#  volumerize:
-#    container_name: volumerize
-#    depends_on:
-#      - sonar
-#    image: blacklabelops/volumerize
-#    volumes:
-#      - database_volume:/source
-#      - backup_volume:/backup
-#      - cache_volume:/volumerize-cache
-#    environment:
-#      - 'VOLUMERIZE_SOURCE=/source'
-#      - 'VOLUMERIZE_TARGET=file:///backup'
 
   jenkins:
     image: 'jenkins/jenkins:lts'
-    container_name: jenkins-docker
+    container_name: jenkins
     restart: unless-stopped
     ports:
       - 1234:1234
     volumes:
-      - './jenkins_home:/var/jenkins_home'
-
-volumes:
-  database_volume:
-    external: true
-  sonardb_volume:
-    external: true
-#  backup_volume:
-#    external: false
-#  cache_volume:
-#    external: false
-
+      - ./jenkins_home:/var/jenkins_home

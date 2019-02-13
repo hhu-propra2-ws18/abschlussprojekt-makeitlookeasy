@@ -5,11 +5,11 @@ import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.test.context.TestExecutionListeners;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CaseServiceTest {
 	private CaseRepository caseRepository;
@@ -18,16 +18,16 @@ public class CaseServiceTest {
 	@Before
 	public void setUp(){
 		caseRepository = new FakeCaseRepository();
-		caseService = new CaseService(caseRepository);
+		caseService = new CaseService(caseRepository, personRepository);
 	}
 
 	@Test
 	public void OwnerWithThreeCases(){
 		Article article = null;
 
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
 
 		ArrayList<Case> cases = caseService.getAllCasesFromPersonOwner(0L);
 
@@ -44,11 +44,11 @@ public class CaseServiceTest {
 	public void OwnerWithThreeCases2(){
 		Article article = null;
 
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(1L, article, "",0,0);
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(2L, article, "",0,0);
+		caseService.addCaseForNewArticle(article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
 
 		ArrayList<Case> cases = caseService.getAllCasesFromPersonOwner(0L);
 
@@ -65,9 +65,9 @@ public class CaseServiceTest {
 	public void OwnerWithZeroCases(){
 		Article article = null;
 
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
-		caseService.addCaseForNewArticle(0L, article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
+		caseService.addCaseForNewArticle( article, "",0,0);
 
 		ArrayList<Case> cases = caseService.getAllCasesFromPersonOwner(1L);
 
