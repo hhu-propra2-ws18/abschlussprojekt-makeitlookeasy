@@ -45,4 +45,16 @@ public class UserController {
 		model.addAttribute("role", RoleService.getUserRole(request));
 		return "/accessed/user/index";
 	}
+
+	@GetMapping("/profil")
+	public String getProfil(HttpServletRequest request, Model model) {
+		model.addAttribute("role", RoleService.getUserRole(request));
+		return "/accessed/user/profiledit";
+	}
+
+	@GetMapping("/profil2")
+	public String getProfi2l(HttpServletRequest request, Model model) {
+		model.addAttribute("role", RoleService.getUserRole(request));
+		return "/accessed/user/profile";
+	}
 }
