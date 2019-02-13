@@ -27,7 +27,7 @@ public class UserController {
 		this.userRepository = userRepository;
 	}
 
-	@GetMapping("/user")
+	@GetMapping("/")
 	public ModelAndView displayUserProfile(@RequestParam("id") Long id) {
 		User user = userRepository.getById(id);
 
@@ -35,12 +35,6 @@ public class UserController {
 		mav.addObject("user", user);
 		return mav;
 	}
-
-	/*
-	@GetMapping("/index")
-	public String getIndex() {
-		return "/accessed/user/index";
-	}*/
 
 	@GetMapping("/index")
 	public ModelAndView getIndex() {

@@ -2,10 +2,7 @@ package de.propra2.ausleiherino24.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -19,6 +16,11 @@ public class Article {
 
 	String description;
 
-	public Boolean active;
-	
+	// If this is true the article is not available for rental ("deleted")
+	Boolean active;
+
+	Boolean reserved;
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	User owner;
 }
