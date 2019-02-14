@@ -3,13 +3,11 @@ package de.propra2.ausleiherino24.propayhandler;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * ProPay Account
- */
 class 	PPAccount {
-	private String account;
-	private double number;
-	private List<Reservation> reservations;
+
+	String account;
+	Double number;
+	List<Reservation> reservations;
 
 	public PPAccount(String account, double number){
 		this.account = account;
@@ -17,11 +15,13 @@ class 	PPAccount {
 		this.reservations = new ArrayList<>();
 	}
 
+
 	double	getAmount(){
+		if(number == null){
+			return 0;
+		}
 		return number;
 	}
-
-	// TODO Reservierungen sind?
 	List<Reservation> getReservations(){
 		if(this.reservations == null){
 			return new ArrayList<>();
