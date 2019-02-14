@@ -2,8 +2,10 @@ package de.propra2.ausleiherino24.web;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
+import de.propra2.ausleiherino24.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Optional;
 
 
@@ -24,12 +27,14 @@ public class CaseController {
 
 	private final ArticleRepository articleRepository;
 	private final CaseRepository caseRepository;
+	private final UserRepository userRepository;
 	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
 	
 	@Autowired
-	public CaseController(ArticleRepository articleRepository, CaseRepository caseRepository) {
+	public CaseController(ArticleRepository articleRepository, CaseRepository caseRepository, UserRepository userRepository) {
 		this.articleRepository = articleRepository;
 		this.caseRepository = caseRepository;
+		this.userRepository = userRepository;
 	}
 	
 	@GetMapping("/article")
@@ -72,9 +77,20 @@ public class CaseController {
 		mav.addObject("article", article);
 		return mav;
 	}
-
+	
+	/**
+	 * Deactivates a single article across all cases, past and present, and deactivates those cases accordingly.
+	 * Deactivated cases are then updated in the CaseRepository.
+	 * Further deactivates the specified article. Article updated in ArticleRepository.
+	 * Afterwards, check if Principal is in UserRepository and display Principal's active articles.
+	 *
+	 * @param article		Article object received from HTML form input
+	 * @param principal		Current user
+	 * @return				View "myArticles", displaying all active articles of principal
+	 * @throws Exception	Thrown, if principal couldn't be found in UserRepository
+	 */
 	@PutMapping("/deactivateArticle")
-	public ModelAndView deactivateArticle(@ModelAttribute @Valid Article article) {
+	public ModelAndView deactivateArticle(@ModelAttribute @Valid Article article, Principal principal) throws Exception {
 		LOGGER.warn("Deactivating cases offering %s [ID=%L]", article.getName(), article.getId());
 		Iterable<Case> allCases = caseRepository.findAll();
 		for (Case c : allCases) {
@@ -89,8 +105,16 @@ public class CaseController {
 		articleRepository.save(article);
 		LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
 		
-		ModelAndView mav = new ModelAndView("index");
-		// TODO: Add object user to model, and display profile with userId
+		User user;
+		String currentPrincipalName = principal.getName();
+		if (userRepository.findByUsername(currentPrincipalName).isPresent()) {
+			user = userRepository.findByUsername(currentPrincipalName).get();
+		} else {
+			throw new Exception("Couldn't find current principal in UserRepository.");
+		}
+		
+		ModelAndView mav = new ModelAndView("myArticles");
+		mav.addObject("articles", articleRepository.findAllActiveByUser(user));
 		return mav;
 	}
 	

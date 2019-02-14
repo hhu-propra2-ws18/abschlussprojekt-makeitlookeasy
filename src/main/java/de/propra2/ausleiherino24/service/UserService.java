@@ -26,8 +26,8 @@ public class UserService {
 	 * @param person
 	 */
 	public void createUserWithProfile(User user, Person person){
-		person.setUser(user);
 		user.setRole("user");
+		person.setUser(user);
 		personRepository.save(person);
 		userRepository.save(user);
 	}

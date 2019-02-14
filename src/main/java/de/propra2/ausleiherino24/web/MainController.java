@@ -35,10 +35,8 @@ public class MainController {
 		this.articleService = articleService;
 	}
 	
-	// Display main page and check for authenticated user.
 	@GetMapping("/")
 	public ModelAndView index(HttpServletRequest request) {
-		// TODO: Link overview.
 		ModelAndView mav = new ModelAndView("index");
 		mav.addObject("all", articleService.getAllNonReservedArticles());
 		mav.addObject("role", RoleService.getUserRole(request));
@@ -66,7 +64,7 @@ public class MainController {
 		mav.addObject("person", new Person());
 		return mav;
 	}
-
+	
 	@PostMapping("/registerNewUser")
 	public ModelAndView registerNewUser(@ModelAttribute @Valid User user, @ModelAttribute @Valid Person person){
 		userService.createUserWithProfile(user,person);

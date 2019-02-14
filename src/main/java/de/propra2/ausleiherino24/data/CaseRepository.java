@@ -14,7 +14,6 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
 	ArrayList<Case> findAll();
 
 	/**
-	 *
 	 * @param user Ausleihender
 	 * @return alle dem User zugehöhrigen Cases
 	 */
@@ -22,14 +21,12 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
 	ArrayList<Case> findAllByReceiver(@Param("user") User user);
 
 	/**
-	 *
 	 * @param Owner Verleiher
 	 * @return alle dem Owner zugehöhrigen Cases
 	 */
 	@Query("SELECT c FROM #{#entityName} c WHERE c.article.owner = :owner")
 	ArrayList<Case> findAllByArticleOwner(@Param("owner") User Owner);
-
-
+	
 	Optional<Case> findByArticle(Article article);
 
 	//Optional<Case> findByArticleOwnerId(Long id);

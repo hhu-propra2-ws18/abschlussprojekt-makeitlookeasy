@@ -1,8 +1,6 @@
 package de.propra2.ausleiherino24.data;
 
-import java.util.Arrays;
-import java.util.List;
-
+import de.propra2.ausleiherino24.model.Article;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +10,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import de.propra2.ausleiherino24.model.Article;
+import java.util.Arrays;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
