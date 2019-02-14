@@ -5,6 +5,7 @@ import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
+import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.RoleService;
 import org.slf4j.Logger;
@@ -46,6 +47,7 @@ public class CaseController {
 			throw new Exception("Article not found!");
 		}
 		ModelAndView mav = new ModelAndView("accessed/user/shopitem");
+		mav.addObject("categories", Category.getAllCategories());
 		mav.addObject("article", article.get());
 		mav.addObject("role", RoleService.getUserRole(request));
 		return mav;
@@ -95,15 +97,15 @@ public class CaseController {
 	@PutMapping("/deactivateArticle")
 	public ModelAndView deactivateArticle(@RequestParam Long id, Principal principal) throws Exception {
 		// TODO: Auslagern in Service.
-		
+
 		Optional<Article> optionalArticle = articleRepository.findById(id);
 		if (!optionalArticle.isPresent()) {
 			LOGGER.warn("Couldn't find article %L in ArticleRepository.", id);
 			throw new Exception("Couldn't find requested article in ArticleRepository.");
 		}
-		
+
 		Article article = optionalArticle.get();
-		
+
 		if (!article.getReserved()) {
 			ArrayList<Case> allCases = caseRepository.findAll();
 			for (Case c : allCases) {
@@ -113,7 +115,7 @@ public class CaseController {
 					LOGGER.info("Deactivated case with ID %L", c.getId());
 				}
 			}
-			
+
 			article.setActive(false);
 			articleRepository.save(article);
 			LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
