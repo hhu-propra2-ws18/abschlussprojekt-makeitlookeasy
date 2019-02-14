@@ -85,7 +85,7 @@ public class MainControllerTest {
 	public void defaultAfterLoginStatusTest() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/default"))
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-				.andExpect(MockMvcResultMatchers.redirectedUrl("/accessed/admin/index"));
+				.andExpect(MockMvcResultMatchers.redirectedUrl("/accessed/user/index"));
 	}
 
 //	@Test
@@ -100,8 +100,7 @@ public class MainControllerTest {
 	@Test
 	public void registerNewUserStatusTest() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.post("/registerNewUser"))
-				.andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(MockMvcResultMatchers.view().name("login"));
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 	
 	@Test
