@@ -72,7 +72,7 @@
 								<a th:text="${article.getName()}"
 								   th:href="@{/article(id=${article.getId()})}">Item One</a>
 							</h4>
-							<!--<h5>$<span th:text="${article.getCase().getPrice()}"></span></h5>-->
+							<h5>$<span th:text="${article.getACase().getPrice()}"></span></h5>
 							<p class="card-text" th:text="${article.getDescription()}">Description</p>
 						</div>
 						<div class="card-footer">
