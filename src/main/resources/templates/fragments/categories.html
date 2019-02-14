@@ -1,9 +1,12 @@
 <div th:fragment="categories" class="col-lg-3">
 		<h1 style="margin-top: 50px">Categories</h1>
 	<ul class="list-group">
-		<li class="list-group-item"> <a th:href="@{~/}">Alle</a> </li>
+		<li class="list-group-item"> <a th:href="@{~/}">All</a> </li>
 
-		<li class="list-group-item" th:each="categorie: ${categories}"> <a href="#"  th:text="${categorie.getName()}">Auto </a> </li>
+		<li class="list-group-item" th:each="category: ${categories}">
+			<a th:href="@{/categories(category=${category.getName()})}"
+			   th:text="${category.getName()}">Dummy Kategorie</a>
+		</li>
 
 	</ul>
 </div>

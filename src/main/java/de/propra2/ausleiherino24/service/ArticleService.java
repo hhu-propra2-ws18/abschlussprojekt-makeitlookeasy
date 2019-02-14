@@ -2,11 +2,13 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleService {
@@ -39,4 +41,13 @@ public class ArticleService {
 		return availableArticles;
 	}
 
+	/**
+	 * Filters articles and checks whether they are included in given category
+	 * @param category
+	 * @return all Articles, which are not reserved and are of given category
+	 */
+	public List<Article> getAllNonReservedArticlesByCategory(Category category) {
+		return getAllNonReservedArticles().stream()
+				.filter(article -> article.getCategory() == category).collect(Collectors.toCollection(ArrayList::new));
+	}
 }
