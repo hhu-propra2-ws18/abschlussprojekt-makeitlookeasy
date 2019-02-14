@@ -29,13 +29,11 @@ public class PersonRepoTest {
 	public void init(){
 		person1 = new Person();
 		person1.setUser(new User());
-		person1.setContact("foobar@baz.net");
 		person1.setFirstName("Max");
 		person1.setLastName("Mustermann");
 
 		person2 = new Person();
 		person2.setUser(new User());
-		person2.setContact("random@rand.net");
 		person2.setFirstName("Hans");
 		person2.setLastName("Wurst");
 	}

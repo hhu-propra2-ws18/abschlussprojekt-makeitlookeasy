@@ -16,7 +16,7 @@ public class ReservationHandler {
 	}
 	
 	private RestTemplate restTemplate;
-	private static final String RESERVATION_URL = "localhost:8888/reservation";
+	private static final String RESERVATION_URL = "http://localhost:8888/reservation";
 	private AccountHandler accountHandler;
 
 	public boolean createReservation(String sourceUser, String targetUser, double amount){
