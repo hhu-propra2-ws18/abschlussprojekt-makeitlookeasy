@@ -17,7 +17,7 @@
 	<link th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}" rel="stylesheet">
 
 	<!-- Custom styles for this template -->
-	<link  th:href="@{~/css/shop-homepage.css}" rel="stylesheet">
+	<link th:href="@{~/css/shop-homepage.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -91,14 +91,30 @@
 
 </div>
 <!-- /.container -->
-
+<div class="dropdown" style="margin-bottom:20px">
+	<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		Dropdown button
+	</button>
+	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+		<a class="dropdown-item" href="#">Action</a>
+		<a class="dropdown-item" href="#">Another action</a>
+		<a class="dropdown-item" href="#">Something else here</a>
+	</div>
+</div>
 <!-- Footer -->
 <div th:replace="/../fragments/footer ::footer" name="footer"></div>
 
-<!-- Bootstrap core JavaScript -->
-<script th:href="@{~/vendor/jquery/jquery.min.js}"></script>
-<script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+<!--<script th:href="@{~/vendor/jquery/jquery-3.3.1.min.js}"></script>
+
+&lt;!&ndash; Popper JS &ndash;&gt;
+<script th:href="@{~/vendor/popper/popper.min.js}"></script>
+
+&lt;!&ndash; Bootstrap core JavaScript &ndash;&gt;
+<script th:href="@{~/vendor/bootstrap/js/bootstrap.min.js}"></script> -->
 </body>
 
 </html>
