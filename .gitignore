@@ -6,6 +6,9 @@ database/
 propaydata/
 sonardb/
 
+### public ###
+uploads/
+
 ### Eclipse ###
 
 .metadata
