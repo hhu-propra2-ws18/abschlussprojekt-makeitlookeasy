@@ -25,6 +25,16 @@ public class Person {
 
 	String lastName;
 
-	String contact;
+	String address;
+
+	public void setUser(User user){
+		setUser(user, false);
+	}
+
+	void setUser(User user, boolean repetition){
+		this.user = user;
+		if(user != null && !repetition)
+			user.setPerson(this, true);
+	}
 
 }

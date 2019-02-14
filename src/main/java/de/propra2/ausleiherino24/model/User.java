@@ -34,7 +34,10 @@ public class User {
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<Article> articleList;
 
-	void addArticle(Article article){
+	@OneToOne(cascade = CascadeType.ALL)
+	private Person person;
+
+	public void addArticle(Article article){
 		addArticle(article, false);
 	}
 
@@ -49,10 +52,21 @@ public class User {
 			article.setOwner(this, true);
 	}
 
-	void removeArticle(Article article){
+	public void removeArticle(Article article){
 		articleList.remove(article);
 		article.setOwner(null);
 	}
+
+	public void setPerson(Person person){
+		setPerson(person, false);
+	}
+
+	void setPerson(Person person, boolean repetition) {
+		this.person = person;
+		if (person != null && !repetition)
+			person.setUser(this, true);
+	}
+
 
 	public User(User user) {
 		this.username = user.getUsername();

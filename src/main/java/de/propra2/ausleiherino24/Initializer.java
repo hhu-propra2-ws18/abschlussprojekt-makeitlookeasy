@@ -3,11 +3,9 @@ package de.propra2.ausleiherino24;
 import com.github.javafaker.Faker;
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
-import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Category;
-import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
@@ -22,12 +20,14 @@ public class Initializer implements ServletContextInitializer{
 	private final UserRepository userRepository;
 	private final ArticleRepository articleRepository;
 	private final CaseRepository caseRepository;
+	private final PersonRepository personRepository;
 
 	@Autowired
-	public Initializer(UserRepository userRepository, ArticleRepository articleRepository, CaseRepository caseRepository) {
+	public Initializer(UserRepository userRepository, ArticleRepository articleRepository, CaseRepository caseRepository, PersonRepository personRepository) {
 		this.userRepository = userRepository;
 		this.articleRepository = articleRepository;
 		this.caseRepository = caseRepository;
+		this.personRepository = personRepository;
 	}
 
 	@Override
@@ -40,10 +40,16 @@ public class Initializer implements ServletContextInitializer{
 		articleRepository.deleteAll();
 		Faker faker = new Faker(Locale.GERMAN);
 		IntStream.range(0, 15).mapToObj(value -> {
+			Person person = createPerson(
+					faker.address().fullAddress(),
+					faker.name().firstName(),
+					faker.name().lastName());
+
 			User user = createUser(
-					faker.funnyName().name()+"@mail.de",
-					faker.funnyName().name(),
-					faker.crypto().sha256());
+					faker.name().firstName()+faker.name().lastName()+"@mail.de",
+					faker.name().fullName(),
+					faker.crypto().sha256(),
+					person);
 
 			Article article = createArticle(
 					faker.beer().name(),
@@ -57,6 +63,7 @@ public class Initializer implements ServletContextInitializer{
 					faker.random().nextInt(5, 500),
 					faker.random().nextInt(100, 2000));
 		}).forEach(aCase -> {
+			personRepository.save(aCase.getArticle().getOwner().getPerson());
 			userRepository.save(aCase.getArticle().getOwner());
 			articleRepository.save(aCase.getArticle());
 			caseRepository.save(aCase);
@@ -82,12 +89,21 @@ public class Initializer implements ServletContextInitializer{
 		userRepository.save(user);
 	}
 
-	private User createUser(String email, String username, String password) {
+	private Person createPerson(String address, String firstname, String lastname){
+		Person person = new Person();
+		person.setAddress(address);
+		person.setFirstName(firstname);
+		person.setLastName(lastname);
+		return person;
+	}
+
+	private User createUser(String email, String username, String password, Person person) {
 		User user = new User();
 		user.setEmail(email);
 		user.setUsername(username);
 		user.setPassword(password);
 		user.setRole("user");
+		user.setPerson(person);
 		return user;
 	}
 
