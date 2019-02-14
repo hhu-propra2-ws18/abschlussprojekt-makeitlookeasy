@@ -3,6 +3,8 @@ package de.propra2.ausleiherino24.propayhandler;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Data;
+@Data
 class 	PPAccount {
 
 	String account;
@@ -22,6 +24,7 @@ class 	PPAccount {
 		}
 		return number;
 	}
+	
 	List<Reservation> getReservations(){
 		if(this.reservations == null){
 			return new ArrayList<>();

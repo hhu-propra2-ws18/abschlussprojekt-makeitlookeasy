@@ -23,6 +23,11 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 //apply plugin: 'checkstyle'
 
+javadoc {
+  source = sourceSets.main.allJava
+  classpath = configurations.compile
+}
+
 //checkstyle {
 //	toolVersion = "8.7"
 //}

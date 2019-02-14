@@ -16,25 +16,25 @@ import javax.servlet.ServletContext;
 /**
  * TODO Was passiert hier?
  */
-@Component
-public class Initializer implements ServletContextInitializer{
-
-	private final UserRepository userRepository;
-	private final ArticleRepository articleRepository;
-	private final CaseRepository caseRepository;
-
-	@Autowired
-	public Initializer(UserRepository userRepository, ArticleRepository articleRepository, CaseRepository caseRepository) {
-		this.userRepository = userRepository;
-		this.articleRepository = articleRepository;
-		this.caseRepository = caseRepository;
-	}
-
-	@Override
-	public void onStartup(final ServletContext servletContext) {
-		initTestUser();
-		//initTestArticle();
-	}
+//@Component
+//public class Initializer implements ServletContextInitializer{
+//
+//	private final UserRepository userRepository;
+//	private final ArticleRepository articleRepository;
+//	private final CaseRepository caseRepository;
+//
+//	@Autowired
+//	public Initializer(UserRepository userRepository, ArticleRepository articleRepository, CaseRepository caseRepository) {
+//		this.userRepository = userRepository;
+//		this.articleRepository = articleRepository;
+//		this.caseRepository = caseRepository;
+//	}
+//
+//	@Override
+//	public void onStartup(final ServletContext servletContext) {
+//		initTestUser();
+//		//initTestArticle();
+//	}
 
 	/*
 	private void initTestArticle() {
@@ -59,22 +59,22 @@ public class Initializer implements ServletContextInitializer{
 	}
 	*/
 
-	private void initTestUser() {
-		userRepository.deleteAll();
-
-		User user = new User();
-		user.setUsername("user");
-		user.setPassword("password");
-		user.setEmail("user@mail.com");
-		user.setRole("user");
-
-		User user2 = new User();
-		user2.setUsername("admin");
-		user2.setPassword("password");
-		user2.setEmail("useradmin@mail.com");
-		user2.setRole("admin");
-
-		userRepository.save(user2);
-		userRepository.save(user);
-	}
-}
+//	private void initTestUser() {
+//		userRepository.deleteAll();
+//
+//		User user = new User();
+//		user.setUsername("user");
+//		user.setPassword("password");
+//		user.setEmail("user@mail.com");
+//		user.setRole("user");
+//
+//		User user2 = new User();
+//		user2.setUsername("admin");
+//		user2.setPassword("password");
+//		user2.setEmail("useradmin@mail.com");
+//		user2.setRole("admin");
+//
+//		userRepository.save(user2);
+//		userRepository.save(user);
+//	}
+//}
