@@ -44,8 +44,7 @@ public class AccountHandlerTest {
 		Assert.assertTrue(accountHandler.hasValidFunds("Acc1",99));
 	}
 
-
-	@Ignore
+	
 	@Test
 	public void transferFundsWorksWithValidFunds(){
 		HttpEntity<Double> request = new HttpEntity<>(10.0);
