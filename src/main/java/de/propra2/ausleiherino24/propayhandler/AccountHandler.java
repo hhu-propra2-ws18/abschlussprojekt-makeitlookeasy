@@ -37,10 +37,7 @@ public class AccountHandler {
 
 	public double addFunds(String username, double amount){
 
-		//ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-		//restTemplate = new RestTemplate(requestFactory);
 		HttpEntity<Double> request = new HttpEntity<>(amount);
-		//TODO: return type, abfrage und test fixen
 		ResponseEntity<Double> responseEntity = restTemplate.exchange(ACCOUNT_URL +"/{account}", HttpMethod.POST, request, Double.class, username);
 		if(responseEntity.getStatusCode().equals(HttpStatus.ACCEPTED)){
 			return responseEntity.getBody();

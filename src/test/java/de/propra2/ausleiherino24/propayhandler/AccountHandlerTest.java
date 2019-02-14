@@ -55,12 +55,10 @@ public class AccountHandlerTest {
 		Assert.assertTrue(result);
 	}
 
-	@Ignore
 	@Test
 	public void addFundsWorks(){
-		//TODO: fixTest
 		String username = "Acc1";
-		HttpEntity<Double> request = new HttpEntity<>(100.0);
+		HttpEntity<Double> request = new HttpEntity<>(10.0);
 		ResponseEntity<Double> responseEntity = new ResponseEntity<>( 200.0 ,HttpStatus.ACCEPTED);
 		Mockito.when(restTemplate.exchange(ACCOUNT_URL +"/{account}", HttpMethod.POST, request, Double.class, username)).thenReturn(responseEntity);
 
