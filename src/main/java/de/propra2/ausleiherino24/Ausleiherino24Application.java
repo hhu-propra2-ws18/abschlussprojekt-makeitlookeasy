@@ -17,9 +17,4 @@ public class Ausleiherino24Application {
 	public RestTemplate getRestTemplate() {
 		return new RestTemplate();
 	}
-	
-	@Bean
-	public ClientHttpRequestFactory getClientHttpRequestFactory() {
-		return new HttpComponentsClientHttpRequestFactory();
-	}
 }
