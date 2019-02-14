@@ -15,12 +15,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Optional;
-
 
 /**
  * Manages all requests regarding creating/editing/deleting articles/cases and after-sales.
- * Optionals: transaction rating (karma/voting), chatting
+ * Possible features: transaction rating (karma/voting), chatting
  */
 @Controller
 public class CaseController {
@@ -45,7 +45,7 @@ public class CaseController {
 		}
 		
 		ModelAndView mav = new ModelAndView("article");
-		mav.addObject("article", article);
+		mav.addObject("article", article.get());
 		return mav;
 	}
 	
@@ -84,37 +84,47 @@ public class CaseController {
 	 * Further deactivates the specified article. Article updated in ArticleRepository.
 	 * Afterwards, check if Principal is in UserRepository and display Principal's active articles.
 	 *
-	 * @param article		Article object received from HTML form input
+	 * @param id			ID of article to be deactivated
 	 * @param principal		Current user
 	 * @return				View "myArticles", displaying all active articles of principal
-	 * @throws Exception	Thrown, if principal couldn't be found in UserRepository
+	 * @throws Exception	1. Thrown, if article couldn't be found in ArticleRepository
+	 * 						2. Thrown, if principal couldn't be found in UserRepository
 	 */
 	@PutMapping("/deactivateArticle")
-	public ModelAndView deactivateArticle(@ModelAttribute @Valid Article article, Principal principal) throws Exception {
-		LOGGER.warn("Deactivating cases offering %s [ID=%L]", article.getName(), article.getId());
-		Iterable<Case> allCases = caseRepository.findAll();
-		for (Case c : allCases) {
-			if (c.getArticle().equals(article)) {
-				c.setActive(false);
-				caseRepository.save(c);
-				LOGGER.info("Deactivated case with ID %L", c.getId());
+	public ModelAndView deactivateArticle(@RequestParam Long id, Principal principal) throws Exception {
+		Optional<Article> optionalArticle = articleRepository.findById(id);
+		if (!optionalArticle.isPresent()) {
+			LOGGER.warn("Couldn't find article %L in ArticleRepository.", id);
+			throw new Exception("Couldn't find requested article in ArticleRepository.");
+		}
+		Article article = optionalArticle.get();
+		
+		if (!article.getReserved()) {
+			ArrayList<Case> allCases = caseRepository.findAll();
+			for (Case c : allCases) {
+				if (c.getArticle().equals(article)) {
+					c.setActive(false);
+					caseRepository.save(c);
+					LOGGER.info("Deactivated case with ID %L", c.getId());
+				}
 			}
+			
+			article.setActive(false);
+			articleRepository.save(article);
+			LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
+		} else {
+			LOGGER.warn("Article %L couldn't be deactivated, because it's currently being reserved.", article.getId());
 		}
 		
-		article.setActive(false);
-		articleRepository.save(article);
-		LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
-		
-		User user;
 		String currentPrincipalName = principal.getName();
-		if (userRepository.findByUsername(currentPrincipalName).isPresent()) {
-			user = userRepository.findByUsername(currentPrincipalName).get();
-		} else {
+		Optional<User> user = userRepository.findByUsername(currentPrincipalName);
+		if (!user.isPresent()) {
+			LOGGER.warn("Couldn't find current principal in UserRepository.");
 			throw new Exception("Couldn't find current principal in UserRepository.");
 		}
 		
 		ModelAndView mav = new ModelAndView("myArticles");
-		mav.addObject("articles", articleRepository.findAllActiveByUser(user));
+		mav.addObject("articles", articleRepository.findAllActiveByUser(user.get()));
 		return mav;
 	}
 	

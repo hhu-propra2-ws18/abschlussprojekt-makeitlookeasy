@@ -16,9 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 
-
 /**
- *
  * 	UserController manages all requests that are exclusively available to logged-in users
  * 	of the platform, except article/case handling. This includes profile management.
  */
@@ -37,6 +35,11 @@ public class UserController {
 
 	@GetMapping("/profile")
 	public ModelAndView displayUserProfile(@RequestParam("id") Long id, Principal principal) throws Exception {
+		if (principal == null) {
+			System.out.println("You have to be logged in to see other users' profiles.");
+			return new ModelAndView("redirect:/login");
+		}
+		
 		if(!userRepository.getById(id).isPresent()) {
 			throw new Exception("User not found");
 		}
