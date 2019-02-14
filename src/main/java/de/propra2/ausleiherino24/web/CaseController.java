@@ -14,12 +14,13 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.validation.Valid;
 import java.util.Optional;
 
+
+/**
+ * Manages all requests regarding creating/editing/deleting articles/cases and after-sales.
+ * Optionals: transaction rating (karma/voting), chatting
+ */
 @Controller
 public class CaseController {
-	/*
-	CaseController manages all requests regarding creating/editing/deleting articles/cases and after-sales.
-	Features to come: transaction rating (karma/voting), chatting
-	 */
 
 	private final ArticleRepository articleRepository;
 	private final CaseRepository caseRepository;

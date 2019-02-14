@@ -15,6 +15,10 @@ import javax.servlet.ServletContext;
 import java.util.Locale;
 import java.util.stream.IntStream;
 
+
+/**
+ * TODO Was passiert hier?
+ */
 @Component
 public class Initializer implements ServletContextInitializer{
 

@@ -58,9 +58,9 @@ public class UserControllerTest {
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 				.andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
 	}
-	
-	// TODO:
-	
+
+
+// TODO:
 //	@SuppressWarnings("static-access")
 //	@Test
 //	public void getIndexModelTest() throws Exception {

@@ -12,7 +12,13 @@ public class AccountHandler {
 	private RestTemplate restTemplate = new RestTemplate();
 	private static final String ACCOUNT_URL = "localhost:8888/account";
 
-	public boolean hasValidFunds(String accountName, double requestedFunds){
+	/**
+	 * TODO ?
+	 * @param accountName ==User/Owner?
+	 * @param requestedFunds Geldbetrag (ggf. BigDecimal nutzen?)
+	 * @return
+	 */
+	 boolean hasValidFunds(String accountName, double requestedFunds){
 		double reserved = 0;
 		PPAccount account = restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, accountName);
 
@@ -23,6 +29,13 @@ public class AccountHandler {
 		return account.getAmount() - reserved >= requestedFunds;
 	}
 
+	/**
+	 * TODO ?
+	 * Geld aufladen?
+	 * @param username ==User/Owner? Was genau wird übergeben?
+	 * @param amount Geldbetrag (ggf. BigDecimal nutzen?)
+	 * @return
+	 */
 	public boolean addFunds(String username, double amount){
 
 		ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
@@ -34,6 +47,14 @@ public class AccountHandler {
 		return responseEntity.getStatusCode().equals(HttpStatus.OK);
 	}
 
+	/**
+	 * TODO ?
+	 * Geldtransfer
+	 * @param sourceUser ==User? Was genau wird übergeben?
+	 * @param targetUser ==Owner? Was genau wird übergeben?
+	 * @param amount Geldbetrag (ggf. BigDecimal nutzen?)
+	 * @return
+	 */
 	public boolean transferFunds(String sourceUser, String targetUser, double amount){
 
 		if(hasValidFunds(sourceUser,amount)) {

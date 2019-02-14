@@ -18,13 +18,13 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+/**
+ * 	MainController manages all actions that are available to every visitor of the platform.
+ * 	This includes basic browsing, and signup/login.
+ */
 @Controller
 public class MainController {
-	/*
-	MainController manages all actions that are available to every visitor of the platform.
-	This includes basic browsing, and signup/login.
-	 */
-	
+
 	private final UserService userService;
 	private final ArticleService articleService;
 	private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
@@ -53,9 +53,9 @@ public class MainController {
 
 	@RequestMapping("/default")
 	public String defaultAfterLogin(HttpServletRequest request) {
-		if (request.isUserInRole("ROLE_admin")) {
+		if (request.isUserInRole("ROLE_admin"))
 			return "redirect:/accessed/admin/index";
-		} else
+		else
 			return "redirect:/accessed/user/index";
 	}
 	

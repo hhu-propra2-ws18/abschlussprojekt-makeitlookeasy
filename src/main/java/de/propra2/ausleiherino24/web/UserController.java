@@ -16,14 +16,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 
+
+/**
+ *
+ * 	UserController manages all requests that are exclusively available to logged-in users
+ * 	of the platform, except article/case handling. This includes profile management.
+ */
 @Controller
 @RequestMapping("/accessed/user")
 public class UserController {
-	/*
-	UserController manages all requests that are exclusively available to logged-in users of the platform, except article/case handling.
-	This includes profile management.
-	 */
-
 	private final UserRepository userRepository;
 	private final PersonRepository personRepository;
 	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);

@@ -9,6 +9,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
+
+/**
+ * Adminseite
+ *
+ */
 @Controller
 @RequestMapping("/accessed/admin")
 public class AdminController {
@@ -16,8 +21,7 @@ public class AdminController {
 	@GetMapping("index")
 	public ModelAndView getAdminIndex(HttpServletRequest request, Model model){
 		model.addAttribute("role", RoleService.getUserRole(request));
-		ModelAndView mav = new ModelAndView("accessed/admin/index");
-		return mav;
+		return new ModelAndView("accessed/admin/index");
 	}
 	
 }

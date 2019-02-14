@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * User hat neben Person eine eigene ID, um diesen als Plattformbenutzer explizit separat ansteuern zu können.
+ */
 @Data
 @Entity
 @Table(name="userDB")
