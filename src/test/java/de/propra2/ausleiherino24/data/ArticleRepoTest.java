@@ -1,6 +1,8 @@
 package de.propra2.ausleiherino24.data;
 
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.User;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,10 +29,13 @@ public class ArticleRepoTest {
 	@Before
 	public void init() {
 		article1 = new Article();
+		article1.setOwner(new User());
 		article1.setDescription("used condition");
 		article1.setName("Mountain-Bike");
+		article1.setActive(true);
 
 		article2 = new Article();
+		article2.setOwner(new User());
 		article2.setName("Chainsaw");
 		article2.setDescription("bloody");
 
@@ -56,7 +61,13 @@ public class ArticleRepoTest {
 
 	@Test
 	public void databaseShouldReturnCountOfTwoIfDatabaseHasTwoEntries() {
-		articles.findAll();
 		Assertions.assertThat(articles.count()).isEqualTo(2);
+	}
+	
+	@Test
+	public void customQueryFindAllActiveByUserShouldReturnActiveArticleWithCorrespondingOwner() {
+		List<Article> us = articles.findAllActiveByUser(article1.getOwner());
+		Assertions.assertThat(us.size()).isEqualTo(1);
+		Assertions.assertThat(us.get(0)).isEqualTo(article1);
 	}
 }
