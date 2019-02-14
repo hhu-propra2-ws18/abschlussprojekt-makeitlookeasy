@@ -2,10 +2,24 @@ package de.propra2.ausleiherino24;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class Ausleiherino24Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Ausleiherino24Application.class, args);
+	}
+	
+	@Bean
+	public RestTemplate getRestTemplate() {
+		return new RestTemplate();
+	}
+	
+	@Bean
+	public ClientHttpRequestFactory getClientHttpRequestFactory() {
+		return new HttpComponentsClientHttpRequestFactory();
 	}
 }
