@@ -1,7 +1,13 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.data.ArticleRepository;
+import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.PersonRepository;
+import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CustomUserDetailsService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -27,8 +33,15 @@ public class MainControllerTest {
 
 	@Autowired private MockMvc mvc;
 	
+	@MockBean private ArticleRepository articles;
+	@MockBean private UserRepository users;
+	@MockBean private PersonRepository persons;
+	@MockBean private CaseRepository cases;
+	
 	@MockBean UserService us;
-
+	@MockBean private ArticleService as;
+	@MockBean private CustomUserDetailsService userDetailsService;
+	
 	@Test
 	public void getIndex() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/"))
