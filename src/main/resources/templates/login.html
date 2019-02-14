@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="text-center" xmlns:th="http://www.w3.org/2005/Atom" xmlns:th="http://www.thymeleaf.org">
+<html class="text-center" xmlns:="http://www.w3.org/2005/Atom" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="utf-8">
@@ -23,6 +23,7 @@
 															style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i>
 	</p>
 	<!-- Geschlossenes Schloss -->
+	<!--/*@thymesVar id="param" type=""*/-->
 	<p th:unless="${param.logout}" class="profile-name-card"><i class="fa fa-lock d-inline"
 																style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i>
 	</p>
