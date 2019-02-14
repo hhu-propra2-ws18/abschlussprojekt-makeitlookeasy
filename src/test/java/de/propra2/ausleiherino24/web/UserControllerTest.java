@@ -1,11 +1,13 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.data.ArticleRepository;
+import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CustomUserDetailsService;
 import de.propra2.ausleiherino24.service.UserService;
-
-import java.util.Optional;
-
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,14 +20,22 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Optional;
+
 @RunWith(SpringRunner.class)
 @WebMvcTest
 public class UserControllerTest {
-
+	
 	@Autowired private MockMvc mvc;
-
-	@MockBean UserRepository users;
+	
+	@MockBean private ArticleRepository articles;
+	@MockBean private UserRepository users;
+	@MockBean private PersonRepository persons;
+	@MockBean private CaseRepository cases;
+	
 	@MockBean UserService us;
+	@MockBean private ArticleService as;
+	@MockBean private CustomUserDetailsService userDetailsService;
 
 	@Test
 	public void displayUserProfileStatusTest() throws Exception {
