@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 
 /**
  * 	MainController manages all actions that are available to every visitor of the platform.
@@ -41,6 +43,7 @@ public class MainController {
 		ModelAndView mav = new ModelAndView("index");
 		mav.addObject("all", articleService.getAllNonReservedArticles());
 		mav.addObject("role", RoleService.getUserRole(request));
+		mav.addObject("categories", Category.getAllCategories());
 		return mav;
 	}
 	

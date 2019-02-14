@@ -4,16 +4,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum Category {
-	AUTO("Auto"),
-	RAD("Rad"),
-	BOOT("Boot"),
-	IMMOBILIEN("Immobilien"),
-	ELEKTRONIK("Elektronik"),
-	BÜCHER("Bücher"),
-	FILME("Filme"),
-	MUSIK("Musik"),
-	WERKZEUG("Werkzeug"),
-	SPIELZEUG("Spielzeug");
+	MOTORS("Motors"),
+	BICYCLE("Bicycle"),
+	BOAT("Boat"),
+	ELECTRONICS("Electronics"),
+	BOOKS("Books"),
+	MOVIES("Movies"),
+	MUSIC("Music"),
+	TOOLS("Tools"),
+	TOYS("Toys");
 
 	private String name;
 
@@ -28,7 +27,7 @@ public enum Category {
 	/**
 	 * @return list with all existing categories.
 	 */
-	public List<Category> getAllCategories(){
+	public static List<Category> getAllCategories(){
 		return Arrays.asList(values());
 	}
 }
