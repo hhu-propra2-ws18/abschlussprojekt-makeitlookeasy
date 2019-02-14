@@ -33,34 +33,35 @@ public class AccountHandlerTest {
 	public void initialize(){
 		restTemplate = Mockito.mock(RestTemplate.class);
 		accountHandler = new AccountHandler(restTemplate);
-		testAcc1 = new PPAccount("Acc1",100);
-		testAcc2 = new PPAccount("Acc2",1000);
+		testAcc1 = new PPAccount("Acc1",100.0);
+		testAcc2 = new PPAccount("Acc2",1000.0);
 	}
 
 
 	@Test
 	public void hasValidFundsWorksWithoutReservations(){
-		String accountName = "Acc1";
-		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, accountName)).thenReturn(testAcc1);
+		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
 		Assert.assertTrue(accountHandler.hasValidFunds("Acc1",99));
 	}
 
-
-
-	@Ignore
+	
 	@Test
 	public void transferFundsWorksWithValidFunds(){
-		boolean result = accountHandler.transferFunds("Acc1","Acc2",10);
+		HttpEntity<Double> request = new HttpEntity<>(10.0);
+		ResponseEntity<Double> responseEntity = new ResponseEntity<>( 200.0 ,HttpStatus.ACCEPTED);
 
-		Assert.assertTrue(result);
+		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
+		Mockito.when(restTemplate.exchange(ACCOUNT_URL +"/{sourceAccount}/transfer/{targetAccount}", HttpMethod.POST, request, Double.class, "Acc1","Acc2")).thenReturn(responseEntity);
+
+		Assert.assertEquals(200.0,accountHandler.transferFunds("Acc1","Acc2",10.0),0.05);
 	}
 
 	@Test
 	public void addFundsWorks(){
-		String username = "Acc1";
 		HttpEntity<Double> request = new HttpEntity<>(10.0);
 		ResponseEntity<Double> responseEntity = new ResponseEntity<>( 200.0 ,HttpStatus.ACCEPTED);
-		Mockito.when(restTemplate.exchange(ACCOUNT_URL +"/{account}", HttpMethod.POST, request, Double.class, username)).thenReturn(responseEntity);
+
+		Mockito.when(restTemplate.exchange(ACCOUNT_URL +"/{account}", HttpMethod.POST, request, Double.class, "Acc1")).thenReturn(responseEntity);
 
 
 		Assert.assertEquals(200.0,accountHandler.addFunds("Acc1",10.0),0.05);
