@@ -3,6 +3,7 @@ package de.propra2.ausleiherino24.web;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.RoleService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.slf4j.Logger;

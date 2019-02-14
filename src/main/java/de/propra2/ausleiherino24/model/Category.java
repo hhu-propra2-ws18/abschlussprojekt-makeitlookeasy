@@ -1,5 +1,8 @@
 package de.propra2.ausleiherino24.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum Category {
 	AUTO("Auto"),
 	RAD("Rad"),
@@ -20,5 +23,12 @@ public enum Category {
 
 	public String getName(){
 		return name;
+	}
+
+	/**
+	 * @return list with all existing categories.
+	 */
+	public List<Category> getAllCategories(){
+		return Arrays.asList(values());
 	}
 }

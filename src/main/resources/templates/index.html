@@ -64,15 +64,16 @@
 			</div>
 
 			<div class="row">
-				<div class="col-lg-4 col-md-6 mb-4" th:each="case: ${allCases}">
+				<div class="col-lg-4 col-md-6 mb-4" th:each="article: ${all}">
 					<div class="card h-100">
 						<a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
 						<div class="card-body">
 							<h4 class="card-title">
-								<a th:text="${case.getArticle().getName()}" th:href="@{/article(id=${case.getArticle().getId()})}">Item One</a>
+								<a th:text="${article.getName()}"
+								   th:href="@{/article(id=${article.getId()})}">Item One</a>
 							</h4>
-							<h5>$<span th:text="${case.getPrice()}"></span></h5>
-							<p class="card-text" th:text="${case.getArticle().getDescription()}">Beschreibung</p>
+							<!--<h5>$<span th:text="${article.getCase().getPrice()}"></span></h5>-->
+							<p class="card-text" th:text="${article.getDescription()}">Beschreibung</p>
 						</div>
 						<div class="card-footer">
 							<small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
