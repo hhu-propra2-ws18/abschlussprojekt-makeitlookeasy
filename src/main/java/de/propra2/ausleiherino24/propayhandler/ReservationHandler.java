@@ -9,9 +9,15 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 public class ReservationHandler {
-	private RestTemplate restTemplate = new RestTemplate();
-	private static final String RESERVATION_URL= "localhost:8888/reservation";
-	private AccountHandler accountHandler = new AccountHandler(restTemplate);
+	
+	public ReservationHandler(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+		accountHandler = new AccountHandler(restTemplate);
+	}
+	
+	private RestTemplate restTemplate;
+	private static final String RESERVATION_URL = "localhost:8888/reservation";
+	private AccountHandler accountHandler;
 
 	public boolean createReservation(String sourceUser, String targetUser, double amount){
 
