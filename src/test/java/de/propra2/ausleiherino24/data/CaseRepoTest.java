@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,12 +27,24 @@ public class CaseRepoTest {
 	private Case case1;
 	private Case case2;
 
+	private User user1, user2;
+
 	@Before
 	public void init(){
+		user1 = new User();
+		user1.setId(0L);
+		user2 = new User();
+		user2.setId(1L);
+
+		Article article1 = new Article();
+		article1.setOwner(user1);
+		Article article2 = new Article();
+		article2.setOwner(user2);
+
 		case1 = new Case();
 		//case1.setOwner(new User());
-		case1.setReceiver(new User());
-		case1.setArticle(new Article());
+		case1.setReceiver(user1);
+		case1.setArticle(article2);
 		case1.setPrice(80);
 		case1.setDeposit(200);
 		case1.setStartTime(12022019L);
@@ -39,8 +52,8 @@ public class CaseRepoTest {
 
 		case2 = new Case();
 		//case2.setOwner(new User());
-		case2.setReceiver(new User());
-		case2.setArticle(new Article());
+		case2.setReceiver(user2);
+		case2.setArticle(article1);
 		case2.setPrice(60);
 		case2.setDeposit(150);
 		case2.setStartTime(10022019L);
@@ -75,5 +88,4 @@ public class CaseRepoTest {
 		List<Case> us = cases.findAll();
 		Assertions.assertThat(cases.count()).isEqualTo(2);
 	}
-
 }
