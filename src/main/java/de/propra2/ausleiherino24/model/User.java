@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -28,6 +30,29 @@ public class User {
 	private String email;
 
 	private String role;
+
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<Article> articleList;
+
+	void addArticle(Article article){
+		addArticle(article, false);
+	}
+
+	void addArticle(Article article, boolean repetition){
+		if(article == null) return;
+		if(articleList == null) articleList = new ArrayList<>();
+		if(articleList.contains(article))
+			articleList.set(articleList.indexOf(article), article);
+		else
+			articleList.add(article);
+		if(!repetition)
+			article.setOwner(this, true);
+	}
+
+	void removeArticle(Article article){
+		articleList.remove(article);
+		article.setOwner(null);
+	}
 
 	public User(User user) {
 		this.username = user.getUsername();
