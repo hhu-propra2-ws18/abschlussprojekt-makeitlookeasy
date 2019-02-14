@@ -8,6 +8,7 @@ import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.CustomUserDetailsService;
+import de.propra2.ausleiherino24.service.ImageStoreService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
@@ -39,7 +40,8 @@ public class CaseControllerTest {
 	@MockBean private UserRepository users;
 	@MockBean private PersonRepository persons;
 	@MockBean private CaseRepository cases;
-	
+
+	@MockBean private ImageStoreService imageStoreService;
 	@MockBean UserService us;
 	@MockBean private ArticleService as;
 	@MockBean private CustomUserDetailsService userDetailsService;

@@ -6,6 +6,7 @@ import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.CustomUserDetailsService;
+import de.propra2.ausleiherino24.service.ImageStoreService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +32,8 @@ public class AdminControllerTest {
 
 	@MockBean
 	private CustomUserDetailsService userDetailsService;
+
+	@MockBean private ImageStoreService imageStoreService;
 
 	@MockBean
 	private ArticleRepository articles;
