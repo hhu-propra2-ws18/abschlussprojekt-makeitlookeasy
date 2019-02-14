@@ -33,6 +33,6 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
 	Optional<Case> findByArticle(Article article);
 
 	//Optional<Case> findByArticleOwnerId(Long id);
-	
+
 	//Optional<Case> findByReceiverId(Long id);
 }
