@@ -46,7 +46,7 @@ public class CaseController {
 			throw new Exception("Article not found!");
 		}
 		ModelAndView mav = new ModelAndView("accessed/user/shopitem");
-		mav.addObject("article", article);
+		mav.addObject("article", article.get());
 		mav.addObject("role", RoleService.getUserRole(request));
 		return mav;
 	}

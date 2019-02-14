@@ -49,7 +49,7 @@ public class UserController {
 	 * @throws Exception	Thrown, if username cannot be found in UserRepository
 	 */
 	@GetMapping("/profile/{username}")
-	public ModelAndView displayUserProfile(@PathVariable String username, Principal principal) throws Exception {
+	public ModelAndView displayUserProfile(@PathVariable String username, Principal principal, HttpServletRequest request) throws Exception {
 		if (principal == null) {
 			System.out.println("You have to be logged in to see other users' profiles.");
 			return new ModelAndView("redirect:/login");
@@ -60,11 +60,13 @@ public class UserController {
 			throw new Exception("User not found");
 		}
 		User user = optionalUser.get();
-		boolean self = principal.getName().equals(username);	// Flag for ThymeLeaf. Enables certain profile editing options.
+		//boolean self = principal.getName().equals(username);	// Flag for ThymeLeaf. Enables certain profile
+		// editing options.
 
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
 		mav.addObject("user", user);
-		mav.addObject("self", self);
+		mav.addObject("role", RoleService.getUserRole(request));
+		//mav.addObject("self", self);
 		return mav;
 	}
 
