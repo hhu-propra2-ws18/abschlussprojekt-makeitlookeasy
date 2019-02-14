@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 public class ReservationHandler {
 	private RestTemplate restTemplate = new RestTemplate();
 	private static final String RESERVATION_URL= "localhost:8888/reservation";
-	private AccountHandler accountHandler = new AccountHandler();
+	private AccountHandler accountHandler = new AccountHandler(restTemplate);
 
 	public boolean createReservation(String sourceUser, String targetUser, double amount){
 

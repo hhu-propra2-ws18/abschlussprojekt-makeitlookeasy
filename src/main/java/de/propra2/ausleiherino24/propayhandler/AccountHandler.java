@@ -9,16 +9,22 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 public class AccountHandler {
-	private RestTemplate restTemplate = new RestTemplate();
-	private static final String ACCOUNT_URL = "localhost:8888/account";
+	private RestTemplate restTemplate;
+	private static final String ACCOUNT_URL = "http://localhost:8888/account";
 
-	/**
-	 * TODO ?
-	 * @param accountName ==User/Owner?
-	 * @param requestedFunds Geldbetrag (ggf. BigDecimal nutzen?)
-	 * @return
-	 */
-	 boolean hasValidFunds(String accountName, double requestedFunds){
+	public AccountHandler(RestTemplate restTemplate){
+		this.restTemplate = restTemplate;
+	}
+
+	public double checkFunds(String accountName){
+		PPAccount account = restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, accountName);
+		if(account != null ){
+			return account.getAmount();
+		}
+		return 0;
+	}
+
+	public boolean hasValidFunds(String accountName, double requestedFunds){
 		double reserved = 0;
 		PPAccount account = restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, accountName);
 
@@ -29,32 +35,19 @@ public class AccountHandler {
 		return account.getAmount() - reserved >= requestedFunds;
 	}
 
-	/**
-	 * TODO ?
-	 * Geld aufladen?
-	 * @param username ==User/Owner? Was genau wird übergeben?
-	 * @param amount Geldbetrag (ggf. BigDecimal nutzen?)
-	 * @return
-	 */
-	public boolean addFunds(String username, double amount){
+	public double addFunds(String username, double amount){
 
-		ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-		restTemplate = new RestTemplate(requestFactory);
+		//ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+		//restTemplate = new RestTemplate(requestFactory);
 		HttpEntity<Double> request = new HttpEntity<>(amount);
-
+		//TODO: return type, abfrage und test fixen
 		ResponseEntity<Double> responseEntity = restTemplate.exchange(ACCOUNT_URL +"/{account}", HttpMethod.POST, request, Double.class, username);
-
-		return responseEntity.getStatusCode().equals(HttpStatus.OK);
+		if(responseEntity.getStatusCode().equals(HttpStatus.ACCEPTED)){
+			return responseEntity.getBody();
+		}
+		return 0.0;
 	}
 
-	/**
-	 * TODO ?
-	 * Geldtransfer
-	 * @param sourceUser ==User? Was genau wird übergeben?
-	 * @param targetUser ==Owner? Was genau wird übergeben?
-	 * @param amount Geldbetrag (ggf. BigDecimal nutzen?)
-	 * @return
-	 */
 	public boolean transferFunds(String sourceUser, String targetUser, double amount){
 
 		if(hasValidFunds(sourceUser,amount)) {
