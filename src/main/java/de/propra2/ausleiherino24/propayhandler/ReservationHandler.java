@@ -5,21 +5,17 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 public class ReservationHandler {
 	
 	@Autowired
-	public ReservationHandler(RestTemplate restTemplate, ClientHttpRequestFactory requestFactory) {
+	public ReservationHandler(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 		accountHandler = new AccountHandler(restTemplate);
-		this.requestFactory = requestFactory;
 	}
 	
 	private RestTemplate restTemplate;
-	private ClientHttpRequestFactory requestFactory;
 	private static final String RESERVATION_URL = "localhost:8888/reservation";
 	private AccountHandler accountHandler;
 
@@ -27,8 +23,6 @@ public class ReservationHandler {
 
 		if(accountHandler.hasValidFunds(sourceUser,amount)) {
 
-			//ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-			restTemplate = new RestTemplate(requestFactory);
 			HttpEntity<Double> request = new HttpEntity<>(amount);
 
 			ResponseEntity<Double> responseEntity = restTemplate.exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}", HttpMethod.POST, request, Double.class, sourceUser, targetUser);
@@ -39,8 +33,6 @@ public class ReservationHandler {
 	}
 	
 	public boolean releaseReservation(String account, int reservationId){
-		//ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-		restTemplate = new RestTemplate(requestFactory);
 		HttpEntity<Integer> request = new HttpEntity<>(reservationId);
 
 		ResponseEntity<Integer> responseEntity = restTemplate.exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST, request, Integer.class, account);
@@ -49,8 +41,6 @@ public class ReservationHandler {
 	}
 	
 	public boolean punishReservation(String account, int reservationId){
-		//ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-		restTemplate = new RestTemplate(requestFactory);
 		HttpEntity<Integer> request = new HttpEntity<>(reservationId);
 
 		ResponseEntity<Integer> responseEntity = restTemplate.exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST, request, Integer.class, account);
