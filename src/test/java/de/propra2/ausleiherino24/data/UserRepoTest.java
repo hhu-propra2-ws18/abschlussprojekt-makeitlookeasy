@@ -1,6 +1,8 @@
 package de.propra2.ausleiherino24.data;
 
-import de.propra2.ausleiherino24.model.User;
+import java.util.Arrays;
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,8 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Arrays;
-import java.util.List;
+import de.propra2.ausleiherino24.model.User;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -25,7 +26,7 @@ public class UserRepoTest {
 	private User user2;
 
 	@Before
-	public void init(){
+	public void init() {
 		user1 = new User();
 		user1.setUsername("foo");
 		user1.setPassword("password");
@@ -39,7 +40,7 @@ public class UserRepoTest {
 	}
 
 	@Test
-	public void databaseShouldSaveEntities(){
+	public void databaseShouldSaveEntities() {
 		users.saveAll(Arrays.asList(user1, user2));
 
 		List<User> us = users.findAll();
@@ -49,7 +50,7 @@ public class UserRepoTest {
 	}
 
 	@Test
-	public void databaseShouldRemoveCorrectEntity(){
+	public void databaseShouldRemoveCorrectEntity() {
 		users.saveAll(Arrays.asList(user1, user2));
 
 		users.delete(user1);
@@ -60,12 +61,30 @@ public class UserRepoTest {
 	}
 
 	@Test
-	public void databaseShouldReturnCountOfTwoIfDatabaseHasTwoEntries(){
+	public void databaseShouldReturnCountOfTwoIfDatabaseHasTwoEntries() {
 		users.saveAll(Arrays.asList(user1, user2));
 
 		List<User> us = users.findAll();
 		Assertions.assertThat(users.count()).isEqualTo(2);
+		Assertions.assertThat(us.size()).isEqualTo(2);
 	}
 
+	@Test
+	public void queryGetByIdShouldReturnUserWithCorrespondingId() {
+		users.saveAll(Arrays.asList(user1, user2));
+
+		User expectedUser = users.getById(user1.getId()).get();
+
+		Assertions.assertThat(expectedUser).isEqualTo(user1);
+	}
+
+	@Test
+	public void queryFindByUsernameShouldReturnUserWithCorrespondingUsername() {
+		users.saveAll(Arrays.asList(user1, user2));
+
+		User expectedUser = users.findByUsername(user2.getUsername()).get();
+
+		Assertions.assertThat(expectedUser).isEqualTo(user2);
+	}
 
 }
