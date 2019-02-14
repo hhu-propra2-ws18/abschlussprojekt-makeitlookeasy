@@ -39,9 +39,9 @@
 						<p class="card-text" th:text="${article.get().description}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. Totam id dolores, sint aperiam sequi pariatur praesentium animi perspiciatis molestias iure, ducimus!</p>
 
 						<div class="row">
-							<p class="card-text" style="margin-left:15px">Zur Verfügung gestellt von <a th:href="@{/accessed/user/profile(id=${article.get().getOwner().id})}" th:text="${article.get().getOwner().username}">Mick Potzkai</a></p>
+							<p class="card-text" style="margin-left:15px">Offered by <a th:href="@{/accessed/user/profile/${article.get().getOwner().getUsername()})}" th:text="${article.get().getOwner()..getUsername()}">Mick Potzkai</a></p>
 							<div class="ml-auto">
-								<div class="btn btn-success " style="width:200px;margin-right:5px">Verfügbarkeit anfragen</div>
+								<div class="btn btn-success " style="width:200px;margin-right:5px">Book now</div>
 							</div>
 						</div>
 						<p class="card-text" th:text="${article.get().getOwner().person.address}">47877 Willich,Plutoweg 5</p>

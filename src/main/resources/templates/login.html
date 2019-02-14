@@ -30,7 +30,7 @@
 	<form class="form-signin" th:action="@{/login}" method="post">
 		<span class="reauth-email" style="margin:11px;"></span>
 		<div th:if="${param.error}" class="alert alert-danger">Invalid username or password.</div>
-		<div th:if="${param.logout}" class="alert alert-success">You have been logged out</div>
+		<div th:if="${param.logout}" class="alert alert-success">You have been logged out.</div>
 		<div th:if="${param.registration}" class="alert alert-success">Your account has been created succesfully! You
 			can login now.
 		</div>

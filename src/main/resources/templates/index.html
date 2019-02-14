@@ -73,7 +73,7 @@
 								   th:href="@{/article(id=${article.getId()})}">Item One</a>
 							</h4>
 							<!--<h5>$<span th:text="${article.getCase().getPrice()}"></span></h5>-->
-							<p class="card-text" th:text="${article.getDescription()}">Beschreibung</p>
+							<p class="card-text" th:text="${article.getDescription()}">Description</p>
 						</div>
 						<div class="card-footer">
 							<small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
@@ -94,14 +94,14 @@
 <!-- /.container -->
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">Verfügbarkeit anfragen</button>
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">Book now</button>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Verfügbarkeit anfragen</h5>
+				<h5 class="modal-title" id="exampleModalLabel">Book now</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
