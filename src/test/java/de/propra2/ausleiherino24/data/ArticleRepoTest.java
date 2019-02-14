@@ -25,7 +25,7 @@ public class ArticleRepoTest {
 	private Article article2;
 
 	@Before
-	public void init(){
+	public void init() {
 		article1 = new Article();
 		article1.setDescription("used condition");
 		article1.setName("Mountain-Bike");
@@ -33,12 +33,12 @@ public class ArticleRepoTest {
 		article2 = new Article();
 		article2.setName("Chainsaw");
 		article2.setDescription("bloody");
+
+		articles.saveAll(Arrays.asList(article1, article2));
 	}
 
 	@Test
-	public void databaseShouldSaveEntities(){
-		articles.saveAll(Arrays.asList(article1, article2));
-
+	public void databaseShouldSaveEntities() {
 		List<Article> us = articles.findAll();
 		Assertions.assertThat(us.size()).isEqualTo(2);
 		Assertions.assertThat(us.get(0)).isEqualTo(article1);
@@ -46,9 +46,7 @@ public class ArticleRepoTest {
 	}
 
 	@Test
-	public void databaseShouldRemoveCorrectEntity(){
-		articles.saveAll(Arrays.asList(article1, article2));
-
+	public void databaseShouldRemoveCorrectEntity() {
 		articles.delete(article1);
 
 		List<Article> us = articles.findAll();
@@ -57,12 +55,8 @@ public class ArticleRepoTest {
 	}
 
 	@Test
-	public void databaseShouldReturnCountOfTwoIfDatabaseHasTwoEntries(){
-		articles.saveAll(Arrays.asList(article1, article2));
-
-		List<Article> us = articles.findAll();
+	public void databaseShouldReturnCountOfTwoIfDatabaseHasTwoEntries() {
+		articles.findAll();
 		Assertions.assertThat(articles.count()).isEqualTo(2);
 	}
-
-
 }

@@ -20,9 +20,14 @@ public class UserService {
 		this.userRepository = userRepository;
 	}
 
+	/**
+	 * TODO Was ist die Idee hier?
+	 * @param user
+	 * @param person
+	 */
 	public void createUserWithProfile(User user, Person person){
-		person.setUser(user);
 		user.setRole("user");
+		person.setUser(user);
 		personRepository.save(person);
 		userRepository.save(user);
 	}

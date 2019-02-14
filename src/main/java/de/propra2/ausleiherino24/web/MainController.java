@@ -3,7 +3,6 @@ package de.propra2.ausleiherino24.web;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
-import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.RoleService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.slf4j.Logger;
@@ -19,29 +18,27 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+/**
+ * 	MainController manages all actions that are available to every visitor of the platform.
+ * 	This includes basic browsing, and signup/login.
+ */
 @Controller
 public class MainController {
-	/*
-	MainController manages all actions that are available to every visitor of the platform.
-	This includes basic browsing, and signup/login.
-	 */
-	
+
 	private final UserService userService;
-	private final CaseService caseService;
+	private final ArticleService articleService;
 	private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
-	public MainController(UserService userService, CaseService caseService) {
-		this.caseService = caseService;
+	public MainController(UserService userService, ArticleService articleService) {
 		this.userService = userService;
+		this.articleService = articleService;
 	}
 	
-	// Display main page and check for authenticated user.
 	@GetMapping("/")
 	public ModelAndView index(HttpServletRequest request) {
-		// TODO: Link overview.
 		ModelAndView mav = new ModelAndView("index");
-		mav.addObject("allCases", caseService.findAllCasesWithNonActiveArticles());
+		mav.addObject("all", articleService.getAllNonReservedArticles());
 		mav.addObject("role", RoleService.getUserRole(request));
 		return mav;
 	}
@@ -54,9 +51,9 @@ public class MainController {
 
 	@RequestMapping("/default")
 	public String defaultAfterLogin(HttpServletRequest request) {
-		if (request.isUserInRole("ROLE_admin")) {
+		if (request.isUserInRole("ROLE_admin"))
 			return "redirect:/accessed/admin/index";
-		} else
+		else
 			return "redirect:/accessed/user/index";
 	}
 	
@@ -67,7 +64,7 @@ public class MainController {
 		mav.addObject("person", new Person());
 		return mav;
 	}
-
+	
 	@PostMapping("/registerNewUser")
 	public ModelAndView registerNewUser(@ModelAttribute @Valid User user, @ModelAttribute @Valid Person person){
 		userService.createUserWithProfile(user,person);

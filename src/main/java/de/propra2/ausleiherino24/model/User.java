@@ -9,6 +9,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * User hat neben Person eine eigene ID, um diesen als Plattformbenutzer explizit separat ansteuern zu können.
+ */
 @Data
 @Entity
 @Table(name="userDB")

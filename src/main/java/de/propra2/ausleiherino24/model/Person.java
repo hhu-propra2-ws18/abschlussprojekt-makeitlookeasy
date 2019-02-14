@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * Person beinhaltet die Stammdaten
+ */
 @Entity
 @Data
 @Builder

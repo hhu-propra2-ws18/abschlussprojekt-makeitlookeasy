@@ -27,32 +27,28 @@ public class CaseRepoTest {
 	private Case case2;
 
 	@Before
-	public void init(){
+	public void init() {
 		case1 = new Case();
-		//case1.setOwner(new User());
 		case1.setReceiver(new User());
 		case1.setArticle(new Article());
 		case1.setPrice(80);
 		case1.setDeposit(200);
-		case1.setTitle("Car");
 		case1.setStartTime(12022019L);
 		case1.setEndTime(19022019L);
 
 		case2 = new Case();
-		//case2.setOwner(new User());
 		case2.setReceiver(new User());
 		case2.setArticle(new Article());
 		case2.setPrice(60);
 		case2.setDeposit(150);
-		case2.setTitle("Monitor");
 		case2.setStartTime(10022019L);
 		case2.setEndTime(15022019L);
+
+		cases.saveAll(Arrays.asList(case1, case2));
 	}
 
 	@Test
-	public void databaseShouldSaveEntities(){
-		cases.saveAll(Arrays.asList(case1, case2));
-
+	public void databaseShouldSaveEntities() {
 		List<Case> us = cases.findAll();
 		Assertions.assertThat(us.size()).isEqualTo(2);
 		Assertions.assertThat(us.get(0)).isEqualTo(case1);
@@ -60,9 +56,7 @@ public class CaseRepoTest {
 	}
 
 	@Test
-	public void databaseShouldRemoveCorrectEntity(){
-		cases.saveAll(Arrays.asList(case1, case2));
-
+	public void databaseShouldRemoveCorrectEntity() {
 		cases.delete(case2);
 
 		List<Case> us = cases.findAll();
@@ -71,11 +65,31 @@ public class CaseRepoTest {
 	}
 
 	@Test
-	public void databaseShouldReturnCountOfTwoIfDatabaseHasTwoEntries(){
-		cases.saveAll(Arrays.asList(case1, case2));
-
-		List<Case> us = cases.findAll();
+	public void databaseShouldReturnCountOfTwoIfDatabaseHasTwoEntries() {
 		Assertions.assertThat(cases.count()).isEqualTo(2);
+	}
+
+	@Test
+	public void queryFindByArticleShouldReturnCaseWithCorrespondingArticle() {
+		Case expectedCase = cases.findByArticle(case2.getArticle()).get();
+		Assertions.assertThat(expectedCase).isEqualTo(case2);
+	}
+
+	@Test
+	public void customQueryFindAllByReceiverShouldReturnCaseWithCorrespondingReceiver() {
+		List<Case> expectedCase = cases.findAllByReceiver(case1.getReceiver());
+		Assertions.assertThat(expectedCase.size()).isOne();
+		Assertions.assertThat(expectedCase.get(0)).isEqualTo(case1);
+	}
+
+	@Test
+	public void customQueryFindAllByArticleOwnerShouldReturnCaseWithCorrespondingArticleOwner() {
+		case2.getArticle().setOwner(new User());
+		case1.getArticle().setOwner(new User());
+
+		List<Case> expectedCase = cases.findAllByArticleOwner(case2.getOwner());
+		Assertions.assertThat(expectedCase.size()).isOne();
+		Assertions.assertThat(expectedCase.get(0)).isEqualTo(case2);
 	}
 
 }

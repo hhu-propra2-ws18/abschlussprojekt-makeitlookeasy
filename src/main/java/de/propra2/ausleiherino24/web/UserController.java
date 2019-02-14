@@ -17,14 +17,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 
+
+/**
+ *
+ * 	UserController manages all requests that are exclusively available to logged-in users
+ * 	of the platform, except article/case handling. This includes profile management.
+ */
 @Controller
 @RequestMapping("/accessed/user")
 public class UserController {
-	/*
-	UserController manages all requests that are exclusively available to logged-in users of the platform, except article/case handling.
-	This includes profile management.
-	 */
-
 	private final UserRepository userRepository;
 	private final PersonRepository personRepository;
 	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
@@ -36,16 +37,18 @@ public class UserController {
 	}
 
 	@GetMapping("/profile")
-	public ModelAndView displayUserProfile(@RequestParam("id") Long id, HttpServletRequest request) {
-		User user = userRepository.getById(id);
+	public ModelAndView displayUserProfile(@RequestParam("id") Long id, HttpServletRequest request,Principal principal) throws Exception {
+		if (!userRepository.getById(id).isPresent()) {
+			throw new Exception("User not found");
+		}
+		User user = userRepository.getById(id).get();
 		//boolean self = principal.getName().equals(user.getUsername());	// Flag for ThymeLeaf. Enables certain profile editing options.
-
+		boolean self = principal.getName().equals(user.getUsername());    // Flag for ThymeLeaf. Enables certain profile editing options.
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
 		mav.addObject("role", RoleService.getUserRole(request));
-
+		mav.addObject("flag",self);
 		return mav;
 	}
-
 	@PutMapping("/editProfile")
 	public void editUserProfile(@ModelAttribute @Valid User user, @ModelAttribute @Valid Person person) {
 		userRepository.save(user);

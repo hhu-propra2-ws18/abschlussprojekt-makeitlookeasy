@@ -41,8 +41,13 @@ public class Case {
 		this.receiver = receiver;
 		this.article = article;
 	}
-	//Die Konstruktion ist nötig, damit der Article stets mit geupdatet wird. Analoges ist im Article
-	//Siehe https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/
+
+	/**
+	 * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
+	 * Siehe <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
+	 *
+	 * @param article
+	 */
 	public void setArticle(Article article){
 		setArticle(article, false);
 	}

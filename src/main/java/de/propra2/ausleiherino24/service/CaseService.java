@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,7 +36,7 @@ public class CaseService {
 
 	//Gibt alle Cases zurück, wo die Person der Verleihende ist
 	public ArrayList<Case> getAllCasesFromPersonOwner(Long personId){
-		return caseRepository.findByOwner(personRepository.findById(personId).get().getUser());
+		return caseRepository.findAllByArticleOwner(personRepository.findById(personId).get().getUser());
 	}
 
 	//Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan verliehen ist
@@ -59,7 +57,7 @@ public class CaseService {
 
 	//Gibt alle Cases zurück, wo die Person sich von jemanden etwas geliehen hat
 	public ArrayList<Case> getLendCasesFromPersonReceiver(Long personId){
-		return caseRepository.findByReceiver(personRepository.findById(personId).get().getUser());
+		return caseRepository.findAllByReceiver(personRepository.findById(personId).get().getUser());
 	}
 
 	//Erwartet Case mit wo Artikel verliehen werden kann. Case wird modifiziert, dass es nun verliehen ist.
@@ -73,13 +71,13 @@ public class CaseService {
 
 		caseRepository.save(c);
 	}
-
-	public List<Case> findAllCasesWithNonActiveArticles(){
-		return articleService.getAllNonActiveArticles().stream()
+/*
+	public List<Case> findAllCasesWithNonReservedArticles(){
+		return articleService.getAllNonReservedArticles().stream()
 				.map(caseRepository::findByArticle)
 				.filter(Optional::isPresent)
 				.map(Optional::get)
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
-
+*/
 }

@@ -17,10 +17,9 @@ public class Article {
 	@Lob
 	String description;
 
-	// If this is true the article is not available for rental ("deleted")
-	Boolean active;
+	Boolean active;		// If this is true the article is not available for rental ("deleted")
 
-	Boolean reserved;
+	Boolean reserved;	// If this is true the article is not available for rental ("reserved/rented")
 
 	Category category;
 
@@ -31,8 +30,12 @@ public class Article {
 	Case aCase;
 
 
-	//Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
-	//Siehe https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/
+	/**
+	 * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
+	 * Siehe <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
+	 *
+	 * @param aCase
+	 */
 	public void setACase(Case aCase){
 		setACase(aCase, false);
 	}
