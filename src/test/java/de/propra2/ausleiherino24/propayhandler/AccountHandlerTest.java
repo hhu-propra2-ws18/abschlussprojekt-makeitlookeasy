@@ -39,19 +39,41 @@ public class AccountHandlerTest {
 
 
 	@Test
-	public void hasValidFundsWorksWithoutReservations(){
+	public void hasValidFundsWorksWithoutReservationsIfValid(){
 		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
-		Assert.assertTrue(accountHandler.hasValidFunds("Acc1",99));
+		Assert.assertTrue(accountHandler.hasValidFunds("Acc1",99.0));
 	}
 
-	
+	@Test
+	public void hasValidFundsFailsWithoutReservationsIfFundsNotValid(){
+		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
+		Assert.assertTrue(!accountHandler.hasValidFunds("Acc1",101.0));
+	}
+
+	@Test
+	public void hasValidFundsWorksWithReservationsIfValid(){
+		testAcc1.addReservation(90.0);
+		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
+		Assert.assertTrue(accountHandler.hasValidFunds("Acc1",9.0));
+	}
+
+	@Test
+	public void hasValidFundsFailsWithReservationsIfFundsNotValid(){
+		testAcc1.addReservation(90.0);
+		testAcc1.addReservation(9.0);
+		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
+		Assert.assertTrue(!accountHandler.hasValidFunds("Acc1",2.0));
+	}
+
+
+
 	@Test
 	public void transferFundsWorksWithValidFunds(){
 		HttpEntity<Double> request = new HttpEntity<>(10.0);
 		ResponseEntity<Double> responseEntity = new ResponseEntity<>( 200.0 ,HttpStatus.ACCEPTED);
 
 		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
-		Mockito.when(restTemplate.exchange(ACCOUNT_URL +"/{sourceAccount}/transfer/{targetAccount}", HttpMethod.POST, request, Double.class, "Acc1","Acc2")).thenReturn(responseEntity);
+		Mockito.when(restTemplate.exchange(ACCOUNT_URL +"/{sourceAccount}/transfer/{targetAccount}", HttpMethod.POST, request, Double.class,"Acc1","Acc2")).thenReturn(responseEntity);
 
 		Assert.assertEquals(200.0,accountHandler.transferFunds("Acc1","Acc2",10.0),0.05);
 	}

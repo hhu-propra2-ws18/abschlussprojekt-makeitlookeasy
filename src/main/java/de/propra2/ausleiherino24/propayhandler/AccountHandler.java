@@ -44,7 +44,6 @@ public class AccountHandler {
 	public double transferFunds(String sourceUser, String targetUser, double amount){
 
 		if(hasValidFunds(sourceUser,amount)) {
-			restTemplate = new RestTemplate();
 			HttpEntity<Double> request = new HttpEntity<>(amount);
 
 			ResponseEntity<Double> responseEntity = restTemplate.exchange(ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}", HttpMethod.POST, request, Double.class, sourceUser, targetUser);

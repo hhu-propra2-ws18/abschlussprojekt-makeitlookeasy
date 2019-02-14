@@ -31,4 +31,7 @@ class 	PPAccount {
 		}
 		return this.reservations;
 	}
+	void addReservation(Double amount){
+		this.reservations.add(new Reservation(this.reservations.size()+1,amount));
+	}
 }
