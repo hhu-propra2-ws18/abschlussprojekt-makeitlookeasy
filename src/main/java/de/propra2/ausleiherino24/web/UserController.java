@@ -2,13 +2,14 @@ package de.propra2.ausleiherino24.web;
 
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
+import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,13 +29,15 @@ public class UserController {
 	private final UserRepository userRepository;
 	private final PersonRepository personRepository;
 	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+	private final ArticleService articleService;
 
 	@Autowired
-	public UserController(UserRepository userRepository, PersonRepository personRepository) {
+	public UserController(UserRepository userRepository, PersonRepository personRepository, ArticleService articleService) {
 		this.userRepository = userRepository;
 		this.personRepository = personRepository;
+		this.articleService = articleService;
 	}
-	
+
 	/**
 	 * Show any user profile to logged-in users.
 	 * 1.	If visitor is not logged-in and tries to access profile, redirect to login.
@@ -54,7 +57,7 @@ public class UserController {
 			System.out.println("You have to be logged in to see other users' profiles.");
 			return new ModelAndView("redirect:/login");
 		}
-		
+
 		Optional<User> optionalUser = userRepository.findByUsername(username);
 		if(!optionalUser.isPresent()) {
 			throw new Exception("User not found");
@@ -64,6 +67,7 @@ public class UserController {
 		// editing options.
 
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
+		mav.addObject("categories", Category.getAllCategories());
 		mav.addObject("user", user);
 		mav.addObject("role", RoleService.getUserRole(request));
 		//mav.addObject("self", self);
@@ -73,7 +77,7 @@ public class UserController {
 	@PutMapping("/editProfile")
 	public ModelAndView editUserProfile(@ModelAttribute @Valid User user, @ModelAttribute @Valid Person person, Principal principal) {
 		String currentPrincipalName = principal.getName();
-		
+
 		if (user.getUsername().equals(currentPrincipalName)) {
 			userRepository.save(user);
 			LOGGER.info("Updated user profile %s [ID=%L]", user.getUsername(), user.getId());
@@ -84,7 +88,7 @@ public class UserController {
 			LOGGER.info("Logging out user %s", currentPrincipalName);
 			return new ModelAndView("redirect:/logout");
 		}
-		
+
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
 		mav.addObject("user", user);
 		return mav;
@@ -92,7 +96,10 @@ public class UserController {
 
 	@GetMapping("/index")
 	public ModelAndView getIndex(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("/accessed/user/index");
+		ModelAndView mav = new ModelAndView("/index");
+		mav.addObject("all", articleService.getAllNonReservedArticles());
+		mav.addObject("role", RoleService.getUserRole(request));
+		mav.addObject("categories", Category.getAllCategories());
 		mav.addObject("role", RoleService.getUserRole(request));
 		return mav;
 	}
