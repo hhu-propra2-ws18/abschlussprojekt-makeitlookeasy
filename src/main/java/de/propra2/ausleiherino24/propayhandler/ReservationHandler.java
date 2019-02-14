@@ -10,13 +10,16 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 public class ReservationHandler {
+	
 	@Autowired
-	public ReservationHandler(RestTemplate restTemplate) {
+	public ReservationHandler(RestTemplate restTemplate, ClientHttpRequestFactory requestFactory) {
 		this.restTemplate = restTemplate;
 		accountHandler = new AccountHandler(restTemplate);
+		this.requestFactory = requestFactory;
 	}
 	
 	private RestTemplate restTemplate;
+	private ClientHttpRequestFactory requestFactory;
 	private static final String RESERVATION_URL = "localhost:8888/reservation";
 	private AccountHandler accountHandler;
 
@@ -24,7 +27,7 @@ public class ReservationHandler {
 
 		if(accountHandler.hasValidFunds(sourceUser,amount)) {
 
-			ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+			//ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 			restTemplate = new RestTemplate(requestFactory);
 			HttpEntity<Double> request = new HttpEntity<>(amount);
 
@@ -34,8 +37,9 @@ public class ReservationHandler {
 		}
 		return false;
 	}
+	
 	public boolean releaseReservation(String account, int reservationId){
-		ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+		//ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 		restTemplate = new RestTemplate(requestFactory);
 		HttpEntity<Integer> request = new HttpEntity<>(reservationId);
 
@@ -43,8 +47,9 @@ public class ReservationHandler {
 
 		return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity.getStatusCode().equals(HttpStatus.CREATED);
 	}
+	
 	public boolean punishReservation(String account, int reservationId){
-		ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+		//ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
 		restTemplate = new RestTemplate(requestFactory);
 		HttpEntity<Integer> request = new HttpEntity<>(reservationId);
 
