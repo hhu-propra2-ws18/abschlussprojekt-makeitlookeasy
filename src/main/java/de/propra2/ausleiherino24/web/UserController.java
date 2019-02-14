@@ -8,6 +8,7 @@ import de.propra2.ausleiherino24.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,13 +36,13 @@ public class UserController {
 	}
 
 	@GetMapping("/profile")
-	public ModelAndView displayUserProfile(@RequestParam("id") Long id, Principal principal) {
+	public ModelAndView displayUserProfile(@RequestParam("id") Long id, HttpServletRequest request) {
 		User user = userRepository.getById(id);
-		boolean self = principal.getName().equals(user.getUsername());	// Flag for ThymeLeaf. Enables certain profile editing options.
+		//boolean self = principal.getName().equals(user.getUsername());	// Flag for ThymeLeaf. Enables certain profile editing options.
 
-		ModelAndView mav = new ModelAndView("profile");
-		mav.addObject("user", user);
-		mav.addObject("self", self);
+		ModelAndView mav = new ModelAndView("/accessed/user/profile");
+		mav.addObject("role", RoleService.getUserRole(request));
+
 		return mav;
 	}
 
