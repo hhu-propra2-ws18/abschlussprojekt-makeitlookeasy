@@ -8,6 +8,7 @@ import de.propra2.ausleiherino24.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -66,18 +67,7 @@ public class UserController {
 		mav.addObject("self", self);
 		return mav;
 	}
-	
-	/**
-	 * Profile editing for current principal.
-	 * 1.	If submitted user.name equals principal.name, save submitted changes and show new profile.
-	 * 2.	Else, do not save changes and redirect principal to logout.
-	 *
-	 * @param user			User object received from form
-	 * @param person		Person object received from form
-	 * @param principal		Current principal
-	 * @return				1. Show updated profile
-	 * 						2. Redirect to logout
-	 */
+
 	@PutMapping("/editProfile")
 	public ModelAndView editUserProfile(@ModelAttribute @Valid User user, @ModelAttribute @Valid Person person, Principal principal) {
 		String currentPrincipalName = principal.getName();

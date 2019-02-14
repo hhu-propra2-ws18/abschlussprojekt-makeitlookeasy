@@ -25,7 +25,7 @@ public class ArticleService {
 	 */
 	public List<Article> getAllNonReservedArticles() {
 		List<Article> availableArticles = new ArrayList<>();
-		List<Article> allArticles = articleRepository.findAll().isEmpty() ? articleRepository.findAll() : new ArrayList<>();
+		List<Article> allArticles = articleRepository.findAll().isEmpty() ? new ArrayList<>() : articleRepository.findAll();
 		
 		for (Article article : allArticles) {
 			// no duplicate, active article, not reserved

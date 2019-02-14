@@ -21,11 +21,13 @@ public class Article {
 
 	Boolean reserved;	// If this is true the article is not available for rental ("reserved/rented")
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	Category category;
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	User owner;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	Case aCase; //TODO  Nötig wegen irgendwas
+	Case aCase;
 
 
 	/**
@@ -41,7 +43,16 @@ public class Article {
 		this.aCase = aCase;
 		if(aCase != null && !repetition)
 			aCase.setArticle(this, true);
+	}
 
+	public void setOwner(User user){
+		setOwner(user, false);
+	}
+	void setOwner(User user, boolean repetition){
+		this.owner = user;
+		if(user != null && !repetition) {
+			user.addArticle(this, true);
+		}
 	}
 
 	public Article(){}

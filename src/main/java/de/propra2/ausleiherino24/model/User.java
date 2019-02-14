@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User hat neben Person eine eigene ID, um diesen als Plattformbenutzer explizit separat ansteuern zu können.
@@ -31,6 +33,43 @@ public class User {
 	private String email;
 
 	private String role;
+
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<Article> articleList;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	private Person person;
+
+	public void addArticle(Article article){
+		addArticle(article, false);
+	}
+
+	void addArticle(Article article, boolean repetition){
+		if(article == null) return;
+		if(articleList == null) articleList = new ArrayList<>();
+		if(articleList.contains(article))
+			articleList.set(articleList.indexOf(article), article);
+		else
+			articleList.add(article);
+		if(!repetition)
+			article.setOwner(this, true);
+	}
+
+	public void removeArticle(Article article){
+		articleList.remove(article);
+		article.setOwner(null);
+	}
+
+	public void setPerson(Person person){
+		setPerson(person, false);
+	}
+
+	void setPerson(Person person, boolean repetition) {
+		this.person = person;
+		if (person != null && !repetition)
+			person.setUser(this, true);
+	}
+
 
 	public User(User user) {
 		this.username = user.getUsername();
