@@ -5,8 +5,8 @@ import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.service.RoleService;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,12 +94,14 @@ public class CaseController {
 	 */
 	@PutMapping("/deactivateArticle")
 	public ModelAndView deactivateArticle(@RequestParam Long id, Principal principal) throws Exception {
+		// TODO: Auslagern in Service.
+		
 		Optional<Article> optionalArticle = articleRepository.findById(id);
 		if (!optionalArticle.isPresent()) {
 			LOGGER.warn("Couldn't find article %L in ArticleRepository.", id);
 			throw new Exception("Couldn't find requested article in ArticleRepository.");
 		}
-
+		
 		Article article = optionalArticle.get();
 		
 		if (!article.getReserved()) {
@@ -119,10 +121,6 @@ public class CaseController {
 			LOGGER.warn("Article %L couldn't be deactivated, because it's currently being reserved.", article.getId());
 		}
 
-		article.setActive(false);
-		articleRepository.save(article);
-		LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
-
 		String currentPrincipalName = principal.getName();
 		Optional<User> user = userRepository.findByUsername(currentPrincipalName);
 		if (!user.isPresent()) {
@@ -131,8 +129,7 @@ public class CaseController {
 		}
 
 		ModelAndView mav = new ModelAndView("myArticles");
-		mav.addObject("articles", articleRepository.findAllActiveByUser(user.get()));
+		mav.addObject("allArticles", articleRepository.findAllActiveByUser(user.get()));
 		return mav;
 	}
-
 }
