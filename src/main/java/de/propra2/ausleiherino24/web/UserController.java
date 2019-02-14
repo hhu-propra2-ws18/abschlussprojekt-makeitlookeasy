@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Optional;
 
 /**
  * 	UserController manages all requests that are exclusively available to logged-in users
@@ -32,38 +33,69 @@ public class UserController {
 		this.userRepository = userRepository;
 		this.personRepository = personRepository;
 	}
-
-	@GetMapping("/profile")
-	public ModelAndView displayUserProfile(@RequestParam("id") Long id, Principal principal) throws Exception {
+	
+	/**
+	 * Show any user profile to logged-in users.
+	 * 1.	If visitor is not logged-in and tries to access profile, redirect to login.
+	 * 2.	Else, display profile.
+	 * 		2.1		If requested profile of user, is own profile, allow editing via 'self' flag.
+	 * 		2.2		Else, do not allow editing.
+	 *
+	 * @param username		Name of requested user, whose profile is requested
+	 * @param principal		Current Principal
+	 * @return				1. Redirect to view "login" (if not logged-in)
+	 * 						2. Display "/accessed/user/profile" view
+	 * @throws Exception	Thrown, if username cannot be found in UserRepository
+	 */
+	@GetMapping("/profile/{username}")
+	public ModelAndView displayUserProfile(@PathVariable String username, Principal principal) throws Exception {
 		if (principal == null) {
 			System.out.println("You have to be logged in to see other users' profiles.");
 			return new ModelAndView("redirect:/login");
 		}
 		
-		if(!userRepository.getById(id).isPresent()) {
+		Optional<User> optionalUser = userRepository.findByUsername(username);
+		if(!optionalUser.isPresent()) {
 			throw new Exception("User not found");
 		}
-		User user = userRepository.getById(id).get();
-		boolean self = principal.getName().equals(user.getUsername());	// Flag for ThymeLeaf. Enables certain profile editing options.
+		User user = optionalUser.get();
+		boolean self = principal.getName().equals(username);	// Flag for ThymeLeaf. Enables certain profile editing options.
 
-		ModelAndView mav = new ModelAndView("profile");
+		ModelAndView mav = new ModelAndView("/accessed/user/profile");
 		mav.addObject("user", user);
 		mav.addObject("self", self);
 		return mav;
 	}
-
+	
+	/**
+	 * Profile editing for current principal.
+	 * 1.	If submitted user.name equals principal.name, save submitted changes and show new profile.
+	 * 2.	Else, do not save changes and redirect principal to logout.
+	 *
+	 * @param user			User object received from form
+	 * @param person		Person object received from form
+	 * @param principal		Current principal
+	 * @return				1. Show updated profile
+	 * 						2. Redirect to logout
+	 */
 	@PutMapping("/editProfile")
-	public void editUserProfile(@ModelAttribute @Valid User user, @ModelAttribute @Valid Person person) {
-		userRepository.save(user);
-		LOGGER.info("Updated user profile %s [ID=%L]", user.getUsername(), user.getId());
-		personRepository.save(person);
-		LOGGER.info("Updated person profile [ID=%L]", person.getId());
-
-		/*
-		ModelAndView mav = new ModelAndView("profile");
+	public ModelAndView editUserProfile(@ModelAttribute @Valid User user, @ModelAttribute @Valid Person person, Principal principal) {
+		String currentPrincipalName = principal.getName();
+		
+		if (user.getUsername().equals(currentPrincipalName)) {
+			userRepository.save(user);
+			LOGGER.info("Updated user profile %s [ID=%L]", user.getUsername(), user.getId());
+			personRepository.save(person);
+			LOGGER.info("Updated person profile [ID=%L]", person.getId());
+		} else {
+			LOGGER.warn("Unauthorized access to 'editProfile' for user %s by user %s", user.getUsername(), currentPrincipalName);
+			LOGGER.info("Logging out user %s", currentPrincipalName);
+			return new ModelAndView("redirect:/logout");
+		}
+		
+		ModelAndView mav = new ModelAndView("/accessed/user/profile");
 		mav.addObject("user", user);
 		return mav;
-		*/
 	}
 
 	@GetMapping("/index")
