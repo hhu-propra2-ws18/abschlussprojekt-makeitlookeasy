@@ -36,8 +36,11 @@ public class UserController {
 	}
 
 	@GetMapping("/profile")
-	public ModelAndView displayUserProfile(@RequestParam("id") Long id, Principal principal) {
-		User user = userRepository.getById(id);
+	public ModelAndView displayUserProfile(@RequestParam("id") Long id, Principal principal) throws Exception {
+		if(!userRepository.getById(id).isPresent()) {
+			throw new Exception("User not found");
+		}
+		User user = userRepository.getById(id).get();
 		boolean self = principal.getName().equals(user.getUsername());	// Flag for ThymeLeaf. Enables certain profile editing options.
 
 		ModelAndView mav = new ModelAndView("profile");

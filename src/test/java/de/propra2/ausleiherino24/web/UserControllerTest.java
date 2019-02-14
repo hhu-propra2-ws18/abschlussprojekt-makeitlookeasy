@@ -3,6 +3,9 @@ package de.propra2.ausleiherino24.web;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.UserService;
+
+import java.util.Optional;
+
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,10 +47,10 @@ public class UserControllerTest {
 				.role("admin")
 				.build();
 
-		Mockito.when(users.getById(1L)).thenReturn(user);
+		Mockito.when(users.getById(1L)).thenReturn(Optional.of(user));
 		
 		mvc.perform(MockMvcRequestBuilders.get("/accessed/user?id=1"))
-				.andExpect(MockMvcResultMatchers.model().attribute("user", Matchers.is(user)));
+				.andExpect(MockMvcResultMatchers.model().attribute("user", Matchers.is(Optional.of(user))));
 		
 		Mockito.verify(users, Mockito.times(1)).getById(1L);
 	}

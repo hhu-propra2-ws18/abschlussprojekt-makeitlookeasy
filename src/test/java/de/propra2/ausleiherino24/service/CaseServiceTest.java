@@ -38,7 +38,7 @@ public class CaseServiceTest {
 		cases.add(new Case(0L,  null, null, 0,0, false, null, article));
 		cases.add(new Case(0L, null, null, 0,0, false, null, article));
 
-		when(caseRepositoryMock.findByOwner(null)).thenReturn(cases);
+		when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
 		Optional<Person> o = Optional.of(new Person());
 		when(personRepositoryMock.findById(0L)).thenReturn(o);
 
@@ -53,7 +53,7 @@ public class CaseServiceTest {
 		cases.add(new Case(1L, null, null, 0,0, false, null, article));
 		cases.add(new Case(0L,null, null, 0,0, false, null, article));
 
-		when(caseRepositoryMock.findByOwner(null)).thenReturn(cases);
+		when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
 		Optional<Person> o = Optional.of(new Person());
 		when(personRepositoryMock.findById(0L)).thenReturn(o);
 		cases.remove(2);
@@ -69,7 +69,7 @@ public class CaseServiceTest {
 		cases.add(new Case(0L, null, null, 0,0, false, null, article));
 		cases.add(new Case(0L, null, null, 0,0, false, new User(), article));
 
-		when(caseRepositoryMock.findByOwner(null)).thenReturn(cases);
+		when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
 		Optional<Person> o = Optional.of(new Person());
 		when(personRepositoryMock.findById(0L)).thenReturn(o);
 		cases.remove(2);
@@ -85,7 +85,7 @@ public class CaseServiceTest {
 		cases.add(new Case(0L,  null, null, 0,0, false, null, article));
 		cases.add(new Case(0L, null, null, 0,0, false, null, article));
 
-		when(caseRepositoryMock.findByOwner(null)).thenReturn(cases);
+		when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
 		Optional<Person> o = Optional.of(new Person());
 		when(personRepositoryMock.findById(0L)).thenReturn(o);
 
@@ -100,7 +100,7 @@ public class CaseServiceTest {
 		cases.add(new Case(0L, null, null, 0,0, false, null, article));
 		cases.add(new Case(0L, null, null, 0,0, false, new User(), article));
 
-		when(caseRepositoryMock.findByOwner(null)).thenReturn(cases);
+		when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
 		Optional<Person> o = Optional.of(new Person());
 		when(personRepositoryMock.findById(0L)).thenReturn(o);
 		cases.remove(3);
@@ -116,7 +116,7 @@ public class CaseServiceTest {
 		cases.add(new Case(0L, null, null, 0,0, false, new User(), article));
 		cases.add(new Case(0L, null, null, 0,0, false, new User(), article));
 
-		when(caseRepositoryMock.findByOwner(null)).thenReturn(cases);
+		when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
 		Optional<Person> o = Optional.of(new Person());
 		when(personRepositoryMock.findById(0L)).thenReturn(o);
 
