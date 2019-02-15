@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.propayhandler;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,30 +35,44 @@ public class AccountHandlerTest {
 		accountHandler = new AccountHandler(restTemplate);
 		testAcc1 = new PPAccount("Acc1",100.0);
 		testAcc2 = new PPAccount("Acc2",1000.0);
+		
+		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
 	}
 
+	@Test
+	public void checkFundsTest(){
+		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc3")).thenReturn(null);
+
+		Assertions.assertThat(accountHandler.checkFunds("Acc3")).isZero();
+		Mockito.verify(restTemplate, Mockito.times(1)).getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc3");
+	}
+	
+	@Test
+	public void checkFundsTest2(){
+		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc2")).thenReturn(testAcc2);
+
+		Assertions.assertThat(accountHandler.checkFunds("Acc2")).isEqualByComparingTo(1000.0);
+		Mockito.verify(restTemplate, Mockito.times(1)).getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc2");
+	}
 
 	@Test
 	public void hasValidFundsWorksWithoutReservationsIfValid(){
-		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
-
-		Assert.assertTrue(accountHandler.hasValidFunds("Acc1",99.0));
+		Assertions.assertThat(accountHandler.hasValidFunds("Acc1",99.0)).isTrue();
+		Mockito.verify(restTemplate, Mockito.times(1)).getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1");
 	}
 
 	@Test
 	public void hasValidFundsFailsWithoutReservationsIfFundsNotValid(){
-		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
-
-		Assert.assertTrue(!accountHandler.hasValidFunds("Acc1",101.0));
+		Assertions.assertThat(accountHandler.hasValidFunds("Acc1",101.0)).isFalse();
+		Mockito.verify(restTemplate, Mockito.times(1)).getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1");
 	}
 
 	@Test
 	public void hasValidFundsWorksWithReservationsIfValid(){
 		testAcc1.addReservation(90.0);
 
-		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
-
-		Assert.assertTrue(accountHandler.hasValidFunds("Acc1",9.0));
+		Assertions.assertThat(accountHandler.hasValidFunds("Acc1",9.0)).isTrue();
+		Mockito.verify(restTemplate, Mockito.times(1)).getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1");
 	}
 
 	@Test
@@ -65,11 +80,9 @@ public class AccountHandlerTest {
 		testAcc1.addReservation(90.0);
 		testAcc1.addReservation(9.0);
 
-		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
-
-		Assert.assertTrue(!accountHandler.hasValidFunds("Acc1",2.0));
+		Assertions.assertThat(accountHandler.hasValidFunds("Acc1",2.0)).isFalse();
+		Mockito.verify(restTemplate, Mockito.times(1)).getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1");
 	}
-
 
 
 	@Test
@@ -77,10 +90,21 @@ public class AccountHandlerTest {
 		HttpEntity<Double> request = new HttpEntity<>(10.0);
 		ResponseEntity<Double> responseEntity = new ResponseEntity<>( 200.0 ,HttpStatus.ACCEPTED);
 
-		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
 		Mockito.when(restTemplate.exchange(ACCOUNT_URL +"/{sourceAccount}/transfer/{targetAccount}", HttpMethod.POST, request, Double.class,"Acc1","Acc2")).thenReturn(responseEntity);
 
-		Assert.assertEquals(200.0,accountHandler.transferFunds("Acc1","Acc2",10.0),0.05);
+		Assertions.assertThat(accountHandler.transferFunds("Acc1","Acc2",10.0)).isEqualByComparingTo(200.0);
+		Mockito.verify(restTemplate, Mockito.times(1)).exchange(ACCOUNT_URL +"/{sourceAccount}/transfer/{targetAccount}", HttpMethod.POST, request, Double.class,"Acc1","Acc2");
+	}
+	
+	@Test
+	public void transferFundsFailsIfFundsValidButStatusCodeNotAccepted(){
+		HttpEntity<Double> request = new HttpEntity<>(10.0);
+		ResponseEntity<Double> responseEntity = new ResponseEntity<>( 200.0 ,HttpStatus.CONFLICT);
+
+		Mockito.when(restTemplate.exchange(ACCOUNT_URL +"/{sourceAccount}/transfer/{targetAccount}", HttpMethod.POST, request, Double.class,"Acc1","Acc2")).thenReturn(responseEntity);
+
+		Assertions.assertThat(accountHandler.transferFunds("Acc1","Acc2",10.0)).isEqualByComparingTo(0.0);
+		Mockito.verify(restTemplate, Mockito.times(1)).exchange(ACCOUNT_URL +"/{sourceAccount}/transfer/{targetAccount}", HttpMethod.POST, request, Double.class,"Acc1","Acc2");
 	}
 
 	@Test
@@ -88,21 +112,34 @@ public class AccountHandlerTest {
 		HttpEntity<Double> request = new HttpEntity<>(201.0);
 		ResponseEntity<Double> responseEntity = new ResponseEntity<>( 200.0 ,HttpStatus.ACCEPTED);
 
-		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
 		Mockito.when(restTemplate.exchange(ACCOUNT_URL +"/{sourceAccount}/transfer/{targetAccount}", HttpMethod.POST, request, Double.class,"Acc1","Acc2")).thenReturn(responseEntity);
 
-		Assert.assertEquals(0.0,accountHandler.transferFunds("Acc1","Acc2",201.0),0.05);
+		Assertions.assertThat(accountHandler.transferFunds("Acc1","Acc2",201.0)).isEqualByComparingTo(0.0);
+		Mockito.verify(restTemplate, Mockito.times(0)).exchange(ACCOUNT_URL +"/{sourceAccount}/transfer/{targetAccount}", HttpMethod.POST, request, Double.class,"Acc1","Acc2");
 	}
 
 	@Test
-	public void addFundsWorks(){
+	public void addFundsAddsFoundsIfStatusCodeIsAccepted(){
 		HttpEntity<Double> request = new HttpEntity<>(10.0);
 		ResponseEntity<Double> responseEntity = new ResponseEntity<>( 200.0 ,HttpStatus.ACCEPTED);
 
 		Mockito.when(restTemplate.exchange(ACCOUNT_URL +"/{account}", HttpMethod.POST, request, Double.class, "Acc1")).thenReturn(responseEntity);
 
-		Assert.assertEquals(200.0,accountHandler.addFunds("Acc1",10.0),0.05);
+		Assertions.assertThat(accountHandler.addFunds("Acc1",10.0)).isEqualByComparingTo(200.0);
+		Mockito.verify(restTemplate, Mockito.times(1)).exchange(ACCOUNT_URL +"/{account}", HttpMethod.POST, request, Double.class, "Acc1");
 	}
+	
+	@Test
+	public void addFundsAddsNoFoundsIfStatusCodeIsNotAccepted(){
+		HttpEntity<Double> request = new HttpEntity<>(10.0);
+		ResponseEntity<Double> responseEntity = new ResponseEntity<>( 200.0 ,HttpStatus.BAD_REQUEST);
+
+		Mockito.when(restTemplate.exchange(ACCOUNT_URL +"/{account}", HttpMethod.POST, request, Double.class, "Acc1")).thenReturn(responseEntity);
+
+		Assertions.assertThat(accountHandler.addFunds("Acc1",10.0)).isEqualByComparingTo(0.0);
+		Mockito.verify(restTemplate, Mockito.times(1)).exchange(ACCOUNT_URL +"/{account}", HttpMethod.POST, request, Double.class, "Acc1");
+	}
+	
 
 
 }
