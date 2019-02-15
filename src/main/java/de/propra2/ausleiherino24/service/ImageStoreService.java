@@ -35,7 +35,7 @@ public class ImageStoreService {
 			e.printStackTrace();
 		}
 
-		return file.getName();
+		return dest.getName();
 	}
 
 	public File getFile(String fileName, Long binningId) {
