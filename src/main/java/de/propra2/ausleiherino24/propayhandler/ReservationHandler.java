@@ -19,7 +19,7 @@ public class ReservationHandler {
 	private static final String RESERVATION_URL = "http://localhost:8888/reservation";
 	private AccountHandler accountHandler;
 
-	public boolean createReservation(String sourceUser, String targetUser, double amount){
+	public boolean createReservation(String sourceUser, String targetUser, Double amount){
 
 		if(accountHandler.hasValidFunds(sourceUser,amount)) {
 
@@ -32,7 +32,7 @@ public class ReservationHandler {
 		return false;
 	}
 	
-	public boolean releaseReservation(String account, int reservationId){
+	public boolean releaseReservation(String account, Integer reservationId){
 		HttpEntity<Integer> request = new HttpEntity<>(reservationId);
 
 		ResponseEntity<Integer> responseEntity = restTemplate.exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST, request, Integer.class, account);
@@ -40,7 +40,7 @@ public class ReservationHandler {
 		return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity.getStatusCode().equals(HttpStatus.CREATED);
 	}
 	
-	public boolean punishReservation(String account, int reservationId){
+	public boolean punishReservation(String account, Integer reservationId){
 		HttpEntity<Integer> request = new HttpEntity<>(reservationId);
 
 		ResponseEntity<Integer> responseEntity = restTemplate.exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST, request, Integer.class, account);
