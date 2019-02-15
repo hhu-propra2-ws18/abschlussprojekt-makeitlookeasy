@@ -7,7 +7,8 @@ services:
     ports:
       - 8888:8888
     volumes:
-      - ./propaydata:/code/data
+      - ./PPdata:/code/data
+
   #   depends_on:
   #     - ausleiherino24
 
@@ -19,55 +20,37 @@ services:
   #    working_dir: /app
   #    user: appuser
   #    environment:
-  #      - POSTGRES_PASSWORD=secret
-  #      - POSTGRES_DB=database
-  #      - POSTGRES_USER=postgres
-  #    command: dockerize -wait tcp://database:5432 -timeout 600s ./gradlew boot
+  #    - POSTGRES_USER=${POSTGRES_USER}
+  #    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+  #    - POSTGRES_DB=${POSTGRES_DB}
+  #    command: dockerize -wait tcp://localhost:5432 -timeout 600s ./gradlew boot
 
-  postgres:
-    image: postgres
+  db:
+    build:
+      ./pgsql-01
     restart: always
-    container_name: postgres
+    container_name: pgsql-01
+#    user: "${PUID}:${PGID}"
     ports:
       - 5432:5432
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
+    env_file:
+      - ./.env
+#    environment:
+#      - POSTGRES_USER=${POSTGRES_USER}
+#      - POSTGRES_PASSWORD=${POSTGRES_USER}
+#      - POSTGRES_USER=test
+#      - POSTGRES_PASSWORD=test
+#      - POSTGRES_DB=${pgsql-01_DB}
     volumes:
-      - ./database:/var/lib/postgresql/data
+      - ./pgsql-01/persistence/data:/var/lib/postgresql/data
+      - ./pgsql-01/persistence/conf:/config
 
-#  sonardb:
-#    container_name: sonardb
-#    image: postgres
-#    hostname: pgsql-01
-#    ports:
-#      - 4321:4321
-#    environment:
-#      - POSTGRES_PASSWORD=sonar
-#      - POSTGRES_DB=sonar
-#      - POSTGRES_USER=sonar
-#    volumes:
-#      - ./sonardb:/var/lib/postgresql/data
-#
-#  sonarqube:
-#    container_name: sonarqube
-#    image: sonarqube
-#    hostname: sonar-01
-#    links:
-#      - sonardb
-#    ports:
-#      - 9000:9000
-#    environment:
-#      - SONAR_JDBC_URL=jdbc:postgresql://pgsql-01:4321/sonar
-#      - SONAR_JDBC_USERNAME=sonar
-#      - SONAR_JDBC_PASSWORD=sonar
-#
 #  jenkins:
 #    image: 'jenkins/jenkins:lts'
 #    container_name: jenkins
 #    restart: unless-stopped
 #    ports:
 #      - 1234:1234
+#      - 50000:50000
 #    volumes:
 #      - ./jenkins_home:/var/jenkins_home

@@ -1,9 +1,14 @@
-<div th:fragment="categories" class="col-lg-3">
-		<h1 style="margin-top: 50px">Categories</h1>
+<!DOCTYPE html>
+<html lang="en" xmlns:="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div class="col-lg-3" th:fragment="categories">
+	<h1 style="margin-top: 50px">Categories</h1>
 	<ul class="list-group">
-		<li class="list-group-item"> <a th:href="@{~/}">Alle</a> </li>
+		<li class="list-group-item"><a th:href="@{~/}">Alle</a></li>
 
-		<li class="list-group-item" th:each="categorie: ${categories}"> <a href="#"  th:text="${categorie.getName()}">Auto </a> </li>
+		<li class="list-group-item" th:each="categorie: ${categories}"><a href="#"
+																		  th:text="${categorie.getName()}">Auto </a>
+		</li>
 
 	</ul>
 </div>
+</html>

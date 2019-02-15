@@ -1,41 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="navbar">
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="/"><img src="/img/mainpage/logoOhneSchrift.jpg" style="width: 50px;">Ausleiherino24</img></a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+			<a class="navbar-brand" href="/"><img src="/img/mainpage/logoOhneSchrift.jpg" style="width: 50px;">Ausleiherino24</img>
+			</a>
+			<button aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+					data-target="#navbarResponsive" data-toggle="collapse" type="button">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse " id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
 					<li>
-						<ul th:if='${role.equals("user")}' class="nav navbar-nav navbar-right">
-							<li><div class="text-white"
-									 style="margin-top:7px;margin-left:5px;margin-right:5px">Logged in as User</div></li>
+						<ul class="nav navbar-nav navbar-right" th:if='${role.equals("user")}'>
+							<li>
+								<div class="text-white"
+									 style="margin-top:7px;margin-left:5px;margin-right:5px">Logged in as User
+								</div>
+							</li>
 							<!--<li><a href="/login?logout" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px">
 								<i class="fa fa-user "></i></div></a></li> -->
 
 
 							<div class="dropdown show">
-								<button class="btn btn-link dropdown-toggle text-white" data-toggle="dropdown" aria-expanded="true" type="button">
+								<button aria-expanded="true" class="btn btn-link dropdown-toggle text-white"
+										data-toggle="dropdown" type="button">
 									<i class="fa fa-cog"></i>
 								</button>
-								<div role="menu" class="dropdown-menu ">
-									<a role="presentation" href="#" class="dropdown-item">Profil     <i class="fa fa-user"></i></a>
-									<a role="presentation" href="/logout" class="dropdown-item">Logout  <i class="fa fa-sign-out"></i></a>
+								<div class="dropdown-menu " role="menu">
+									<a class="dropdown-item" href="#" role="presentation">Profil     <i
+											class="fa fa-user"></i></a>
+									<a class="dropdown-item" href="/logout" role="presentation">Logout  <i
+											class="fa fa-sign-out"></i></a>
 								</div>
 							</div>
 						</ul>
-						<ul th:if='${role.equals("admin")}' class="nav navbar-nav navbar-right">
-							<li><div class="text-white"
-									 style="margin-top:7px;margin-left:5px;margin-right:5px">Logged in as Admin</div></li>
-							<li><div class="text-white" style="margin-top:7px;margin-left:5px;margin-right:5px">
-								<i class="fa fa-user"></i></div></li>
-							<li><a href="/logout" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px">
-								<i class="fa fa-sign-out "></i></div></a></li>
+						<ul class="nav navbar-nav navbar-right" th:if='${role.equals("admin")}'>
+							<li>
+								<div class="text-white"
+									 style="margin-top:7px;margin-left:5px;margin-right:5px">Logged in as Admin
+								</div>
+							</li>
+							<li>
+								<div class="text-white" style="margin-top:7px;margin-left:5px;margin-right:5px">
+									<i class="fa fa-user"></i></div>
+							</li>
+							<li><a class="text-white" href="/logout">
+								<div style="margin-top:7px;margin-left:5px;margin-right:5px">
+									<i class="fa fa-sign-out "></i></div>
+							</a></li>
 						</ul>
-						<ul th:if='${role.equals("")}' class="nav navbar-nav navbar-right">
-							<li><a href="/login" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px"><i class="fa fa-user-plus ">  Login</i></div></a></li>
-							<li><a href="/signup" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px"><i class="fa fa-sign-in ">  Sign-Up</i></div></a></li>
+						<ul class="nav navbar-nav navbar-right" th:if='${role.equals("")}'>
+							<li><a class="text-white" href="/login">
+								<div style="margin-top:7px;margin-left:5px;margin-right:5px"><i
+										class="fa fa-user-plus "> Login</i></div>
+							</a></li>
+							<li><a class="text-white" href="/signup">
+								<div style="margin-top:7px;margin-left:5px;margin-right:5px"><i class="fa fa-sign-in ">
+									Sign-Up</i></div>
+							</a></li>
 						</ul>
 
 					</li>
@@ -43,5 +66,5 @@
 			</div>
 		</div>
 	</nav>
-
 </div>
+</html>
