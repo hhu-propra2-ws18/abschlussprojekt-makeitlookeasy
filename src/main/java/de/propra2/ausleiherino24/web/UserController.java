@@ -74,6 +74,7 @@ public class UserController {
 		mav.addObject("user", userService.findUserByPrincipal(principal));
 		mav.addObject("self", self); //unused
 		mav.addObject("allArticles", articleService);
+		mav.addObject("ppAccount",accountHandler.getAccountData(userService.findUserByPrincipal(principal).getUsername()));
 		return mav;
 	}
 	
@@ -98,7 +99,6 @@ public class UserController {
 		}
 
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
-		mav.addObject("propayacc",accountHandler.checkFunds(user.getUsername()));
 		mav.addObject("user", user);
 		return mav;
 	}
