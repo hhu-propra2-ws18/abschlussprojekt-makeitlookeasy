@@ -56,7 +56,7 @@ public class ImageStoreService {
 		return uniqueFilepath;
 	}
 
-	private boolean fileExists(String path) {
+	public boolean fileExists(String path) {
 		File f = new File(path);
 		return f.exists() && !f.isDirectory();
 	}
