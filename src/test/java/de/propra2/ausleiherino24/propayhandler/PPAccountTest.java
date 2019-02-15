@@ -34,9 +34,9 @@ public class PPAccountTest {
 	@Test
 	public void getReservationsShouldReturnCorrectListOfReservationsIfReservationsIsNotNull() {
 		Reservation res1 = new Reservation();
-		res1.setId(1L);
+//		res1.setId(1L);
 		Reservation res2 = new Reservation();
-		res2.setId(2L);
+//		res2.setId(2L);
 		List<Reservation> resList = new ArrayList<>();
 		resList.add(res1);
 		resList.add(res2);

@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="">
-	<meta name="author" content="">
+	<meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+		  name="viewport">
+	<!-- before: content="width=device-width, initial-scale=1, shrink-to-fit=no" -->
+	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+	<meta content="" name="description">
+	<meta content="" name="author">
 
 	<title>Ausleiherino24</title>
 
 	<!-- Bootstrap core CSS -->
-	<link th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}">
 
 	<!-- Font awesome Css-->
-	<link th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}">
 
 	<!-- Footer Css -->
-	<link  th:href="@{~/css/footerstyle.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{~/css/footerstyle.css}">
 
 	<!-- Custom styles for this template -->
-	<link  th:href="@{~/css/shop-homepage.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{~/css/shop-homepage.css}">
 </head>
 <body>
-	<!-- Navigation -->
-	<div th:replace="/../fragments/navbar ::navbar" name="navbar"></div>
-	<div class="container">
-		<div class="row">
-			<div th:replace="/../fragments/categories ::categories" name="categorie"></div>
-		</div>
+<!-- Navigation -->
+<div name="navbar" th:replace="/../fragments/navbar ::navbar"></div>
+<div class="container">
+	<div class="row">
+		<div name="categorie" th:replace="/../fragments/categories ::categories"></div>
 	</div>
-	<!-- Footer -->
-	<div th:replace="/../fragments/footer ::footer" name="footer"></div>
+</div>
+<!-- Footer -->
+<div name="footer" th:replace="/../fragments/footer ::footer"></div>
 <script th:href="@{~/vendor/jquery/jquery.min.js}"></script>
 <script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </body>

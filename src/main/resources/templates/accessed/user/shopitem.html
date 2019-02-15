@@ -2,90 +2,100 @@
 <html lang="en" xmlns:="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="">
-	<meta name="author" content="">
+	<meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+		  name="viewport">
+	<!-- before: content="width=device-width, initial-scale=1, shrink-to-fit=no" -->
+	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+	<meta content="" name="description">
+	<meta content="" name="author">
 
 	<title>Ausleiherino24</title>
 
 	<!-- Bootstrap core CSS -->
-	<link th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}">
 
 	<!-- Font awesome Css-->
-	<link th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}" rel="stylesheet">
-
+	<link rel="stylesheet" th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}">
 
 
 	<!-- Custom styles for this template -->
-	<link th:href="@{~/css/shop-homepage.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{~/css/shop-homepage.css}">
 </head>
 <body>
-	<!-- Navigation -->
-	<div th:replace="/../fragments/navbar ::navbar" name="navbar"></div>
+<!-- Navigation -->
+<div name="navbar" th:replace="/../fragments/navbar ::navbar"></div>
 
-	<div class="container">
-		<div class="row">
-			<!-- Categories -->
-			<div th:replace="/../fragments/categories ::categories" name="categorie"></div>
+<div class="container">
+	<div class="row">
+		<!-- Categories -->
+		<div name="categorie" th:replace="/../fragments/categories ::categories"></div>
 
-			<!-- Item  -->
-			<div class="col-lg-9">
-				<div class="card mt-4">
-					<img class="card-img-top img-fluid" src="http://placehold.it/900x400" alt="">
-					<div class="card-body">
-						<h3 class="card-title" th:text="${article.getName()}">Product Name</h3>
-						<h4 th:text="${article.getACase().getPrice()+'€ pro Tag'}">24.99€ pro Tag</h4>
-						<h6 th:text="${article.getACase().getDeposit()} +'€ Kaution'">200€ Kaution</h6>
-						<p class="card-text" th:text="${article.description}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. Totam id dolores, sint aperiam sequi pariatur praesentium animi perspiciatis molestias iure, ducimus!</p>
+		<!-- Item  -->
+		<div class="col-lg-9">
+			<div class="card mt-4">
+				<img alt="" class="card-img-top img-fluid" src="http://placehold.it/900x400">
+				<div class="card-body">
+					<h3 class="card-title" th:text="${article.getName()}">Product Name</h3>
+					<h4 th:text="${article.getACase().getPrice()+'€ pro Tag'}">24.99€ pro Tag</h4>
+					<h6 th:text="${article.getACase().getDeposit()} +'€ Kaution'">200€ Kaution</h6>
+					<p class="card-text" th:text="${article.description}">Lorem ipsum dolor sit amet, consectetur
+						adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. Totam id
+						dolores, sint aperiam sequi pariatur praesentium animi perspiciatis molestias iure, ducimus!</p>
 
-						<div class="row">
-							<p class="card-text" style="margin-left:15px">Offered by <a
-									th:href="@{/accessed/user/profile/{username} (username=${article.getOwner().getUsername()})}"
-									th:text="${article.getOwner().getUsername()}">Mick Potzkai</a></p>
-							<div class="ml-auto">
-								<div class="btn btn-success " style="width:200px;margin-right:5px">Book now</div>
-							</div>
+					<div class="row">
+						<p class="card-text" style="margin-left:15px">Offered by <a
+								th:href="@{/accessed/user/profile/{username} (username=${article.getOwner().getUsername()})}"
+								th:text="${article.getOwner().getUsername()}">Mick Potzkai</a></p>
+						<div class="ml-auto">
+							<div class="btn btn-success " style="width:200px;margin-right:5px">Book now</div>
 						</div>
-						<p class="card-text" th:text="${article.getOwner().person.address}">47877 Willich,Plutoweg 5</p>
-
 					</div>
-
+					<p class="card-text" th:text="${article.getOwner().person.address}">47877 Willich,Plutoweg 5</p>
 
 				</div>
-				<!-- /.card -->
-				<div class="card card-outline-secondary my-4">
-					<div class="card-header">
-						Product Reviews
-					</div>
-					<!-- Reviews, could be added soon
-					<div class="card-body">
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
-						<small class="text-muted">Posted by Anonymous on 3/1/17</small>
-						<hr>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
-						<small class="text-muted">Posted by Anonymous on 3/1/17</small>
-						<hr>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
-						<small class="text-muted">Posted by Anonymous on 3/1/17</small>
-						<hr>
-						<a href="#" class="btn btn-success">Leave a Review</a>
-					</div> -->
-				</div>
-				<!-- /.card -->
+
+
 			</div>
-			<!-- /.col-lg-9 -->
+			<!-- /.card -->
+			<div class="card card-outline-secondary my-4">
+				<div class="card-header">
+					Product Reviews
+				</div>
+				<!-- Reviews, could be added soon
+                <div class="card-body">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+                    <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+                    <hr>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+                    <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+                    <hr>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+                    <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+                    <hr>
+                    <a href="#" class="btn btn-success">Leave a Review</a>
+                </div> -->
+			</div>
+			<!-- /.card -->
 		</div>
-		</div>
+		<!-- /.col-lg-9 -->
 	</div>
-	<!-- Footer -->
-<div th:replace="/../fragments/footer ::footer" name="footer"></div>
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+</div>
+</div>
+<!-- Footer -->
+<div name="footer" th:replace="/../fragments/footer ::footer"></div>
+<script crossorigin="anonymous"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script crossorigin="anonymous"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-	<!--
-    <script th:href="@{~/vendor/jquery/jquery.min.js}"></script>
-    <script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script> -->
+<script crossorigin="anonymous"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!--
+<script th:href="@{~/vendor/jquery/jquery.min.js}"></script>
+<script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script> -->
 </body>
 </html>
