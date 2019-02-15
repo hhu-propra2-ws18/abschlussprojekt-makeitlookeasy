@@ -11,6 +11,11 @@ class 	PPAccount {
 	Double number;
 	List<Reservation> reservations;
 
+	public  PPAccount(){
+		this.account = "";
+		this.number = 0D;
+		this.reservations = new ArrayList<>();
+	}
 	public PPAccount(String account, Double number){
 		this.account = account;
 		this.number = number;

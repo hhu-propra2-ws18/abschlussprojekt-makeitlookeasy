@@ -80,7 +80,6 @@ public class UserController {
 		mav.addObject("role", RoleService.getUserRole(request));
 		mav.addObject("self", self);
 		mav.addObject("allArticles", articleService);
-		mav.addObject("propayacc",accountHandler.checkFunds(user.getUsername()));
 		return mav;
 	}
 	
@@ -105,6 +104,7 @@ public class UserController {
 		}
 
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
+		mav.addObject("propayacc",accountHandler.checkFunds(user.getUsername()));
 		mav.addObject("user", user);
 		return mav;
 	}

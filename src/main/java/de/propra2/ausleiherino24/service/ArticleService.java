@@ -2,6 +2,7 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleService {
@@ -43,6 +45,21 @@ public class ArticleService {
 	public ArrayList<Article> findAllActiveByUser(User user) {
 		return articleRepository.findAllActiveByUser(user);
 	}
+	
+	/**
+	 * Filters articles and checks whether they are included in given category
+	 * @param category
+	 * @return all Articles, which are not reserved and are of given category
+	 */
+	public List<Article> getAllNonReservedArticlesByCategory(Category category) {
+		return getAllNonReservedArticles().stream()
+				.filter(article -> article.getCategory() == category).collect(Collectors.toCollection(ArrayList::new));
+	}
+	
+	public List<Article> getAllNonReservedArticlesByUser(User user) {
+		return articleRepository.findAllActiveByUser(user);
+	}
+	
 	
 	/**
 	 * Iterate through list of all articles. If article is not being rented, mark article as available and
