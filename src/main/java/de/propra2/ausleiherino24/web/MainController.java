@@ -36,7 +36,7 @@ public class MainController {
 	public ModelAndView index(Principal principal) throws Exception {
 		ModelAndView mav = new ModelAndView("index");
 		mav.addObject("all", articleService.getAllNonReservedArticles());
-		mav.addObject("user", userService.findUserByPrincipal(principal));
+		mav.addObject("user", userService.findUserByUsername(principal.getName()));
 		mav.addObject("categories", Category.getAllCategories());
 		return mav;
 	}
