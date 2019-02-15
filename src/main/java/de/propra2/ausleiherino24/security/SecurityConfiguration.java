@@ -2,7 +2,7 @@ package de.propra2.ausleiherino24.security;
 
 
 import de.propra2.ausleiherino24.data.UserRepository;
-import de.propra2.ausleiherino24.service.CustomUserDetailsService;
+import de.propra2.ausleiherino24.service.SearchUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,10 +32,10 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	private final CustomUserDetailsService userDetailsService;
+	private final SearchUserService userDetailsService;
 
 	@Autowired
-	public SecurityConfiguration(CustomUserDetailsService userDetailsService) {
+	public SecurityConfiguration(SearchUserService userDetailsService) {
 		this.userDetailsService = userDetailsService;
 	}
 

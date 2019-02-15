@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class SearchUserService implements UserDetailsService {
 
 	private UserRepository userRepository;
 
 	@Autowired
-	public CustomUserDetailsService(UserRepository userRepository){
+	public SearchUserService(UserRepository userRepository){
 		this.userRepository = userRepository;
 	}
 

@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-	@Component
-	public class EnvVars {
+@Component
+public class EnvVars {
 
 //		@Value("${POSTGRES_USER}")
 //		private String pgsql;
@@ -22,5 +22,5 @@ import java.io.FileReader;
 //		@Value("${SPRING_SEC_PASSWORD}")
 //		private String f49ec07849;
 
-	}
+}
 

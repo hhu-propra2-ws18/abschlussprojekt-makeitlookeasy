@@ -6,7 +6,7 @@ import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
-import de.propra2.ausleiherino24.service.CustomUserDetailsService;
+import de.propra2.ausleiherino24.service.SearchUserService;
 import de.propra2.ausleiherino24.service.ImageStoreService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.hamcrest.Matchers;
@@ -38,7 +38,7 @@ public class UserControllerTest {
 	@MockBean private ImageStoreService imageStoreService;
 	@MockBean UserService us;
 	@MockBean private ArticleService as;
-	@MockBean private CustomUserDetailsService userDetailsService;
+	@MockBean private SearchUserService userDetailsService;
 
 	@Ignore
 	@Test

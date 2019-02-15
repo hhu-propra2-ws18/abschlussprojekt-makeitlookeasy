@@ -18,7 +18,7 @@ import de.propra2.ausleiherino24.model.User;
 public class CustomUserDetailsServiceTest {
 
 	private UserRepository users;
-	private CustomUserDetailsService customUserDetailsService;
+	private SearchUserService searchUserService;
 	private User user1;
 	private User user2;
 
@@ -29,20 +29,20 @@ public class CustomUserDetailsServiceTest {
 		user1.setUsername("user1");
 		user2 = new User();
 		user2.setUsername("user2");
-		customUserDetailsService = new CustomUserDetailsService(users);
+		searchUserService = new SearchUserService(users);
 	}
 
 	@Test
 	public void test() {
 		Mockito.when(users.findByUsername("user1")).thenReturn(Optional.of(user1));
 		CustomUserDetails expected = new CustomUserDetails(user1);
-		Assertions.assertThat(customUserDetailsService.loadUserByUsername("user1")).isEqualTo(expected);
+		Assertions.assertThat(searchUserService.loadUserByUsername("user1")).isEqualTo(expected);
 	}
 
 	@Test(expected = UsernameNotFoundException.class)
 	public void test2() {
 		Mockito.when(users.findByUsername("user1")).thenThrow(UsernameNotFoundException.class);
 
-		customUserDetailsService.loadUserByUsername("user1");
+		searchUserService.loadUserByUsername("user1");
 	}
 }

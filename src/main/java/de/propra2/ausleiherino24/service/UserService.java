@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
 	private final PersonRepository personRepository;
-	private final UserRepository userRepository;
+	private UserRepository userRepository;
 
 	@Autowired
 	public UserService(PersonRepository personRepository, UserRepository userRepository){
