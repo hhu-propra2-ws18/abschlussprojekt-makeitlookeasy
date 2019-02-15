@@ -4,10 +4,8 @@ import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
-import de.propra2.ausleiherino24.service.ArticleService;
-import de.propra2.ausleiherino24.service.CustomUserDetailsService;
-import de.propra2.ausleiherino24.service.ImageStoreService;
-import de.propra2.ausleiherino24.service.UserService;
+import de.propra2.ausleiherino24.propayhandler.AccountHandler;
+import de.propra2.ausleiherino24.service.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,31 +19,21 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @RunWith(SpringRunner.class)
 @WebMvcTest
 public class AdminControllerTest {
-	@Autowired
-	private MockMvc mvc;
-
-	@MockBean
-	UserRepository users;
-
-	@MockBean
-	private CaseRepository cases;
-
-	@MockBean
-	private CustomUserDetailsService userDetailsService;
-
-	@MockBean private ImageStoreService imageStoreService;
-
-	@MockBean
-	private ArticleRepository articles;
-
-	@MockBean
-	private PersonRepository persons;
 	
-	@MockBean
-	UserService us;
+	@Autowired private MockMvc mvc;
 	
-	@MockBean
-	private ArticleService as;
+	@MockBean private ArticleRepository articles;
+	@MockBean private UserRepository users;
+	@MockBean private PersonRepository persons;
+	@MockBean private CaseRepository cases;
+	
+	@MockBean private ImageStoreService is;
+	@MockBean private UserService us;
+	@MockBean private PersonService ps;
+	@MockBean private ArticleService as;
+	@MockBean private CustomUserDetailsService uds;
+	@MockBean private RoleService rs;
+	@MockBean private AccountHandler ah;
 	
 	@Test
 	public void getAdminIndexStatusTest() throws Exception {
