@@ -16,6 +16,11 @@ public class AccountHandler {
 		this.restTemplate = restTemplate;
 	}
 
+
+	public PPAccount getAccountData(String accountName){
+		return restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, accountName);
+	}
+
 	public double checkFunds(String accountName){
 		PPAccount account = restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, accountName);
 		if(account != null ){
