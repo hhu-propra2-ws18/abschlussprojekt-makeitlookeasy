@@ -8,11 +8,15 @@ import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.UserService;
+import de.propra2.ausleiherino24.service.ImageStoreService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -31,13 +35,16 @@ public class CaseController {
 	private final ArticleService articleService;
 	private final UserService userService;
 	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
+	private ImageStoreService imageStorageService;
 
 	@Autowired
-	public CaseController(ArticleRepository articleRepository, UserRepository userRepository, ArticleService articleService, UserService userService) {
+	public CaseController(ArticleRepository articleRepository, UserRepository userRepository,
+						  ArticleService articleService, UserService userService, ImageStoreService imageStorageService) {
 		this.articleRepository = articleRepository;
 		this.userRepository = userRepository;
 		this.articleService = articleService;
 		this.userService = userService;
+		this.imageStorageService = imageStorageService;
 	}
 
 	@GetMapping("/article")
@@ -55,13 +62,19 @@ public class CaseController {
 
 	@GetMapping("/newArticle")
 	public ModelAndView createNewCaseAndArticle() {
-		ModelAndView mav = new ModelAndView("article");
+		ModelAndView mav = new ModelAndView("newarticle");
 		mav.addObject("article", new Article());
 		return mav;
 	}
 
 	@PostMapping("/saveNewArticle")
-	public ModelAndView saveNewCaseAndArticle(@ModelAttribute @Valid Article article) {
+	public ModelAndView saveNewCaseAndArticle(
+			@ModelAttribute @Valid Article article,
+			BindingResult result,
+			Model model,
+			@RequestParam("image") MultipartFile image
+	) {
+		article.setImage(imageStorageService.store(image, null));
 		articleRepository.save(article);
 		LOGGER.info("Created article %s [ID=%L]", article.getName(), article.getId());
 
@@ -73,7 +86,13 @@ public class CaseController {
 	}
 
 	@PutMapping("/saveEditedArticle")
-	public ModelAndView saveEditedCaseAndArticle(@ModelAttribute @Valid Article article) {
+	public ModelAndView saveEditedCaseAndArticle(
+			@ModelAttribute @Valid Article article,
+			BindingResult result,
+			Model model,
+			@RequestParam("image") MultipartFile image
+	) {
+		article.setImage(imageStorageService.store(image, null));
 		articleRepository.save(article);
 		LOGGER.info("Edited article %s [ID=%L]", article.getName(), article.getId());
 
