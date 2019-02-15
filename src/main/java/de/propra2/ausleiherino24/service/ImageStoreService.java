@@ -77,7 +77,7 @@ public class ImageStoreService {
 	}
 
 
-	private String ensureBinning(Long binningId) {
+	public String ensureBinning(Long binningId) {
 		if(binningId == null) return "";
 
 		String binningDirName = resolveBin(binningId).toString();
@@ -90,7 +90,7 @@ public class ImageStoreService {
 		return binningId % NR_OF_BINS;
 	}
 
-	private void createBinningDirectory(String name) {
+	public void createBinningDirectory(String name) {
 		String binPath = Paths.get(getUploadDirectoryPath(), name).toString();
 
 		File binningDir = new File( binPath );
@@ -108,7 +108,7 @@ public class ImageStoreService {
 		}
 	}
 
-	private String getFileExtension(String fileName) {
+	public String getFileExtension(String fileName) {
 		if(fileName == null) return "";
 
 		int i = fileName.lastIndexOf('.');
