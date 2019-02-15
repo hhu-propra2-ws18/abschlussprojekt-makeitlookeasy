@@ -5,6 +5,8 @@ import static org.mockito.Mockito.*;
 import org.junit.*;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 public class ImageStoreServiceTest {
 	private ImageStoreService imageStoreService;
@@ -96,6 +98,28 @@ public class ImageStoreServiceTest {
 		assertTrue(new File(path + "/0").exists());
 		assertEquals(1, new File(path).listFiles().length);
 	}
+
+	@Test
+	public void fileExists() throws IOException {
+		File file = new File(path + "/x.txt");
+		file.createNewFile();
+
+		assertTrue(imageStoreService.fileExists(path + "/x.txt"));
+	}
+
+	@Test
+	public void fileDoesNotExists(){
+		assertFalse(imageStoreService.fileExists(path + "/x.txt"));
+	}
+
+	@Test
+	public void onlyDirectoryExists(){
+		File file = new File(path + "/x");
+		file.mkdir();
+
+		assertFalse(imageStoreService.fileExists(path + "/x"));
+	}
+
 
 	//Deletes the given directory and all included directories and files
 	public void cleanDir(File dir){
