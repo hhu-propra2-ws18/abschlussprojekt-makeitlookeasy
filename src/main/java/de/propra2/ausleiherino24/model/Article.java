@@ -59,6 +59,7 @@ public class Article {
 
 	public Article(){}
 
+	//for testing
 	public Article(Long id, String name, String description, Boolean active, Boolean reserved, User owner, String image) {
 		this.id = id;
 		this.name = name;
@@ -67,5 +68,13 @@ public class Article {
 		this.reserved = reserved;
 		this.owner = owner;
 		this.image = image;
+	}
+
+	//for testing
+	public Article(Long id, Boolean active, Boolean reserved, Category category) {
+		this.id = id;
+		this.active = active;
+		this.reserved = reserved;
+		this.category = category;
 	}
 }
