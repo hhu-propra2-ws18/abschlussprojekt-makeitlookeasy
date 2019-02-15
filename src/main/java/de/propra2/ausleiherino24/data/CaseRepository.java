@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public interface CaseRepository extends CrudRepository<Case, Long> {
+	/**
+	 * @return			ArrayList of all Case objects in database.
+	 */
 	ArrayList<Case> findAll();
 
 

@@ -6,8 +6,6 @@ import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.RoleService;
 import de.propra2.ausleiherino24.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +23,6 @@ public class MainController {
 
 	private final UserService userService;
 	private final ArticleService articleService;
-	private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
 	@Autowired
 	public MainController(UserService userService, ArticleService articleService) {
@@ -80,8 +77,7 @@ public class MainController {
 	
 	@PostMapping("/registerNewUser")
 	public ModelAndView registerNewUser(@ModelAttribute @Valid User user, @ModelAttribute @Valid Person person){
-		userService.createUserWithProfile(user,person);
-		LOGGER.info("Created new person [ID=%L] and user %s [ROLE=%s, ID=%L]", person.getId(), user.getUsername(), user.getRole(), user.getId());
+		userService.saveUserWithProfile(user,person, "Created");
 		
 		return new ModelAndView("redirect:/login");
 	}
