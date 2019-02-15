@@ -19,6 +19,7 @@ import java.nio.file.Files;
 
 @Controller
 public class ImageController {
+	
 	private ImageStoreService imageStorageService;
 
 	@Autowired

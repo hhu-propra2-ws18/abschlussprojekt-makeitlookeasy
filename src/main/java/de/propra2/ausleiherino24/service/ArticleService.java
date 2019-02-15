@@ -2,7 +2,7 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.web.CaseController;
+import de.propra2.ausleiherino24.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +16,34 @@ import java.util.Optional;
 public class ArticleService {
 	
 	private final ArticleRepository articleRepository;
-	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(ArticleService.class);
 	
 	@Autowired
 	public ArticleService(ArticleRepository articleRepository) {
 		this.articleRepository = articleRepository;
 	}
 
+	public void saveArticle(Article article, String msg) {
+		articleRepository.save(article);
+		LOGGER.info("%s article '%s' [ID=%L]", msg, article.getName(), article.getId());
+	}
+	
+	public Article findArticleById(Long id) throws Exception {
+		Optional<Article> article = articleRepository.findById(id);
+		
+		if (!article.isPresent()) {
+			LOGGER.warn("Couldn't find article %L in UserRepository.", id);
+			throw new Exception("Couldn't find article in ArticleRepository.");
+		}
+		
+		return article.get();
+	}
+	
+	public ArrayList<Article> findAllActiveByUser(User user) {
+		return articleRepository.findAllActiveByUser(user);
+	}
+	
 	/**
 	 * Iterate through list of all articles. If article is not being rented, mark article as available and
 	 * @return all available articles as List<>.
@@ -51,6 +72,7 @@ public class ArticleService {
 	 * Else, throw Exception.
 	 *
 	 * @param id                ID of article to be "deleted".
+	 * @return boolean			True, if succeeded. False, if encountered error while processing request.
 	 * @throws Exception		1. Thrown, if article not present in ArticleRepository.
 	 * 							2. Thrown, if article is reserved,
 	 */

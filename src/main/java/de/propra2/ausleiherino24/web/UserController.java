@@ -1,12 +1,11 @@
 package de.propra2.ausleiherino24.web;
 
-import de.propra2.ausleiherino24.data.PersonRepository;
-import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.RoleService;
+import de.propra2.ausleiherino24.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * 	UserController manages all requests that are exclusively available to logged-in users
@@ -26,18 +24,27 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/accessed/user")
 public class UserController {
-	private final UserRepository userRepository;
-	private final PersonRepository personRepository;
-	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+	private final UserService userService;
 	private final ArticleService articleService;
-
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+	
 	@Autowired
-	public UserController(UserRepository userRepository, PersonRepository personRepository, ArticleService articleService) {
-		this.userRepository = userRepository;
-		this.personRepository = personRepository;
+	public UserController(UserService userService, ArticleService articleService) {
+		this.userService = userService;
 		this.articleService = articleService;
 	}
-
+	
+	@GetMapping("/index")
+	public ModelAndView getIndex(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("/index");
+		mav.addObject("all", articleService.getAllNonReservedArticles());
+		mav.addObject("role", RoleService.getUserRole(request));
+		mav.addObject("categories", Category.getAllCategories());
+		mav.addObject("role", RoleService.getUserRole(request));
+		return mav;
+	}
+	
 	/**
 	 * Show any user profile to logged-in users.
 	 * 1.	If visitor is not logged-in and tries to access profile, redirect to login.
@@ -46,7 +53,7 @@ public class UserController {
 	 * 		2.2		Else, do not allow editing.
 	 *
 	 * @param username		Name of requested user, whose profile is requested
-	 * @param principal		Current Principal
+	 * @param principal		Current principal
 	 * @return				1. Redirect to view "login" (if not logged-in)
 	 * 						2. Display "/accessed/user/profile" view
 	 * @throws Exception	Thrown, if username cannot be found in UserRepository
@@ -58,31 +65,32 @@ public class UserController {
 			return new ModelAndView("redirect:/login");
 		}
 
-		Optional<User> optionalUser = userRepository.findByUsername(username);
-		if(!optionalUser.isPresent()) {
-			throw new Exception("User not found");
-		}
-		User user = optionalUser.get();
-		//boolean self = principal.getName().equals(username);	// Flag for ThymeLeaf. Enables certain profile
-		// editing options.
+		User user = userService.findUserByUsername(username);
+		boolean self = principal.getName().equals(username);	// Flag for ThymeLeaf. Enables certain profile editing options.
 
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
 		mav.addObject("categories", Category.getAllCategories());
 		mav.addObject("user", user);
 		mav.addObject("role", RoleService.getUserRole(request));
-		//mav.addObject("self", self);
+		mav.addObject("self", self);
+		mav.addObject("allArticles", articleService);
 		return mav;
 	}
-
+	
+	/**
+	 * Receives HTML form input as @Valid User and Person objects and tries to save those objects to the database.
+	 *
+	 * @param user			User object that is updated in database.
+	 * @param person		Person object that is updated in database.
+	 * @param principal		Current principal.
+	 * @return				View "/accessed/user/profile". Displays principal's profile.
+	 */
 	@PutMapping("/editProfile")
 	public ModelAndView editUserProfile(@ModelAttribute @Valid User user, @ModelAttribute @Valid Person person, Principal principal) {
 		String currentPrincipalName = principal.getName();
 
 		if (user.getUsername().equals(currentPrincipalName)) {
-			userRepository.save(user);
-			LOGGER.info("Updated user profile %s [ID=%L]", user.getUsername(), user.getId());
-			personRepository.save(person);
-			LOGGER.info("Updated person profile [ID=%L]", person.getId());
+			userService.saveUserWithProfile(user, person, "Updated");
 		} else {
 			LOGGER.warn("Unauthorized access to 'editProfile' for user %s by user %s", user.getUsername(), currentPrincipalName);
 			LOGGER.info("Logging out user %s", currentPrincipalName);
@@ -91,16 +99,6 @@ public class UserController {
 
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
 		mav.addObject("user", user);
-		return mav;
-	}
-
-	@GetMapping("/index")
-	public ModelAndView getIndex(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("/index");
-		mav.addObject("all", articleService.getAllNonReservedArticles());
-		mav.addObject("role", RoleService.getUserRole(request));
-		mav.addObject("categories", Category.getAllCategories());
-		mav.addObject("role", RoleService.getUserRole(request));
 		return mav;
 	}
 

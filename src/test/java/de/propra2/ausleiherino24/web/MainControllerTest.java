@@ -6,10 +6,7 @@ import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.service.ArticleService;
-import de.propra2.ausleiherino24.service.CustomUserDetailsService;
-import de.propra2.ausleiherino24.service.ImageStoreService;
-import de.propra2.ausleiherino24.service.UserService;
+import de.propra2.ausleiherino24.service.*;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,6 +39,7 @@ public class MainControllerTest {
 
 	@MockBean private ImageStoreService imageStoreService;
 	@MockBean UserService us;
+	@MockBean PersonService ps;
 	@MockBean private ArticleService as;
 	@MockBean private CustomUserDetailsService userDetailsService;
 	
@@ -104,7 +102,7 @@ public class MainControllerTest {
 	public void registerNewUserStatusTest() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.post("/registerNewUser"))
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
-		Mockito.verify(us, Mockito.times(1)).createUserWithProfile(ArgumentMatchers.refEq(new User()), ArgumentMatchers.refEq(new Person()));
+		Mockito.verify(us, Mockito.times(1)).saveUserWithProfile(ArgumentMatchers.refEq(new User()), ArgumentMatchers.refEq(new Person()), ArgumentMatchers.refEq("Created"));
 	}
 	
 	@Test
