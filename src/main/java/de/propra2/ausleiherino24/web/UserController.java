@@ -27,9 +27,9 @@ import java.security.Principal;
 public class UserController {
 	private final UserService userService;
 	private final ArticleService articleService;
-	
+
 	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-	
+
 	private final AccountHandler accountHandler;
 
 	@Autowired
@@ -38,12 +38,12 @@ public class UserController {
 		this.articleService = articleService;
 		this.accountHandler = accountHandler;
 	}
-	
+
 	@GetMapping("/index")
 	public String getIndex(HttpServletRequest request) {
 		return "redirect:/";
 	}
-	
+
 	/**
 	 * Show any user profile to logged-in users.
 	 * 1.	If visitor is not logged-in and tries to access profile, redirect to login.
@@ -76,7 +76,7 @@ public class UserController {
 		mav.addObject("allArticles", articleService);
 		return mav;
 	}
-	
+
 	/**
 	 * Receives HTML form input as @Valid User and Person objects and tries to save those objects to the database.
 	 *
@@ -100,6 +100,20 @@ public class UserController {
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
 		mav.addObject("propayacc",accountHandler.checkFunds(user.getUsername()));
 		mav.addObject("user", user);
+		return mav;
+	}
+
+
+	@GetMapping("/newItem")
+	public ModelAndView getNewItemPage (Principal principal) {
+		ModelAndView mav = new ModelAndView("/accessed/user/newItem");
+		mav.addObject("categories", Category.getAllCategories());
+		try {
+			mav.addObject("user", userService.findUserByPrincipal(principal));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mav.addObject("allArticles", articleService);
 		return mav;
 	}
 }
