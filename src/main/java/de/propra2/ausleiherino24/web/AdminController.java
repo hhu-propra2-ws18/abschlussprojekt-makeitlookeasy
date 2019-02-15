@@ -1,13 +1,13 @@
 package de.propra2.ausleiherino24.web;
 
-import de.propra2.ausleiherino24.service.RoleService;
+import de.propra2.ausleiherino24.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 
 /**
@@ -18,9 +18,15 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/accessed/admin")
 public class AdminController {
 
+	private final UserService userService;
+
+	public AdminController(UserService userService) {
+		this.userService = userService;
+	}
+
 	@GetMapping("index")
-	public ModelAndView getAdminIndex(HttpServletRequest request, Model model){
-		model.addAttribute("role", RoleService.getUserRole(request));
+	public ModelAndView getAdminIndex(Principal principal, Model model) throws Exception {
+		model.addAttribute("user", userService.findUserByPrincipal(principal));
 		return new ModelAndView("accessed/admin/index");
 	}
 	

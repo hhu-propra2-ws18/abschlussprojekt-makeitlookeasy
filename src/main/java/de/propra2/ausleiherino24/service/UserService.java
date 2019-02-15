@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.security.Principal;
 import java.util.Optional;
 
 
@@ -63,5 +63,23 @@ public class UserService {
 		person.setUser(user);
 		personService.savePerson(person, msg);
 	}
-	
+
+	public User findUserByPrincipal(Principal principal) throws Exception{
+		User user;
+		if(principal == null){
+			user = new User();
+			user.setRole("");
+			user.setUsername("");
+
+		} else if(principal.getName() == null) {
+			user = new User();
+			user.setRole("");
+			user.setUsername("");
+		} else {
+			if (!userRepository.findByUsername(principal.getName()).isPresent())
+				throw new Exception("User " + principal.getName() + " not found");
+			user = userRepository.findByUsername(principal.getName()).get();
+		}
+		return user;
+	}
 }
