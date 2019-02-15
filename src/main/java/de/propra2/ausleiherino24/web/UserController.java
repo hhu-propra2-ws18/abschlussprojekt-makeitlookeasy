@@ -3,6 +3,7 @@ package de.propra2.ausleiherino24.web;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.RoleService;
 import de.propra2.ausleiherino24.service.UserService;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Optional;
 
 /**
  * 	UserController manages all requests that are exclusively available to logged-in users
@@ -29,10 +31,13 @@ public class UserController {
 	
 	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 	
+	private final AccountHandler accountHandler;
+
 	@Autowired
-	public UserController(UserService userService, ArticleService articleService) {
+	public UserController(UserService userService, ArticleService articleService, AccountHandler accountHandler) {
 		this.userService = userService;
 		this.articleService = articleService;
+		this.accountHandler = accountHandler;
 	}
 	
 	@GetMapping("/index")
@@ -53,7 +58,7 @@ public class UserController {
 	 * 		2.2		Else, do not allow editing.
 	 *
 	 * @param username		Name of requested user, whose profile is requested
-	 * @param principal		Current principal
+	 * @param principal		Current Principal
 	 * @return				1. Redirect to view "login" (if not logged-in)
 	 * 						2. Display "/accessed/user/profile" view
 	 * @throws Exception	Thrown, if username cannot be found in UserRepository
@@ -69,11 +74,13 @@ public class UserController {
 		boolean self = principal.getName().equals(username);	// Flag for ThymeLeaf. Enables certain profile editing options.
 
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
+		mav.addObject("articles",articleService.getAllNonReservedArticlesByUser(user));
 		mav.addObject("categories", Category.getAllCategories());
 		mav.addObject("user", user);
 		mav.addObject("role", RoleService.getUserRole(request));
 		mav.addObject("self", self);
 		mav.addObject("allArticles", articleService);
+		mav.addObject("propayacc",accountHandler.checkFunds(user.getUsername()));
 		return mav;
 	}
 	
