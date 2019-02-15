@@ -36,7 +36,12 @@ public class UserService {
 
 	public User findUserByPrincipal(Principal principal) throws Exception{
 		User user;
-		if(principal.getName() == null) {
+		if(principal == null){
+			user = new User();
+			user.setRole("");
+			user.setUsername("");
+
+		} else if(principal.getName() == null) {
 			user = new User();
 			user.setRole("");
 			user.setUsername("");
