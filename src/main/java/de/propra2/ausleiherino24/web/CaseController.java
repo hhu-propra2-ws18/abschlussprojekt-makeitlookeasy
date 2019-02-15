@@ -38,7 +38,7 @@ public class CaseController {
 
 	@GetMapping("/article")
 	public ModelAndView displayArticle(@RequestParam("id") Long id, HttpServletRequest request) throws Exception {
-		ModelAndView mav = new ModelAndView("shopitem");
+		ModelAndView mav = new ModelAndView("/accessed/user/shopitem");
 		mav.addObject("article", articleService.findArticleById(id));
 		mav.addObject("role", RoleService.getUserRole(request));
 		return mav;
@@ -46,7 +46,7 @@ public class CaseController {
 
 	@GetMapping("/newArticle")
 	public ModelAndView createNewCaseAndArticle() {
-		ModelAndView mav = new ModelAndView("shopitem");
+		ModelAndView mav = new ModelAndView("/accessed/user/shopitem");
 		mav.addObject("shopitem", new Article());
 		return mav;
 	}
@@ -88,7 +88,7 @@ public class CaseController {
 		article.setImage(imageStoreService.store(image, null));
 		articleService.saveArticle(article, "Updated");
 
-		ModelAndView mav = new ModelAndView("shopitem");
+		ModelAndView mav = new ModelAndView("/accessed/user/shopitem");
 		mav.addObject("article", article);
 		return mav;
 	}
