@@ -26,9 +26,9 @@ public class ArticleServiceTest {
 
 	@Test
 	public void threeActiveArticles(){
-		articles.add(new Article(0L, "", "", true, false, null));
-		articles.add(new Article(1L, "", "", true, false, null));
-		articles.add(new Article(2L, "", "", true, false, null));
+		articles.add(new Article(0L, "", "", true, false, null,""));
+		articles.add(new Article(1L, "", "", true, false, null,""));
+		articles.add(new Article(2L, "", "", true, false, null,""));
 
 		when(articleRepositoryMock.findAll()).thenReturn(articles);
 
@@ -37,8 +37,8 @@ public class ArticleServiceTest {
 
 	@Test
 	public void OneActiveOneReservedArticle(){
-		articles.add(new Article(0L, "", "", true, false, null));
-		articles.add(new Article(1L, "", "", true, true, null));
+		articles.add(new Article(0L, "", "", true, false, null,""));
+		articles.add(new Article(1L, "", "", true, true, null,""));
 
 		when(articleRepositoryMock.findAll()).thenReturn(articles);
 		articles.remove(1);
@@ -48,9 +48,9 @@ public class ArticleServiceTest {
 
 	@Test
 	public void threeInactiveArticles(){
-		articles.add(new Article(0L, "", "", false, false, null));
-		articles.add(new Article(1L, "", "", false, false, null));
-		articles.add(new Article(2L, "", "", false, false, null));
+		articles.add(new Article(0L, "", "", false, false, null,""));
+		articles.add(new Article(1L, "", "", false, false, null,""));
+		articles.add(new Article(2L, "", "", false, false, null,""));
 
 		when(articleRepositoryMock.findAll()).thenReturn(articles);
 
@@ -59,9 +59,9 @@ public class ArticleServiceTest {
 
 	@Test
 	public void doubleArticle(){
-		articles.add(new Article(0L, "", "", true, false, null));
-		articles.add(new Article(0L, "", "", true, false, null));
-		articles.add(new Article(0L, "", "", true, false, null));
+		articles.add(new Article(0L, "", "", true, false, null,""));
+		articles.add(new Article(0L, "", "", true, false, null,""));
+		articles.add(new Article(0L, "", "", true, false, null,""));
 
 		when(articleRepositoryMock.findAll()).thenReturn(articles);
 
