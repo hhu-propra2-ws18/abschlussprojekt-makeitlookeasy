@@ -4,7 +4,6 @@ import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
-import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.RoleService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.slf4j.Logger;
@@ -19,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.security.Principal;
 
 /**
  * 	MainController manages all actions that are available to every visitor of the platform.

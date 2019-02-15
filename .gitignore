@@ -2,9 +2,9 @@
 # Edit at https://www.gitignore.io/?templates=linux,macos,maven,gradle,windows,eclipse,netbeans,jetbrains+all
 
 jenkins_home/
-database/
-propaydata/
-sonardb/
+pgsql-01/persistence
+PPdata/
+
 
 ### public ###
 uploads/

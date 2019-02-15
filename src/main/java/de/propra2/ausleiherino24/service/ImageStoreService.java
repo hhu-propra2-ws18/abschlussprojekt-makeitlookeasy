@@ -100,7 +100,7 @@ public class ImageStoreService {
 		}
 	}
 
-	private void createUploadDirectoryIfNotExists() {
+	public void createUploadDirectoryIfNotExists() {
 		File uploadDir = new File( getUploadDirectoryPath() );
 
 		if(!uploadDir.exists()) {
