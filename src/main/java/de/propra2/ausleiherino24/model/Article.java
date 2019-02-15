@@ -14,8 +14,10 @@ public class Article {
 
 	String name;
 
-	@Lob
+	@Column(length=10485760)
 	String description;
+
+	String image;
 
 	Boolean active;		// If this is true the article is not available for rental ("deleted")
 
@@ -57,12 +59,13 @@ public class Article {
 
 	public Article(){}
 
-	public Article(Long id, String name, String description, Boolean active, Boolean reserved, User owner) {
+	public Article(Long id, String name, String description, Boolean active, Boolean reserved, User owner, String image) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.active = active;
 		this.reserved = reserved;
 		this.owner = owner;
+		this.image = image;
 	}
 }

@@ -71,13 +71,4 @@ public class CaseService {
 
 		caseRepository.save(c);
 	}
-/*
-	public List<Case> findAllCasesWithNonReservedArticles(){
-		return articleService.getAllNonReservedArticles().stream()
-				.map(caseRepository::findByArticle)
-				.filter(Optional::isPresent)
-				.map(Optional::get)
-				.collect(Collectors.toCollection(ArrayList::new));
-	}
-*/
 }

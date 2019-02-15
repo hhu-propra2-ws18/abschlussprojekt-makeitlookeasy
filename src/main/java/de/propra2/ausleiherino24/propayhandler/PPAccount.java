@@ -1,9 +1,9 @@
 package de.propra2.ausleiherino24.propayhandler;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Data;
 @Data
 class 	PPAccount {
 

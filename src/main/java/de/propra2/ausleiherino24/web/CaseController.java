@@ -1,12 +1,11 @@
 package de.propra2.ausleiherino24.web;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
-import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -29,15 +27,15 @@ import java.util.Optional;
 public class CaseController {
 
 	private final ArticleRepository articleRepository;
-	private final CaseRepository caseRepository;
 	private final UserRepository userRepository;
+	private final ArticleService articleService;
 	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
 
 	@Autowired
-	public CaseController(ArticleRepository articleRepository, CaseRepository caseRepository, UserRepository userRepository) {
+	public CaseController(ArticleRepository articleRepository, UserRepository userRepository, ArticleService articleService) {
 		this.articleRepository = articleRepository;
-		this.caseRepository = caseRepository;
 		this.userRepository = userRepository;
+		this.articleService = articleService;
 	}
 
 	@GetMapping("/article")
@@ -46,8 +44,7 @@ public class CaseController {
 		if (!article.isPresent()) {
 			throw new Exception("Article not found!");
 		}
-		ModelAndView mav = new ModelAndView("accessed/user/shopitem");
-		mav.addObject("categories", Category.getAllCategories());
+		ModelAndView mav = new ModelAndView("/accessed/user/shopitem");
 		mav.addObject("article", article.get());
 		mav.addObject("role", RoleService.getUserRole(request));
 		return mav;
@@ -83,10 +80,7 @@ public class CaseController {
 	}
 
 	/**
-	 * Deactivates a single article across all cases, past and present, and deactivates those cases accordingly.
-	 * Deactivated cases are then updated in the CaseRepository.
-	 * Further deactivates the specified article. Article updated in ArticleRepository.
-	 * Afterwards, check if Principal is in UserRepository and display Principal's active articles.
+	 * Deactivates a single article.
 	 *
 	 * @param id			ID of article to be deactivated
 	 * @param principal		Current user
@@ -96,42 +90,22 @@ public class CaseController {
 	 */
 	@PutMapping("/deactivateArticle")
 	public ModelAndView deactivateArticle(@RequestParam Long id, Principal principal) throws Exception {
-		// TODO: Auslagern in Service.
-
-		Optional<Article> optionalArticle = articleRepository.findById(id);
-		if (!optionalArticle.isPresent()) {
-			LOGGER.warn("Couldn't find article %L in ArticleRepository.", id);
-			throw new Exception("Couldn't find requested article in ArticleRepository.");
-		}
-
-		Article article = optionalArticle.get();
-
-		if (!article.getReserved()) {
-			ArrayList<Case> allCases = caseRepository.findAll();
-			for (Case c : allCases) {
-				if (c.getArticle().equals(article)) {
-					c.setActive(false);
-					caseRepository.save(c);
-					LOGGER.info("Deactivated case with ID %L", c.getId());
-				}
-			}
-
-			article.setActive(false);
-			articleRepository.save(article);
-			LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
-		} else {
-			LOGGER.warn("Article %L couldn't be deactivated, because it's currently being reserved.", article.getId());
-		}
-
 		String currentPrincipalName = principal.getName();
-		Optional<User> user = userRepository.findByUsername(currentPrincipalName);
-		if (!user.isPresent()) {
-			LOGGER.warn("Couldn't find current principal in UserRepository.");
+		
+		Optional<User> optionalUser = userRepository.findByUsername(currentPrincipalName);
+		if (!optionalUser.isPresent()) {
+			LOGGER.warn("Couldn't find user %s in UserRepository.", currentPrincipalName);
 			throw new Exception("Couldn't find current principal in UserRepository.");
 		}
-
-		ModelAndView mav = new ModelAndView("myArticles");
-		mav.addObject("allArticles", articleRepository.findAllActiveByUser(user.get()));
+		User user = optionalUser.get();
+		
+		if (!articleService.deactivateArticle(id)) {
+			// TODO: Display error msg, when article deactivation fails.
+		}
+		
+		ModelAndView mav = new ModelAndView("/accessed/user/profile");
+		mav.addObject("user", user);
+		mav.addObject("allArticles", articleRepository.findAllActiveByUser(user));
 		return mav;
 	}
 }
