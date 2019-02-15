@@ -40,6 +40,15 @@ public class AccountHandlerTest {
 	}
 
 	@Test
+	public void checkGetAccountData(){
+		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1")).thenReturn(testAcc1);
+
+		Assertions.assertThat(accountHandler.getAccountData("Acc1")).isEqualTo(testAcc1);
+		Mockito.verify(restTemplate, Mockito.times(1)).getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc1");
+	}
+
+
+	@Test
 	public void checkFundsTest(){
 		Mockito.when(restTemplate.getForObject(ACCOUNT_URL +"/{account}", PPAccount.class, "Acc3")).thenReturn(null);
 
