@@ -2,6 +2,8 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Category;
+import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.web.CaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,14 +12,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Optional;
 
 @Service
 public class ArticleService {
-	
+
 	private final ArticleRepository articleRepository;
 	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
-	
+
 	@Autowired
 	public ArticleService(ArticleRepository articleRepository) {
 		this.articleRepository = articleRepository;
@@ -31,7 +34,7 @@ public class ArticleService {
 	public List<Article> getAllNonReservedArticles() {
 		List<Article> availableArticles = new ArrayList<>();
 		List<Article> allArticles = articleRepository.findAll().isEmpty() ? new ArrayList<>() : articleRepository.findAll();
-		
+
 		for (Article article : allArticles) {
 			// no duplicate, active article, not reserved
 			if (!availableArticles.contains(article)
@@ -40,10 +43,24 @@ public class ArticleService {
 				availableArticles.add(article);
 			}
 		}
-		
+
 		return availableArticles;
 	}
-	
+
+	/**
+	 * Filters articles and checks whether they are included in given category
+	 * @param category
+	 * @return all Articles, which are not reserved and are of given category
+	 */
+	public List<Article> getAllNonReservedArticlesByCategory(Category category) {
+		return getAllNonReservedArticles().stream()
+				.filter(article -> article.getCategory() == category).collect(Collectors.toCollection(ArrayList::new));
+	}
+
+	public List<Article> getAllNonReservedArticlesByUser(User user) {
+		return articleRepository.findAllActiveByUser(user);
+	}
+
 	/**
 	 * Deactivates an article by ID to hide it from all users and prohibit further cases.
 	 * Checks, if article is present by looking for ID key. If fails, throw Exception.
@@ -60,18 +77,17 @@ public class ArticleService {
 			LOGGER.warn("Couldn't find article %L in ArticleRepository.", id);
 			throw new Exception("Couldn't find requested article in ArticleRepository.");
 		}
-		
+
 		Article article = optionalArticle.get();
-		
+
 		if (article.getReserved()) {
 			LOGGER.warn("Article %L couldn't be deactivated, because it's currently being reserved.", article.getId());
 			return false;
 		}
-		
+
 		article.setActive(false);
 		articleRepository.save(article);
 		LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
 		return true;
 	}
-	
 }

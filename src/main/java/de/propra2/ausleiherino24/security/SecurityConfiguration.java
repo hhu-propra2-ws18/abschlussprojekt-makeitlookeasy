@@ -18,7 +18,13 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 
 
 /**
- * Vorgang vollständig unklar.
+ *  Security configuration for Spring.
+ *  Includes the password encoder and configuration for :
+ *   . Login Page
+ *   . Logout Page
+ *   . Role system
+ * Also adds ResourceHandler. Its the default resource destination.
+ *
  */
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
@@ -42,6 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/**").addResourceLocations("/", "classpath:/static/");
 	}
+
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

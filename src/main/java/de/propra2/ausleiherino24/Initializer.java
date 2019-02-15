@@ -54,7 +54,7 @@ public class Initializer implements ServletContextInitializer{
 			Article article = createArticle(
 					faker.beer().name(),
 					String.join("\n", faker.lorem().paragraph(5)),
-					Category.BICYCLE,
+					Category.getAllCategories().get(faker.random().nextInt(0, Category.getAllCategories().size()-1)),
 					user);
 
 			return createCase(
