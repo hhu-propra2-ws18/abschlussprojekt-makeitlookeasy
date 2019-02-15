@@ -8,10 +8,7 @@ import de.propra2.ausleiherino24.service.RoleService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +34,20 @@ public class MainController {
 	public ModelAndView index(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("index");
 		mav.addObject("all", articleService.getAllNonReservedArticles());
+		mav.addObject("role", RoleService.getUserRole(request));
+		mav.addObject("categories", Category.getAllCategories());
+		return mav;
+	}
+
+	/**
+	 * Returns view with a filtered set of Articles
+	 * @param request
+	 * @return
+	 */
+	@GetMapping("/categories")
+	public ModelAndView indexByCategory(@RequestParam String category, HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("index");
+		mav.addObject("all", articleService.getAllNonReservedArticlesByCategory(Category.valueOf(category.toUpperCase())));
 		mav.addObject("role", RoleService.getUserRole(request));
 		mav.addObject("categories", Category.getAllCategories());
 		return mav;

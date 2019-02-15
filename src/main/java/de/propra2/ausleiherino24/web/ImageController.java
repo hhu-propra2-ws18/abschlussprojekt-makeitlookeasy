@@ -29,7 +29,7 @@ public class ImageController {
 
 	@GetMapping("/imageupload")
 	public String fileUpload() {
-		return "/imageUploadSketch";
+		return "/imageupload";
 	}
 
 	@PostMapping("/imageupload")
