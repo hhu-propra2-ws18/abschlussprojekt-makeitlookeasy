@@ -4,9 +4,10 @@ import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
+import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
-import de.propra2.ausleiherino24.service.RoleService;
+import de.propra2.ausleiherino24.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Optional;
@@ -29,24 +29,27 @@ public class CaseController {
 	private final ArticleRepository articleRepository;
 	private final UserRepository userRepository;
 	private final ArticleService articleService;
+	private final UserService userService;
 	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
 
 	@Autowired
-	public CaseController(ArticleRepository articleRepository, UserRepository userRepository, ArticleService articleService) {
+	public CaseController(ArticleRepository articleRepository, UserRepository userRepository, ArticleService articleService, UserService userService) {
 		this.articleRepository = articleRepository;
 		this.userRepository = userRepository;
 		this.articleService = articleService;
+		this.userService = userService;
 	}
 
 	@GetMapping("/article")
-	public ModelAndView displayArticle(@RequestParam("id") Long id, HttpServletRequest request) throws Exception {
+	public ModelAndView displayArticle(@RequestParam("id") Long id, Principal principal) throws Exception {
 		Optional<Article> article = articleRepository.findById(id);
 		if (!article.isPresent()) {
 			throw new Exception("Article not found!");
 		}
 		ModelAndView mav = new ModelAndView("/accessed/user/shopitem");
 		mav.addObject("article", article.get());
-		mav.addObject("role", RoleService.getUserRole(request));
+		mav.addObject("categories", Category.getAllCategories());
+		mav.addObject("user", userService.findUserByPrincipal(principal));
 		return mav;
 	}
 

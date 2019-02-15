@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 
 /**
  * 	MainController manages all actions that are available to every visitor of the platform.
@@ -34,24 +36,24 @@ public class MainController {
 	}
 	
 	@GetMapping("/")
-	public ModelAndView index(HttpServletRequest request) {
+	public ModelAndView index(Principal principal) throws Exception {
 		ModelAndView mav = new ModelAndView("index");
 		mav.addObject("all", articleService.getAllNonReservedArticles());
-		mav.addObject("role", RoleService.getUserRole(request));
+		mav.addObject("user", userService.findUserByPrincipal(principal));
 		mav.addObject("categories", Category.getAllCategories());
 		return mav;
 	}
 
 	/**
 	 * Returns view with a filtered set of Articles
-	 * @param request
+	 * @param principal
 	 * @return
 	 */
 	@GetMapping("/categories")
-	public ModelAndView indexByCategory(@RequestParam String category, HttpServletRequest request) {
+	public ModelAndView indexByCategory(@RequestParam String category, Principal principal) throws Exception {
 		ModelAndView mav = new ModelAndView("index");
 		mav.addObject("all", articleService.getAllNonReservedArticlesByCategory(Category.valueOf(category.toUpperCase())));
-		mav.addObject("role", RoleService.getUserRole(request));
+		mav.addObject("user", userService.findUserByPrincipal(principal));
 		mav.addObject("categories", Category.getAllCategories());
 		return mav;
 	}

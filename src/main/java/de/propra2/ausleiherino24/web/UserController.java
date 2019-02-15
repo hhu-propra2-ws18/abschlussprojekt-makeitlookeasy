@@ -96,12 +96,7 @@ public class UserController {
 	}
 
 	@GetMapping("/index")
-	public ModelAndView getIndex(HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("/index");
-		mav.addObject("all", articleService.getAllNonReservedArticles());
-		mav.addObject("role", RoleService.getUserRole(request));
-		mav.addObject("categories", Category.getAllCategories());
-		mav.addObject("role", RoleService.getUserRole(request));
-		return mav;
+	public String getIndex(HttpServletRequest request) {
+		return "redirect:/";
 	}
 }
