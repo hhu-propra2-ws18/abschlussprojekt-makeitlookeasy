@@ -64,15 +64,15 @@ public class UserController {
 			return new ModelAndView("redirect:/login");
 		}
 
-		User user = userService.findUserByUsername(username);
+		User visitedUser = userService.findUserByUsername(username);
 		boolean self = principal.getName().equals(username);	// Flag for ThymeLeaf. Enables certain profile editing options.
 
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
-		mav.addObject("articles",articleService.getAllNonReservedArticlesByUser(user));
+		mav.addObject("articles",articleService.getAllNonReservedArticlesByUser(visitedUser));
 		mav.addObject("categories", Category.getAllCategories());
-		mav.addObject("user", user);
-		mav.addObject("role", RoleService.getUserRole(request));
-		mav.addObject("self", self);
+		mav.addObject("visitedUser", visitedUser);
+		mav.addObject("user", userService.findUserByPrincipal(principal));
+		mav.addObject("self", self); //unused
 		mav.addObject("allArticles", articleService);
 		return mav;
 	}

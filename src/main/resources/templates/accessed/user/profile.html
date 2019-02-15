@@ -38,31 +38,31 @@
 				<div class="form-row profile-row" style="margin-top:50px">
 					<div class="col-md-4 relative"></div>
 					<div class="col-md-8">
-						<h1 th:text="${user.username}">Username</h1>
+						<h1 th:text="${visitedUser.username}">Username</h1>
 						<hr>
 						<div class="form-row">
 							<div class="col-sm-12 col-md-6">
 								<div class="form-group"><label>First Name </label><input class="form-control"
 																						 disabled
-																						 name="firstname" th:value="${user.person.firstName}"
+																						 name="firstname" th:value="${visitedUser.person.firstName}"
 																						 type="text">
 								</div>
 							</div>
 							<div class="col-sm-12 col-md-6">
 								<div class="form-group"><label>Last Name </label><input class="form-control" disabled
-																						name="lastname" th:value="${user.person.lastName}"
+																						name="lastname" th:value="${visitedUser.person.lastName}"
 																						type="text">
 								</div>
 							</div>
 						</div>
 						<div class="form-group"><label>Email </label><input autocomplete="off" class="form-control"
 																			disabled name="email" required=""
-																			th:value="${user.email}"></div>
+																			th:value="${visitedUser.email}"></div>
 						<div class="form-group"><label>Address </label><input autocomplete="off"
 																			  class="form-control" disabled
 																			  name="email"
 																			  required=""
-																			  th:value="${user.person.address}"></div>
+																			  th:value="${visitedUser.person.address}"></div>
 						<hr>
 						<div>
 							<h4>All articles</h4>
