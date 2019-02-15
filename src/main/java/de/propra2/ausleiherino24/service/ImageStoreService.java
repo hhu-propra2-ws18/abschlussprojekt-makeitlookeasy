@@ -22,6 +22,8 @@ public class ImageStoreService {
 	}
 
 	public String store(MultipartFile file, Long binningId) {
+		if(file == null) return null;
+
 		String prefix = ensureBinning(binningId);
 
 		String extension = getFileExtension(file.getOriginalFilename());
