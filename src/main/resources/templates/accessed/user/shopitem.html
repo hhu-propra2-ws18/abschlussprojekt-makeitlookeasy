@@ -38,8 +38,8 @@
 				<img alt="" class="card-img-top img-fluid" src="http://placehold.it/900x400">
 				<div class="card-body">
 					<h3 class="card-title" th:text="${article.getName()}">Product Name</h3>
-					<h4 th:text="${article.getACase().getPrice()+'€ pro Tag'}">24.99€ pro Tag</h4>
-					<h6 th:text="${article.getACase().getDeposit()} +'€ Kaution'">200€ Kaution</h6>
+					<h4 th:text="${article.getACase().getPrice()+'€ per day'}">24.99€ pro Tag</h4>
+					<h6 th:text="${article.getACase().getDeposit()} +'€ deposit'">200€ Kaution</h6>
 					<p class="card-text" th:text="${article.description}">Lorem ipsum dolor sit amet, consectetur
 						adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. Totam id
 						dolores, sint aperiam sequi pariatur praesentium animi perspiciatis molestias iure, ducimus!</p>
@@ -68,9 +68,9 @@
 											<input></input>
 											<label>Bis</label>
 											<input></input>
-											<p th:text="${article.getACase().getPrice()+'€ pro Tag'}">24.99€ pro Tag</p>
-											<p th:text="${article.getACase().getDeposit()} +'€ Kaution'">200€ Kaution</p>
-											
+											<p th:text="${article.getACase().getPrice()+'€ pro Tag'}">24.99€ per day</p>
+											<p th:text="${article.getACase().getDeposit()} +'€ Kaution'">200€ deposit</p>
+
 										</div>
 										<div class="modal-footer">
 											<button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
