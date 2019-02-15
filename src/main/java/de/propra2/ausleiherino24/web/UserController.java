@@ -5,6 +5,7 @@ import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.RoleService;
 import org.slf4j.Logger;
@@ -30,12 +31,14 @@ public class UserController {
 	private final PersonRepository personRepository;
 	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 	private final ArticleService articleService;
+	private final AccountHandler accountHandler;
 
 	@Autowired
-	public UserController(UserRepository userRepository, PersonRepository personRepository, ArticleService articleService) {
+	public UserController(UserRepository userRepository, PersonRepository personRepository, ArticleService articleService, AccountHandler accountHandler) {
 		this.userRepository = userRepository;
 		this.personRepository = personRepository;
 		this.articleService = articleService;
+		this.accountHandler = accountHandler;
 	}
 
 	/**
@@ -71,6 +74,7 @@ public class UserController {
 		mav.addObject("categories", Category.getAllCategories());
 		mav.addObject("user", user);
 		mav.addObject("role", RoleService.getUserRole(request));
+		mav.addObject("propayacc",accountHandler.checkFunds(user.getUsername()));
 		//mav.addObject("self", self);
 		return mav;
 	}
