@@ -2,34 +2,34 @@
 <html lang="en" xmlns:="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="">
-	<meta name="author" content="">
+	<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+	<meta content="" name="description">
+	<meta content="" name="author">
 
 	<title>Ausleiherino24</title>
 
 	<!-- Bootstrap core CSS -->
-	<link th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}">
 
 	<!-- Font awesome Css-->
-	<link th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}">
 
 	<!-- Custom styles for this template -->
-	<link  th:href="@{~/css/shop-homepage.css}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{~/css/shop-homepage.css}">
 
 </head>
 <body>
 <!-- Navigation -->
-<div th:replace="/../fragments/navbar ::navbar" name="navbar"></div>
+<div name="navbar" th:replace="/../fragments/navbar ::navbar"></div>
 <div class="container" style="margin-bottom: 100px;margin-top:50px">
 	<div class="row">
 		<!-- Categories -->
-		<div th:replace="/../fragments/categories ::categories" name="categorie"></div>
+		<div name="categorie" th:replace="/../fragments/categories ::categories"></div>
 		<div class="col-lg-8">
 			<div class="row">
 				<div class="col-md-12 alert-col relative">
 					<div class="alert alert-info absolue center collapse" role="alert">
-						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+						<button aria-label="Close" class="close" data-dismiss="alert" type="button"><span
 								aria-hidden="true">×</span></button>
 						<span>Profile saved with success</span></div>
 				</div>
@@ -42,18 +42,27 @@
 						<hr>
 						<div class="form-row">
 							<div class="col-sm-12 col-md-6">
-								<div class="form-group"><label>First Name </label><input class="form-control" type="text"
-																						name="firstname" disabled th:value="${user.person.firstName}"></div>
+								<div class="form-group"><label>First Name </label><input class="form-control"
+																						 disabled
+																						 name="firstname" th:value="${user.person.firstName}"
+																						 type="text">
+								</div>
 							</div>
 							<div class="col-sm-12 col-md-6">
-								<div class="form-group"><label>Last Name </label><input class="form-control" type="text"
-																					   name="lastname" disabled th:value="${user.person.lastName}"></div>
+								<div class="form-group"><label>Last Name </label><input class="form-control" disabled
+																						name="lastname" th:value="${user.person.lastName}"
+																						type="text">
+								</div>
 							</div>
 						</div>
-						<div class="form-group"><label>Email </label><input class="form-control"  autocomplete="off"
-																			required="" name="email" disabled th:value="${user.email}"></div>
-						<div class="form-group"><label>Address </label><input class="form-control"
-																			 autocomplete="off" required="" name="email" th:value="${user.person.address}" disabled></div>
+						<div class="form-group"><label>Email </label><input autocomplete="off" class="form-control"
+																			disabled name="email" required=""
+																			th:value="${user.email}"></div>
+						<div class="form-group"><label>Address </label><input autocomplete="off"
+																			  class="form-control" disabled
+																			  name="email"
+																			  required=""
+																			  th:value="${user.person.address}"></div>
 						<hr>
 						<div>
 							<h4>All articles</h4>
@@ -71,12 +80,18 @@
 
 </div>
 <!-- Footer -->
-<div th:replace="/../fragments/footer ::footer" name="footer"></div>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<div name="footer" th:replace="/../fragments/footer ::footer"></div>
+<script crossorigin="anonymous"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script crossorigin="anonymous"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script crossorigin="anonymous"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 <!--
 <script th:href="@{~/vendor/jquery/jquery.min.js}"></script>
