@@ -6,6 +6,7 @@ import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.service.*;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -36,12 +37,14 @@ public class MainControllerTest {
 	@MockBean private UserRepository users;
 	@MockBean private PersonRepository persons;
 	@MockBean private CaseRepository cases;
-
-	@MockBean private ImageStoreService imageStoreService;
-	@MockBean UserService us;
-	@MockBean PersonService ps;
+	
+	@MockBean private ImageStoreService is;
+	@MockBean private UserService us;
+	@MockBean private PersonService ps;
 	@MockBean private ArticleService as;
-	@MockBean private CustomUserDetailsService userDetailsService;
+	@MockBean private CustomUserDetailsService uds;
+	@MockBean private RoleService rs;
+	@MockBean private AccountHandler ah;
 	
 	@Test
 	public void getIndex() throws Exception {

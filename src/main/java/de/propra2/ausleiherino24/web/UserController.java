@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Optional;
 
 /**
  * 	UserController manages all requests that are exclusively available to logged-in users
@@ -66,7 +65,7 @@ public class UserController {
 	@GetMapping("/profile/{username}")
 	public ModelAndView displayUserProfile(@PathVariable String username, Principal principal, HttpServletRequest request) throws Exception {
 		if (principal == null) {
-			System.out.println("You have to be logged in to see other users' profiles.");
+			// System.out.println("You have to be logged in to see other users' profiles.");
 			return new ModelAndView("redirect:/login");
 		}
 
