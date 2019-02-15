@@ -1,7 +1,8 @@
 package de.propra2.ausleiherino24.service;
 
-import java.util.Optional;
-
+import de.propra2.ausleiherino24.data.UserRepository;
+import de.propra2.ausleiherino24.model.CustomUserDetails;
+import de.propra2.ausleiherino24.model.User;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,12 +11,10 @@ import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import de.propra2.ausleiherino24.data.UserRepository;
-import de.propra2.ausleiherino24.model.CustomUserDetails;
-import de.propra2.ausleiherino24.model.User;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
-public class CustomUserDetailsServiceTest {
+public class SearchUserServiceTest {
 
 	private UserRepository users;
 	private SearchUserService searchUserService;
