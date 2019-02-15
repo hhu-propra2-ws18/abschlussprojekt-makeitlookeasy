@@ -20,20 +20,25 @@ public class PersonServiceTest {
 	
 	private PersonService personService;
 	private PersonRepository persons;
+	private Logger logger;
 	
 	@Before
 	public void init() {
+		PowerMockito.mockStatic(LoggerFactory.class);
+		logger = PowerMockito.mock(Logger.class);
+		PowerMockito.when(LoggerFactory.getLogger(PersonService.class)).thenReturn(logger);
+		
 		persons = Mockito.mock(PersonRepository.class);
 		personService = new PersonService(persons);
 	}
-	@Ignore
+	
 	@Test
 	public void savePersonShouldSavePerson() throws Exception{
-		PowerMockito.mockStatic(LoggerFactory.class);
-		Logger logger = PowerMockito.mock(Logger.class);
-		PowerMockito.when(LoggerFactory.getLogger(PersonService.class)).thenReturn(logger);
 		Person person = new Person();
 		person.setId(1L);
+		
+		persons = Mockito.mock(PersonRepository.class);
+		personService = new PersonService(persons);
 		
 		personService.savePerson(person, "str");
 		
