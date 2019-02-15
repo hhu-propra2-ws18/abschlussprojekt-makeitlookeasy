@@ -14,7 +14,7 @@ public class Article {
 
 	String name;
 
-	@Lob
+	@Column(length=10485760)
 	String description;
 
 	Boolean active;		// If this is true the article is not available for rental ("deleted")

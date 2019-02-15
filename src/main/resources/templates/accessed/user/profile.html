@@ -57,12 +57,8 @@
 						<hr>
 						<div>
 							<h4>All articles</h4>
-							<ul >
-								<li>Cras justo odio</li>
-								<li>Dapibus ac facilisis in</li>
-								<li>Morbi leo risus</li>
-								<li>Porta ac consectetur ac</li>
-								<li>Vestibulum at eros</li>
+							<ul th:each="article: ${articles}">
+								<a th:href="@{/article(id=${article.getId()})}"><li th:text="${article.name}">Cras justo odio</li></a>
 							</ul>
 						</div>
 					</div>

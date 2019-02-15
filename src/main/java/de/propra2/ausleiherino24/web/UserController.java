@@ -67,6 +67,7 @@ public class UserController {
 		// editing options.
 
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
+		mav.addObject("articles",articleService.getAllNonReservedArticlesByUser(user));
 		mav.addObject("categories", Category.getAllCategories());
 		mav.addObject("user", user);
 		mav.addObject("role", RoleService.getUserRole(request));
@@ -103,5 +104,4 @@ public class UserController {
 		mav.addObject("role", RoleService.getUserRole(request));
 		return mav;
 	}
-
 }

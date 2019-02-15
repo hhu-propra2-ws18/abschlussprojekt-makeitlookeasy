@@ -3,6 +3,7 @@ package de.propra2.ausleiherino24.service;
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Category;
+import de.propra2.ausleiherino24.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class ArticleService {
-	
+
 	private final ArticleRepository articleRepository;
-	
+
 	@Autowired
 	public ArticleService(ArticleRepository articleRepository) {
 		this.articleRepository = articleRepository;
@@ -28,7 +29,7 @@ public class ArticleService {
 	public List<Article> getAllNonReservedArticles() {
 		List<Article> availableArticles = new ArrayList<>();
 		List<Article> allArticles = articleRepository.findAll().isEmpty() ? new ArrayList<>() : articleRepository.findAll();
-		
+
 		for (Article article : allArticles) {
 			// no duplicate, active article, not reserved
 			if (!availableArticles.contains(article)
@@ -37,7 +38,7 @@ public class ArticleService {
 				availableArticles.add(article);
 			}
 		}
-		
+
 		return availableArticles;
 	}
 
@@ -49,5 +50,9 @@ public class ArticleService {
 	public List<Article> getAllNonReservedArticlesByCategory(Category category) {
 		return getAllNonReservedArticles().stream()
 				.filter(article -> article.getCategory() == category).collect(Collectors.toCollection(ArrayList::new));
+	}
+
+	public List<Article> getAllNonReservedArticlesByUser(User user) {
+		return articleRepository.findAllActiveByUser(user);
 	}
 }
