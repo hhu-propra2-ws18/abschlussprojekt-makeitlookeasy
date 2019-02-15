@@ -7,7 +7,7 @@ import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.service.ArticleService;
-import de.propra2.ausleiherino24.service.CustomUserDetailsService;
+import de.propra2.ausleiherino24.service.SearchUserService;
 import de.propra2.ausleiherino24.service.ImageStoreService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.assertj.core.api.Assertions;
@@ -44,7 +44,7 @@ public class CaseControllerTest {
 	@MockBean private ImageStoreService imageStoreService;
 	@MockBean UserService us;
 	@MockBean private ArticleService as;
-	@MockBean private CustomUserDetailsService userDetailsService;
+	@MockBean private SearchUserService userDetailsService;
 
 	@Ignore
 	@Test

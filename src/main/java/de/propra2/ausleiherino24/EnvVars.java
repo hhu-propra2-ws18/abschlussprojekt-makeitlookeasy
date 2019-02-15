@@ -2,8 +2,8 @@ package de.propra2.ausleiherino24;
 
 import org.springframework.stereotype.Component;
 
-	@Component
-	public class EnvVars {
+@Component
+public class EnvVars {
 
 //		@Value("${POSTGRES_USER}")
 //		private String pgsql;
@@ -17,5 +17,5 @@ import org.springframework.stereotype.Component;
 //		@Value("${SPRING_SEC_PASSWORD}")
 //		private String f49ec07849;
 
-	}
+}
 

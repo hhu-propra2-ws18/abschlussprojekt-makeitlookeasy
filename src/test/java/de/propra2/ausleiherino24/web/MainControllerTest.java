@@ -42,7 +42,7 @@ public class MainControllerTest {
 	@MockBean private UserService us;
 	@MockBean private PersonService ps;
 	@MockBean private ArticleService as;
-	@MockBean private CustomUserDetailsService uds;
+	@MockBean private SearchUserService uds;
 	@MockBean private RoleService rs;
 	@MockBean private AccountHandler ah;
 	
