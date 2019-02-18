@@ -10,7 +10,10 @@ import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Locale;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,35 +46,38 @@ public class Initializer implements ServletContextInitializer {
 	private void initTestArticleWithinUsers() {
 		articleRepository.deleteAll();
 		Faker faker = new Faker(Locale.GERMAN);
-		IntStream.range(0, 15).mapToObj(value -> {
+		IntStream.range(0, 15).forEach(value -> {
 			Person person = createPerson(
 					faker.address().fullAddress(),
 					faker.name().firstName(),
 					faker.name().lastName());
 
 			User user = createUser(
-					faker.name().firstName() + faker.name().lastName() + "@mail.de",
+					person.getFirstName() + person.getLastName() + "@mail.de",
 					faker.name().fullName(),
 					faker.crypto().sha256(),
 					person);
 
-			Article article = createArticle(
-					faker.beer().name(),
-					String.join("\n", faker.lorem().paragraph(5)),
-					Category.getAllCategories()
-							.get(faker.random().nextInt(0, Category.getAllCategories().size() - 1)),
-					user);
+			ArrayList<Case> cases = IntStream.range(0, faker.random().nextInt(1, 7)).mapToObj(value1 -> {
+				Article article2 = createArticle(
+						faker.pokemon().name(),
+						faker.chuckNorris().fact(),
+						Category.getAllCategories().get(faker.random().nextInt(0, Category.getAllCategories().size() - 1)),
+						user,
+						faker.random().nextInt(5, 500),
+						faker.random().nextInt(100, 2000));
 
-			return createCase(
-					faker.random().nextBoolean(),
-					article,
-					faker.random().nextInt(5, 500),
-					faker.random().nextInt(100, 2000));
-		}).forEach(aCase -> {
-			personRepository.save(aCase.getArticle().getOwner().getPerson());
-			userRepository.save(aCase.getArticle().getOwner());
-			articleRepository.save(aCase.getArticle());
-			caseRepository.save(aCase);
+				return createCase(
+						faker.random().nextBoolean(),
+						article2);
+			}).collect(Collectors.toCollection(ArrayList::new));
+
+			personRepository.save(person);
+			userRepository.save(user);
+			for (Case c: cases) {
+				articleRepository.save(c.getArticle());
+				caseRepository.save(c);
+			}
 		});
 	}
 
@@ -121,7 +127,7 @@ public class Initializer implements ServletContextInitializer {
 		return user;
 	}
 
-	private Article createArticle(String name, String description, Category category, User owner) {
+	private Article createArticle(String name, String description, Category category, User owner, int costPerDay, int deposit) {
 		Article article = new Article();
 		article.setActive(true);
 		article.setReserved(false);
@@ -129,15 +135,17 @@ public class Initializer implements ServletContextInitializer {
 		article.setDescription(description);
 		article.setCategory(category);
 		article.setOwner(owner);
+		article.setCostPerDay(costPerDay);
+		article.setDeposit(deposit);
 		return article;
 	}
 
-	private Case createCase(boolean active, Article article, int price, int deposit) {
+	private Case createCase(boolean active, Article article) {
 		Case aCase = new Case();
 		aCase.setActive(active);
 		aCase.setArticle(article);
-		aCase.setPrice(price);
-		aCase.setDeposit(deposit);
+		aCase.setPrice(article.getCostPerDay());
+		aCase.setDeposit(article.getDeposit());
 		return aCase;
 	}
 }
