@@ -1,110 +1,147 @@
 buildscript {
-	ext {
-		springBootVersion = '2.1.2.RELEASE'
-	}
-	repositories {
-		maven {
-      url "https://plugins.gradle.org/m2/"
+    ext {
+        springBootVersion = '2.1.2.RELEASE'
     }
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7"
-//    classpath("gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.9")
-	}
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7")
+        classpath("gradle.plugin.com.avast.gradle:gradle-docker-compose-plugin:0.8.14")
+        classpath("gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.9")
+        classpath('ca.cutterslade.gradle:gradle-dependency-analyze:1.3.0')
+        classpath('com.github.ksoichiro:gradle-console-reporter:0.6.2')
+        classpath('com.adarshr:gradle-test-logger-plugin:1.6.0')
+        classpath("net.rdrei.android.buildtimetracker:gradle-plugin:0.11.+")
+    }
 }
 
-//apply plugin: 'com.github.spotbugs'
+repositories {
+    jcenter()
+}
+
+apply plugin: "build-time-tracker"
+apply plugin: 'com.adarshr.test-logger'
+apply plugin: 'com.github.ksoichiro.console.reporter'
+apply plugin: 'ca.cutterslade.analyze'
+apply plugin: 'jacoco'
+apply plugin: "com.github.spotbugs"
+apply plugin: 'docker-compose'
 apply plugin: "org.sonarqube"
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-//apply plugin: 'checkstyle'
-
-javadoc {
-  source = sourceSets.main.allJava
-  classpath = configurations.compile
-}
-
-//checkstyle {
-//	toolVersion = "8.7"
-//}
-
-//apply plugin: 'pmd'
-//pmd {
-//	ruleSets = [
-//			'java-android', 'java-basic', 'java-braces',
-//			'java-clone', 'java-codesize', 'java-comments',
-//			'java-controversial', 'java-coupling', 'java-design',
-//			'java-empty', 'java-finalizers', 'java-imports',
-//			'java-j2ee', 'java-javabeans', 'java-junit',
-//			'java-logging-jakarta-commons', 'java-logging-java',
-//			'java-migrating', 'java-naming', 'java-optimizations',
-//			'java-strictexception', 'java-strings', 'java-sunsecure',
-//			'java-typeresolution', 'java-unnecessary', 'java-unusedcode'
-//	]
-//	toolVersion = '5.1.1'
-//	ignoreFailures = true
-//}
-
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
+apply from: './config/gradle/tasks.gradle'
+apply from: './config/gradle/plugin-configs.gradle'
 
 group = 'de.propra2'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-repositories {
-	mavenCentral()
+
+dockerCompose.isRequiredBy(bootRun)
+//dockerCompose.isRequiredBy(tasks.sonarqube)
+//dockerCompose.isRequiredBy(tasks.check)
+dockerCompose {
+    useComposeFiles = ['docker-compose.yml']
+    startedServices = ['propay','jenkins']
+//  forceRecreate = false
+//  buildAdditionalArgs = ['--force-rm']
+    waitForTcpPorts = false
+    tcpPortsToIgnoreWhenWaiting = []
+    captureContainersOutput = false // one log to rule them all switch
+//  captureContainersOutputToFile = '/logs'
+    captureContainersOutputToFiles = './build/logs/services/'
+    composeLogToFile = project.file('./build/logs/compose.log')
+    containerLogToDir = project.file('./build/logs/container-logs')
+    stopContainers = true
+    removeContainers = true
+    removeImages = "Local"
+    removeVolumes = true
+    removeOrphans = true
+    projectName = 'ausleiherino24'
+//  dockerComposeWorkingDirectory = '/path/where/docker-compose/is/invoked/from'
+//  dockerComposeStopTimeout = java.time.Duration.ofSeconds(20)
+//  environment.put 'BACKEND_ADDRESS', '192.168.1.100'
 }
+
+gradle.taskGraph.whenReady { graph ->
+    println("Checking folder structure..")
+    def proc = "./scripts/init.sh".execute()
+    proc.waitForProcessOutput(System.out, System.err)
+//  if (graph.hasTask(bootRun)) { // trigger sonar analysis on bootRun
+//    tasks.sonarqube.execute()
+//  }
+}
+
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    dependsOn 'assemble'
+    group = "verification"
+    source = fileTree('src/main/java')
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+    classpath = files()
+}
+
+test {
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
+}
+
 
 configurations {
-	developmentOnly
-	runtimeClasspath {
-		extendsFrom developmentOnly
-	}
-}
-
-dependencies {
-  annotationProcessor('org.projectlombok:lombok')
-  compile("org.springframework.boot:spring-boot-starter-actuator")
-  compileOnly('org.projectlombok:lombok')
-  developmentOnly('org.springframework.boot:spring-boot-devtools')
-  implementation('org.springframework.boot:spring-boot-starter-data-jpa')
-  implementation('org.springframework.boot:spring-boot-starter-mail')
-  implementation('org.springframework.boot:spring-boot-starter-security')
-  implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
-  implementation('org.springframework.boot:spring-boot-starter-web')
-  implementation('org.springframework.session:spring-session-core')
-  implementation('com.github.javafaker:javafaker:0.17.2')
-  runtimeOnly('org.postgresql:postgresql')
-  runtimeOnly('com.h2database:h2')
-//  spotbugsPlugins('com.h3xstream.findsecbugs:findsecbugs-plugin:1.7.1')
-  testImplementation('junit:junit')
-  testImplementation('org.mockito:mockito-core')
-  testImplementation('org.springframework.boot:spring-boot-starter-test')
-  testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
-  testImplementation('org.springframework.security:spring-security-test')
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
 }
 
 bootRun {
-	classpath = sourceSets.main.runtimeClasspath + configurations.developmentOnly
+    classpath = sourceSets.main.runtimeClasspath + configurations.developmentOnly
 }
 
-//tasks.withType(com.github.spotbugs.SpotBugsTask) {
-//  reports {
-//    xml.enabled = false
-//    html.enabled = true
-//  }
-//  spotbugs {
-//    effort = "max"
-//    reportLevel = "low"
-//  }
-//}
 
-
-
-
+dependencies {
+    //    spotbugsPlugins ('com.mebigfatguy.fb-contrib:fb-contrib:7.4.3.sb')
+    annotationProcessor('org.projectlombok:lombok')
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compileOnly('org.projectlombok:lombok')
+    developmentOnly('org.springframework.boot:spring-boot-devtools')
+    implementation('com.github.javafaker:javafaker:0.17.2')
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('org.springframework.boot:spring-boot-starter-mail')
+    implementation('org.springframework.boot:spring-boot-starter-security')
+    implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.session:spring-session-core')
+    runtimeOnly('com.h2database:h2')
+    runtimeOnly('org.postgresql:postgresql')
+    spotbugs configurations.spotbugsPlugins.dependencies
+    spotbugsPlugins('com.h3xstream.findsecbugs:findsecbugs-plugin:1.8.0')
+    testCompile('org.powermock:powermock-api-easymock:2.0.0')
+    testCompile('org.powermock:powermock-api-mockito2:2.0.0')
+    testCompile('org.powermock:powermock-classloading-base:2.0.0')
+    testCompile('org.powermock:powermock-classloading-xstream:2.0.0')
+    testCompile('org.powermock:powermock-module-junit4:2.0.0')
+    testCompile('org.powermock:powermock-module-junit4-rule:2.0.0')
+    testImplementation('junit:junit')
+    testImplementation('org.mockito:mockito-core:2.+')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
+    testImplementation('org.springframework.security:spring-security-test')
+}
