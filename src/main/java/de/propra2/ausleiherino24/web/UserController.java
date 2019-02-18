@@ -124,4 +124,17 @@ public class UserController {
 		mav.addObject("allArticles", articleService);
 		return mav;
 	}
+
+    @GetMapping("/myarticle")
+    public ModelAndView geMyArticlePage (Principal principal) {
+        ModelAndView mav = new ModelAndView("/accessed/user/myarticle");
+        mav.addObject("categories", Category.getAllCategories());
+        try {
+            mav.addObject("user", userService.findUserByPrincipal(principal));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mav.addObject("allArticles", articleService);
+        return mav;
+    }
 }
