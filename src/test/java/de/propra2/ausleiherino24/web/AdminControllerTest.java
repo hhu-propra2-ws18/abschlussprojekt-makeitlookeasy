@@ -3,8 +3,10 @@ package de.propra2.ausleiherino24.web;
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.ConflictRepository;
+import de.propra2.ausleiherino24.data.CustomerReviewRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
+import de.propra2.ausleiherino24.email.EmailSender;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.ImageStoreService;
@@ -40,6 +42,8 @@ public class AdminControllerTest {
 	private PersonRepository persons;
 	@MockBean
 	private CaseRepository cases;
+	@MockBean
+	private CustomerReviewRepository customerReviews;
 
 	@MockBean
 	private ImageStoreService is;
@@ -55,6 +59,8 @@ public class AdminControllerTest {
 	private RoleService rs;
 	@MockBean
 	private AccountHandler ah;
+	@MockBean
+	private EmailSender es;
 
 	@Test
 	public void getAdminIndexStatusTest() throws Exception {

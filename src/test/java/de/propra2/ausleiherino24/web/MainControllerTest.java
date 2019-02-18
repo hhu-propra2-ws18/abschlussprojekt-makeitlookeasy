@@ -5,8 +5,10 @@ import static org.mockito.Mockito.mock;
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.ConflictRepository;
+import de.propra2.ausleiherino24.data.CustomerReviewRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
+import de.propra2.ausleiherino24.email.EmailSender;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
@@ -55,6 +57,9 @@ public class MainControllerTest {
 	private ConflictRepository conflicts;
 
 	@MockBean
+	private CustomerReviewRepository customerReviews;
+
+	@MockBean
 	private ImageStoreService is;
 	@MockBean
 	private UserService us;
@@ -68,12 +73,16 @@ public class MainControllerTest {
 	private RoleService rs;
 	@MockBean
 	private AccountHandler ah;
+
+	@MockBean
+	private EmailSender es;
 	@MockBean
 	private Principal principal;
 
 	@Ignore
 	@Test
 	public void getIndex() throws Exception {
+		principal = mock(Principal.class);
 		us = mock(UserService.class);
 		User user = new User();//mock(User.class);
 		user.setRole("user");
