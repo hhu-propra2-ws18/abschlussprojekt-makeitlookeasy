@@ -3,12 +3,12 @@
 <div th:fragment="navbar">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="/"><img src="/img/mainpage/logoOhneSchrift.jpg"
-                                            style="width: 50px;">Ausleiherino24</img>
+      <a class="navbar-brand" href="/">
+        <img src="/img/mainpage/logoOhneSchrift.jpg" style="width: 50px;">Ausleiherino24</img>
       </a>
       <button aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"
-              class="navbar-toggler"
-              data-target="#navbarResponsive" data-toggle="collapse" type="button">
+              class="navbar-toggler" data-target="#navbarResponsive" data-toggle="collapse"
+              type="button">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse " id="navbarResponsive">
@@ -22,19 +22,18 @@
                 </div>
               </li>
               <!--<li><a href="/login?logout" class="text-white"><div style="margin-top:7px;margin-left:5px;margin-right:5px">
-                <i class="fa fa-user "></i></div></a></li> -->
-
-
+              <i class="fa fa-user "></i></div></a></li> -->
               <div class="dropdown show">
                 <button aria-expanded="true" class="btn btn-link dropdown-toggle text-white"
                         data-toggle="dropdown" type="button">
                   <i class="fa fa-cog"></i>
                 </button>
                 <div class="dropdown-menu " role="menu">
+                  <a class="dropdown-item" th:href="@{~/accessed/user/newItem}" role="prsentation">Add
+                    item <i class="fa fa-plus"></i></a>
                   <a class="dropdown-item"
-                     role="presentation"
-                     th:href="@{'/accessed/user/profile/' + ${user.getUsername()}}">Profil<i
-                      class="fa fa-user"></i></a>
+                     th:href="@{'/accessed/user/profile/' + ${user.getUsername()}}"
+                     role="presentation">Profil <i class="fa fa-user"></i></a>
                   <a class="dropdown-item" href="/logout" role="presentation">Logout  <i
                       class="fa fa-sign-out"></i></a>
                 </div>
@@ -66,7 +65,6 @@
                   Sign-Up</i></div>
               </a></li>
             </ul>
-
           </li>
         </ul>
       </div>
