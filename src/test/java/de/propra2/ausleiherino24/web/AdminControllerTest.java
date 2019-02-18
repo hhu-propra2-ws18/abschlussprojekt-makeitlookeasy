@@ -42,8 +42,6 @@ public class AdminControllerTest {
 	private PersonRepository persons;
 	@MockBean
 	private CaseRepository cases;
-	@MockBean
-	private CustomerReviewRepository customerReviews;
 
 	@MockBean
 	private ImageStoreService is;

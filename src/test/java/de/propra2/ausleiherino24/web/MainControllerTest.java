@@ -57,9 +57,6 @@ public class MainControllerTest {
 	private ConflictRepository conflicts;
 
 	@MockBean
-	private CustomerReviewRepository customerReviews;
-
-	@MockBean
 	private ImageStoreService is;
 	@MockBean
 	private UserService us;
