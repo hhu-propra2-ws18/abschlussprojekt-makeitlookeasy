@@ -27,12 +27,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/accessed/user")
 public class UserController {
-
     private final UserService userService;
     private final ArticleService articleService;
-
     private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-
     private final AccountHandler accountHandler;
 
     /**
@@ -46,11 +43,6 @@ public class UserController {
         this.accountHandler = accountHandler;
     }
 
-    @GetMapping("/index")
-    public String getIndex(HttpServletRequest request) {
-        return "redirect:/";
-    }
-
     /**
      * Show any user profile to logged-in users. 1.If visitor is not logged-in and tries to access
      * profile, redirect to login. 2. Else, display profile. 2.1 If requested profile of user, is
@@ -62,6 +54,10 @@ public class UserController {
      * view
      * @throws Exception Thrown, if username cannot be found in UserRepository
      */
+    @GetMapping("/index")
+    public String getIndex (){
+        return "redirect:/";
+    }
     @GetMapping("/profile/{username}")
     public ModelAndView displayUserProfile(@PathVariable String username, Principal principal,
             HttpServletRequest request) throws Exception {
@@ -81,9 +77,9 @@ public class UserController {
         mav.addObject("user", userService.findUserByPrincipal(principal));
         mav.addObject("self", self); //unused
         mav.addObject("allArticles", articleService);
-        mav.addObject("ppAccount",
-                accountHandler
-                        .getAccountData(userService.findUserByPrincipal(principal).getUsername()));
+      //  mav.addObject("ppAccount",
+       //         accountHandler
+      //                  .getAccountData(userService.findUserByPrincipal(principal).getUsername()));
         return mav;
     }
 
@@ -110,9 +106,22 @@ public class UserController {
             LOGGER.info("Logging out user %s", currentPrincipalName);
             return new ModelAndView("redirect:/logout");
         }
+		ModelAndView mav = new ModelAndView("/accessed/user/profile");
+		mav.addObject("propayacc",accountHandler.checkFunds(user.getUsername()));
+		mav.addObject("user", user);
+		return mav;
+	}
 
-        ModelAndView mav = new ModelAndView("/accessed/user/profile");
-        mav.addObject("user", user);
-        return mav;
-    }
+	@GetMapping("/newItem")
+	public ModelAndView getNewItemPage (Principal principal) {
+		ModelAndView mav = new ModelAndView("/accessed/user/newItem");
+		mav.addObject("categories", Category.getAllCategories());
+		try {
+			mav.addObject("user", userService.findUserByPrincipal(principal));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mav.addObject("allArticles", articleService);
+		return mav;
+	}
 }
