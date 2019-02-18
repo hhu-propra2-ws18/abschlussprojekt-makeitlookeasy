@@ -79,28 +79,19 @@
           <th scope="col">Price</th>
           <th scope="col">Status</th>
           <th scope="col"></th>
-    <div class="col-lg 9" style="margin-top: 100px">
-      <table class="table" th:each="article : ${myArticles}">
-        <thead>
-        <tr>
-          <th scope="col" th:text="|${article.getName()}|">Name</th>
-          <th scope="col" th:text="|${article.getPrice()}|">Price</th>
-          <th scope="col" th:if="${article.getReserved()} == true" th:text="|Status: Reserved|">Status</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-          <td></td>
-          <td></td>
-          <td><span class="badge badge-pill badge-success">Active</span><span class="badge badge-pill badge-danger">Deactivated</span></td>
-          <td><button type="button" class="btn btn-success btn-sm">Active</button><span>  </span><button class="btn btn-danger btn-sm">Deactivate</button></td>
+        <!--  <th scope="col" th:text="|${article.getName()}|">Name</th>
+          <th scope="col" th:text="|${article.getPrice()}|">Price</th>
+          <th scope="col" th:if="${article.getReserved()} == true" th:text="|Status: Reserved|">Status</th>
+          <td><button type="button" class="btn btn-success btn-sm">Active</button><span>  </span><button class="btn btn-danger btn-sm">Deactivate</button></td> -->
         </tr>
         </tbody>
       </table>
     </div>
-
   </div>
-</div>
 </div>
 <!-- Footer -->
 <div name="footer" th:replace="/../fragments/footer ::footer"></div>
