@@ -65,17 +65,27 @@ public class UserController {
         User visitedUser = userService.findUserByUsername(username);
         boolean self = principal.getName().equals(username);  // Flag for ThymeLeaf. Enables certain profile editing options.
 
-        ModelAndView mav = new ModelAndView("/user/profile");
-        mav.addObject("myArticles", articleService.getAllNonReservedArticlesByUser(visitedUser));
-        mav.addObject("categories", Category.getAllCategories());
-        mav.addObject("visitedUser", visitedUser);
-        mav.addObject("user", userService.findUserByPrincipal(principal));
-        mav.addObject("self", self); //unused
+        if(!self) {
+            ModelAndView mav = new ModelAndView("/user/profile");
+            mav.addObject("myArticles",
+                    articleService.getAllNonReservedArticlesByUser(visitedUser));
+            mav.addObject("categories", Category.getAllCategories());
+            mav.addObject("visitedUser", visitedUser);
+            mav.addObject("user", userService.findUserByPrincipal(principal));
+            return mav;
+        } else {
+            ModelAndView mav = new ModelAndView("/user/profileEdit");
+            mav.addObject("myArticles",
+                    articleService.getAllNonReservedArticlesByUser(visitedUser));
+            mav.addObject("categories", Category.getAllCategories());
+            mav.addObject("visitedUser", visitedUser);
+            mav.addObject("user", userService.findUserByPrincipal(principal));
+            return mav;
+        }
         //mav.addObject("allArticles", articleService);
-      //  mav.addObject("ppAccount",
-       //         accountHandler
-      //                  .getAccountData(userService.findUserByPrincipal(principal).getUsername()));
-        return mav;
+        //  mav.addObject("ppAccount",
+        //         accountHandler
+        //                  .getAccountData(userService.findUserByPrincipal(principal).getUsername()));
     }
 
     /**
