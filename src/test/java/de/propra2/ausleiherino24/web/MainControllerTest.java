@@ -13,6 +13,7 @@ import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CustomerReviewService;
 import de.propra2.ausleiherino24.service.ImageStoreService;
 import de.propra2.ausleiherino24.service.PersonService;
 import de.propra2.ausleiherino24.service.RoleService;
@@ -55,7 +56,12 @@ public class MainControllerTest {
 	private CaseRepository cases;
 	@MockBean
 	private ConflictRepository conflicts;
+	@MockBean
+	private CustomerReviewRepository customerReviewRepository;
 
+
+	@MockBean
+	private CustomerReviewService crs;
 	@MockBean
 	private ImageStoreService is;
 	@MockBean

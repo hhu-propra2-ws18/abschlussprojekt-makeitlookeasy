@@ -28,6 +28,8 @@ public class CustomerReview {
 	@NotNull
 	Case aCase;
 
+	int stars;
+
 	String description;
 
 	Long timestamp;
