@@ -31,7 +31,7 @@
 
 		<!-- main information (input) -->
 		<div class="col-lg 9" style="margin-top: 100px">
-			<form method="post" enctype="multipart/form-data" action="/accessed/saveNewArticle">
+			<form method="post" enctype="multipart/form-data" th:action="@{/saveNewArticle}" th:object="${article}">
 				<div class="form-group">
 					<label for="formControlInput1">Name</label>
 					<input class="form-control" id="formControlInput1" name="name">
@@ -47,8 +47,8 @@
 				<div class="form-group">
 					<label for="formControlSelect1">Categorie</label>
 					<select class="form-control" id="formControlSelect1" name="categorie" >
-						<div th:each="categorie : ${categories}">
-						<option th:text="${categorie.name}">Motors</option>
+						<div th:each="category : ${categories}">
+						<option th:text="|${category.name}|">Motors</option>
 						</div>
 					</select>
 				</div>

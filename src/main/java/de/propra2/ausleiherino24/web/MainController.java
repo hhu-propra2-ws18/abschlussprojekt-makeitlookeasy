@@ -7,10 +7,12 @@ import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -42,6 +44,11 @@ public class MainController {
         return mav;
     }
 
+    @GetMapping("/index")
+    public String getIndex (){
+        return "redirect:/";
+    }
+
     /**
      * Returns view with a filtered set of Articles.
      */
@@ -67,18 +74,6 @@ public class MainController {
     /**
      * TODO Javadoc
      */
-    @RequestMapping("/default")
-    public String defaultAfterLogin(HttpServletRequest request) {
-        if (request.isUserInRole("ROLE_admin")) {
-            return "redirect:/accessed/admin/index";
-        } else {
-            return "redirect:/accessed/user/index";
-        }
-    }
-
-    /**
-     * TODO Javadoc
-     */
     @GetMapping("/signup")
     public ModelAndView getRegistration() {
         ModelAndView mav = new ModelAndView("registration");
@@ -98,3 +93,15 @@ public class MainController {
         return new ModelAndView("redirect:/login");
     }
 }
+
+    /*
+    @RequestMapping("/default")
+    public String defaultAfterLogin(HttpServletRequest request) {
+        if (request.isUserInRole("ROLE_admin")) {
+            return "redirect:/accessed/admin/index";
+        } else {
+            return "redirect:/accessed/user/index";
+        }
+        return "redirect:/";
+    }
+    */

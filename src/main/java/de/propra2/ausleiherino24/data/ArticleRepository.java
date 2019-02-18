@@ -23,6 +23,5 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
      * @return ArrayList of Article objects
      */
     @Query("SELECT a FROM Article a WHERE a.owner = :user and a.active = true")
-    // TODO: Check, if query works.
     ArrayList<Article> findAllActiveByUser(@Param("user") User user);
 }
