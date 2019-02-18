@@ -59,7 +59,7 @@ public class UserController {
 	 */
 	@GetMapping("/profile/{username}")
 	public ModelAndView displayUserProfile(@PathVariable String username, Principal principal, HttpServletRequest request) throws Exception {
-		if (principal == null) {
+		if (principal.getName() == null) {
 			// System.out.println("You have to be logged in to see other users' profiles.");
 			return new ModelAndView("redirect:/login");
 		}

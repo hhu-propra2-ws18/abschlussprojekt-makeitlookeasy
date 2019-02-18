@@ -28,7 +28,7 @@ import java.util.Optional;
  */
 @Controller
 public class CaseController {
-	
+
 	private final ArticleService articleService;
 	private final UserService userService;
 	private final ArticleRepository articleRepository;
@@ -65,41 +65,41 @@ public class CaseController {
 		mav.addObject("shopitem", new Article());
 		return mav;
 	}
-	
+
 	/**
 	 * Creates new article in database and returns this.article's details view.
 	 *
 	 * @param article		Article object from HTML form input.
 	 * @return				Article details view.
 	 */
-	@PostMapping("/saveNewArticle")
-	public ModelAndView saveNewCaseAndArticle(
+	@PostMapping("/accessed/saveNewArticle")
+	public String saveNewCaseAndArticle(
 			@ModelAttribute @Valid Article article,
 			BindingResult result,
 			Model model,
-			@RequestParam("image") MultipartFile image) {
-		
+			@RequestParam("image") MultipartFile image,Principal principal) throws Exception {
+
 		article.setImage(imageStoreService.store(image, null));
+		article.setActive(true);
+		article.setReserved(false);
+		article.setOwner(userService.findUserByPrincipal(principal));
 		articleService.saveArticle(article, "Created");
 
-		ModelAndView mav = new ModelAndView("newarticle");
-		mav.addObject("article", article);
-		return mav;
-	}
-	
+		return "redirect:/";	}
+
 	/**
 	 * Updates edited article in database and returns this.article's view.
 	 *
 	 * @param article		Article object from HTML form input.
 	 * @return				Article details view.
 	 */
-	@PutMapping("/saveEditedArticle")
+	@PutMapping("/accessed/saveEditedArticle")
 	public ModelAndView saveEditedCaseAndArticle(
 				@ModelAttribute @Valid Article article,
 				BindingResult result,
 				Model model,
 				@RequestParam("image") MultipartFile image) {
-		
+
 		article.setImage(imageStoreService.store(image, null));
 		articleService.saveArticle(article, "Updated");
 
@@ -117,15 +117,15 @@ public class CaseController {
 	 * @throws Exception	1. Thrown, if article couldn't be found in ArticleRepository
 	 * 						2. Thrown, if principal couldn't be found in UserRepository
 	 */
-	@PutMapping("/deactivateArticle")
+	@PutMapping("/accessed/deactivateArticle")
 	public ModelAndView deactivateArticle(@RequestParam Long id, Principal principal) throws Exception {
 		String currentPrincipalName = principal.getName();
 		User user = userService.findUserByUsername(currentPrincipalName);
-		
+
 		if (!articleService.deactivateArticle(id)) {
 			// TODO: Display error msg, when article deactivation fails.
 		}
-		
+
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
 		mav.addObject("user", user);
 		mav.addObject("allArticles", articleService.findAllActiveByUser(user));

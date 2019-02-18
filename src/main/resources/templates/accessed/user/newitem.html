@@ -31,22 +31,22 @@
 
 		<!-- main information (input) -->
 		<div class="col-lg 9" style="margin-top: 100px">
-			<form method="post" action="/acessed/user/newItem/add">
+			<form method="post" enctype="multipart/form-data" action="/acessed/saveNewArticle">
 				<div class="form-group">
 					<label for="formControlInput1">Name</label>
-					<input class="form-control" id="formControlInput1" >
+					<input class="form-control" id="formControlInput1" name="name">
 				</div>
 				<div class="form-group">
 					<label for="formControlInput2">Price</label>
-					<input class="form-control" type="number" id="formControlInput2" >
+					<input class="form-control" type="number" id="formControlInput2" name="price">
 				</div>
 				<div class="form-group">
 					<label for="formControlInput3">Deposit</label>
-					<input class="form-control" type="number" id="formControlInput3" >
+					<input class="form-control" type="number" id="formControlInput3" name="deposit">
 				</div>
 				<div class="form-group">
 					<label for="formControlSelect1">Categorie</label>
-					<select class="form-control" id="formControlSelect1" >
+					<select class="form-control" id="formControlSelect1" name="categorie" >
 						<div th:each="categorie : ${categories}">
 						<option th:text="${categorie.name}">Motors</option>
 						</div>
@@ -56,6 +56,8 @@
 					<label for="exampleFormControlTextarea1">Description</label>
 					<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
 				</div>
+				<input type="file" name="image" accept="image/jpg,image/png,image/jpeg">
+
 				<button type="submit" class="btn btn-success float-right">Add item</button>
 			</form>
 		</div>
