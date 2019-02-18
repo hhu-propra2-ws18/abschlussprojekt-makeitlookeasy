@@ -1,20 +1,17 @@
 package de.propra2.ausleiherino24.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Category;
-import java.util.ArrayList;
-import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+
+import java.util.ArrayList;
+import java.util.Optional;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class ArticleServiceTest {
 
@@ -22,18 +19,32 @@ public class ArticleServiceTest {
     private ArticleRepository articleRepositoryMock;
     private ArrayList<Article> articles;
 
+    private Article article01;
+    private Article article02;
+    private Article article03;
+    private Article article04;
+    
     @Before
     public void setUp() {
         articleRepositoryMock = mock(ArticleRepository.class);
         articleService = new ArticleService(articleRepositoryMock);
+        
         articles = new ArrayList<>();
+        article01 = new Article(0L, "", "", "", false, 0,
+                            0,"",null, true, Category.TOYS, null);
+        article02 = new Article(1L, "", "", "", false, 0,
+                            0,"",null, true, Category.TOYS, null);
+        article03 = new Article(2L, "", "", "", false, 0,
+                            0,"",null, true, Category.TOYS, null);
+        article04 = new Article(3L, "", "", "", false, 0,
+                            0,"",null, true, Category.TOYS, null);
     }
 
     @Test
     public void threeActiveArticles() {
-        articles.add(new Article(0L, "", "", true, false, null, ""));
-        articles.add(new Article(1L, "", "", true, false, null, ""));
-        articles.add(new Article(2L, "", "", true, false, null, ""));
+        articles.add(article01);
+        articles.add(article02);
+        articles.add(article03);
 
         when(articleRepositoryMock.findAll()).thenReturn(articles);
 
@@ -42,8 +53,10 @@ public class ArticleServiceTest {
 
     @Test
     public void OneActiveOneReservedArticle() {
-        articles.add(new Article(0L, "", "", true, false, null, ""));
-        articles.add(new Article(1L, "", "", true, true, null, ""));
+        article02.setReserved(true);
+        
+        articles.add(article01);
+        articles.add(article02);
 
         when(articleRepositoryMock.findAll()).thenReturn(articles);
         articles.remove(1);
@@ -53,9 +66,13 @@ public class ArticleServiceTest {
 
     @Test
     public void threeInactiveArticles() {
-        articles.add(new Article(0L, "", "", false, false, null, ""));
-        articles.add(new Article(1L, "", "", false, false, null, ""));
-        articles.add(new Article(2L, "", "", false, false, null, ""));
+        article01.setActive(false);
+        article02.setActive(false);
+        article03.setActive(false);
+        
+        articles.add(article01);
+        articles.add(article02);
+        articles.add(article03);
 
         when(articleRepositoryMock.findAll()).thenReturn(articles);
 
@@ -63,10 +80,10 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void doubleArticle() {
-        articles.add(new Article(0L, "", "", true, false, null, ""));
-        articles.add(new Article(0L, "", "", true, false, null, ""));
-        articles.add(new Article(0L, "", "", true, false, null, ""));
+    public void tripleArticle() {
+        articles.add(article01);
+        articles.add(article01);
+        articles.add(article01);
 
         when(articleRepositoryMock.findAll()).thenReturn(articles);
 
@@ -78,9 +95,9 @@ public class ArticleServiceTest {
 
     @Test
     public void threeToys() {
-        articles.add(new Article(0L, true, false, Category.TOYS));
-        articles.add(new Article(1L, true, false, Category.TOYS));
-        articles.add(new Article(2L, true, false, Category.TOYS));
+        articles.add(article01);
+        articles.add(article02);
+        articles.add(article03);
 
         when(articleRepositoryMock.findAll()).thenReturn(articles);
 
@@ -89,9 +106,9 @@ public class ArticleServiceTest {
 
     @Test
     public void threeToys2() {
-        articles.add(new Article(0L, true, false, Category.TOYS));
-        articles.add(new Article(1L, true, false, Category.TOYS));
-        articles.add(new Article(2L, true, false, Category.TOYS));
+        articles.add(article01);
+        articles.add(article02);
+        articles.add(article03);
 
         when(articleRepositoryMock.findAll()).thenReturn(articles);
 
@@ -99,10 +116,12 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void threeToyskOneReserved() {
-        articles.add(new Article(0L, true, false, Category.TOYS));
-        articles.add(new Article(1L, true, false, Category.TOYS));
-        articles.add(new Article(2L, true, true, Category.TOYS));
+    public void threeToysOneReserved() {
+        article03.setReserved(true);
+        
+        articles.add(article01);
+        articles.add(article02);
+        articles.add(article03);
 
         when(articleRepositoryMock.findAll()).thenReturn(articles);
 
@@ -113,10 +132,13 @@ public class ArticleServiceTest {
 
     @Test
     public void twoToysTwoTools() {
-        articles.add(new Article(0L, true, false, Category.TOYS));
-        articles.add(new Article(1L, true, false, Category.TOOLS));
-        articles.add(new Article(2L, true, false, Category.TOYS));
-        articles.add(new Article(3L, true, false, Category.TOOLS));
+        article02.setCategory(Category.TOOLS);
+        article04.setCategory(Category.TOOLS);
+        
+        articles.add(article01);
+        articles.add(article02);
+        articles.add(article03);
+        articles.add(article04);
 
         when(articleRepositoryMock.findAll()).thenReturn(articles);
 
@@ -128,10 +150,13 @@ public class ArticleServiceTest {
 
     @Test
     public void twoToysTwoTools2() {
-        articles.add(new Article(0L, true, false, Category.TOYS));
-        articles.add(new Article(1L, true, false, Category.TOOLS));
-        articles.add(new Article(2L, true, false, Category.TOYS));
-        articles.add(new Article(3L, true, false, Category.TOOLS));
+        article02.setCategory(Category.TOOLS);
+        article04.setCategory(Category.TOOLS);
+        
+        articles.add(article01);
+        articles.add(article02);
+        articles.add(article03);
+        articles.add(article04);
 
         when(articleRepositoryMock.findAll()).thenReturn(articles);
 
@@ -143,7 +168,7 @@ public class ArticleServiceTest {
 
     @Test
     public void deactivateArticle() throws Exception {
-        Optional<Article> op = Optional.of(new Article(0L, true, false, null));
+        Optional<Article> op = Optional.of(article01);
         when(articleRepositoryMock.findById(0L)).thenReturn(op);
 
         ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
@@ -154,8 +179,10 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactiveReservedArticle() throws Exception {
-        Optional<Article> op = Optional.of(new Article(0L, true, true, null));
+    public void deactivateReservedArticle() throws Exception {
+        article01.setReserved(true);
+        
+        Optional<Article> op = Optional.of(article01);
         when(articleRepositoryMock.findById(0L)).thenReturn(op);
 
         assertFalse(articleService.deactivateArticle(0L));

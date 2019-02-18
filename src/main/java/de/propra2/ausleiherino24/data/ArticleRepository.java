@@ -2,10 +2,11 @@ package de.propra2.ausleiherino24.data;
 
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.User;
-import java.util.ArrayList;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+
+import java.util.ArrayList;
 
 public interface ArticleRepository extends CrudRepository<Article, Long> {
 

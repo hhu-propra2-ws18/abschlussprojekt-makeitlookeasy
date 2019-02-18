@@ -5,17 +5,14 @@ import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
-import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Category;
-import de.propra2.ausleiherino24.model.Person;
-import de.propra2.ausleiherino24.model.User;
-import java.util.Locale;
-import java.util.stream.IntStream;
-import javax.servlet.ServletContext;
+import de.propra2.ausleiherino24.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.ServletContext;
+import java.util.Locale;
+import java.util.stream.IntStream;
 
 @Component
 public class Initializer implements ServletContextInitializer {

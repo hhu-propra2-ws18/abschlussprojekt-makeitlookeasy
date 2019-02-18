@@ -1,18 +1,16 @@
 package de.propra2.ausleiherino24.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Article {
 
     @Id
@@ -25,48 +23,31 @@ public class Article {
     String description;
 
     String image;
-
-    Boolean active;    // If this is true the article is not available for rental ("deleted")
-
+    
     Boolean reserved;  // If this is true the article is not available for rental ("reserved/rented")
-
-    Category category;
-
+    
+    int deposit;
+    
+    int costPerDay;
+    
+    String location;
+    
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     User owner;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    Case aCase;
+    Boolean active;    // If this is true the article is not available for rental ("deleted")
+    
+    Category category;
 
-
-    public Article() {
-    }
-
-    //for testing
-    public Article(Long id, String name, String description, Boolean active, Boolean reserved,
-            User owner, String image) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.active = active;
-        this.reserved = reserved;
-        this.owner = owner;
-        this.image = image;
-    }
-
-    //for testing
-    public Article(Long id, Boolean active, Boolean reserved, Category category) {
-        this.id = id;
-        this.active = active;
-        this.reserved = reserved;
-        this.category = category;
-    }
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    List<Case> cases;
 
     /**
      * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
      * Siehe
      * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
      */
+    /*
     public void setACase(Case aCase) {
         setACase(aCase, false);
     }
@@ -77,7 +58,7 @@ public class Article {
             aCase.setArticle(this, true);
         }
     }
-
+*/
     public void setOwner(User user) {
         setOwner(user, false);
     }

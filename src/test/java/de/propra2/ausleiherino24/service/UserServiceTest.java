@@ -1,10 +1,9 @@
 package de.propra2.ausleiherino24.service;
 
+/*
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
-import java.security.Principal;
-import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -16,6 +15,9 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.security.Principal;
+import java.util.Optional;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({UserService.class, LoggerFactory.class})
@@ -78,3 +80,4 @@ public class UserServiceTest {
         Assertions.assertThat(userService.findUserByPrincipal(principal)).isEqualTo(expected);
     }
 }
+*/
