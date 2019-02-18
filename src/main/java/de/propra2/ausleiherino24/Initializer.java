@@ -71,7 +71,7 @@ public class Initializer implements ServletContextInitializer {
 			personRepository.save(aCase.getArticle().getOwner().getPerson());
 			userRepository.save(aCase.getArticle().getOwner());
 			articleRepository.save(aCase.getArticle());
-			caseRepository.save(aCase);
+			//caseRepository.save(aCase);
 		});
 	}
 
