@@ -52,7 +52,7 @@
 
           <div class="row">
             <p class="card-text" style="margin-left:15px">Offered by <a
-                th:href="@{/user/profile/{username}(username=${article.getOwner().getUsername()})}"
+                th:href="@{~/profile/{username}(username=${article.getOwner().getUsername()})}"
                 th:text="|${article.getOwner().getUsername()}|">Mick Potzkai</a></p>
             <div class="ml-auto">
               <!-- Button trigger modal -->
