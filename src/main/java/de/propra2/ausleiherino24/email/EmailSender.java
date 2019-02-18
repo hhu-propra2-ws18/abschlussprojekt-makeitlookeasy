@@ -1,10 +1,9 @@
 package de.propra2.ausleiherino24.email;
 
+import de.propra2.ausleiherino24.model.Conflict;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-
-import de.propra2.ausleiherino24.model.Conflict;
 
 public class EmailSender {
 
@@ -13,7 +12,8 @@ public class EmailSender {
 	private SimpleMailMessage message;
 
 	@Autowired
-	public EmailSender(EmailConfig config, JavaMailSenderImpl mailSender, SimpleMailMessage message) {
+	public EmailSender(EmailConfig config, JavaMailSenderImpl mailSender,
+			SimpleMailMessage message) {
 		this.config = config;
 		this.mailSender = mailSender;
 		this.message = message;

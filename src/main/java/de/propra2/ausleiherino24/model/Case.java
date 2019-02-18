@@ -1,10 +1,17 @@
 package de.propra2.ausleiherino24.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @Entity
 @Data
@@ -13,31 +20,31 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Case {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	Long id;
 
-    Long startTime;
+	Long startTime;
 
-    Long endTime;
+	Long endTime;
 
-    int price;
+	int price;
 
-    int deposit;
-    
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    User receiver;
+	int deposit;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    Article article;
-    
-    Boolean active;
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	User receiver;
 
-    /**
-     * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
-     * Siehe
-     * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
-     */
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	Article article;
+
+	Boolean active;
+
+	/**
+	 * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
+	 * Siehe
+	 * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
+	 */
     /*
     public void setArticle(Article article) {
         setArticle(article, false);
@@ -51,8 +58,8 @@ public class Case {
         }
     }
 */
-    public User getOwner() {
-        return this.article.getOwner();
-    }
+	public User getOwner() {
+		return this.article.getOwner();
+	}
 
 }
