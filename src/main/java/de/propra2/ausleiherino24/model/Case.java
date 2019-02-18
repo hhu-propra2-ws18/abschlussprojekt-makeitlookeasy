@@ -33,6 +33,9 @@ public class Case {
 	int deposit;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	CustomerReview customerReview;
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	User receiver;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
