@@ -122,6 +122,12 @@ public class UserController {
 		return mav;
 	}
 
+    /**
+     * GET request which shows the User his own Articles.
+     * @param principal
+     * @return
+     */
+
     @GetMapping("/myarticle")
     public ModelAndView geMyArticlePage (Principal principal) {
         ModelAndView mav = new ModelAndView("/accessed/user/myarticle");
