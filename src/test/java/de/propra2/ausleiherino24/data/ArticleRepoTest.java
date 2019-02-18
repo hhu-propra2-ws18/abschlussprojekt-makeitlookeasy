@@ -2,8 +2,6 @@ package de.propra2.ausleiherino24.data;
 
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.User;
-import java.util.Arrays;
-import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,14 +11,16 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
 
 public class ArticleRepoTest {
 
-    @Autowired
-    private ArticleRepository articles;
+    @Autowired private ArticleRepository articles;
 
     private Article article1;
     private Article article2;
@@ -29,14 +29,19 @@ public class ArticleRepoTest {
     public void init() {
         article1 = new Article();
         article1.setOwner(new User());
-        article1.setDescription("used condition");
         article1.setName("Mountain-Bike");
+        article1.setDescription("Looks like shit");
+        article1.setDeposit(500);
+        article1.setCostPerDay(24);
         article1.setActive(true);
 
         article2 = new Article();
         article2.setOwner(new User());
         article2.setName("Chainsaw");
         article2.setDescription("bloody");
+        article2.setDeposit(1);
+        article2.setCostPerDay(99);
+        article2.setActive(false);
 
         articles.saveAll(Arrays.asList(article1, article2));
     }
