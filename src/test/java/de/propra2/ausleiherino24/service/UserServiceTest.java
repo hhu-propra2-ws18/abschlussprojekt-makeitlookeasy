@@ -1,11 +1,8 @@
 package de.propra2.ausleiherino24.service;
 
-/*
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
-import java.security.Principal;
-import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -13,11 +10,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.security.Principal;
+import java.util.Optional;
+
+@PowerMockIgnore("javax.security.*")
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({UserService.class, LoggerFactory.class})
 public class UserServiceTest {
@@ -68,15 +70,45 @@ public class UserServiceTest {
         Mockito.verify(personService, Mockito.times(1)).savePerson(person, "str");
     }
 
-    @Ignore
     @Test
     public void findUserByPrincipalTest() throws Exception {
         Principal principal = Mockito.mock(Principal.class);
-
+        Mockito.when(principal.getName()).thenReturn("");
         User expected = new User();
         expected.setUsername("");
         expected.setRole("");
+        Mockito.when(users.findByUsername("")).thenReturn(Optional.of(expected));
+
         Assertions.assertThat(userService.findUserByPrincipal(principal)).isEqualTo(expected);
     }
+
+    @Test
+    public void findUserByPrincipalTest2() throws Exception {
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn(null);
+        User expected = new User();
+        expected.setUsername("");
+        expected.setRole("");
+
+        Assertions.assertThat(userService.findUserByPrincipal(principal)).isEqualTo(expected);
+    }
+
+    @Test
+    public void findUserByPrincipalTest3() throws Exception {
+        User expected = new User();
+        expected.setUsername("");
+        expected.setRole("");
+
+        Assertions.assertThat(userService.findUserByPrincipal(null)).isEqualTo(expected);
+    }
+
+    @Test(expected = Exception.class)
+    public void findUserByPrincipalThrowsException() throws Exception {
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn("");
+        Mockito.when(users.findByUsername("")).thenReturn(Optional.empty());
+
+        userService.findUserByPrincipal(principal);
+    }
 }
-*/
+
