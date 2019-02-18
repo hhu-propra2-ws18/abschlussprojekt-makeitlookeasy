@@ -16,16 +16,16 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/accessed/admin")
 public class AdminController {
 
-  private final UserService userService;
+    private final UserService userService;
 
-  public AdminController(UserService userService) {
-    this.userService = userService;
-  }
+    public AdminController(UserService userService) {
+        this.userService = userService;
+    }
 
-  @GetMapping("index")
-  public ModelAndView getAdminIndex(Principal principal, Model model) throws Exception {
-    model.addAttribute("user", userService.findUserByPrincipal(principal));
-    return new ModelAndView("accessed/admin/index");
-  }
+    @GetMapping("index")
+    public ModelAndView getAdminIndex(Principal principal, Model model) throws Exception {
+        model.addAttribute("user", userService.findUserByPrincipal(principal));
+        return new ModelAndView("accessed/admin/index");
+    }
 
 }

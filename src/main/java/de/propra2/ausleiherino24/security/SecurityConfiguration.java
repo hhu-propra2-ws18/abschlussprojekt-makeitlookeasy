@@ -28,58 +28,58 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-  private final SearchUserService userDetailsService;
+    private final SearchUserService userDetailsService;
 
-  @Autowired
-  public SecurityConfiguration(SearchUserService userDetailsService) {
-    this.userDetailsService = userDetailsService;
-  }
+    @Autowired
+    public SecurityConfiguration(SearchUserService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService)
-        .passwordEncoder(getPasswordEncoder());
-  }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(getPasswordEncoder());
+    }
 
-  public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    registry.addResourceHandler("/**").addResourceLocations("/", "classpath:/static/");
-  }
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("/", "classpath:/static/");
+    }
 
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable();
-    http.authorizeRequests()
-        .antMatchers("/accessed").denyAll()
-        .antMatchers("/accessed/user/**").hasAnyRole("user", "admin")
-        .antMatchers("/accessed/admin/**").hasRole("admin")
-        .anyRequest().permitAll()
-        .and()
-        .formLogin()
-        .loginPage("/login")
-        .permitAll()
-        .defaultSuccessUrl("/default", true)
-        .and()
-        .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-        .logoutSuccessUrl("/login?logout");
-  }
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+        http.authorizeRequests()
+                .antMatchers("/accessed").denyAll()
+                .antMatchers("/accessed/user/**").hasAnyRole("user", "admin")
+                .antMatchers("/accessed/admin/**").hasRole("admin")
+                .anyRequest().permitAll()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .defaultSuccessUrl("/default", true)
+                .and()
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login?logout");
+    }
 
-  /**
-   * TODO Javadoc
-   */
-  @Bean
-  public PasswordEncoder getPasswordEncoder() {
-    return new PasswordEncoder() {
-      @Override
-      public String encode(CharSequence rawPassword) {
-        return rawPassword.toString();
-      }
+    /**
+     * TODO Javadoc
+     */
+    @Bean
+    public PasswordEncoder getPasswordEncoder() {
+        return new PasswordEncoder() {
+            @Override
+            public String encode(CharSequence rawPassword) {
+                return rawPassword.toString();
+            }
 
-      @Override
-      public boolean matches(CharSequence rawPassword, String s) {
-        return rawPassword.toString().equals(s);
-      }
-      //GGF BCRYPTPASSWORDENCODER
-    };
-  }
+            @Override
+            public boolean matches(CharSequence rawPassword, String s) {
+                return rawPassword.toString().equals(s);
+            }
+            //GGF BCRYPTPASSWORDENCODER
+        };
+    }
 }

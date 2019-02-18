@@ -13,93 +13,82 @@ import org.springframework.stereotype.Service;
 @Service
 public class CaseService {
 
-  private final CaseRepository caseRepository;
-  private final PersonRepository personRepository;
-  private final ArticleService articleService;
+    private final CaseRepository caseRepository;
+    private final PersonRepository personRepository;
+    private final ArticleService articleService;
 
-  @Autowired
-  public CaseService(CaseRepository caseRepository, PersonRepository personRepository,
-      ArticleService articleService) {
-    this.caseRepository = caseRepository;
-    this.personRepository = personRepository;
-    this.articleService = articleService;
-  }
-
-  /**
-   * Fügt einen Artikel, welcher frei zum Verleih ist, von einer Person hinzu.
-   * @param article
-   * @param price
-   * @param deposit
-   */
-  public void addCaseForNewArticle(Article article, int price, int deposit) {
-    Case c = new Case();
-    c.setArticle(article);
-    c.setDeposit(deposit);
-    c.setPrice(price);
-
-    caseRepository.save(c);
-  }
-
-  /**
-   * Gibt alle Cases zurück, wo die Person der Verleihende ist.
-   * @param personId
-   * @return
-   */
-  public ArrayList<Case> getAllCasesFromPersonOwner(Long personId) {
-    return caseRepository
-        .findAllByArticleOwner(personRepository.findById(personId).get().getUser());
-  }
-
-  /**
-   * Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan verliehen ist.
-   * @param personId
-   * @return
-   */
-  public ArrayList<Case> getLendCasesFromPersonOwner(Long personId) {
-    ArrayList<Case> cases = getAllCasesFromPersonOwner(personId);
-    return cases.stream()
-        .filter(c -> c.getReceiver() != null)
-        .collect(Collectors.toCollection(ArrayList::new));
-  }
-
-  /**
-   * Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan nicht verliehen ist.
-   * @param personId
-   * @return
-   */
-  public ArrayList<Case> getFreeCasesFromPersonOwner(Long personId) {
-    ArrayList<Case> cases = getAllCasesFromPersonOwner(personId);
-    return cases.stream()
-        .filter(c -> c.getReceiver() == null)
-        .collect(Collectors.toCollection(ArrayList::new));
-  }
-
-  /**
-   * Gibt alle Cases zurück, wo die Person sich von jemanden etwas geliehen hat.
-   * @param personId
-   * @return
-   */
-  public ArrayList<Case> getLendCasesFromPersonReceiver(Long personId) {
-    return caseRepository.findAllByReceiver(personRepository.findById(personId).get().getUser());
-  }
-
-  /**
-   * Erwartet Case mit wo Artikel verliehen werden kann. Case wird modifiziert, dass es nun verliehen ist.
-   * @param caseId
-   * @param receiver
-   * @param starttime
-   * @param endtime
-   */
-  public void lendArticleToPerson(Long caseId, User receiver, Long starttime, Long endtime) {
-    if (!(caseRepository.findById(caseId).isPresent())) {
-      return;
+    @Autowired
+    public CaseService(CaseRepository caseRepository, PersonRepository personRepository,
+            ArticleService articleService) {
+        this.caseRepository = caseRepository;
+        this.personRepository = personRepository;
+        this.articleService = articleService;
     }
 
-    Case c = caseRepository.findById(caseId).get();
-    c.setReceiver(receiver);
-    c.setStartTime(starttime);
-    c.setEndTime(endtime);
+    /**
+     * Fügt einen Artikel, welcher frei zum Verleih ist, von einer Person hinzu.
+     */
+    public void addCaseForNewArticle(Article article, int price, int deposit) {
+        Case c = new Case();
+        c.setArticle(article);
+        c.setDeposit(deposit);
+        c.setPrice(price);
 
-    caseRepository.save(c);
-  }
+        caseRepository.save(c);
+    }
+
+    /**
+     * Gibt alle Cases zurück, wo die Person der Verleihende ist.
+     */
+    public ArrayList<Case> getAllCasesFromPersonOwner(Long personId) {
+        return caseRepository
+                .findAllByArticleOwner(personRepository.findById(personId).get().getUser());
+    }
+
+    /**
+     * Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan verliehen
+     * ist.
+     */
+    public ArrayList<Case> getLendCasesFromPersonOwner(Long personId) {
+        ArrayList<Case> cases = getAllCasesFromPersonOwner(personId);
+        return cases.stream()
+                .filter(c -> c.getReceiver() != null)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    /**
+     * Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan nicht
+     * verliehen ist.
+     */
+    public ArrayList<Case> getFreeCasesFromPersonOwner(Long personId) {
+        ArrayList<Case> cases = getAllCasesFromPersonOwner(personId);
+        return cases.stream()
+                .filter(c -> c.getReceiver() == null)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    /**
+     * Gibt alle Cases zurück, wo die Person sich von jemanden etwas geliehen hat.
+     */
+    public ArrayList<Case> getLendCasesFromPersonReceiver(Long personId) {
+        return caseRepository
+                .findAllByReceiver(personRepository.findById(personId).get().getUser());
+    }
+
+    /**
+     * Erwartet Case mit wo Artikel verliehen werden kann. Case wird modifiziert, dass es nun
+     * verliehen ist.
+     */
+    public void lendArticleToPerson(Long caseId, User receiver, Long starttime, Long endtime) {
+        if (!(caseRepository.findById(caseId).isPresent())) {
+            return;
+        }
+
+        Case c = caseRepository.findById(caseId).get();
+        c.setReceiver(receiver);
+        c.setStartTime(starttime);
+        c.setEndTime(endtime);
+
+        caseRepository.save(c);
+    }
 }

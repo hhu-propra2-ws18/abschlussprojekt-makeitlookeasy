@@ -19,41 +19,41 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class ImageController {
 
-  private ImageStoreService imageStorageService;
+    private ImageStoreService imageStorageService;
 
-  @Autowired
-  public ImageController(ImageStoreService imageStorageService) {
-    this.imageStorageService = imageStorageService;
-  }
-
-  @GetMapping("/imageupload")
-  public String fileUpload() {
-    return "/imageupload";
-  }
-
-  @PostMapping("/imageupload")
-  public String handleFileUpload(@RequestParam("file") MultipartFile file) {
-    imageStorageService.store(file, null);
-    return "redirect:/imageupload";
-  }
-
-  /**
-   * TODO Javadoc
-   */
-  @GetMapping("/images/{fileName}")
-  public void getImage(@PathVariable String fileName, HttpServletResponse response)
-      throws IOException {
-    File requestedFile = imageStorageService.getFile(fileName, null);
-
-    if (requestedFile == null) {
-      response.setStatus(404);
-      return;
+    @Autowired
+    public ImageController(ImageStoreService imageStorageService) {
+        this.imageStorageService = imageStorageService;
     }
 
-    response.setContentType(Files.probeContentType(requestedFile.toPath()));
-    IOUtils.copy(
-        new DataInputStream(new FileInputStream(requestedFile)),
-        response.getOutputStream()
-    );
-  }
+    @GetMapping("/imageupload")
+    public String fileUpload() {
+        return "/imageupload";
+    }
+
+    @PostMapping("/imageupload")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
+        imageStorageService.store(file, null);
+        return "redirect:/imageupload";
+    }
+
+    /**
+     * TODO Javadoc
+     */
+    @GetMapping("/images/{fileName}")
+    public void getImage(@PathVariable String fileName, HttpServletResponse response)
+            throws IOException {
+        File requestedFile = imageStorageService.getFile(fileName, null);
+
+        if (requestedFile == null) {
+            response.setStatus(404);
+            return;
+        }
+
+        response.setContentType(Files.probeContentType(requestedFile.toPath()));
+        IOUtils.copy(
+                new DataInputStream(new FileInputStream(requestedFile)),
+                response.getOutputStream()
+        );
+    }
 }

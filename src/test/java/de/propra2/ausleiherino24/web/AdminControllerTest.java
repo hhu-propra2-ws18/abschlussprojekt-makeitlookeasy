@@ -25,36 +25,36 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @WebMvcTest
 public class AdminControllerTest {
 
-  @Autowired
-  private MockMvc mvc;
+    @Autowired
+    private MockMvc mvc;
 
-  @MockBean
-  private ArticleRepository articles;
-  @MockBean
-  private UserRepository users;
-  @MockBean
-  private PersonRepository persons;
-  @MockBean
-  private CaseRepository cases;
+    @MockBean
+    private ArticleRepository articles;
+    @MockBean
+    private UserRepository users;
+    @MockBean
+    private PersonRepository persons;
+    @MockBean
+    private CaseRepository cases;
 
-  @MockBean
-  private ImageStoreService is;
-  @MockBean
-  private UserService us;
-  @MockBean
-  private PersonService ps;
-  @MockBean
-  private ArticleService as;
-  @MockBean
-  private SearchUserService uds;
-  @MockBean
-  private RoleService rs;
-  @MockBean
-  private AccountHandler ah;
+    @MockBean
+    private ImageStoreService is;
+    @MockBean
+    private UserService us;
+    @MockBean
+    private PersonService ps;
+    @MockBean
+    private ArticleService as;
+    @MockBean
+    private SearchUserService uds;
+    @MockBean
+    private RoleService rs;
+    @MockBean
+    private AccountHandler ah;
 
-  @Test
-  public void getAdminIndexStatusTest() throws Exception {
-    mvc.perform(MockMvcRequestBuilders.get("/accessed/admin/index"))
-        .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
-  }
+    @Test
+    public void getAdminIndexStatusTest() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/accessed/admin/index"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+    }
 }

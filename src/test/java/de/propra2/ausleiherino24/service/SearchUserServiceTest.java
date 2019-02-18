@@ -15,32 +15,32 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 public class SearchUserServiceTest {
 
-  private UserRepository users;
-  private SearchUserService searchUserService;
-  private User user1;
-  private User user2;
+    private UserRepository users;
+    private SearchUserService searchUserService;
+    private User user1;
+    private User user2;
 
-  @Before
-  public void init() {
-    users = Mockito.mock(UserRepository.class);
-    user1 = new User();
-    user1.setUsername("user1");
-    user2 = new User();
-    user2.setUsername("user2");
-    searchUserService = new SearchUserService(users);
-  }
+    @Before
+    public void init() {
+        users = Mockito.mock(UserRepository.class);
+        user1 = new User();
+        user1.setUsername("user1");
+        user2 = new User();
+        user2.setUsername("user2");
+        searchUserService = new SearchUserService(users);
+    }
 
-  @Test
-  public void test() {
-    Mockito.when(users.findByUsername("user1")).thenReturn(Optional.of(user1));
-    CustomUserDetails expected = new CustomUserDetails(user1);
-    Assertions.assertThat(searchUserService.loadUserByUsername("user1")).isEqualTo(expected);
-  }
+    @Test
+    public void test() {
+        Mockito.when(users.findByUsername("user1")).thenReturn(Optional.of(user1));
+        CustomUserDetails expected = new CustomUserDetails(user1);
+        Assertions.assertThat(searchUserService.loadUserByUsername("user1")).isEqualTo(expected);
+    }
 
-  @Test(expected = UsernameNotFoundException.class)
-  public void test2() {
-    Mockito.when(users.findByUsername("user1")).thenThrow(UsernameNotFoundException.class);
+    @Test(expected = UsernameNotFoundException.class)
+    public void test2() {
+        Mockito.when(users.findByUsername("user1")).thenThrow(UsernameNotFoundException.class);
 
-    searchUserService.loadUserByUsername("user1");
-  }
+        searchUserService.loadUserByUsername("user1");
+    }
 }

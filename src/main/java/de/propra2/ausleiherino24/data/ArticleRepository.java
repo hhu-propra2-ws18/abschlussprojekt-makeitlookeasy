@@ -9,19 +9,19 @@ import org.springframework.data.repository.query.Param;
 
 public interface ArticleRepository extends CrudRepository<Article, Long> {
 
-  /**
-   * @return ArrayList of all Article objects in database.
-   */
-  ArrayList<Article> findAll();
+    /**
+     * @return ArrayList of all Article objects in database.
+     */
+    ArrayList<Article> findAll();
 
-  /**
-   * Returns a list of all articles, that are currently being offered (active == true) by the user,
-   * regardless of reservation status.
-   *
-   * @param user User object, whose articles are being returned.
-   * @return ArrayList of Article objects
-   */
-  @Query("SELECT a FROM Article a WHERE a.owner = :user and a.active = true")
-  // TODO: Check, if query works.
-  ArrayList<Article> findAllActiveByUser(@Param("user") User user);
+    /**
+     * Returns a list of all articles, that are currently being offered (active == true) by the
+     * user, regardless of reservation status.
+     *
+     * @param user User object, whose articles are being returned.
+     * @return ArrayList of Article objects
+     */
+    @Query("SELECT a FROM Article a WHERE a.owner = :user and a.active = true")
+    // TODO: Check, if query works.
+    ArrayList<Article> findAllActiveByUser(@Param("user") User user);
 }

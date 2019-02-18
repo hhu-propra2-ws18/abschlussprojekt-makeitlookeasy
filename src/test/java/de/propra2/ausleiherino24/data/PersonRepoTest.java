@@ -19,53 +19,53 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 public class PersonRepoTest {
 
-  @Autowired
-  private PersonRepository persons;
+    @Autowired
+    private PersonRepository persons;
 
-  private Person person1;
-  private Person person2;
+    private Person person1;
+    private Person person2;
 
-  @Before
-  public void init() {
-    person1 = new Person();
-    person1.setUser(new User());
-    person1.setFirstName("Max");
-    person1.setLastName("Mustermann");
+    @Before
+    public void init() {
+        person1 = new Person();
+        person1.setUser(new User());
+        person1.setFirstName("Max");
+        person1.setLastName("Mustermann");
 
-    person2 = new Person();
-    person2.setUser(new User());
-    person2.setFirstName("Hans");
-    person2.setLastName("Wurst");
-  }
+        person2 = new Person();
+        person2.setUser(new User());
+        person2.setFirstName("Hans");
+        person2.setLastName("Wurst");
+    }
 
-  @Test
-  public void databaseShouldSaveEntities() {
-    persons.saveAll(Arrays.asList(person1, person2));
+    @Test
+    public void databaseShouldSaveEntities() {
+        persons.saveAll(Arrays.asList(person1, person2));
 
-    List<Person> us = persons.findAll();
-    Assertions.assertThat(us.size()).isEqualTo(2);
-    Assertions.assertThat(us.get(0)).isEqualTo(person1);
-    Assertions.assertThat(us.get(1)).isEqualTo(person2);
-  }
+        List<Person> us = persons.findAll();
+        Assertions.assertThat(us.size()).isEqualTo(2);
+        Assertions.assertThat(us.get(0)).isEqualTo(person1);
+        Assertions.assertThat(us.get(1)).isEqualTo(person2);
+    }
 
-  @Test
-  public void databaseShouldRemoveCorrectEntity() {
-    persons.saveAll(Arrays.asList(person1, person2));
+    @Test
+    public void databaseShouldRemoveCorrectEntity() {
+        persons.saveAll(Arrays.asList(person1, person2));
 
-    persons.delete(person2);
+        persons.delete(person2);
 
-    List<Person> us = persons.findAll();
-    Assertions.assertThat(us.size()).isOne();
-    Assertions.assertThat(us.get(0)).isEqualTo(person1);
-  }
+        List<Person> us = persons.findAll();
+        Assertions.assertThat(us.size()).isOne();
+        Assertions.assertThat(us.get(0)).isEqualTo(person1);
+    }
 
-  @Test
-  public void databaseShouldReturnCountOfTwoIfDatabaseHasTwoEntries() {
-    persons.saveAll(Arrays.asList(person1, person2));
+    @Test
+    public void databaseShouldReturnCountOfTwoIfDatabaseHasTwoEntries() {
+        persons.saveAll(Arrays.asList(person1, person2));
 
-    List<Person> us = persons.findAll();
-    Assertions.assertThat(persons.count()).isEqualTo(2);
-  }
+        List<Person> us = persons.findAll();
+        Assertions.assertThat(persons.count()).isEqualTo(2);
+    }
 
 
 }

@@ -53,7 +53,7 @@ dockerCompose.isRequiredBy(bootRun)
 //dockerCompose.isRequiredBy(tasks.check)
 dockerCompose {
     useComposeFiles = ['docker-compose.yml']
-    startedServices = ['jenkins']
+    startedServices = ['propay','jenkins']
 //  forceRecreate = false
 //  buildAdditionalArgs = ['--force-rm']
     waitForTcpPorts = false

@@ -22,28 +22,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Person {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
 
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  User user;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    User user;
 
-  String firstName;
+    String firstName;
 
-  String lastName;
+    String lastName;
 
-  String address;
+    String address;
 
-  public void setUser(User user) {
-    setUser(user, false);
-  }
-
-  void setUser(User user, boolean repetition) {
-    this.user = user;
-    if (user != null && !repetition) {
-      user.setPerson(this, true);
+    public void setUser(User user) {
+        setUser(user, false);
     }
-  }
+
+    void setUser(User user, boolean repetition) {
+        this.user = user;
+        if (user != null && !repetition) {
+            user.setPerson(this, true);
+        }
+    }
 
 }

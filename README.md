@@ -55,28 +55,3 @@ Apart from the report that is generated when running the task <u>check</u> to ./
 `Settings -> Other Settings -> PMD -> + and then select ./config/pmd/ruleset.xml.` <br>
 To run the analysis: Tools -> Run PMD -> custom rles -> ruleset.
 
-# Stage the *.sh file
-git add --all
-# Flag it as executable
-git update-index --chmod=+x ./scripts/*.sh
-git update-index --chmod=+x gradlew
-git update-index --chmod=+x gradlew.bat
-# Commit the change
-hub commit
-# Push the commit
-git push
-
-- Implemented code styleguide acc. to googles coding convention (readme)
-- Implemented Automation of docker-compose in sync with gradle (readme)
-- TravisCI config for producion and development phase completed
-- Finalized database and docker configuration for dev/prod phase
-- Various changes in application.properties and application-test.properties (partly necessary for getting travis to work)
-- Updated git-index to grant +x on sh-scripts and gradlew
-- Finalized sonarqube implementation and automation for local-task and travisCI
-- Added jacoco for (valid) coverage analysis and added it to travisCI workflow
-- Added various custom gradle tasks for init and cleanup purposes (readme)
-- Switched database to H2 for tests and main app until completion of development phase
-- Fixed spotbugs, checkstyle and PMD configurations and included them in travisCI workflow
-- Fixed incorrect implementation of powermock and set mockito to higher version
-- Added usage descriptions to readme
-- A lot of Random code cleanup

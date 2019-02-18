@@ -8,12 +8,12 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class Ausleiherino24Application {
 
-  public static void main(String[] args) {
-    SpringApplication.run(Ausleiherino24Application.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(Ausleiherino24Application.class, args);
+    }
 
-  @Bean
-  public RestTemplate getRestTemplate() {
-    return new RestTemplate();
-  }
+    @Bean
+    public RestTemplate getRestTemplate() {
+        return new RestTemplate();
+    }
 }

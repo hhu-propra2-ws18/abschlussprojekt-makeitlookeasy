@@ -21,60 +21,60 @@ import org.slf4j.LoggerFactory;
 @PrepareForTest({UserService.class, LoggerFactory.class})
 public class UserServiceTest {
 
-  private UserRepository users;
-  private PersonService personService;
-  private UserService userService;
-  private Logger logger;
-  private User user;
+    private UserRepository users;
+    private PersonService personService;
+    private UserService userService;
+    private Logger logger;
+    private User user;
 
-  @Before
-  public void setup() {
-    users = Mockito.mock(UserRepository.class);
-    personService = Mockito.mock(PersonService.class);
-    PowerMockito.mockStatic(LoggerFactory.class);
-    logger = PowerMockito.mock(Logger.class);
-    PowerMockito.when(LoggerFactory.getLogger(UserService.class)).thenReturn(logger);
+    @Before
+    public void setup() {
+        users = Mockito.mock(UserRepository.class);
+        personService = Mockito.mock(PersonService.class);
+        PowerMockito.mockStatic(LoggerFactory.class);
+        logger = PowerMockito.mock(Logger.class);
+        PowerMockito.when(LoggerFactory.getLogger(UserService.class)).thenReturn(logger);
 
-    user = new User();
-    user.setUsername("user1");
-    user.setId(1L);
-    Mockito.when(users.findByUsername("user1")).thenReturn(Optional.of(user));
-    userService = new UserService(personService, users);
-  }
+        user = new User();
+        user.setUsername("user1");
+        user.setId(1L);
+        Mockito.when(users.findByUsername("user1")).thenReturn(Optional.of(user));
+        userService = new UserService(personService, users);
+    }
 
-  @Test
-  public void findUserByUsernameTest() throws Exception {
-    Assertions.assertThat(userService.findUserByUsername("user1")).isEqualTo(user);
-  }
+    @Test
+    public void findUserByUsernameTest() throws Exception {
+        Assertions.assertThat(userService.findUserByUsername("user1")).isEqualTo(user);
+    }
 
-  @Test(expected = Exception.class)
-  public void findUserByUsernameTest2() throws Exception {
-    userService.findUserByUsername("user2");
-    Mockito.verify(logger).warn("Couldn't find user %s in UserRepository.", "user2");
-  }
+    @Test(expected = Exception.class)
+    public void findUserByUsernameTest2() throws Exception {
+        userService.findUserByUsername("user2");
+        Mockito.verify(logger).warn("Couldn't find user %s in UserRepository.", "user2");
+    }
 
-  @Test
-  public void saveUserWithProfileTest() {
-    Person person = new Person();
-    person.setId(1L);
-    userService.saveUserWithProfile(user, person, "str");
+    @Test
+    public void saveUserWithProfileTest() {
+        Person person = new Person();
+        person.setId(1L);
+        userService.saveUserWithProfile(user, person, "str");
 
-    Assertions.assertThat(user.getRole()).isEqualTo("user");
-    Assertions.assertThat(person.getUser()).isEqualTo(user);
+        Assertions.assertThat(user.getRole()).isEqualTo("user");
+        Assertions.assertThat(person.getUser()).isEqualTo(user);
 
-    Mockito.verify(users, Mockito.times(1)).save(user);
-    Mockito.verify(logger).info("%s user profile %s [ID=%L]", "str", "user1", 1L);
-    Mockito.verify(personService, Mockito.times(1)).savePerson(person, "str");
-  }
+        Mockito.verify(users, Mockito.times(1)).save(user);
+        Mockito.verify(logger).info("%s user profile %s [ID=%L]", "str", "user1", 1L);
+        Mockito.verify(personService, Mockito.times(1)).savePerson(person, "str");
+    }
 
-  @Ignore
-  @Test
-  public void findUserByPrincipalTest() throws Exception {
-    Principal principal = Mockito.mock(Principal.class);
+    @Ignore
+    @Test
+    public void findUserByPrincipalTest() throws Exception {
+        Principal principal = Mockito.mock(Principal.class);
 
-    User expected = new User();
-    expected.setUsername("");
-    expected.setRole("");
-    Assertions.assertThat(userService.findUserByPrincipal(principal)).isEqualTo(expected);
-  }
+        User expected = new User();
+        expected.setUsername("");
+        expected.setRole("");
+        Assertions.assertThat(userService.findUserByPrincipal(principal)).isEqualTo(expected);
+    }
 }
