@@ -9,48 +9,41 @@ services:
     volumes:
       - ./PPdata:/code/data
 
-  #   depends_on:
-  #     - ausleiherino24
-
   #  ausleiherino24:
-  #    container_name: ausleiherino
+  #    container_name: ausleiherino24
   #    build: .
   #    volumes:
   #      - .:/app
   #    working_dir: /app
   #    user: appuser
-  #    environment:
-  #    - POSTGRES_USER=${POSTGRES_USER}
-  #    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-  #    - POSTGRES_DB=${POSTGRES_DB}
-  #    command: dockerize -wait tcp://localhost:5432 -timeout 600s ./gradlew boot
+  #    ports:
+  #      - 8081:8081
+  #    env_file:
+  #      - ./.env
+  #    command: dockerize -wait tcp://localhost:5432 -timeout 600s  -wait tcp://localhost:8888 -timeout 600s./gradlew bootRun
 
+  # (production)
   db:
     build:
-      ./pgsql-01
+      context: ./
+      dockerfile: PGSQLDockerfile
     restart: always
     container_name: pgsql-01
-#    user: "${PUID}:${PGID}"
+    user: "${PUID}:${PGID}"
     ports:
       - 5432:5432
     env_file:
       - ./.env
-#    environment:
-#      - POSTGRES_USER=${POSTGRES_USER}
-#      - POSTGRES_PASSWORD=${POSTGRES_USER}
-#      - POSTGRES_USER=test
-#      - POSTGRES_PASSWORD=test
-#      - POSTGRES_DB=${pgsql-01_DB}
     volumes:
-      - ./pgsql-01/persistence/data:/var/lib/postgresql/data
-      - ./pgsql-01/persistence/conf:/config
+      - ./pgsql-01/data:/var/lib/postgresql/data
+      - ./pgsql-01/conf:/config
 
-#  jenkins:
-#    image: 'jenkins/jenkins:lts'
-#    container_name: jenkins
-#    restart: unless-stopped
-#    ports:
-#      - 1234:1234
-#      - 50000:50000
-#    volumes:
-#      - ./jenkins_home:/var/jenkins_home
+  jenkins:
+    image: jenkins/jenkins:latest
+    container_name: jenkins
+    restart: unless-stopped
+    ports:
+      - 9000:8080
+      - 50000:50000
+    volumes:
+      - ~/jenkins_home:/var/jenkins_home

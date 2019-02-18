@@ -7,7 +7,9 @@ body {
   padding-top: 56px;
 }
 
-* {box-sizing: border-box;}
+* {
+  box-sizing: border-box;
+}
 
 /* Style the navbar */
 .topnav {
@@ -39,7 +41,7 @@ body {
 }
 
 /* Style the input container */
- .login-container {
+.login-container {
   float: right;
 }
 
@@ -73,6 +75,7 @@ body {
   .topnav .login-container {
     float: none;
   }
+
   .topnav a, .topnav input[type=text], .topnav .login-container button {
     float: none;
     display: block;
@@ -81,6 +84,7 @@ body {
     margin: 0;
     padding: 14px;
   }
+
   .topnav input[type=text] {
     border: 1px solid #ccc;
   }

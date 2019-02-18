@@ -1,16 +1,16 @@
 # Created by https://www.gitignore.io/api/linux,macos,maven,gradle,windows,eclipse,netbeans,jetbrains+all
 # Edit at https://www.gitignore.io/?templates=linux,macos,maven,gradle,windows,eclipse,netbeans,jetbrains+all
 
+# binarys
 jenkins_home/
-pgsql-01/persistence
+pgsql-01/
 PPdata/
-
+typescript
 
 ### public ###
 uploads/
 
 ### Eclipse ###
-
 .metadata
 bin/
 tmp/
@@ -281,6 +281,3 @@ gradle-app.setting
 /dist/
 /nbdist/
 /.nb-gradle/
-
-# Jenkins
-/jenkins_home

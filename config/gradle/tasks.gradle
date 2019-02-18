@@ -1,0 +1,44 @@
+task cleanUp {
+    doLast {
+        println("cleanup..")
+        def proc = "./scripts/clean.sh".execute()
+        proc.waitForProcessOutput(System.out, System.err)
+    }
+    group = "customTasks"
+}
+
+task manualinit {
+    doLast {
+        println("Creating folder-structure...")
+        def proc = "./scripts/init.sh".execute()
+        proc.waitForProcessOutput(System.out, System.err)
+    }
+    group = "customTasks"
+}
+
+task dockerReset {
+    doLast {
+        println("Creating folder-structure...")
+        def proc = "./scripts/docker-reset.sh".execute()
+        proc.waitForProcessOutput(System.out, System.err)
+    }
+    group = 'customTasks'
+}
+
+task dockerReboot {
+    doLast {
+        println("Creating folder-structure...")
+        def proc = "./scripts/docker-reboot.sh".execute()
+        proc.waitForProcessOutput(System.out, System.err)
+    }
+    group = 'customTasks'
+}
+
+task dockerClean {
+    doLast {
+        println("Creating folder-structure...")
+        def proc = "./scripts/docker-clean.sh".execute()
+        proc.waitForProcessOutput(System.out, System.err)
+    }
+    group = 'customTasks'
+}
