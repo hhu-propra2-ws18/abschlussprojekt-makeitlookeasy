@@ -19,6 +19,18 @@
 
   <!-- Custom styles for this template -->
   <link rel="stylesheet" th:href="@{~/css/shop-homepage.css}">
+  <script>
+    function myFunction() {
+      var mainFrameOne = document.getElementById("mainFrameOne");
+      var mainFrameTwo = document.getElementById("mainFrameTwo");
+
+      mainFrameOne.style.display = (
+          mainFrameOne.style.display == "none" ? "block" : "none");
+      mainFrameTwo.style.display = (
+          mainFrameTwo.style.display == "none" ? "block" : "none");
+    }
+  </script>
+
 </head>
 <body>
 <!-- Navigation -->
@@ -29,7 +41,44 @@
     <!-- Categories -->
     <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
 
+
+
     <!-- main information (input) -->
+    <div class="col-lg 9" style="margin-top: 100px" id="mainFrameOne">
+      <table class="table">
+        <tr><div class="text-center" >
+          <button class="btn btn-info" onclick="myFunction()">Click me</button>
+        </div></tr>
+        <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">From</th>
+          <th scope="col">To</th>
+          <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><button type="button" class="btn btn-success btn-sm">Give back</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-lg 9" style="margin-top: 100px;display:none" id="mainFrameTwo">
+      <table class="table">
+        <tr><div class="text-center">
+          <button class="btn btn-info" onclick="myFunction()">Click me</button>
+        </div></tr>
+        <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Price</th>
+          <th scope="col">Status</th>
+          <th scope="col"></th>
     <div class="col-lg 9" style="margin-top: 100px">
       <table class="table" th:each="article : ${myArticles}">
         <thead>
@@ -41,13 +90,15 @@
         </thead>
         <tbody>
         <tr>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
+          <td></td>
+          <td></td>
+          <td><span class="badge badge-pill badge-success">Active</span><span class="badge badge-pill badge-danger">Deactivated</span></td>
+          <td><button type="button" class="btn btn-success btn-sm">Active</button><span>  </span><button class="btn btn-danger btn-sm">Deactivate</button></td>
         </tr>
         </tbody>
       </table>
     </div>
+
   </div>
 </div>
 </div>

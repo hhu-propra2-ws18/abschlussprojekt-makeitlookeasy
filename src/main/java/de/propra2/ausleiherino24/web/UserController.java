@@ -121,7 +121,6 @@ public class UserController {
     public ModelAndView geMyArticlePage (Principal principal) throws Exception {
     	String currentPrincipalName = principal.getName();
     	User user = userService.findUserByUsername(currentPrincipalName);
-
         ModelAndView mav = new ModelAndView("/user/myArticles");
         mav.addObject("categories", Category.getAllCategories());
         mav.addObject("user", user);
