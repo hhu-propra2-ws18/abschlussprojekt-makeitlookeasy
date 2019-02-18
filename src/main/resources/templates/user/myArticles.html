@@ -31,12 +31,12 @@
 
     <!-- main information (input) -->
     <div class="col-lg 9" style="margin-top: 100px">
-      <table class="table">
+      <table class="table" th:each="article : ${myArticles}">
         <thead>
         <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Price</th>
-          <th scope="col">Status</th>
+          <th scope="col" th:text="|${article.getName()}|">Name</th>
+          <th scope="col" th:text="|${article.getPrice()}|">Price</th>
+          <th scope="col" th:if="${article.getReserved()} == true" th:text="|Status: Reserved|">Status</th>
         </tr>
         </thead>
         <tbody>

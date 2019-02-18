@@ -31,10 +31,10 @@ public class UserServiceTest {
 
     @Before
     public void setup() {
-        users = Mockito.mock(UserRepository.class);
-        personService = Mockito.mock(PersonService.class);
+        users = Mockito.control(UserRepository.class);
+        personService = Mockito.control(PersonService.class);
         PowerMockito.mockStatic(LoggerFactory.class);
-        logger = PowerMockito.mock(Logger.class);
+        logger = PowerMockito.control(Logger.class);
         PowerMockito.when(LoggerFactory.getLogger(UserService.class)).thenReturn(logger);
 
         user = new User();
@@ -72,7 +72,7 @@ public class UserServiceTest {
     @Ignore
     @Test
     public void findUserByPrincipalTest() throws Exception {
-        Principal principal = Mockito.mock(Principal.class);
+        Principal principal = Mockito.control(Principal.class);
 
         User expected = new User();
         expected.setUsername("");

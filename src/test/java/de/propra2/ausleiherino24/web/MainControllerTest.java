@@ -68,7 +68,7 @@ public class MainControllerTest {
     @Test
     public void getIndex() throws Exception {
         us = mock(UserService.class);
-        User user = new User();//mock(User.class);
+        User user = new User();//control(User.class);
         user.setRole("user");
         Mockito.when(principal.getName()).thenReturn("tom");
         Mockito.when(us.findUserByUsername("tom")).thenReturn(user);

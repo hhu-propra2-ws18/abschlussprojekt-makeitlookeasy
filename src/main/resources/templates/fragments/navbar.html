@@ -29,10 +29,10 @@
                   <i class="fa fa-cog"></i>
                 </button>
                 <div class="dropdown-menu " role="menu">
-                  <a class="dropdown-item" th:href="@{~/accessed/user/newItem}" role="prsentation">Add
+                  <a class="dropdown-item" th:href="@{/newArticle}" role="presentation">Add
                     item <i class="fa fa-plus"></i></a>
                   <a class="dropdown-item"
-                     th:href="@{'/accessed/user/profile/' + ${user.getUsername()}}"
+                     th:href="@{'/profile/' + ${user.getUsername()}}"
                      role="presentation">Profil <i class="fa fa-user"></i></a>
                   <a class="dropdown-item" href="/logout" role="presentation">Logout  <i
                       class="fa fa-sign-out"></i></a>
