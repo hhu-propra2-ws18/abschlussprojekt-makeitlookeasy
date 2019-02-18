@@ -1,99 +1,110 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="utf-8">
-	<meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-		  name="viewport">
-	<!-- before: content="width=device-width, initial-scale=1, shrink-to-fit=no" -->
-	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-	<meta content="" name="description">
-	<meta content="" name="author">
+  <meta charset="utf-8">
+  <meta
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+      name="viewport">
+  <!-- before: content="width=device-width, initial-scale=1, shrink-to-fit=no" -->
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+  <meta content="" name="description">
+  <meta content="" name="author">
 
-	<title>Ausleiherino24</title>
+  <title>Ausleiherino24</title>
 
-	<!-- Bootstrap core CSS -->
-	<link rel="stylesheet" th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}">
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}">
 
-	<!-- Font awesome Css-->
-	<link rel="stylesheet" th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}">
+  <!-- Font awesome Css-->
+  <link rel="stylesheet" th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}">
 
-	<!-- Datetime picker-->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" integrity="sha256-yMjaV542P+q1RnH6XByCPDfUFhmOafWbeLPmqKh11zo=" crossorigin="anonymous" />
+  <!-- Datetime picker-->
+  <link crossorigin="anonymous"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"
+        integrity="sha256-yMjaV542P+q1RnH6XByCPDfUFhmOafWbeLPmqKh11zo=" rel="stylesheet"/>
 
-	<!-- Custom styles for this template -->
-	<link rel="stylesheet" th:href="@{~/css/shop-homepage.css}">
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" th:href="@{~/css/shop-homepage.css}">
 </head>
 <body>
 <!-- Navigation -->
 <div name="navbar" th:replace="/../fragments/navbar ::navbar"></div>
 
 <div class="container">
-	<div class="row">
-		<!-- Categories -->
-		<div name="categorie" th:replace="/../fragments/categories ::categories"></div>
+  <div class="row">
+    <!-- Categories -->
+    <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
 
-		<!-- Item  -->
-		<div class="col-lg-9">
-			<div class="card mt-4">
-				<img alt="" class="card-img-top img-fluid" src="http://placehold.it/900x400">
-				<div class="card-body">
-					<h3 class="card-title" th:text="${article.getName()}">Product Name</h3>
-					<h4 th:text="${article.getACase().getPrice()+'€ per day'}">24.99€ pro Tag</h4>
-					<h6 th:text="${article.getACase().getDeposit()} +'€ deposit'">200€ Kaution</h6>
-					<p class="card-text" th:text="${article.description}">Lorem ipsum dolor sit amet, consectetur
-						adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. Totam id
-						dolores, sint aperiam sequi pariatur praesentium animi perspiciatis molestias iure, ducimus!</p>
+    <!-- Item  -->
+    <div class="col-lg-9">
+      <div class="card mt-4">
+        <img alt="" class="card-img-top img-fluid" src="http://placehold.it/900x400">
+        <div class="card-body">
+          <h3 class="card-title" th:text="${article.getName()}">Product Name</h3>
+          <h4 th:text="${article.getACase().getPrice()+'€ per day'}">24.99€ pro Tag</h4>
+          <h6 th:text="${article.getACase().getDeposit()} +'€ deposit'">200€ Kaution</h6>
+          <p class="card-text" th:text="${article.description}">Lorem ipsum dolor sit amet,
+            consectetur
+            adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. Totam
+            id
+            dolores, sint aperiam sequi pariatur praesentium animi perspiciatis molestias iure,
+            ducimus!</p>
 
-					<div class="row">
-						<p class="card-text" style="margin-left:15px">Offered by <a
-								th:href="@{/accessed/user/profile/{username} (username=${article.getOwner().getUsername()})}"
-								th:text="${article.getOwner().getUsername()}">Mick Potzkai</a></p>
-						<div class="ml-auto">
-							<!-- Button trigger modal -->
-							<button class="btn btn-success" data-target="#exampleModal" data-toggle="modal" type="button">Book now</button>
+          <div class="row">
+            <p class="card-text" style="margin-left:15px">Offered by <a
+                th:href="@{/accessed/user/profile/{username} (username=${article.getOwner().getUsername()})}"
+                th:text="${article.getOwner().getUsername()}">Mick Potzkai</a></p>
+            <div class="ml-auto">
+              <!-- Button trigger modal -->
+              <button class="btn btn-success" data-target="#exampleModal" data-toggle="modal"
+                      type="button">Book now
+              </button>
 
-							<!-- Modal -->
-							<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="exampleModal" role="dialog"
-								 tabindex="-1">
-								<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title" id="exampleModalLabel">Book now</h5>
-											<button aria-label="Close" class="close" data-dismiss="modal" type="button">
-												<span aria-hidden="true">&times;</span>
-											</button>
-										</div>
-										<div class="modal-body">
-											<label>Von</label>
-											<input></input>
-											<label>Bis</label>
-											<input></input>
-											<p th:text="${article.getACase().getPrice()+'€ pro Tag'}">24.99€ per day</p>
-											<p th:text="${article.getACase().getDeposit()} +'€ Kaution'">200€ deposit</p>
+              <!-- Modal -->
+              <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade"
+                   id="exampleModal" role="dialog"
+                   tabindex="-1">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Book now</h5>
+                      <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <label>Von</label>
+                      <input></input>
+                      <label>Bis</label>
+                      <input></input>
+                      <p th:text="${article.getACase().getPrice()+'€ pro Tag'}">24.99€ per day</p>
+                      <p th:text="${article.getACase().getDeposit()} +'€ Kaution'">200€ deposit</p>
 
-										</div>
-										<div class="modal-footer">
-											<button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-											<button class="btn btn-primary" type="button">Book</button>
-										</div>
-									</div>
-								</div>
-							</div>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-secondary" data-dismiss="modal" type="button">Close
+                      </button>
+                      <button class="btn btn-primary" type="button">Book</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-						</div>
-					</div>
-					<p class="card-text" th:text="${article.getOwner().person.address}">47877 Willich,Plutoweg 5</p>
+            </div>
+          </div>
+          <p class="card-text" th:text="${article.getOwner().person.address}">47877 Willich,Plutoweg
+            5</p>
 
-				</div>
+        </div>
 
 
-			</div>
-			<!-- /.card -->
-			<div class="card card-outline-secondary my-4">
-				<div class="card-header">
-					Product Reviews
-				</div>
-				<!-- Reviews, could be added soon
+      </div>
+      <!-- /.card -->
+      <div class="card card-outline-secondary my-4">
+        <div class="card-header">
+          Product Reviews
+        </div>
+        <!-- Reviews, could be added soon
                 <div class="card-body">
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
                     <small class="text-muted">Posted by Anonymous on 3/1/17</small>
@@ -106,34 +117,35 @@
                     <hr>
                     <a href="#" class="btn btn-success">Leave a Review</a>
                 </div> -->
-			</div>
-			<!-- /.card -->
-		</div>
-		<!-- /.col-lg-9 -->
-	</div>
+      </div>
+      <!-- /.card -->
+    </div>
+    <!-- /.col-lg-9 -->
+  </div>
 </div>
 </div>
 <!-- Footer -->
 <div name="footer" th:replace="/../fragments/footer ::footer"></div>
 <script crossorigin="anonymous"
-		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-		src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 
 <script src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
 
 
 <script crossorigin="anonymous"
-		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 
 <script crossorigin="anonymous"
-		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"
-		integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU=" crossorigin="anonymous"></script>
+<script
+    crossorigin="anonymous"
+    integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU="
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <!--
 <script th:href="@{~/vendor/jquery/jquery.min.js}"></script>
 <script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script> -->

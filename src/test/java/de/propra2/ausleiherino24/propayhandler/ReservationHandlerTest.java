@@ -2,7 +2,6 @@ package de.propra2.ausleiherino24.propayhandler;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,135 +16,151 @@ import org.springframework.web.client.RestTemplate;
 
 @RunWith(SpringRunner.class)
 public class ReservationHandlerTest {
-	private Reservation res1 = new Reservation();
-	private Reservation res2 = new Reservation();
-	private RestTemplate restTemplate;
-	private ResponseEntity<Integer> responseEntityMockInt;
-	private ResponseEntity<Double> responseEntityMockDouble;
-	private ReservationHandler reservationHandler;
-	private PPAccount acc1;
-	private List<Reservation> resList;
-	private final String ACCOUNT_URL = "http://localhost:8888/account";
-	private final String RESERVATION_URL = "http://localhost:8888/reservation";
 
-	@Before
-	public void init() {
-		restTemplate = Mockito.mock(RestTemplate.class);
-		responseEntityMockInt = Mockito.mock(ResponseEntity.class);
-		responseEntityMockDouble = Mockito.mock(ResponseEntity.class);
-		reservationHandler = new ReservationHandler(restTemplate);
+  private final String ACCOUNT_URL = "http://localhost:8888/account";
+  private final String RESERVATION_URL = "http://localhost:8888/reservation";
+  private Reservation res1 = new Reservation();
+  private Reservation res2 = new Reservation();
+  private RestTemplate restTemplate;
+  private ResponseEntity<Integer> responseEntityMockInt;
+  private ResponseEntity<Double> responseEntityMockDouble;
+  private ReservationHandler reservationHandler;
+  private PPAccount acc1;
+  private List<Reservation> resList;
 
-		acc1 = new PPAccount("acc1", 100.0);
+  @Before
+  public void init() {
+    restTemplate = Mockito.mock(RestTemplate.class);
+    responseEntityMockInt = Mockito.mock(ResponseEntity.class);
+    responseEntityMockDouble = Mockito.mock(ResponseEntity.class);
+    reservationHandler = new ReservationHandler(restTemplate);
 
-		resList = new ArrayList<>();
-		res1 = new Reservation();
-		res1.setNumber(10.0);
-		res2 = new Reservation();
-		res2.setNumber(10.0);
-		resList.add(res1);
-		resList.add(res2);
+    acc1 = new PPAccount("acc1", 100.0);
 
-		acc1.setReservations(resList);
+    resList = new ArrayList<>();
+    res1 = new Reservation();
+    res1.setNumber(10.0);
+    res2 = new Reservation();
+    res2.setNumber(10.0);
+    resList.add(res1);
+    resList.add(res2);
 
-		Mockito.when(restTemplate.getForObject(ACCOUNT_URL + "/{account}", PPAccount.class, "user1")).thenReturn(acc1);
+    acc1.setReservations(resList);
 
-		Mockito.when(restTemplate.exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}", HttpMethod.POST,
-				new HttpEntity<>(80.0), Double.class, "user1", "user2")).thenReturn(responseEntityMockDouble);
+    Mockito.when(restTemplate.getForObject(ACCOUNT_URL + "/{account}", PPAccount.class, "user1"))
+        .thenReturn(acc1);
 
-		Mockito.when(restTemplate.exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST, new HttpEntity<>(1),
-				Integer.class, "user1")).thenReturn(responseEntityMockInt);
+    Mockito.when(restTemplate
+        .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}", HttpMethod.POST,
+            new HttpEntity<>(80.0), Double.class, "user1", "user2"))
+        .thenReturn(responseEntityMockDouble);
 
-		Mockito.when(restTemplate.exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST, new HttpEntity<>(1),
-				Integer.class, "user1")).thenReturn(responseEntityMockInt);
-	}
+    Mockito.when(restTemplate
+        .exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST, new HttpEntity<>(1),
+            Integer.class, "user1")).thenReturn(responseEntityMockInt);
 
-	@Test
-	public void createReservationShouldReturnFalseIfSourceUserHasNoValidFounds() {
-		res1.setNumber(11.0);
+    Mockito.when(restTemplate
+        .exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST, new HttpEntity<>(1),
+            Integer.class, "user1")).thenReturn(responseEntityMockInt);
+  }
 
-		Assertions.assertThat(reservationHandler.createReservation("user1", "user2", 80.0)).isFalse();
-		Mockito.verify(restTemplate, Mockito.times(1)).getForObject(ACCOUNT_URL + "/{account}", PPAccount.class,
-				"user1");
-	}
+  @Test
+  public void createReservationShouldReturnFalseIfSourceUserHasNoValidFounds() {
+    res1.setNumber(11.0);
 
-	@Test
-	public void createReservationShouldReturnTrueIfSourceUserHasValidFoundsAndHttpStatusOfExchangeWasOk() {
-		Mockito.when(responseEntityMockDouble.getStatusCode()).thenReturn(HttpStatus.OK);
+    Assertions.assertThat(reservationHandler.createReservation("user1", "user2", 80.0)).isFalse();
+    Mockito.verify(restTemplate, Mockito.times(1))
+        .getForObject(ACCOUNT_URL + "/{account}", PPAccount.class,
+            "user1");
+  }
 
-		Assertions.assertThat(reservationHandler.createReservation("user1", "user2", 80.0)).isTrue();
-		Mockito.verify(restTemplate, Mockito.times(1)).getForObject(ACCOUNT_URL + "/{account}", PPAccount.class,
-				"user1");
-	}
+  @Test
+  public void createReservationShouldReturnTrueIfSourceUserHasValidFoundsAndHttpStatusOfExchangeWasOk() {
+    Mockito.when(responseEntityMockDouble.getStatusCode()).thenReturn(HttpStatus.OK);
 
-	@Test
-	public void createReservationShouldReturnTrueIfSourceUserHasValidFoundsAndHttpStatusOfExchangeWasCreated() {
-		Mockito.when(responseEntityMockDouble.getStatusCode()).thenReturn(HttpStatus.CREATED);
+    Assertions.assertThat(reservationHandler.createReservation("user1", "user2", 80.0)).isTrue();
+    Mockito.verify(restTemplate, Mockito.times(1))
+        .getForObject(ACCOUNT_URL + "/{account}", PPAccount.class,
+            "user1");
+  }
 
-		Assertions.assertThat(reservationHandler.createReservation("user1", "user2", 80.0)).isTrue();
-		Mockito.verify(restTemplate, Mockito.times(1)).getForObject(ACCOUNT_URL + "/{account}", PPAccount.class,
-				"user1");
-	}
+  @Test
+  public void createReservationShouldReturnTrueIfSourceUserHasValidFoundsAndHttpStatusOfExchangeWasCreated() {
+    Mockito.when(responseEntityMockDouble.getStatusCode()).thenReturn(HttpStatus.CREATED);
 
-	@Test
-	public void createReservationShouldReturnFalseIfSourceUserHasValidFoundsAndHttpStatusOfExchangeWasNeitherOkNorCreated() {
-		Mockito.when(responseEntityMockDouble.getStatusCode()).thenReturn(HttpStatus.ACCEPTED);
+    Assertions.assertThat(reservationHandler.createReservation("user1", "user2", 80.0)).isTrue();
+    Mockito.verify(restTemplate, Mockito.times(1))
+        .getForObject(ACCOUNT_URL + "/{account}", PPAccount.class,
+            "user1");
+  }
 
-		Assertions.assertThat(reservationHandler.createReservation("user1", "user2", 80.0)).isFalse();
-		Mockito.verify(restTemplate, Mockito.times(1)).getForObject(ACCOUNT_URL + "/{account}", PPAccount.class,
-				"user1");
-	}
+  @Test
+  public void createReservationShouldReturnFalseIfSourceUserHasValidFoundsAndHttpStatusOfExchangeWasNeitherOkNorCreated() {
+    Mockito.when(responseEntityMockDouble.getStatusCode()).thenReturn(HttpStatus.ACCEPTED);
 
-	@Test
-	public void releaseReservationShouldReturnTrueIfHttpStatusOfExchangeWasOk() {
-		Mockito.when(responseEntityMockInt.getStatusCode()).thenReturn(HttpStatus.OK);
+    Assertions.assertThat(reservationHandler.createReservation("user1", "user2", 80.0)).isFalse();
+    Mockito.verify(restTemplate, Mockito.times(1))
+        .getForObject(ACCOUNT_URL + "/{account}", PPAccount.class,
+            "user1");
+  }
 
-		Assertions.assertThat(reservationHandler.releaseReservation("user1", 1)).isTrue();
-		Mockito.verify(restTemplate, Mockito.times(1)).exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST,
-				new HttpEntity<>(1), Integer.class, "user1");
-	}
+  @Test
+  public void releaseReservationShouldReturnTrueIfHttpStatusOfExchangeWasOk() {
+    Mockito.when(responseEntityMockInt.getStatusCode()).thenReturn(HttpStatus.OK);
 
-	@Test
-	public void releaseReservationShouldReturnTrueIfHttpStatusOfExchangeWasCreated() {
-		Mockito.when(responseEntityMockInt.getStatusCode()).thenReturn(HttpStatus.CREATED);
+    Assertions.assertThat(reservationHandler.releaseReservation("user1", 1)).isTrue();
+    Mockito.verify(restTemplate, Mockito.times(1))
+        .exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST,
+            new HttpEntity<>(1), Integer.class, "user1");
+  }
 
-		Assertions.assertThat(reservationHandler.releaseReservation("user1", 1)).isTrue();
-		Mockito.verify(restTemplate, Mockito.times(1)).exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST,
-				new HttpEntity<>(1), Integer.class, "user1");
-	}
+  @Test
+  public void releaseReservationShouldReturnTrueIfHttpStatusOfExchangeWasCreated() {
+    Mockito.when(responseEntityMockInt.getStatusCode()).thenReturn(HttpStatus.CREATED);
 
-	@Test
-	public void releaseReservationShouldReturnFalseIfHttpStatusOfExchangeWasNeitherOkNorCreated() {
-		Mockito.when(responseEntityMockInt.getStatusCode()).thenReturn(HttpStatus.CONFLICT);
+    Assertions.assertThat(reservationHandler.releaseReservation("user1", 1)).isTrue();
+    Mockito.verify(restTemplate, Mockito.times(1))
+        .exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST,
+            new HttpEntity<>(1), Integer.class, "user1");
+  }
 
-		Assertions.assertThat(reservationHandler.releaseReservation("user1", 1)).isFalse();
-		Mockito.verify(restTemplate, Mockito.times(1)).exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST,
-				new HttpEntity<>(1), Integer.class, "user1");
-	}
+  @Test
+  public void releaseReservationShouldReturnFalseIfHttpStatusOfExchangeWasNeitherOkNorCreated() {
+    Mockito.when(responseEntityMockInt.getStatusCode()).thenReturn(HttpStatus.CONFLICT);
 
-	@Test
-	public void punishReservationShouldReturnTrueIfHttpStatusOfExchangeWasOk() {
-		Mockito.when(responseEntityMockInt.getStatusCode()).thenReturn(HttpStatus.OK);
+    Assertions.assertThat(reservationHandler.releaseReservation("user1", 1)).isFalse();
+    Mockito.verify(restTemplate, Mockito.times(1))
+        .exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST,
+            new HttpEntity<>(1), Integer.class, "user1");
+  }
 
-		Assertions.assertThat(reservationHandler.punishReservation("user1", 1)).isTrue();
-		Mockito.verify(restTemplate, Mockito.times(1)).exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST,
-				new HttpEntity<>(1), Integer.class, "user1");
-	}
+  @Test
+  public void punishReservationShouldReturnTrueIfHttpStatusOfExchangeWasOk() {
+    Mockito.when(responseEntityMockInt.getStatusCode()).thenReturn(HttpStatus.OK);
 
-	@Test
-	public void punishReservationShouldReturnTrueIfHttpStatusOfExchangeWasCreated() {
-		Mockito.when(responseEntityMockInt.getStatusCode()).thenReturn(HttpStatus.CREATED);
+    Assertions.assertThat(reservationHandler.punishReservation("user1", 1)).isTrue();
+    Mockito.verify(restTemplate, Mockito.times(1))
+        .exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST,
+            new HttpEntity<>(1), Integer.class, "user1");
+  }
 
-		Assertions.assertThat(reservationHandler.punishReservation("user1", 1)).isTrue();
-		Mockito.verify(restTemplate, Mockito.times(1)).exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST,
-				new HttpEntity<>(1), Integer.class, "user1");
-	}
+  @Test
+  public void punishReservationShouldReturnTrueIfHttpStatusOfExchangeWasCreated() {
+    Mockito.when(responseEntityMockInt.getStatusCode()).thenReturn(HttpStatus.CREATED);
 
-	@Test
-	public void punishReservationShouldReturnFalseIfHttpStatusOfExchangeWasNeitherOkNorCreated() {
-		Mockito.when(responseEntityMockInt.getStatusCode()).thenReturn(HttpStatus.CONFLICT);
+    Assertions.assertThat(reservationHandler.punishReservation("user1", 1)).isTrue();
+    Mockito.verify(restTemplate, Mockito.times(1))
+        .exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST,
+            new HttpEntity<>(1), Integer.class, "user1");
+  }
 
-		Assertions.assertThat(reservationHandler.punishReservation("user1", 1)).isFalse();
-		Mockito.verify(restTemplate, Mockito.times(1)).exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST,
-				new HttpEntity<>(1), Integer.class, "user1");
-	}
+  @Test
+  public void punishReservationShouldReturnFalseIfHttpStatusOfExchangeWasNeitherOkNorCreated() {
+    Mockito.when(responseEntityMockInt.getStatusCode()).thenReturn(HttpStatus.CONFLICT);
+
+    Assertions.assertThat(reservationHandler.punishReservation("user1", 1)).isFalse();
+    Mockito.verify(restTemplate, Mockito.times(1))
+        .exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST,
+            new HttpEntity<>(1), Integer.class, "user1");
+  }
 }

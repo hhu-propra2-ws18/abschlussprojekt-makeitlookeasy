@@ -8,44 +8,53 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class ReservationHandler {
-	
-	@Autowired
-	public ReservationHandler(RestTemplate restTemplate) {
-		this.restTemplate = restTemplate;
-		accountHandler = new AccountHandler(restTemplate);
-	}
-	
-	private RestTemplate restTemplate;
-	private static final String RESERVATION_URL = "http://localhost:8888/reservation";
-	private AccountHandler accountHandler;
 
-	public boolean createReservation(String sourceUser, String targetUser, Double amount){
+  private static final String RESERVATION_URL = "http://localhost:8888/reservation";
+  private RestTemplate restTemplate;
+  private AccountHandler accountHandler;
 
-		if(accountHandler.hasValidFunds(sourceUser,amount)) {
+  @Autowired
+  public ReservationHandler(RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
+    accountHandler = new AccountHandler(restTemplate);
+  }
 
-			HttpEntity<Double> request = new HttpEntity<>(amount);
+  public boolean createReservation(String sourceUser, String targetUser, Double amount) {
 
-			ResponseEntity<Double> responseEntity = restTemplate.exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}", HttpMethod.POST, request, Double.class, sourceUser, targetUser);
+    if (accountHandler.hasValidFunds(sourceUser, amount)) {
 
-			return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity.getStatusCode().equals(HttpStatus.CREATED);
-		}
-		return false;
-	}
-	
-	public boolean releaseReservation(String account, Integer reservationId){
-		HttpEntity<Integer> request = new HttpEntity<>(reservationId);
+      HttpEntity<Double> request = new HttpEntity<>(amount);
 
-		ResponseEntity<Integer> responseEntity = restTemplate.exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST, request, Integer.class, account);
+      ResponseEntity<Double> responseEntity = restTemplate
+          .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}", HttpMethod.POST,
+              request, Double.class, sourceUser, targetUser);
 
-		return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity.getStatusCode().equals(HttpStatus.CREATED);
-	}
-	
-	public boolean punishReservation(String account, Integer reservationId){
-		HttpEntity<Integer> request = new HttpEntity<>(reservationId);
+      return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity.getStatusCode()
+          .equals(HttpStatus.CREATED);
+    }
+    return false;
+  }
 
-		ResponseEntity<Integer> responseEntity = restTemplate.exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST, request, Integer.class, account);
+  public boolean releaseReservation(String account, Integer reservationId) {
+    HttpEntity<Integer> request = new HttpEntity<>(reservationId);
 
-		return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity.getStatusCode().equals(HttpStatus.CREATED);
-	}
+    ResponseEntity<Integer> responseEntity = restTemplate
+        .exchange(RESERVATION_URL + "/release/{account}", HttpMethod.POST, request, Integer.class,
+            account);
+
+    return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity.getStatusCode()
+        .equals(HttpStatus.CREATED);
+  }
+
+  public boolean punishReservation(String account, Integer reservationId) {
+    HttpEntity<Integer> request = new HttpEntity<>(reservationId);
+
+    ResponseEntity<Integer> responseEntity = restTemplate
+        .exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST, request, Integer.class,
+            account);
+
+    return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity.getStatusCode()
+        .equals(HttpStatus.CREATED);
+  }
 
 }
