@@ -44,6 +44,12 @@ public class UserController {
 		this.accountHandler = accountHandler;
 	}
 
+
+	@GetMapping("/index")
+	public String getIndex() {
+		return "redirect:/";
+	}
+
 	/**
 	 * Show any user profile to logged-in users. 1.If visitor is not logged-in and tries to access
 	 * profile, redirect to login. 2. Else, display profile. 2.1 If requested profile of user, is
@@ -55,11 +61,6 @@ public class UserController {
 	 * view
 	 * @throws Exception Thrown, if username cannot be found in UserRepository
 	 */
-	@GetMapping("/index")
-	public String getIndex() {
-		return "redirect:/";
-	}
-
 	@GetMapping("/profile/{username}")
 	public ModelAndView displayUserProfile(@PathVariable String username, Principal principal,
 			HttpServletRequest request) throws Exception {
@@ -69,15 +70,12 @@ public class UserController {
 		}
 
 		User visitedUser = userService.findUserByUsername(username);
-		boolean self = principal.getName()
-				.equals(username);  // Flag for ThymeLeaf. Enables certain profile editing options.
 
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
 		mav.addObject("articles", articleService.getAllNonReservedArticlesByUser(visitedUser));
 		mav.addObject("categories", Category.getAllCategories());
 		mav.addObject("visitedUser", visitedUser);
 		mav.addObject("user", userService.findUserByPrincipal(principal));
-		mav.addObject("self", self); //unused
 		mav.addObject("allArticles", articleService);
 		//  mav.addObject("ppAccount",
 		//         accountHandler
