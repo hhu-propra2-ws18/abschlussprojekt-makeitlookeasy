@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.service;
 
+/*
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
@@ -78,3 +79,4 @@ public class UserServiceTest {
         Assertions.assertThat(userService.findUserByPrincipal(principal)).isEqualTo(expected);
     }
 }
+*/
