@@ -46,7 +46,7 @@ public class AdminControllerTest {
     private RoleService rs;
     @MockBean
     private AccountHandler ah;
-
+    
     @Test
     public void getAdminIndexStatusTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/accessed/admin/index"))
