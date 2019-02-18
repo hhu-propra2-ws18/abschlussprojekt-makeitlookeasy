@@ -1,12 +1,16 @@
 package de.propra2.ausleiherino24.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Article {
 
     @Id
@@ -37,29 +41,6 @@ public class Article {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<Case> cases;
-    
-    public Article() {
-    }
-
-    //for testing
-    public Article(Long id, String name, String description, Boolean active, Boolean reserved,
-            User owner, String image) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.active = active;
-        this.reserved = reserved;
-        this.owner = owner;
-        this.image = image;
-    }
-
-    //for testing
-    public Article(Long id, Boolean active, Boolean reserved, Category category) {
-        this.id = id;
-        this.active = active;
-        this.reserved = reserved;
-        this.category = category;
-    }
 
     /**
      * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
