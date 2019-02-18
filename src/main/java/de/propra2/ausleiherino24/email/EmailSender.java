@@ -4,7 +4,9 @@ import de.propra2.ausleiherino24.model.Conflict;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EmailSender {
 
 	private EmailConfig config;

@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -54,18 +55,32 @@ public class Article {
 	 * Siehe
 	 * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
 	 */
-    /*
-    public void setACase(Case aCase) {
-        setACase(aCase, false);
+    public void addCase(Case aCase) {
+        addCase(aCase, false);
     }
 
-    void setACase(Case aCase, boolean repetition) {
-        this.aCase = aCase;
-        if (aCase != null && !repetition) {
-            aCase.setArticle(this, true);
-        }
+    void addCase(Case aCase, boolean repetition) {
+		if (aCase == null) {
+			return;
+		}
+		if (cases == null) {
+			cases = new ArrayList<>();
+		}
+		if (cases.contains(aCase)) {
+			cases.set(cases.indexOf(aCase), aCase);
+		} else {
+			cases.add(aCase);
+		}
+		if(!repetition) {
+			aCase.setArticle(this, true);
+		}
     }
-*/
+
+    public void removeCase(Case aCase){
+    	cases.remove(aCase);
+    	aCase.setArticle(null);
+	}
+
 	public void setOwner(User user) {
 		setOwner(user, false);
 	}

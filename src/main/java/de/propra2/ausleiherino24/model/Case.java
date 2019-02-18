@@ -45,19 +45,18 @@ public class Case {
 	 * Siehe
 	 * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
 	 */
-    /*
+
     public void setArticle(Article article) {
         setArticle(article, false);
     }
-    */
-/*
+
     void setArticle(Article article, boolean repetition) {
         this.article = article;
         if (article != null && !repetition) {
-            article.setACase(this, true);
+            article.addCase(this, true);
         }
     }
-*/
+
 	public User getOwner() {
 		return this.article.getOwner();
 	}
