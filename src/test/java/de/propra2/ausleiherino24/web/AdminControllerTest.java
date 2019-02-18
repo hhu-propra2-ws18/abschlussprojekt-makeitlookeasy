@@ -2,6 +2,7 @@ package de.propra2.ausleiherino24.web;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.ConflictRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
@@ -23,6 +24,9 @@ public class AdminControllerTest {
     @Autowired
     private MockMvc mvc;
 
+
+    @MockBean
+    private ConflictRepository conflicts;
     @MockBean
     private ArticleRepository articles;
     @MockBean
