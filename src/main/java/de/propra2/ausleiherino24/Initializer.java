@@ -68,7 +68,7 @@ public class Initializer implements ServletContextInitializer {
             personRepository.save(aCase.getArticle().getOwner().getPerson());
             userRepository.save(aCase.getArticle().getOwner());
             articleRepository.save(aCase.getArticle());
-            caseRepository.save(aCase);
+            //caseRepository.save(aCase);
         });
     }
 
@@ -122,7 +122,6 @@ public class Initializer implements ServletContextInitializer {
         Article article = new Article();
         article.setActive(true);
         article.setReserved(false);
-
         article.setName(name);
         article.setDescription(description);
         article.setCategory(category);
@@ -130,9 +129,9 @@ public class Initializer implements ServletContextInitializer {
         return article;
     }
 
-    private Case createCase(boolean activ, Article article, int price, int deposit) {
+    private Case createCase(boolean active, Article article, int price, int deposit) {
         Case aCase = new Case();
-        aCase.setActive(activ);
+        aCase.setActive(active);
         aCase.setArticle(article);
         aCase.setPrice(price);
         aCase.setDeposit(deposit);
