@@ -32,7 +32,8 @@ public class CaseServiceTest {
 	public void setUp() {
 		caseRepositoryMock = mock(CaseRepository.class);
 		personRepositoryMock = mock(PersonRepository.class);
-		caseService = new CaseService(caseRepositoryMock, personRepositoryMock);
+		caseService = new CaseService(caseRepositoryMock, personRepositoryMock, articleService,
+				userService);
 		cases = new ArrayList<>();
 	}
 

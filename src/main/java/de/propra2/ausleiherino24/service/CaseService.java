@@ -17,11 +17,17 @@ public class CaseService {
 
 	private final CaseRepository caseRepository;
 	private final PersonRepository personRepository;
+	private final ArticleService articleService;
+	private final UserService userService;
 
 	@Autowired
-	public CaseService(CaseRepository caseRepository, PersonRepository personRepository) {
+	public CaseService(CaseRepository caseRepository, PersonRepository personRepository,
+			ArticleService articleService,
+			UserService userService) {
 		this.caseRepository = caseRepository;
 		this.personRepository = personRepository;
+		this.articleService = articleService;
+		this.userService = userService;
 	}
 
 	/**
@@ -78,16 +84,19 @@ public class CaseService {
 	 * Erwartet Case mit wo Artikel verliehen werden kann. Case wird modifiziert, dass es nun
 	 * verliehen ist.
 	 */
-	public void lendArticleToPerson(Long caseId, User receiver, Long starttime, Long endtime) {
-		if (!(caseRepository.findById(caseId).isPresent())) {
-			return;
+	public void requestArticle(Long articleId, Long starttime, Long endtime, String username) {
+		try {
+			Case c = new Case();
+			c.setArticle(articleService.findArticleById(articleId));
+			c.setStartTime(starttime);
+			c.setEndTime(endtime);
+			c.setDeposit(c.getArticle().getDeposit());
+			c.setPrice(c.getArticle().getCostPerDay());
+			c.setReceiver(userService.findUserByUsername(username));
+
+			caseRepository.save(c);
+		} catch(Exception e){
+
 		}
-
-		Case c = caseRepository.findById(caseId).get();
-		c.setReceiver(receiver);
-		c.setStartTime(starttime);
-		c.setEndTime(endtime);
-
-		caseRepository.save(c);
 	}
 }
