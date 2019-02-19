@@ -1,16 +1,18 @@
 package de.propra2.ausleiherino24.web;
 
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ImageStoreService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,15 +35,19 @@ public class CaseController {
 	private final ArticleService articleService;
 	private final ImageStoreService imageStoreService;
 	private final UserService userService;
+	private final CaseService caseService;
 
 	private final List<Category> allCategories = Category.getAllCategories();
 
 	@Autowired
-	public CaseController(ArticleService articleService, UserService userService, ImageStoreService imageStoreService) {
+	public CaseController(ArticleService articleService, UserService userService,
+			ImageStoreService imageStoreService,
+			CaseService caseService) {
 		this.articleService = articleService;
 		this.userService = userService;
 		this.imageStoreService = imageStoreService;
-    }
+		this.caseService = caseService;
+	}
 
     /**
 	 * TODO JavaDoc
@@ -63,12 +69,20 @@ public class CaseController {
 
 
     @PostMapping("/bookArticle")
-	public String bookArticle(@RequestParam Long id,
-			@DateTimeFormat(pattern = "dd.MM.yyyy") Date startTime,
-			@DateTimeFormat(pattern = "dd.MM.yyyy") Date endTime){
-		System.out.println(startTime);
-		System.out.println(endTime);
-    	return "redirect:/article?id="+id;
+	public String bookArticle(@RequestParam Long id, String startTime, String endTime,
+			Principal principal){
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		try {
+			caseService.requestArticle(
+					id,
+					simpleDateFormat.parse(startTime).getTime(),
+					simpleDateFormat.parse(endTime).getTime(),
+					principal.getName());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		//TODO: Show the user, whether die request was successful or not
+		return "redirect:/article?id="+id;
 	}
 
     /**
