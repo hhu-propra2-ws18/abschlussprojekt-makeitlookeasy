@@ -1,10 +1,15 @@
 package de.propra2.ausleiherino24.model;
 
 import lombok.Data;
-
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Data
 @Entity
@@ -18,11 +23,10 @@ public class Conflict {
 	@NotNull
 	Case conflictedCase;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@NotNull
-	User conflictReporter;
-
 	@NotNull
 	@Size(min = 15, max = 2048)
 	String conflictDescription;
+
+	@NotNull
+	String conflictReporterUsername;
 }
