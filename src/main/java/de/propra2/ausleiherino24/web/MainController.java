@@ -44,7 +44,7 @@ public class MainController {
 	 */
 	@GetMapping(value = {"/", "/index"})
 	public ModelAndView getIndex(Principal principal) {
-		List<Article> allArticles = articleService.getAllNonReservedArticles();
+		List<Article> allArticles = articleService.getAllActiveArticles();
 		User currentUser = userService.findUserByPrincipal(principal);
 
 		ModelAndView mav = new ModelAndView("index");
@@ -63,7 +63,7 @@ public class MainController {
 	 */
 	@GetMapping("/categories")
 	public ModelAndView getIndexByCategory(@RequestParam String category, Principal principal) {
-		List<Article> allArticlesInCategory = articleService.getAllNonReservedArticlesByCategory(Category.valueOf(category.toUpperCase()));
+		List<Article> allArticlesInCategory = articleService.getAllArticlesByCategory(Category.valueOf(category.toUpperCase()));
 		User currentUser = userService.findUserByPrincipal(principal);
 
 		ModelAndView mav = new ModelAndView("index");

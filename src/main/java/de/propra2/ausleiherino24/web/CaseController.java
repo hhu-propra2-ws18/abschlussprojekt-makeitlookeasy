@@ -94,8 +94,6 @@ public class CaseController {
 			@RequestParam("image") MultipartFile image, Principal principal) {
 		User user = userService.findUserByPrincipal(principal);
 
-		article.setActive(true);
-		article.setReserved(false);
 		article.setOwner(user);
 		article.setImage(imageStoreService.store(image, null));
 		articleService.saveArticle(article, "Created");
@@ -150,26 +148,4 @@ public class CaseController {
 		return mav;
 	}
 
-	/**
-	 * TODO JavaDoc
-	 *
-	 * @param id
-	 * @param principal
-	 * @return
-	 * @throws Exception
-	 */
-	@PutMapping("/deactivateArticle")
-	public ModelAndView deactivateArticle(@RequestParam Long id, Principal principal) throws Exception {
-		if (!articleService.deactivateArticle(id)) {
-			// TODO: Display error msg, when article deactivation fails.
-		}
-
-		User currentUser = userService.findUserByPrincipal(principal);
-		List<Article> myArticles = articleService.findAllActiveByUser(currentUser);
-
-		ModelAndView mav = new ModelAndView("/user/myArticles");
-		mav.addObject("myArticles", myArticles);
-		mav.addObject("user", currentUser);
-		return mav;
-	}
 }

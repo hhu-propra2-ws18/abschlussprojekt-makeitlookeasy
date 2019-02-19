@@ -51,39 +51,19 @@ public class ArticleService {
 	 *
 	 * @return all Articles, which are not reserved and are of given category
 	 */
-	public List<Article> getAllNonReservedArticlesByCategory(Category category) {
-		return getAllNonReservedArticles().stream()
+	public List<Article> getAllArticlesByCategory(Category category) {
+		return getAllActiveArticles().stream()
 				.filter(article -> article.getCategory() == category)
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
-	public List<Article> getAllNonReservedArticlesByUser(User user) {
-		return articleRepository.findAllActiveByUser(user);
+	public List<Article> getAllActiveArticles() {
+		return articleRepository.findAllActive().isEmpty() ? new ArrayList<>()
+				: articleRepository.findAllActive();
 	}
 
-
-	/**
-	 * Iterate through list of all articles. If article is not being rented, mark article as
-	 * available and
-	 *
-	 * @return all available articles as List. (Possibly more efficient, if handled by SQL request
-	 * (SELECT * FROM article WHERE active == TRUE AND reserved == FALSE)
-	 */
-	public List<Article> getAllNonReservedArticles() {
-		List<Article> availableArticles = new ArrayList<>();
-		List<Article> allArticles = articleRepository.findAll().isEmpty() ? new ArrayList<>()
-				: articleRepository.findAll();
-
-		for (Article article : allArticles) {
-			// no duplicate, active article, not reserved
-			if (!availableArticles.contains(article)
-					&& article.getActive()
-					&& !article.getReserved()) {
-				availableArticles.add(article);
-			}
-		}
-
-		return availableArticles;
+	public List<Article> getAllActiveArticlesbyUser(User user) {
+		return articleRepository.findAllActiveByUser(user);
 	}
 
 	/**
@@ -96,7 +76,7 @@ public class ArticleService {
 	 * @return boolean            True, if succeeded. False, if encountered error while processing
 	 * request.
 	 * @throws Exception 1. Thrown, if article not present in ArticleRepository. 2. Thrown, if
-	 *                   article is reserved,
+	 * article is reserved,
 	 */
 	public boolean deactivateArticle(Long id) throws Exception {
 		Optional<Article> optionalArticle = articleRepository.findById(id);
@@ -107,17 +87,11 @@ public class ArticleService {
 
 		Article article = optionalArticle.get();
 
-		if (article.getReserved()) {
-			LOGGER.warn(
-					"Article %L couldn't be deactivated, because it's currently being reserved.",
-					article.getId());
-			return false;
-		}
+		//TODO: Check whether there are open cases in the feature, which reserve the article
 
 		article.setActive(false);
 		articleRepository.save(article);
 		LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
 		return true;
 	}
-
 }

@@ -16,32 +16,34 @@ public class Article {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	Long id;
+	private Long id;
 
-	String name;
+	private String name;
 
 	@Column(length = 10485760)
-	String description;
+	private String description;
 
-	String image;
+	private String image;
 
-	Boolean reserved;  // If this is true the article is not available for rental ("reserved/rented")
+	private int deposit;
 
-	int deposit;
+	private int costPerDay;
 
-	int costPerDay;
+	private String location;
 
-	String location;
+	/**
+	 * true: it is possible to rent the article
+	 * false: owner does not want to have the article for rent right now
+	 */
+	private boolean active;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	User owner;
+	private User owner;
 
-	Boolean active;    // If this is true the article is not available for rental ("deleted")
-
-	Category category;
+	private Category category;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	List<Case> cases;
+	private List<Case> cases;
 
 	/**
 	 * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case

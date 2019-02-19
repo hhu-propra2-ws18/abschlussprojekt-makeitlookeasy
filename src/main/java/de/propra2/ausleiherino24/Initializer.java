@@ -137,7 +137,6 @@ public class Initializer implements ServletContextInitializer {
 	private Article createArticle(String name, String description, Category category, User owner, int costPerDay, int deposit) {
 		Article article = new Article();
 		article.setActive(true);
-		article.setReserved(false);
 		article.setName(name);
 		article.setDescription(description);
 		article.setCategory(category);
@@ -149,7 +148,6 @@ public class Initializer implements ServletContextInitializer {
 
 	private Case createCase(boolean active, Article article) {
 		Case aCase = new Case();
-		aCase.setActive(active);
 		aCase.setArticle(article);
 		aCase.setPrice(article.getCostPerDay());
 		aCase.setDeposit(article.getDeposit());

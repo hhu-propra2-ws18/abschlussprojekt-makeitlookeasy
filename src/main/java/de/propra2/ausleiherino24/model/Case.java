@@ -34,8 +34,6 @@ public class Case {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	Article article;
 
-	Boolean active;
-
 	/**
 	 * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
 	 * Siehe

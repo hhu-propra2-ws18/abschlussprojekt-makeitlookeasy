@@ -68,7 +68,7 @@ public class UserController {
 		} else {
 			mav.setViewName("/user/profile");
 		}
-		mav.addObject("myArticles", articleService.getAllNonReservedArticlesByUser(visitedUser));
+		mav.addObject("myArticles", articleService.getAllActiveArticlesbyUser(visitedUser));
 		mav.addObject("visitedUser", visitedUser);
 		mav.addObject("user", currentUser);
 		mav.addObject("categories", allCategories);
