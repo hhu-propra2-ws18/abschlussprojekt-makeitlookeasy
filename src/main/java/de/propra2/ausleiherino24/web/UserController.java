@@ -160,15 +160,16 @@ public class UserController {
 	@PostMapping("/accessed/user/saveProfile")
 	public String saveEditedUserProfile(Principal principal, User user, Person person,
 			String password, String confirmpass){
+		String url = "redirect:/profile/"+principal.getName();
 		switch(userService.saveUserIfPasswordsAreEqual(principal.getName(), user, person, password, confirmpass)){
 			case "PasswordNotEqual":
-				return "redirect:/profile/"+principal.getName()+"?pwnotfound";
+				return url+"?pwdonotmatch";
 			case "UserNotFound":
-				return "redirect:/profile/"+principal.getName()+"?usernotfound";
+				return url+"?usernotfound";
 			case "Success":
-				return "redirect:/profile/"+principal.getName()+"?success";
+				return url+"?success";
 			default:
-				return "redirect:/profile/"+principal.getName();
+				return url;
 		}
 	}
 }
