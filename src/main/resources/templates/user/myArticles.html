@@ -20,7 +20,6 @@
   <!-- Custom styles for this template -->
   <link rel="stylesheet" th:href="@{~/css/shop-homepage.css}">
   <script>
-
     function oneFunction(){
       var mainFrameOne = document.getElementById("mainFrameOne");
       var mainFrameTwo = document.getElementById("mainFrameTwo");
@@ -66,9 +65,7 @@
     <!-- Categories -->
     <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
 
-
-
-    <!-- main information (input) -->
+    <!-- Frame for articles from User-->
     <div class="col-lg 9" style="margin-top: 100px;display:block" id="mainFrameOne">
       <table class="table">
         <tr><div class="text-center">
@@ -78,18 +75,23 @@
         <tr>
           <th scope="col">Name</th>
           <th scope="col">Price</th>
+          <th scope="col">Deposit</th>
           <th scope="col">Status</th>
           <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-
+        <tr th:each="article: ${myArticles}">
+          <td th:text="${article.name}"></td>
+          <td th:text="${article.costPerDay}"></td>
+          <td th:text="${article.deposit}"></td>
+          <td><span th:if="${article.reserved==false}" class="badge badge-pill badge-success">Activ</span><span th:unless="${article.reserved==false}" class="badge badge-pill badge-danger">Deactivated</span></td>
         </tr>
         </tbody>
       </table>
     </div>
 
+    <!-- Frame for borrowed articles from other users -->
     <div class="col-lg 9" style="margin-top: 100px;display:none" id="mainFrameTwo">
       <table class="table">
         <tr><div class="text-center">
@@ -104,20 +106,17 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <!--  <th scope="col" th:text="|${article.getName()}|">Name</th>
-            <th scope="col" th:text="|${article.getPrice()}|">Price</th>
-            <th scope="col" th:if="${article.getReserved()} == true" th:text="|Status: Reserved|">Status</th>
-            <td><button type="button" class="btn btn-success btn-sm">Active</button><span>  </span><button class="btn btn-danger btn-sm">Deactivate</button></td> -->
-          <td></td>
-          <td></td>
-          <td></td>
+        <tr th:each="borrow: ${borrowed}">
+          <td th:text="${borrow.article.name}"></td>
+          <td th:text="${borrow.startTime}"></td>
+          <td th:text="${borrow.endTime}"></td>
           <td><button type="button" class="btn btn-success btn-sm">Give back</button></td>
         </tr>
         </tbody>
       </table>
     </div>
 
+    <!-- Frame for returned articles from other users -->
     <div class="col-lg 9" style="margin-top: 100px;display:none" id="mainFrameThree">
       <table class="table">
         <tr><div class="text-center" >
