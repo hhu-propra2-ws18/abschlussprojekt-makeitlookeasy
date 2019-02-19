@@ -10,7 +10,6 @@ import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -84,22 +83,23 @@ public class Initializer implements ServletContextInitializer {
 	private void initTestAccounts() {
 		userRepository.deleteAll();
 
+		String pw = "password";
 		User user = new User();
 		user.setUsername("user");
-		user.setPassword("password");
+		user.setPassword(pw);
 		user.setEmail("user@mail.com");
 		user.setRole("user");
 
 		User user2 = new User();
 		user2.setUsername("admin");
-		user2.setPassword("password");
+		user2.setPassword(pw);
 		user2.setEmail("useradmin@mail.com");
 		user2.setRole("admin");
 
 		userRepository.save(createUser(
 				"hans@mail.de",
 				"Hans",
-				"password",
+				pw,
 				createPerson(
 						"HHU",
 						"Hans",

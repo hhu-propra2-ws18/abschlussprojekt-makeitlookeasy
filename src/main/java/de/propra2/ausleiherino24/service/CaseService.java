@@ -6,6 +6,7 @@ import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.User;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class CaseService {
 	/**
 	 * Gibt alle Cases zurück, wo die Person der Verleihende ist.
 	 */
-	public ArrayList<Case> getAllCasesFromPersonOwner(Long personId) {
+	public List<Case> getAllCasesFromPersonOwner(Long personId) {
 		return caseRepository
 				.findAllByArticleOwner(personRepository.findById(personId).get().getUser());
 	}
@@ -49,8 +50,8 @@ public class CaseService {
 	 * Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan verliehen
 	 * ist.
 	 */
-	public ArrayList<Case> getLendCasesFromPersonOwner(Long personId) {
-		ArrayList<Case> cases = getAllCasesFromPersonOwner(personId);
+	public List<Case> getLendCasesFromPersonOwner(Long personId) {
+		List<Case> cases = getAllCasesFromPersonOwner(personId);
 		return cases.stream()
 				.filter(c -> c.getReceiver() != null)
 				.collect(Collectors.toCollection(ArrayList::new));
@@ -60,8 +61,8 @@ public class CaseService {
 	 * Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan nicht
 	 * verliehen ist.
 	 */
-	public ArrayList<Case> getFreeCasesFromPersonOwner(Long personId) {
-		ArrayList<Case> cases = getAllCasesFromPersonOwner(personId);
+	public List<Case> getFreeCasesFromPersonOwner(Long personId) {
+		List<Case> cases = getAllCasesFromPersonOwner(personId);
 		return cases.stream()
 				.filter(c -> c.getReceiver() == null)
 				.collect(Collectors.toCollection(ArrayList::new));
@@ -70,7 +71,7 @@ public class CaseService {
 	/**
 	 * Gibt alle Cases zurück, wo die Person sich von jemanden etwas geliehen hat.
 	 */
-	public ArrayList<Case> getLendCasesFromPersonReceiver(Long personId) {
+	public List<Case> getLendCasesFromPersonReceiver(Long personId) {
 		return caseRepository
 				.findAllByReceiver(personRepository.findById(personId).get().getUser());
 	}
