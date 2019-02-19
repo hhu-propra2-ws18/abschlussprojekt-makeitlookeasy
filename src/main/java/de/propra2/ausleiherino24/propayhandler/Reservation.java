@@ -8,17 +8,17 @@ import lombok.Data;
 @Data
 class Reservation {
 
-    Integer id;
-    Double number;
+	Integer id;
+	Double number;
 
-    public Reservation() {
-        this.id = 0;
-        this.number = 0D;
-    }
+	public Reservation() {
+		this.id = 0;
+		this.number = 0D;
+	}
 
-    public Reservation(Integer id, Double number) {
-        this.id = id;
-        this.number = number;
-    }
+	public Reservation(Integer id, Double number) {
+		this.id = id;
+		this.number = number;
+	}
 
 }

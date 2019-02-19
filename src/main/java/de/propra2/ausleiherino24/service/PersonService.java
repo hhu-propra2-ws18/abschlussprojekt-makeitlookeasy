@@ -10,24 +10,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class PersonService {
 
-    private final PersonRepository personRepository;
+	private final PersonRepository personRepository;
 
-    private final Logger LOGGER = LoggerFactory.getLogger(PersonService.class);
+	private final Logger LOGGER = LoggerFactory.getLogger(PersonService.class);
 
-    @Autowired
-    public PersonService(PersonRepository personRepository) {
-        this.personRepository = personRepository;
-    }
+	@Autowired
+	public PersonService(PersonRepository personRepository) {
+		this.personRepository = personRepository;
+	}
 
-    /**
-     * Saves created/updated Person object to database.
-     *
-     * @param person Person object that gets stored in databased.
-     * @param msg String with message for logger. Either "Created" or "Updated".
-     */
-    void savePerson(Person person, String msg) {
-        personRepository.save(person);
-        LOGGER.info("%s person profile [ID=%L]", msg, person.getId());
-    }
+	/**
+	 * Saves created/updated Person object to database.
+	 *
+	 * @param person Person object that gets stored in databased.
+	 * @param msg String with message for logger. Either "Created" or "Updated".
+	 */
+	void savePerson(Person person, String msg) {
+		personRepository.save(person);
+		LOGGER.info("%s person profile [ID=%L]", msg, person.getId());
+	}
 
 }

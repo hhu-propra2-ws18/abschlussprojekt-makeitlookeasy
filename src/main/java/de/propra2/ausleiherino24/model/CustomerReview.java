@@ -1,34 +1,34 @@
 package de.propra2.ausleiherino24.model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Data
 @Entity
-public class Conflict {
+@NoArgsConstructor
+@AllArgsConstructor
+public class CustomerReview {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	Long id;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@NotNull
-	Case conflictedCase;
+	Case aCase;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@NotNull
-	User conflictReporter;
+	String description;
 
-	@NotNull
-	@Size(min = 15, max = 2048)
-	String conflictDescription;
+	Long timestamp;
 }
