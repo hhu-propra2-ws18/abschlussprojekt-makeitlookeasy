@@ -74,4 +74,22 @@ public class ArticleRepoTest {
 		Assertions.assertThat(us.size()).isEqualTo(1);
 		Assertions.assertThat(us.get(0)).isEqualTo(article1);
 	}
+
+	@Test
+	public void customQueryFindAllActiveByUserShouldReturnAllActiveArticleWithCorrespondingOwner() {
+		Article article3 = new Article();
+		article3.setOwner(article1.getOwner());
+		article3.setActive(true);
+
+		List<Article> us = articles.findAllActiveByUser(article1.getOwner());
+		Assertions.assertThat(us.size()).isEqualTo(2);
+		Assertions.assertThat(us.get(0)).isEqualTo(article1);
+		Assertions.assertThat(us.get(1)).isEqualTo(article3);
+	}
+
+	@Test
+	public void customQueryFindAllActiveByUserShouldReturnNoArticle(){
+		List<Article> us = articles.findAllActiveByUser(article2.getOwner());
+		Assertions.assertThat(us.size()).isEqualTo(0);
+	}
 }

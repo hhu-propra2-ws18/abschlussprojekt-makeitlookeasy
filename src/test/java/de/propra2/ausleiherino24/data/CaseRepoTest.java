@@ -92,4 +92,16 @@ public class CaseRepoTest {
 		Assertions.assertThat(expectedCase.get(0)).isEqualTo(case2);
 	}
 
+	@Test
+	public void customQueryFindAllByArticleOwnerShouldReturnTwoCaseWithCorrespondingArticleOwner() {
+		User user = new User();
+		case2.getArticle().setOwner(user);
+		case1.getArticle().setOwner(user);
+
+		List<Case> expectedCase = cases.findAllByArticleOwner(case2.getOwner());
+		Assertions.assertThat(expectedCase.size()).isEqualTo(2);
+		Assertions.assertThat(expectedCase.get(0)).isEqualTo(case1);
+		Assertions.assertThat(expectedCase.get(1)).isEqualTo(case2);
+	}
+
 }
