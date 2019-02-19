@@ -32,7 +32,7 @@ public class ConflictService {
 	}
 
 	public void saveConflict(Conflict conflict, User user) throws Exception {
-		if(conflict == null || !conflict.getConflictedCase().getActive()) {
+		if(conflict == null) {
 			throw new Exception("No such conflict");
 		}
 		isCorrectUser(conflict, user);
