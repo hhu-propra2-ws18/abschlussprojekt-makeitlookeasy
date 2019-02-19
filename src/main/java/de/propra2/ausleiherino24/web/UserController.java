@@ -7,7 +7,6 @@ import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -26,7 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class UserController {
     private final UserService userService;
-    private final ArticleService articleService;
+	private final ArticleService articleService;
     private final AccountHandler accountHandler;
 	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
@@ -34,10 +34,11 @@ public class UserController {
      * TODO Javadoc
      */
     @Autowired
-    public UserController(UserService userService, ArticleService articleService,
-            AccountHandler accountHandler) {
+    public UserController(UserService userService,
+			ArticleService articleService,
+			AccountHandler accountHandler) {
         this.userService = userService;
-        this.articleService = articleService;
+		this.articleService = articleService;
         this.accountHandler = accountHandler;
     }
 
@@ -53,26 +54,24 @@ public class UserController {
      * @throws Exception Thrown, if username cannot be found in UserRepository
      */
     @GetMapping("/profile/{username}")
-    public ModelAndView displayUserProfile(@PathVariable String username, Principal principal,
-            HttpServletRequest request) throws Exception {
+    public ModelAndView displayUserProfile(@PathVariable String username, Principal principal) throws Exception {
         if (principal.getName() == null) {
             return new ModelAndView("redirect:/login");
         }
 
-        User visitedUser = userService.findUserByUsername(username);
         boolean self = principal.getName().equals(username);  // Flag for ThymeLeaf. Enables certain profile editing options.
 
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("myArticles", articleService.getAllNonReservedArticlesByUser(visitedUser));
 		mav.addObject("categories", Category.getAllCategories());
-		mav.addObject("visitedUser", visitedUser);
+		mav.addObject("user", userService.findUserByPrincipal(principal));
 
-        if(!self) {
-            mav.setViewName("/user/profile");
-            mav.addObject("user", userService.findUserByPrincipal(principal));
+        if(self) {
+			mav.setViewName("user/profileEdit");
         } else {
-            mav.setViewName("user/profileEdit");
-            mav.addObject("user", userService.findUserByPrincipal(principal));
+			User visitedUser = userService.findUserByUsername(username);
+			mav.addObject("myArticles", articleService.getAllNonReservedArticlesByUser(visitedUser));
+			mav.addObject("visitedUser", visitedUser);
+			mav.setViewName("/user/profile");
         }
 		return mav;
         //mav.addObject("allArticles", articleService);
@@ -126,7 +125,7 @@ public class UserController {
 	}
 
     @GetMapping("/myArticles")
-    public ModelAndView geMyArticlePage (Principal principal) throws Exception {
+    public ModelAndView getMyArticlePage (Principal principal) throws Exception {
     	String currentPrincipalName = principal.getName();
     	User user = userService.findUserByUsername(currentPrincipalName);
         ModelAndView mav = new ModelAndView("/user/myArticles");
@@ -147,5 +146,29 @@ public class UserController {
 		}
 		mav.addObject("allArticles", articleService);
 		return mav;
+	}
+
+	/**
+	 * Saves new data if possible and redirects to same page with according param
+	 * @param principal
+	 * @param user
+	 * @param person
+	 * @param password
+	 * @param confirmpass
+	 * @return
+	 */
+	@PostMapping("/accessed/user/saveProfile")
+	public String saveEditedUserProfile(Principal principal, User user, Person person,
+			String password, String confirmpass){
+		switch(userService.saveUserIfPasswordsAreEqual(principal.getName(), user, person, password, confirmpass)){
+			case "PasswordNotEqual":
+				return "redirect:/profile/"+principal.getName()+"?pwnotfound";
+			case "UserNotFound":
+				return "redirect:/profile/"+principal.getName()+"?usernotfound";
+			case "Success":
+				return "redirect:/profile/"+principal.getName()+"?success";
+			default:
+				return "redirect:/profile/"+principal.getName();
+		}
 	}
 }

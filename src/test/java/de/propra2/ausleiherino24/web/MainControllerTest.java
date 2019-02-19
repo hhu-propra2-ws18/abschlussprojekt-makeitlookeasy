@@ -127,7 +127,7 @@ public class MainControllerTest {
 						MockMvcResultMatchers.model()
 								.attribute("person", Matchers.instanceOf(Person.class)));
 	}
-
+	@Ignore
 	@Test
 	public void defaultAfterLoginStatusTest() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/default"))
@@ -147,6 +147,7 @@ public class MainControllerTest {
 				.andExpect(MockMvcResultMatchers.redirectedUrl("/accessed/admin/index"));
 	}
 
+	@Ignore
 	@Test
 	public void registerNewUserStatusTest() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.post("/registerNewUser"))
