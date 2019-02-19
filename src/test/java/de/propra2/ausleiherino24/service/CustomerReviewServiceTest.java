@@ -55,7 +55,6 @@ public class CustomerReviewServiceTest {
 
 	@Test
 	public void findAllReviewsByLenderIdFindsAllReviews(){
-
 		Mockito.when(customerReviewRepository.findAll()).thenReturn(customerReviews);
 		Mockito.when(caseService.getAllCasesFromPersonOwner(1L)).thenReturn(cases);
 
@@ -65,8 +64,15 @@ public class CustomerReviewServiceTest {
 	}
 
 	@Test
-	public void saveCustomerReviewShouldSaveCustomerReview(){
+	public void findAllReviewsByLenderIdFindsZeroReviews() {
+		Mockito.when(customerReviewRepository.findAll()).thenReturn(new ArrayList<>());
 
+		List<CustomerReview> crvws = customerReviewService.findAllReviewsByLenderId(1L);
+		Assertions.assertThat(crvws.size()).isEqualTo(0);
+	}
+
+	@Test
+	public void saveCustomerReviewShouldSaveCustomerReview(){
 		customerReviewService.addCustomerReview(customerReviews.get(0));
 		Mockito.verify(customerReviewRepository,Mockito.times(1)).save(customerReviews.get(0));
 	}
