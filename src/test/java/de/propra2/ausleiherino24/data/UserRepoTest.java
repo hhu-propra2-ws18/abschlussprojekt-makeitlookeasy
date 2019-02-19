@@ -78,12 +78,30 @@ public class UserRepoTest {
 	}
 
 	@Test
+	public void queryGetByIdShouldReturnEmptyOptional(){
+		users.saveAll(Arrays.asList(user1, user2));
+
+		boolean userExists = users.getById(0L).isPresent();
+
+		Assertions.assertThat(userExists).isEqualTo(false);
+	}
+
+	@Test
 	public void queryFindByUsernameShouldReturnUserWithCorrespondingUsername() {
 		users.saveAll(Arrays.asList(user1, user2));
 
 		User expectedUser = users.findByUsername(user2.getUsername()).get();
 
 		Assertions.assertThat(expectedUser).isEqualTo(user2);
+	}
+
+	@Test
+	public void queryFindByUsernameSouldReturnEmptyOptional(){
+		users.saveAll(Arrays.asList(user1, user2));
+
+		boolean userExists = users.findByUsername("affe").isPresent();
+
+		Assertions.assertThat(userExists).isEqualTo(false);
 	}
 
 }

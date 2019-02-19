@@ -10,7 +10,6 @@ import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.stream.Collectors;

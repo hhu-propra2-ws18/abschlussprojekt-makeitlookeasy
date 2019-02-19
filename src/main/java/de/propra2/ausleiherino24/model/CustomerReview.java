@@ -1,7 +1,6 @@
 package de.propra2.ausleiherino24.model;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,7 +11,6 @@ import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Data
 @Entity
@@ -27,6 +25,8 @@ public class CustomerReview {
 	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@NotNull
 	Case aCase;
+
+	int stars;
 
 	String description;
 
