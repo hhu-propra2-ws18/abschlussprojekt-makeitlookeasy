@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 public class AccountHandler {
 
 	private static final String ACCOUNT_URL = "http://localhost:8888/account";
+	private static final String ACCOUNT_DEFAULT = "/{account}";
 	private RestTemplate restTemplate;
 
 	public AccountHandler(RestTemplate restTemplate) {
@@ -19,12 +20,12 @@ public class AccountHandler {
 
 
 	public PPAccount getAccountData(String accountName) {
-		return restTemplate.getForObject(ACCOUNT_URL + "/{account}", PPAccount.class, accountName);
+		return restTemplate.getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
 	}
 
 	public double checkFunds(String accountName) {
 		PPAccount account = restTemplate
-				.getForObject(ACCOUNT_URL + "/{account}", PPAccount.class, accountName);
+				.getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
 		if (account != null) {
 			return account.getAmount();
 		}
@@ -34,7 +35,7 @@ public class AccountHandler {
 	public boolean hasValidFunds(String accountName, double requestedFunds) {
 		double reserved = 0;
 		PPAccount account = restTemplate
-				.getForObject(ACCOUNT_URL + "/{account}", PPAccount.class, accountName);
+				.getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
 		for (Reservation r : account.getReservations()) {
 			reserved += r.number;
 		}

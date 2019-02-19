@@ -45,6 +45,40 @@ public class UserService {
         person.setUser(user);
         personService.savePerson(person, msg);
     }
+
+	/**
+	 * Saves User and Person in case the passwords are equal
+	 * @param username
+	 * @param user
+	 * @param person
+	 * @param pw1
+	 * @param pw2
+	 * @return status
+	 */
+	public String saveUserIfPasswordsAreEqual(String username, User user, Person person, String pw1, String pw2){
+		if (!pw1.equals(pw2))
+			return "PasswordNotEqual";
+
+		Optional<User> optionalUser = userRepository.findByUsername(username);
+		if(!optionalUser.isPresent()){
+			return "UserNotFound";
+		} else {
+			User dbUser = optionalUser.get();
+			Person dbPerson = dbUser.getPerson();
+			dbPerson.setFirstName(person.getFirstName());
+			dbPerson.setLastName(person.getLastName());
+			dbPerson.setAddress(person.getAddress());
+			dbUser.setPerson(person);
+			dbUser.setEmail(user.getEmail());
+			dbUser.setPassword(pw1);
+			this.saveUser(dbUser, "Save");
+			personService.savePerson(person, "Save");
+			return "Success";
+		}
+
+	}
+
+
 	/**
 	 * Searches database for user by username. If user cannot be found, throw an exception. Else,
 	 * return user.
