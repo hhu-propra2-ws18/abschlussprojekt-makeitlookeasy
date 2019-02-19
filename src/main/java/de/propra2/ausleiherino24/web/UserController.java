@@ -5,8 +5,10 @@ import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
+import java.sql.SQLOutput;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,7 @@ public class UserController {
     private final UserService userService;
 	private final ArticleService articleService;
     private final AccountHandler accountHandler;
+    private final CaseService caseService;
 	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	/**
@@ -36,11 +39,13 @@ public class UserController {
     @Autowired
     public UserController(UserService userService,
 			ArticleService articleService,
-			AccountHandler accountHandler) {
+			AccountHandler accountHandler,
+			CaseService caseService) {
         this.userService = userService;
 		this.articleService = articleService;
         this.accountHandler = accountHandler;
-    }
+		this.caseService = caseService;
+	}
 
     /**
      * Show any user profile to logged-in users. 1.If visitor is not logged-in and tries to access
@@ -124,14 +129,16 @@ public class UserController {
 		return false;
 	}
 
-    @GetMapping("/myArticles")
+    @GetMapping("/myOverview")
     public ModelAndView getMyArticlePage (Principal principal) throws Exception {
     	String currentPrincipalName = principal.getName();
     	User user = userService.findUserByUsername(currentPrincipalName);
-        ModelAndView mav = new ModelAndView("/user/myArticles");
+        ModelAndView mav = new ModelAndView("/user/myOverview");
         mav.addObject("categories", Category.getAllCategories());
         mav.addObject("user", user);
         mav.addObject("myArticles", articleService.findAllActiveByUser(user));
+        mav.addObject("borrowed", caseService.getLendCasesFromPersonReceiver(user.getPerson().getId()));
+        mav.addObject("returned");
         return mav;
     }
 
@@ -139,6 +146,20 @@ public class UserController {
 	public ModelAndView getNewItemPage(Principal principal) {
 		ModelAndView mav = new ModelAndView("/accessed/user/newItem");
 		mav.addObject("categories", Category.getAllCategories());
+		try {
+			mav.addObject("user", userService.findUserByPrincipal(principal));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mav.addObject("allArticles", articleService);
+		return mav;
+	}
+
+	@GetMapping("/bankAccount")
+	public ModelAndView getBankAccountPage (Principal principal) {
+		ModelAndView mav = new ModelAndView("/user/bankAccount");
+		mav.addObject("categories", Category.getAllCategories());
+		mav.addObject("pp",accountHandler.checkFunds(principal.getName()));
 		try {
 			mav.addObject("user", userService.findUserByPrincipal(principal));
 		} catch (Exception e) {

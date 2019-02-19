@@ -82,9 +82,9 @@
         </thead>
         <tbody>
         <tr th:each="article: ${myArticles}">
-          <td th:text="${article.name}"></td>
-          <td th:text="${article.costPerDay}"></td>
-          <td th:text="${article.deposit}"></td>
+          <td th:text="${article.name} "></td>
+          <td th:text="${article.costPerDay} + '€'"></td>
+          <td th:text="${article.deposit} + '€'"></td>
           <td><span th:if="${article.reserved==false}" class="badge badge-pill badge-success">Activ</span><span th:unless="${article.reserved==false}" class="badge badge-pill badge-danger">Deactivated</span></td>
         </tr>
         </tbody>
