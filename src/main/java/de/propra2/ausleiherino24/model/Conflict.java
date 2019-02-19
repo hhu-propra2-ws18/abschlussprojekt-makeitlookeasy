@@ -6,10 +6,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import lombok.Data;
 
 @Data
@@ -24,11 +24,10 @@ public class Conflict {
 	@NotNull
 	Case conflictedCase;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@NotNull
-	User conflictReporter;
-
 	@NotNull
 	@Size(min = 15, max = 2048)
 	String conflictDescription;
+
+	@NotNull
+	String conflictReporterUsername;
 }
