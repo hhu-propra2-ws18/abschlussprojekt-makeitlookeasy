@@ -74,38 +74,45 @@ public class Initializer implements ServletContextInitializer {
 
 			personRepository.save(person);
 			userRepository.save(user);
-			for (Case c: cases) {
-				articleRepository.save(c.getArticle());
-				caseRepository.save(c);
-			}
+			cases.forEach(c -> {
+                articleRepository.save(c.getArticle());
+                caseRepository.save(c);
+            });
 		});
 	}
 
 	private void initTestAccounts() {
 		userRepository.deleteAll();
 
-		User user = new User();
-		user.setUsername("user");
-		user.setPassword("password");
-		user.setEmail("user@mail.com");
-		user.setRole("user");
+		User user = createUser(
+		        "user@mail.com",
+                "user",
+                "password",
+                createPerson(
+                        "HHU",
+                        "Max",
+                        "Mustermann"));
 
-		User user2 = new User();
-		user2.setUsername("admin");
-		user2.setPassword("password");
-		user2.setEmail("useradmin@mail.com");
-		user2.setRole("admin");
+		User admin = createUser(
+		        "useradmin@mail.com",
+                "admine",
+                "password",
+                createPerson(
+                        "HHU",
+                        "Maxi",
+                        "Mustermann"));
 
-		userRepository.save(createUser(
-				"hans@mail.de",
-				"Hans",
-				"password",
-				createPerson(
-						"HHU",
-						"Hans",
-						"Peter")));
+		User hans = createUser(
+                "hans@mail.de",
+                "Hans",
+                "password",
+                createPerson(
+                        "HHU",
+                        "Hans",
+                        "Peter"));
 
-		userRepository.save(user2);
+		userRepository.save(hans);
+		userRepository.save(admin);
 		userRepository.save(user);
 	}
 
