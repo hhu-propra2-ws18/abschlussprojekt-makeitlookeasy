@@ -1,14 +1,18 @@
 package de.propra2.ausleiherino24.web;
 
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.ImageStoreService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.util.Date;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -60,6 +65,16 @@ public class CaseController {
         mav.addObject("categories", Category.getAllCategories());
         return mav;
     }
+
+    @PostMapping("/bookArticle")
+	public String bookArticle(@RequestParam Long id,
+			@DateTimeFormat(pattern = "dd.MM.yyyy") Date startTime,
+			@DateTimeFormat(pattern = "dd.MM.yyyy") Date endTime){
+		System.out.println(startTime);
+		System.out.println(endTime);
+		articleService.findArticleById(id).getC
+    	return "redirect:/article?id="+id;
+	}
 
     /**
      * Creates new article in database and returns this.article's details view.
