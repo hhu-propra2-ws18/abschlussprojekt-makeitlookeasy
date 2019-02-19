@@ -65,28 +65,34 @@
                    id="exampleModal" role="dialog"
                    tabindex="-1">
                 <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Book now</h5>
-                      <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      <label>Von</label>
-                      <input></input>
-                      <label>Bis</label>
-                      <input></input>
-                      <p th:text="|${article.getCostPerDay()}€ pro Tag|">24.99€ per day</p>
-                      <p th:text="|${article.getDeposit()}€ Kaution|">200€ deposit</p>
+                  <form method="post" th:action="@{/bookArticle(id=${article.id})}">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Book now</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div>
+                          <label>From</label>
+                          <input name="startTime" placeholder="dd.mm.yyyy">
+                        </div>
+                        <div>
+                          <label>To</label>
+                          <input name="finishTime" placeholder="dd.mm.yyyy">
+                        </div>
+                        <p th:text="|${article.getCostPerDay()}€ per Day|">24.99€ per day</p>
+                        <p th:text="|${article.getDeposit()}€ Kaution|">200€ deposit</p>
 
+                      </div>
+                      <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal" type="button">Close
+                        </button>
+                        <button class="btn btn-primary" type="submit">Book</button>
+                      </div>
                     </div>
-                    <div class="modal-footer">
-                      <button class="btn btn-secondary" data-dismiss="modal" type="button">Close
-                      </button>
-                      <button class="btn btn-primary" type="button">Book</button>
-                    </div>
-                  </div>
+                  </form>
                 </div>
               </div>
 
