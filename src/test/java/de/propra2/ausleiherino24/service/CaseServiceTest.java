@@ -2,6 +2,7 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
+import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
@@ -10,10 +11,14 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import org.mockito.ArgumentCaptor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class CaseServiceTest {
@@ -115,5 +120,46 @@ public class CaseServiceTest {
 		when(personRepositoryMock.findById(0L)).thenReturn(o);
 
 		assertTrue(caseService.getFreeCasesFromPersonOwner(0L).isEmpty());
+	}
+
+	@Test
+	public void saveNewArticleCase(){
+		Article article = new Article();
+		Case c = new Case();
+		c.setArticle(article);
+		c.setPrice(0);
+		c.setDeposit(10);
+
+		caseService.addCaseForNewArticle(article, 0, 10);
+
+		verify(caseRepositoryMock).save(c);
+	}
+
+	@Test
+	public void lendOneArticle(){
+		Case c = new Case();
+		when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c));
+		User user = new User();
+		c.setReceiver(user);
+		c.setStartTime(0L);
+		c.setEndTime(10L);
+		ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+
+		caseService.lendArticleToPerson(0L,user, 0L, 10L);
+
+		verify(caseRepositoryMock).save(argument.capture());
+		assertEquals(argument.getValue().getReceiver(), user);
+		assertTrue(argument.getValue().getStartTime().equals(0L));
+		assertTrue(argument.getValue().getEndTime().equals(10L));
+	}
+
+	@Test
+	public void lendNotExistingArticle(){
+		when(caseRepositoryMock.findById(0L)).thenReturn(Optional.empty());
+
+		caseService.lendArticleToPerson(0L, new User(), 0L, 10L);
+
+		verify(caseRepositoryMock, times(0)).save(any());
+		verify(caseRepositoryMock, times(1)).findById(0L);
 	}
 }

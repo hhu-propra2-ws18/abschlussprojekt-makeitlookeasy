@@ -7,6 +7,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
@@ -99,6 +100,37 @@ public class UserServiceTest {
 		expected.setRole("");
 
 		Assertions.assertThat(userService.findUserByPrincipal(null)).isEqualTo(expected);
+	}
+
+	@Test
+	public void saveUserUnequalPasswords(){
+		Assertions.assertThat(userService.saveUserIfPasswordsAreEqual("", new User(), new Person(), "1", "2")).isEqualTo("PasswordNotEqual");
+	}
+
+	@Test
+	public void saveNotExistingUserWithEqualPasswords(){
+		Mockito.when(users.findByUsername("")).thenReturn(Optional.empty());
+
+		Assertions.assertThat(userService.saveUserIfPasswordsAreEqual("", new User(), new Person(), "1", "1")).isEqualTo("UserNotFound");
+	}
+
+	@Test
+	public void saveExistingUserWithEqualPasswords(){
+		String pw = "1";
+		Person person = new Person();
+		User user = new User();
+		user.setPerson(person);
+		user.setPassword(pw);
+		user.setEmail("test@mail.de");
+		Mockito.when(users.findByUsername("")).thenReturn(Optional.of(user));
+		ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
+
+		Assertions.assertThat(userService.saveUserIfPasswordsAreEqual("", user, person, pw, pw)).isEqualTo("Success");
+		Mockito.verify(personService).savePerson(Mockito.eq(person), Mockito.eq("Save"));
+		Mockito.verify(users).save(argument.capture());
+		Assertions.assertThat(argument.getValue().getPassword()).isEqualTo(pw);
+		Assertions.assertThat(argument.getValue().getEmail()).isEqualTo("test@mail.de");
+		Assertions.assertThat(argument.getValue().getPerson()).isEqualTo(person);
 	}
 }
 
