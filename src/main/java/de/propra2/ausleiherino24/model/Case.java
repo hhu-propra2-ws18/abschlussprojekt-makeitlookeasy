@@ -41,6 +41,9 @@ public class Case {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	Article article;
 
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	PPTransaction ppTransaction;
+
 	Boolean active;
 
 	/**

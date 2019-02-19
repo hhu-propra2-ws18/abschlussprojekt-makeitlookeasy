@@ -1,9 +1,7 @@
 package de.propra2.ausleiherino24.service;
 
 import static org.mockito.Mockito.mock;
-import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
-import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.CustomerReviewRepository;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.CustomerReview;
@@ -12,7 +10,7 @@ import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
+
 import org.mockito.Mockito;
 
 public class CustomerReviewServiceTest {
@@ -31,9 +29,9 @@ public class CustomerReviewServiceTest {
 		customerReviewService = new CustomerReviewService(customerReviewRepository,caseService);
 
 		cases = new ArrayList<>();
-		Case case1 = new Case(0L, null, null, 0, 0, null,null, null, false);
-		Case case2 = new Case(0L, null, null, 0, 0, null,null, null, false);
-		Case case3 = new Case(0L, null, null, 0, 0, null,null, null, false);
+		Case case1 = new Case(0L, null, null, 0, 0, null,null,null, null, false);
+		Case case2 = new Case(0L, null, null, 0, 0, null,null, null,null, false);
+		Case case3 = new Case(0L, null, null, 0, 0, null,null, null, null,false);
 
 		customerReviews = new ArrayList<>();
 		CustomerReview customerReview1 = new CustomerReview();
