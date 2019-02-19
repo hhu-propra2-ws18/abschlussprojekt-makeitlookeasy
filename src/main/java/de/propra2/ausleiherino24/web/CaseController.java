@@ -116,16 +116,6 @@ public class CaseController {
 		return mav;
 	}
 
-	/**
-	 * TODO Javadoc
-	 */
-	@GetMapping("/newArticle")
-	public ModelAndView createNewCaseAndArticle() {
-		ModelAndView mav = new ModelAndView("/accessed/user/shopitem");
-		mav.addObject("shopitem", new Article());
-		return mav;
-	}
-
 
 	/**
 	 * Updates edited article in database and returns this.article's view.
