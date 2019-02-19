@@ -1,19 +1,12 @@
 package de.propra2.ausleiherino24.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -55,11 +48,11 @@ public class Article {
 	 * Siehe
 	 * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
 	 */
-    public void addCase(Case aCase) {
-        addCase(aCase, false);
-    }
+	public void addCase(Case aCase) {
+		addCase(aCase, false);
+	}
 
-    void addCase(Case aCase, boolean repetition) {
+	void addCase(Case aCase, boolean repetition) {
 		if (aCase == null) {
 			return;
 		}
@@ -71,14 +64,14 @@ public class Article {
 		} else {
 			cases.add(aCase);
 		}
-		if(!repetition) {
+		if (!repetition) {
 			aCase.setArticle(this, true);
 		}
-    }
+	}
 
-    public void removeCase(Case aCase){
-    	cases.remove(aCase);
-    	aCase.setArticle(null);
+	public void removeCase(Case aCase) {
+		cases.remove(aCase);
+		aCase.setArticle(null);
 	}
 
 	public void setOwner(User user) {

@@ -1,17 +1,10 @@
 package de.propra2.ausleiherino24.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -49,16 +42,16 @@ public class Case {
 	 * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
 	 */
 
-    public void setArticle(Article article) {
-        setArticle(article, false);
-    }
+	public void setArticle(Article article) {
+		setArticle(article, false);
+	}
 
-    void setArticle(Article article, boolean repetition) {
-        this.article = article;
-        if (article != null && !repetition) {
-            article.addCase(this, true);
-        }
-    }
+	void setArticle(Article article, boolean repetition) {
+		this.article = article;
+		if (article != null && !repetition) {
+			article.addCase(this, true);
+		}
+	}
 
 	public User getOwner() {
 		return this.article.getOwner();
