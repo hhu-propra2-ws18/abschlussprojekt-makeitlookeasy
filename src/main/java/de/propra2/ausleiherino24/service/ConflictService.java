@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.propra2.ausleiherino24.data.ConflictRepository;
@@ -23,6 +24,7 @@ public class ConflictService {
 	private final AccountHandler accountHandler;
 	private final Logger LOGGER = LoggerFactory.getLogger(ConflictService.class);
 
+	@Autowired
 	public ConflictService(ConflictRepository conflicts, EmailSender emailSender, AccountHandler accountHandler) {
 		this.conflicts = conflicts;
 		this.emailSender = emailSender;
