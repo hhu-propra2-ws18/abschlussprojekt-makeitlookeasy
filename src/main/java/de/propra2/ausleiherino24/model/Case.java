@@ -1,5 +1,7 @@
 package de.propra2.ausleiherino24.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,6 +55,16 @@ public class Case {
 
 	public User getOwner() {
 		return this.article.getOwner();
+	}
+
+	public String getFormattedStartTime(){
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		return simpleDateFormat.format(startTime);
+	}
+
+	public String getFormattedEndTime(){
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		return simpleDateFormat.format(endTime);
 	}
 
 }
