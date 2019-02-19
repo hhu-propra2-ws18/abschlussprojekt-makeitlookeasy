@@ -83,7 +83,6 @@ public class ConflictService {
 		return true;
 	}
 
-
 	public boolean isUserAdmin(HttpServletRequest request) {
 		if("admin".equals(RoleService.getUserRole(request))) {
 			return true;
