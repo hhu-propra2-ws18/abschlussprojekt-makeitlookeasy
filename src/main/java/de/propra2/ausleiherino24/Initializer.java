@@ -5,6 +5,11 @@ import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.ServletContext;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
@@ -14,10 +19,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import javax.servlet.ServletContext;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.stereotype.Component;
 
 @Component
 public class Initializer implements ServletContextInitializer {
@@ -29,7 +30,7 @@ public class Initializer implements ServletContextInitializer {
 
 	@Autowired
 	public Initializer(UserRepository userRepository, ArticleRepository articleRepository,
-			CaseRepository caseRepository, PersonRepository personRepository) {
+					   CaseRepository caseRepository, PersonRepository personRepository) {
 		this.userRepository = userRepository;
 		this.articleRepository = articleRepository;
 		this.caseRepository = caseRepository;

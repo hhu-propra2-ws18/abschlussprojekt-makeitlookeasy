@@ -15,7 +15,7 @@ public class EmailSender {
 
 	@Autowired
 	public EmailSender(EmailConfig config, JavaMailSenderImpl mailSender,
-			SimpleMailMessage message) {
+					   SimpleMailMessage message) {
 		this.config = config;
 		this.mailSender = mailSender;
 		this.message = message;

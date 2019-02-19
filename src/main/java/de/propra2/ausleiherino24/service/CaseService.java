@@ -5,25 +5,23 @@ import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.User;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Service
 public class CaseService {
 
 	private final CaseRepository caseRepository;
 	private final PersonRepository personRepository;
-	private final ArticleService articleService;
 
 	@Autowired
-	public CaseService(CaseRepository caseRepository, PersonRepository personRepository,
-			ArticleService articleService) {
+	public CaseService(CaseRepository caseRepository, PersonRepository personRepository) {
 		this.caseRepository = caseRepository;
 		this.personRepository = personRepository;
-		this.articleService = articleService;
 	}
 
 	/**
