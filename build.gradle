@@ -95,8 +95,12 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 }
 
 test {
+//    useJUnitPlatform()
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
 }
+
+test.finalizedBy jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification
 
 javadoc {
     source = sourceSets.main.allJava
