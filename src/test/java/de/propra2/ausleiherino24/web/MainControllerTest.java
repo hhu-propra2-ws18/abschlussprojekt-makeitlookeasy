@@ -5,7 +5,17 @@ import de.propra2.ausleiherino24.email.EmailSender;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
-import de.propra2.ausleiherino24.service.*;
+import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CaseService;
+import de.propra2.ausleiherino24.service.ConflictService;
+import de.propra2.ausleiherino24.service.ImageStoreService;
+import de.propra2.ausleiherino24.service.PersonService;
+import de.propra2.ausleiherino24.service.RoleService;
+import de.propra2.ausleiherino24.service.SearchUserService;
+import de.propra2.ausleiherino24.service.UserService;
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -21,10 +31,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.mockito.Mockito.mock;
 
@@ -51,6 +57,8 @@ public class MainControllerTest {
 	private CustomerReviewRepository customerReviewRepository;
 
 	@MockBean
+	private ConflictService cfs;
+	@MockBean
 	private ImageStoreService is;
 	@MockBean
 	private UserService us;
@@ -64,7 +72,8 @@ public class MainControllerTest {
 	private RoleService rs;
 	@MockBean
 	private AccountHandler ah;
-
+	@MockBean
+	private CaseService cs;
 	@MockBean
 	private EmailSender es;
 	@MockBean
