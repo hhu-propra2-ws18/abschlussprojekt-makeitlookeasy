@@ -40,10 +40,10 @@
       <div class="card mt-4">
         <img alt="" class="card-img-top img-fluid" src="http://placehold.it/900x400">
         <div class="card-body">
-          <h3 class="card-title" th:text="${article.getName()}">Product Name</h3>
-          <h4 th:text="${article.costPerDay+'€ per day'}">24.99€ pro Tag</h4>
-          <h6 th:text="${article.deposit} +'€ deposit'">200€ Kaution</h6>
-          <p class="card-text" th:text="${article.description}">Lorem ipsum dolor sit amet,
+          <h3 class="card-title" th:text="|${article.getName()}|">Product Name</h3>
+          <h4 th:text="|${article.getCostPerDay()}€ per day|">24.99€ pro Tag</h4>
+          <h6 th:text="|${article.getDeposit()}€ deposit|">200€ Kaution</h6>
+          <p class="card-text" th:text="|${article.getDescription()}|">Lorem ipsum dolor sit amet,
             consectetur
             adipisicing elit. Sapiente dicta fugit fugiat hic aliquam itaque facere, soluta. Totam
             id
@@ -52,8 +52,8 @@
 
           <div class="row">
             <p class="card-text" style="margin-left:15px">Offered by <a
-                th:href="@{/accessed/user/profile/{username} (username=${article.getOwner().getUsername()})}"
-                th:text="${article.getOwner().getUsername()}">Mick Potzkai</a></p>
+                th:href="@{~/profile/{username}(username=${article.getOwner().getUsername()})}"
+                th:text="|${article.getOwner().getUsername()}|">Mick Potzkai</a></p>
             <div class="ml-auto">
               <!-- Button trigger modal -->
               <button class="btn btn-success" data-target="#exampleModal" data-toggle="modal"
@@ -77,8 +77,8 @@
                       <input></input>
                       <label>Bis</label>
                       <input></input>
-                      <p th:text="${article.costPerDay+'€ pro Tag'}">24.99€ per day</p>
-                      <p th:text="${article.deposit} +'€ Kaution'">200€ deposit</p>
+                      <p th:text="|${article.getCostPerDay()}€ pro Tag|">24.99€ per day</p>
+                      <p th:text="|${article.getDeposit()}€ Kaution|">200€ deposit</p>
 
                     </div>
                     <div class="modal-footer">
@@ -92,7 +92,7 @@
 
             </div>
           </div>
-          <p class="card-text" th:text="${article.getOwner().person.address}">47877 Willich,Plutoweg
+          <p class="card-text" th:text="|${article.getOwner().getPerson().getAddress()}|">47877 Willich,Plutoweg
             5</p>
 
         </div>
@@ -151,3 +151,4 @@
 <script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script> -->
 </body>
 </html>
+

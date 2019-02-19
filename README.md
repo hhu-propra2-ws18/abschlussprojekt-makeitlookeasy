@@ -21,10 +21,11 @@ After starting the Docker Compose file, you can login into the web app
 ## docker
 Permissions of the database persistence folder (pgsql-01) are now synchronized with the invoking user, so that it should be visible and accessible from within the IDE.
 
-Container/service and compose-logs are now automatically written to ./build/logs/
+Container/service and compose-logsconfigure the checkstyle intellij plugin like so: <br>
+`File -> Settings -> Other Settings -> Checkstyle -> + -> Use local checkstyle-file are now automatically written to ./build/logs/
 
 ## jenkins
-Does the same as travis, just more and better. It can be reached on localhost:8080. Persistent local storage is located
+Does the same as travis, just more and better. It can be reached on localhost:9000. Persistent local storage is located
 at ~/jenkins_home.
 
 ## javadocs

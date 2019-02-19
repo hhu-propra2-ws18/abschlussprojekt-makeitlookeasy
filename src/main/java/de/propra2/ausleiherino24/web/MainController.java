@@ -13,10 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * MainController manages all actions that are available to every visitor of the platform. This
  * includes basic browsing, and signup/login.
@@ -37,7 +37,7 @@ public class MainController {
 	 * TODO Javadoc
 	 */
 	@GetMapping("/")
-	public ModelAndView index(Principal principal) throws Exception {
+	public ModelAndView index(Principal principal) {
 		ModelAndView mav = new ModelAndView("index");
 		mav.addObject("all", articleService.getAllNonReservedArticles());
 		mav.addObject("user", userService.findUserByPrincipal(principal));
@@ -45,19 +45,23 @@ public class MainController {
 		return mav;
 	}
 
-	/**
-	 * Returns view with a filtered set of Articles.
-	 */
-	@GetMapping("/categories")
-	public ModelAndView indexByCategory(@RequestParam String category, Principal principal)
-			throws Exception {
-		ModelAndView mav = new ModelAndView("index");
-		mav.addObject("all", articleService
-				.getAllNonReservedArticlesByCategory(Category.valueOf(category.toUpperCase())));
-		mav.addObject("user", userService.findUserByPrincipal(principal));
-		mav.addObject("categories", Category.getAllCategories());
-		return mav;
-	}
+    @GetMapping("/index")
+    public String getIndex (){
+        return "redirect:/";
+    }
+
+    /**
+     * Returns view with a filtered set of Articles.
+     */
+    @GetMapping("/categories")
+    public ModelAndView indexByCategory(@RequestParam String category, Principal principal){
+        ModelAndView mav = new ModelAndView("index");
+        mav.addObject("all", articleService
+                .getAllNonReservedArticlesByCategory(Category.valueOf(category.toUpperCase())));
+        mav.addObject("user", userService.findUserByPrincipal(principal));
+        mav.addObject("categories", Category.getAllCategories());
+        return mav;
+    }
 
 	/**
 	 * OGIN and SIGNUP.
@@ -101,3 +105,15 @@ public class MainController {
 		return new ModelAndView("redirect:/login");
 	}
 }
+
+    /*
+    @RequestMapping("/default")
+    public String defaultAfterLogin(HttpServletRequest request) {
+        if (request.isUserInRole("ROLE_admin")) {
+            return "redirect:/accessed/admin/index";
+        } else {
+            return "redirect:/accessed/user/index";
+        }
+        return "redirect:/";
+    }
+    */

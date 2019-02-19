@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -25,63 +24,62 @@ import org.springframework.web.servlet.ModelAndView;
  * platform, except article/case handling. This includes profile management.
  */
 @Controller
-@RequestMapping("/accessed/user")
 public class UserController {
-
-	private final UserService userService;
-	private final ArticleService articleService;
+    private final UserService userService;
+    private final ArticleService articleService;
+    private final AccountHandler accountHandler;
 	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-	private final AccountHandler accountHandler;
 
 	/**
-	 * TODO Javadoc
-	 */
-	@Autowired
-	public UserController(UserService userService, ArticleService articleService,
-			AccountHandler accountHandler) {
-		this.userService = userService;
-		this.articleService = articleService;
-		this.accountHandler = accountHandler;
-	}
+     * TODO Javadoc
+     */
+    @Autowired
+    public UserController(UserService userService, ArticleService articleService,
+            AccountHandler accountHandler) {
+        this.userService = userService;
+        this.articleService = articleService;
+        this.accountHandler = accountHandler;
+    }
 
+    /**
+     * Show any user profile to logged-in users. 1.If visitor is not logged-in and tries to access
+     * profile, redirect to login. 2. Else, display profile. 2.1 If requested profile of user, is
+     * own profile, allow editing via 'self' flag. 2.2 Else, do not allow editing.
+     *
+     * @param username Name of requested user, whose profile is requested
+     * @param principal Current Principal
+     * @return 1. Redirect to view "login" (if not logged-in) 2. Display "/accessed/user/profile"
+     * view
+     * @throws Exception Thrown, if username cannot be found in UserRepository
+     */
+    @GetMapping("/profile/{username}")
+    public ModelAndView displayUserProfile(@PathVariable String username, Principal principal,
+            HttpServletRequest request) throws Exception {
+        if (principal.getName() == null) {
+            return new ModelAndView("redirect:/login");
+        }
 
-	@GetMapping("/index")
-	public String getIndex() {
-		return "redirect:/";
-	}
+        User visitedUser = userService.findUserByUsername(username);
+        boolean self = principal.getName().equals(username);  // Flag for ThymeLeaf. Enables certain profile editing options.
 
-	/**
-	 * Show any user profile to logged-in users. 1.If visitor is not logged-in and tries to access
-	 * profile, redirect to login. 2. Else, display profile. 2.1 If requested profile of user, is
-	 * own profile, allow editing via 'self' flag. 2.2 Else, do not allow editing.
-	 *
-	 * @param username Name of requested user, whose profile is requested
-	 * @param principal Current Principal
-	 * @return 1. Redirect to view "login" (if not logged-in) 2. Display "/accessed/user/profile"
-	 * view
-	 * @throws Exception Thrown, if username cannot be found in UserRepository
-	 */
-	@GetMapping("/profile/{username}")
-	public ModelAndView displayUserProfile(@PathVariable String username, Principal principal,
-			HttpServletRequest request) throws Exception {
-		if (principal == null) {
-			// System.out.println("You have to be logged in to see other users' profiles.");
-			return new ModelAndView("redirect:/login");
-		}
-
-		User visitedUser = userService.findUserByUsername(username);
-
-		ModelAndView mav = new ModelAndView("/accessed/user/profile");
-		mav.addObject("articles", articleService.getAllNonReservedArticlesByUser(visitedUser));
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("myArticles", articleService.getAllNonReservedArticlesByUser(visitedUser));
 		mav.addObject("categories", Category.getAllCategories());
 		mav.addObject("visitedUser", visitedUser);
-		mav.addObject("user", userService.findUserByPrincipal(principal));
-		mav.addObject("allArticles", articleService);
-		//  mav.addObject("ppAccount",
-		//         accountHandler
-		//                  .getAccountData(userService.findUserByPrincipal(principal).getUsername()));
+
+        if(!self) {
+            mav.setViewName("/user/profile");
+            mav.addObject("user", userService.findUserByPrincipal(principal));
+        } else {
+            mav.setViewName("user/profileEdit");
+            mav.addObject("user", userService.findUserByPrincipal(principal));
+        }
 		return mav;
-	}
+        //mav.addObject("allArticles", articleService);
+        //  mav.addObject("ppAccount",
+        //         accountHandler
+        //                  .getAccountData(userService.findUserByPrincipal(principal).getUsername()));
+    }
 
 	/**
 	 * Receives HTML form input as @Valid User and Person objects and tries to save those objects to
@@ -97,20 +95,46 @@ public class UserController {
 			@ModelAttribute @Valid Person person, Principal principal) {
 		String currentPrincipalName = principal.getName();
 
-		if (user.getUsername().equals(currentPrincipalName)) {
-			userService.saveUserWithProfile(user, person, "Updated");
-		} else {
-			LOGGER.warn("Unauthorized access to 'editProfile' for user %s by user %s",
-					user.getUsername(),
-					currentPrincipalName);
-			LOGGER.info("Logging out user %s", currentPrincipalName);
+		if (CheckUser(user, person, currentPrincipalName)) {
 			return new ModelAndView("redirect:/logout");
 		}
 		ModelAndView mav = new ModelAndView("/accessed/user/profile");
 		mav.addObject("propayacc", accountHandler.checkFunds(user.getUsername()));
+
 		mav.addObject("user", user);
 		return mav;
 	}
+
+	/**
+	 * Checks whether user is known
+	 * @param user
+	 * @param person
+	 * @param currentPrincipalName
+	 * @return
+	 */
+	private boolean CheckUser(@ModelAttribute @Valid User user, @ModelAttribute @Valid Person person,
+			String currentPrincipalName) {
+		if (user.getUsername().equals(currentPrincipalName)) {
+			userService.saveUserWithProfile(user, person, "Updated");
+		} else {
+			LOGGER.warn("Unauthorized access to 'editProfile' for user %s by user %s",
+					user.getUsername(), currentPrincipalName);
+			LOGGER.info("Logging out user %s", currentPrincipalName);
+			return true;
+		}
+		return false;
+	}
+
+    @GetMapping("/myArticles")
+    public ModelAndView geMyArticlePage (Principal principal) throws Exception {
+    	String currentPrincipalName = principal.getName();
+    	User user = userService.findUserByUsername(currentPrincipalName);
+        ModelAndView mav = new ModelAndView("/user/myArticles");
+        mav.addObject("categories", Category.getAllCategories());
+        mav.addObject("user", user);
+        mav.addObject("myArticles", articleService.findAllActiveByUser(user));
+        return mav;
+    }
 
 	@GetMapping("/newItem")
 	public ModelAndView getNewItemPage(Principal principal) {

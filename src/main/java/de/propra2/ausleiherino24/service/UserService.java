@@ -30,6 +30,21 @@ public class UserService {
 		LOGGER.info("%s user profile %s [ID=%L]", msg, user.getUsername(), user.getId());
 	}
 
+
+    /**
+     * Saves newly created/updated user and person data to database.
+     *
+     * @param user User object to be saved to database.
+     * @param person Person object to be saved to database.
+     * @param msg String to be displayed in the Logger.
+     */
+    public void saveUserWithProfile(User user, Person person, String msg) {
+        user.setRole("user");
+        saveUser(user, msg);
+
+        person.setUser(user);
+        personService.savePerson(person, msg);
+    }
 	/**
 	 * Searches database for user by username. If user cannot be found, throw an exception. Else,
 	 * return user.
@@ -49,38 +64,17 @@ public class UserService {
 		return optionalUser.get();
 	}
 
-	/**
-	 * Saves newly created/updated user and person data to database.
-	 *
-	 * @param user User object to be saved to database.
-	 * @param person Person object to be saved to database.
-	 * @param msg String to be displayed in the Logger.
-	 */
-	public void saveUserWithProfile(User user, Person person, String msg) {
-		user.setRole("user");
-		saveUser(user, msg);
+    public User findUserByPrincipal(Principal principal) {
+        User user;
 
-		person.setUser(user);
-		personService.savePerson(person, msg);
-	}
+        try {
+            user = findUserByUsername(principal.getName());
+        } catch (Exception e) {
+            user = new User();
+            user.setRole("");
+            user.setUsername("");
+        }
 
-	public User findUserByPrincipal(Principal principal) throws Exception {
-		User user;
-		if (principal == null) {
-			user = new User();
-			user.setRole("");
-			user.setUsername("");
-
-		} else if (principal.getName() == null) {
-			user = new User();
-			user.setRole("");
-			user.setUsername("");
-		} else {
-			if (!userRepository.findByUsername(principal.getName()).isPresent()) {
-				throw new Exception("User " + principal.getName() + " not found");
-			}
-			user = userRepository.findByUsername(principal.getName()).get();
-		}
-		return user;
-	}
+        return user;
+    }
 }

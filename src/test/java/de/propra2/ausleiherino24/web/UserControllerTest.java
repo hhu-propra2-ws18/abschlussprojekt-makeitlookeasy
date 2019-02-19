@@ -100,7 +100,7 @@ public class UserControllerTest {
 //	@SuppressWarnings("static-access")
 //	@Test
 //	public void getIndexModelTest() throws Exception {
-//		RoleService rs = Mockito.mock(RoleService.class);
+//		RoleService rs = Mockito.control(RoleService.class);
 //		MockHttpServletRequest req = new MockHttpServletRequest();
 //		Mockito.when(rs.getUserRole(Mockito.anyObject())).thenReturn("user");
 //		mvc.perform(MockMvcRequestBuilders.get("/accessed/user/index")).andExpect(MockMvcResultMatchers.model().attribute("role", "user"));

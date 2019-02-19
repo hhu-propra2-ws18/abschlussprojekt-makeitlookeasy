@@ -31,14 +31,14 @@
 
 		<!-- main information (input) -->
 		<div class="col-lg 9" style="margin-top: 100px">
-			<form method="post" enctype="multipart/form-data" action="/acessed/saveNewArticle">
+			<form method="post" enctype="multipart/form-data" th:action="@{/saveNewArticle}" th:object="${article}">
 				<div class="form-group">
 					<label for="formControlInput1">Name</label>
 					<input class="form-control" id="formControlInput1" name="name">
 				</div>
 				<div class="form-group">
-					<label for="formControlInput2">Price</label>
-					<input class="form-control" type="number" id="formControlInput2" name="price">
+					<label for="formControlInput2">Price per Day</label>
+					<input class="form-control" type="number" id="formControlInput2" name="costPerDay">
 				</div>
 				<div class="form-group">
 					<label for="formControlInput3">Deposit</label>
@@ -47,14 +47,14 @@
 				<div class="form-group">
 					<label for="formControlSelect1">Categorie</label>
 					<select class="form-control" id="formControlSelect1" name="categorie" >
-						<div th:each="categorie : ${categories}">
-						<option th:text="${categorie.name}">Motors</option>
+						<div th:each="category : ${categories}">
+						<option th:text="|${category.name}|">Motors</option>
 						</div>
 					</select>
 				</div>
 				<div class="form-group">
 					<label for="exampleFormControlTextarea1">Description</label>
-					<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+					<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description"></textarea>
 				</div>
 				<input type="file" name="image" accept="image/jpg,image/png,image/jpeg">
 

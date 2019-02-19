@@ -1,7 +1,5 @@
 package de.propra2.ausleiherino24.web;
 
-import de.propra2.ausleiherino24.data.ArticleRepository;
-import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
@@ -9,10 +7,7 @@ import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.ImageStoreService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
-import java.util.Optional;
 import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +19,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 /**
  * Manages all requests regarding creating/editing/deleting articles/cases and after-sales. Possible
  * features: transaction rating (karma/voting), chatting
@@ -34,11 +28,69 @@ public class CaseController {
 
 	private final ArticleService articleService;
 	private final UserService userService;
-	private final ArticleRepository articleRepository;
-	private final UserRepository userRepository;
-	private final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
 	private ImageStoreService imageStoreService;
 
+    @Autowired
+    public CaseController(ArticleService articleService, UserService userService, ImageStoreService imageStoreService) {
+        this.articleService = articleService;
+        this.userService = userService;
+        this.imageStoreService = imageStoreService;
+    }
+
+    @GetMapping("/article")
+    public ModelAndView displayArticle(@RequestParam("id") Long id, Principal principal)
+            throws Exception {
+        Article article = articleService.findArticleById(id);
+
+        ModelAndView mav = new ModelAndView("/shop/item");
+        mav.addObject("article", article);
+        mav.addObject("categories", Category.getAllCategories());
+        mav.addObject("user", userService.findUserByPrincipal(principal));
+        return mav;
+    }
+
+    /**
+     * TODO Javadoc
+     */
+    @GetMapping("/newArticle")
+    public ModelAndView createNewCaseAndArticle(Principal principal) {
+        ModelAndView mav = new ModelAndView("/shop/newItem");
+        mav.addObject("article", new Article());
+        mav.addObject("user", userService.findUserByPrincipal(principal));
+        mav.addObject("categories", Category.getAllCategories());
+        return mav;
+    }
+
+    /**
+     * Creates new article in database and returns this.article's details view.
+     *
+     * @param article Article object from HTML form input.
+     * @return Article details view.
+     */
+    @PostMapping("/saveNewArticle")
+    public ModelAndView saveNewCaseAndArticle(
+            @ModelAttribute @Valid Article article,
+            BindingResult result,
+            Model model,
+            @RequestParam("image") MultipartFile image, Principal principal) throws Exception {
+
+    	String currentPrincipalName = principal.getName();
+    	User user = userService.findUserByUsername(currentPrincipalName);
+
+		article.setActive(true);
+    	article.setReserved(false);
+    	article.setOwner(user);
+        article.setImage(imageStoreService.store(image, null));
+        articleService.saveArticle(article, "Created");
+
+        //ModelAndView mav = new ModelAndView("redirect:/");
+        //mav.addObject("all", articleService.getAllNonReservedArticles());
+		//mav.addObject("user", userService.findUserByPrincipal(principal));
+		//mav.addObject("categories", Category.getAllCategories());
+        return new ModelAndView("redirect:/");
+    }
+
+	/**
 	@Autowired
 	public CaseController(ArticleRepository articleRepository, UserRepository userRepository,
 			ArticleService articleService, UserService userService,
@@ -64,58 +116,6 @@ public class CaseController {
 		return mav;
 	}
 
-	/**
-	 * TODO Javadoc
-	 */
-	@GetMapping("/newArticle")
-	public ModelAndView createNewCaseAndArticle() {
-		ModelAndView mav = new ModelAndView("/accessed/user/shopitem");
-		mav.addObject("shopitem", new Article());
-		return mav;
-	}
-
-	/**
-	 * Creates new article in database and returns this.article's details view.
-	 *
-	 * @param article Article object from HTML form input.
-	 * @return Article details view.
-	 */
-	@PostMapping("/saveNewArticle")
-	public ModelAndView saveNewCaseAndArticle(
-			@ModelAttribute @Valid Article article,
-			BindingResult result,
-			Model model,
-			@RequestParam("image") MultipartFile image) {
-
-		article.setImage(imageStoreService.store(image, null));
-		articleService.saveArticle(article, "Created");
-
-		ModelAndView mav = new ModelAndView("newarticle");
-		mav.addObject("article", article);
-		return mav;
-	}
-
-	/**
-	 * Creates new article in database and returns this.article's details view.
-	 *
-	 * @param article Article object from HTML form input.
-	 * @return Article details view.
-	 */
-	@PostMapping("/accessed/saveNewArticle")
-	public String saveNewCaseAndArticle(
-			@ModelAttribute @Valid Article article,
-			BindingResult result,
-			Model model,
-			@RequestParam("image") MultipartFile image, Principal principal) throws Exception {
-
-		article.setImage(imageStoreService.store(image, null));
-		article.setActive(true);
-		article.setReserved(false);
-		article.setOwner(userService.findUserByPrincipal(principal));
-		articleService.saveArticle(article, "Created");
-
-		return "redirect:/";
-	}
 
 	/**
 	 * Updates edited article in database and returns this.article's view.
@@ -123,7 +123,7 @@ public class CaseController {
 	 * @param article Article object from HTML form input.
 	 * @return Article details view.
 	 */
-	@PutMapping("/accessed/saveEditedArticle")
+	@PutMapping("/saveEditedArticle")
 	public ModelAndView saveEditedCaseAndArticle(
 			@ModelAttribute @Valid Article article,
 			BindingResult result,
@@ -132,11 +132,11 @@ public class CaseController {
 
 		article.setImage(imageStoreService.store(image, null));
 		articleService.saveArticle(article, "Updated");
-		ModelAndView mav = new ModelAndView("/accessed/user/shopitem");
-		mav.addObject("article", article);
-		return mav;
-	}
 
+        ModelAndView mav = new ModelAndView("/shop/item");
+        mav.addObject("article", article);
+        return mav;
+    }
 
 	/**
 	 * Deactivates a single article.
@@ -147,19 +147,18 @@ public class CaseController {
 	 * principal couldn't be found in UserRepository
 	 * @return View "myArticles", displaying all active articles of principal
 	 */
-	@PutMapping("/accessed/deactivateArticle")
-	public ModelAndView deactivateArticle(@RequestParam Long id, Principal principal)
-			throws Exception {
+	@PutMapping("/deactivateArticle")
+	public ModelAndView deactivateArticle(@RequestParam Long id, Principal principal) throws Exception {
+
 		String currentPrincipalName = principal.getName();
 		User user = userService.findUserByUsername(currentPrincipalName);
 
 		if (!articleService.deactivateArticle(id)) {
 			// TODO: Display error msg, when article deactivation fails.
 		}
-
-		ModelAndView mav = new ModelAndView("/accessed/user/profile");
+		ModelAndView mav = new ModelAndView("/user/myArticles");
 		mav.addObject("user", user);
-		mav.addObject("allArticles", articleService.findAllActiveByUser(user));
+		mav.addObject("myArticles", articleService.findAllActiveByUser(user));
 		return mav;
 	}
 }

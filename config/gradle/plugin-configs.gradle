@@ -52,11 +52,16 @@ pmd {
     ignoreFailures = true
 }
 
+jacoco {
+    toolVersion = "0.8.2"
+}
+
 jacocoTestReport {
     group = "verification"
     reports {
         xml.enabled true
-        csv.enabled true
+        html.enabled true
+        csv.enabled false
     }
 }
 
