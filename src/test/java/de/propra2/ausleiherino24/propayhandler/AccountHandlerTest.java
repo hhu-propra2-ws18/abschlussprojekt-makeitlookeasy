@@ -1,5 +1,7 @@
 package de.propra2.ausleiherino24.propayhandler;
 
+import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.PPTransactionRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,13 +25,18 @@ public class AccountHandlerTest {
 	AccountHandler accountHandler;
 	@MockBean
 	private RestTemplate restTemplate;
+	@MockBean
+	private PPTransactionRepository ppTransactionRepository;
+	@MockBean
+	private CaseRepository caseRepository;
+
 	private PPAccount testAcc1;
 	private PPAccount testAcc2;
 
 	@Before
 	public void initialize() {
 		restTemplate = Mockito.mock(RestTemplate.class);
-		accountHandler = new AccountHandler(restTemplate);
+		accountHandler = new AccountHandler(caseRepository,ppTransactionRepository,restTemplate);
 		testAcc1 = new PPAccount("Acc1", 100.0);
 		testAcc2 = new PPAccount("Acc2", 1000.0);
 
