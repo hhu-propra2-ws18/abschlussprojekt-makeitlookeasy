@@ -1,5 +1,10 @@
 package de.propra2.ausleiherino24.propayhandler;
 
+import de.propra2.ausleiherino24.data.ArticleRepository;
+import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.PPTransactionRepository;
+import de.propra2.ausleiherino24.model.Case;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -13,8 +18,13 @@ public class AccountHandler {
 	private static final String ACCOUNT_URL = "http://localhost:8888/account";
 	private static final String ACCOUNT_DEFAULT = "/{account}";
 	private RestTemplate restTemplate;
+	private PPTransactionRepository ppTransactionRepository;
+	private CaseRepository caseRepository;
 
-	public AccountHandler(RestTemplate restTemplate) {
+	@Autowired
+	public AccountHandler(CaseRepository caseRepository, PPTransactionRepository ppTransactionRepository,RestTemplate restTemplate) {
+		this.caseRepository = caseRepository;
+		this.ppTransactionRepository = ppTransactionRepository;
 		this.restTemplate = restTemplate;
 	}
 
@@ -32,7 +42,12 @@ public class AccountHandler {
 		return 0;
 	}
 
-	public boolean hasValidFunds(String accountName, double requestedFunds) {
+
+	public boolean hasValidFunds(Case aCase){
+		return hasValidFunds(aCase.getReceiver().getUsername(),aCase.getPrice());
+	}
+
+	boolean hasValidFunds(String accountName, double requestedFunds) {
 		double reserved = 0;
 		PPAccount account = restTemplate
 				.getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
@@ -46,7 +61,7 @@ public class AccountHandler {
 
 		HttpEntity<Double> request = new HttpEntity<>(amount);
 		ResponseEntity<Double> responseEntity = restTemplate
-				.exchange(ACCOUNT_URL + "/{account}", HttpMethod.POST, request, Double.class,
+				.exchange(ACCOUNT_URL + ACCOUNT_DEFAULT, HttpMethod.POST, request, Double.class,
 						username);
 		if (responseEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
 			return responseEntity.getBody();
@@ -54,7 +69,11 @@ public class AccountHandler {
 		return 0.0;
 	}
 
-	public double transferFunds(String sourceUser, String targetUser, double amount) {
+	public double transferFunds(Case aCase){
+		return transferFunds(aCase.getReceiver().getUsername(),aCase.getOwner().getUsername(),aCase.getPrice());
+	}
+
+	double transferFunds(String sourceUser, String targetUser, double amount) {
 
 		if (hasValidFunds(sourceUser, amount)) {
 			HttpEntity<Double> request = new HttpEntity<>(amount);
