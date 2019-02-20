@@ -14,9 +14,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Case {
 
-	public static final String REQUESTED = "Requested";
-	public static final String REQUEST_ACCEPTED = "Request accepted";
-	public static final String REQUEST_DECLINED = "Request declined";
+	public static final int REQUESTED = 1;
+	public static final int REQUEST_ACCEPTED = 2;
+	public static final int REQUEST_DECLINED = 3;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,7 +30,7 @@ public class Case {
 
 	private int deposit;
 
-	private String requestStatus;
+	private int requestStatus;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private CustomerReview customerReview;
@@ -62,11 +62,17 @@ public class Case {
 		return this.article.getOwner();
 	}
 
+	/**
+	 * Formatiert die Startzeit in dd.mm.yyy
+	 */
 	public String getFormattedStartTime(){
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 		return simpleDateFormat.format(startTime);
 	}
 
+	/**
+	 * Formatiert die Endzeit in dd.mm.yyy
+	 */
 	public String getFormattedEndTime(){
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 		return simpleDateFormat.format(endTime);

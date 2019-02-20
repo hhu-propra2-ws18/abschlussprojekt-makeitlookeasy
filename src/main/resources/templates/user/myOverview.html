@@ -176,9 +176,9 @@
     <div class="col-lg 9" style="margin-top: 100px;display:none" id="mainFrameFour">
       <table class="table">
         <tr><div class="text-center">
-          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> | </span>
-          <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> | </span>
-          <button class="btn btn-light" onclick="threeFunction()"> Returned</button><span> | </span>
+          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span>
+          <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span>
+          <button class="btn btn-light" onclick="threeFunction()"> Returned</button><span> / </span>
           <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
         </div></tr>
         <thead>
@@ -187,16 +187,33 @@
           <th scope="col">Article</th>
           <th scope="col">From</th>
           <th scope="col">To</th>
+          <th scope="col">Profit</th>
           <th scope="col">Accept</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="case:${requested}">
-          <td th:text="${case.receiver.username}"></td>
-          <td th:text="${case.article.name}"></td>
+          <td> <a th:text="${case.receiver.username}"
+                  th:href="@{~/profile/{username}(username=${case.receiver.username})}"></a>
+          </td>
+          <td> <a th:text="${case.article.name}"
+                  th:href="@{/article(id=${case.article.getId()})}"></a>
+          </td>
           <td th:text="${case.getFormattedStartTime()}"></td>
           <td th:text="${case.getFormattedEndTime()}"></td>
-          <td><button type="button" class="btn btn-success btn-sm">accept</button><span> </span><button type="button" class="btn btn-danger btn-sm">decline</button></td>
+          <td th:text="${((case.endTime-case.startTime)/(1000*3600*24)*case.price)+'€'}"></td>
+          <td>
+            <th:block th:if="${case.requestStatus==1}">
+              <button type="button" class="btn btn-success btn-sm" >accept</button>
+              <span> </span>
+              <button type="button" class="btn btn-danger btn-sm">decline</button>
+            </th:block>
+            <th:block th:unless="${case.requestStatus==1}">
+              <div class="alert alert-info">
+                Abgeschlossen
+              </div>
+            </th:block>
+          </td>
         </tr>
         </tbody>
       </table>

@@ -113,7 +113,7 @@ public class UserController {
 		List<Article> myArticles = articleService.findAllActiveByUser(currentUser);
 		List<Case> borrowedArticles = caseService
 				.getLendCasesFromPersonReceiver(currentUser.getPerson().getId());
-		List<Case> requestedArticles = caseService.getAllRequestedCasesbyUser(currentUser.getId());
+		List<Case> requestedArticles = caseService.findAllCasesbyUserId(currentUser.getId());
 
 		ModelAndView mav = new ModelAndView("/user/myOverview");
 		mav.addObject("user", currentUser);

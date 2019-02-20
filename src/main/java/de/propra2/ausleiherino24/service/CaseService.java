@@ -51,6 +51,14 @@ public class CaseService {
 	}
 
 	/**
+	 * Gibt alle Cases zurück, wo die Person der Verleihende ist.
+	 */
+	public List<Case> findAllCasesbyUserId(Long userId) {
+		return caseRepository
+				.findAllByArticleOwnerId(userId);
+	}
+
+	/**
 	 * Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan verliehen
 	 * ist.
 	 */
@@ -87,8 +95,7 @@ public class CaseService {
 		return caseRepository
 				.findAllByArticleOwner(userService.findUserById(userId))
 				.stream()
-				.filter(c ->
-						c.getRequestStatus() != null && c.getRequestStatus().equals(Case.REQUESTED))
+				.filter(c -> c.getRequestStatus() == Case.REQUESTED)
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
@@ -109,7 +116,7 @@ public class CaseService {
 
 			caseRepository.save(c);
 		} catch(Exception e){
-
+			e.printStackTrace();
 		}
 	}
 }

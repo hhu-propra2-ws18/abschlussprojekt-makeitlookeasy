@@ -5,6 +5,8 @@ import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
+import de.propra2.ausleiherino24.service.CaseService;
+import java.util.GregorianCalendar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.stereotype.Component;
@@ -27,14 +29,17 @@ public class Initializer implements ServletContextInitializer {
 	private final ArticleRepository articleRepository;
 	private final CaseRepository caseRepository;
 	private final PersonRepository personRepository;
+	private final CaseService caseService;
 
 	@Autowired
 	public Initializer(UserRepository userRepository, ArticleRepository articleRepository,
-					   CaseRepository caseRepository, PersonRepository personRepository) {
+			CaseRepository caseRepository, PersonRepository personRepository,
+			CaseService caseService) {
 		this.userRepository = userRepository;
 		this.articleRepository = articleRepository;
 		this.caseRepository = caseRepository;
 		this.personRepository = personRepository;
+		this.caseService = caseService;
 	}
 
 	@Override
@@ -58,27 +63,19 @@ public class Initializer implements ServletContextInitializer {
 					"password",
 					person);
 
-			ArrayList<Case> cases = IntStream.range(0, faker.random().nextInt(1, 7)).mapToObj(value1 -> {
-				Article article2 = createArticle(
-						faker.pokemon().name(),
-						faker.chuckNorris().fact(),
-						Category.getAllCategories().get(faker.random().nextInt(0, Category.getAllCategories().size() - 1)),
-						user,
-						faker.random().nextInt(5, 500),
-						faker.random().nextInt(100, 2000),
-						"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+
-								faker.random().nextInt(1, 807)+".png");
-
-				return createCase(
-						article2);
-			}).collect(Collectors.toCollection(ArrayList::new));
+			ArrayList<Article> articles = IntStream.range(0, faker.random().nextInt(1, 7)).mapToObj(value1 -> createArticle(
+					faker.pokemon().name(),
+					faker.chuckNorris().fact(),
+					Category.getAllCategories().get(faker.random().nextInt(0, Category.getAllCategories().size() - 1)),
+					user,
+					faker.random().nextInt(5, 500),
+					faker.random().nextInt(100, 2000),
+					"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+
+							faker.random().nextInt(1, 807)+".png")).collect(Collectors.toCollection(ArrayList::new));
 
 			personRepository.save(person);
 			userRepository.save(user);
-			cases.forEach(c -> {
-                articleRepository.save(c.getArticle());
-                caseRepository.save(c);
-            });
+			articles.forEach(articleRepository::save);
 		});
 	}
 
@@ -150,10 +147,14 @@ public class Initializer implements ServletContextInitializer {
 	}
 
 	private Case createCase(Article article) {
-		Case aCase = new Case();
-		aCase.setArticle(article);
-		aCase.setPrice(article.getCostPerDay());
-		aCase.setDeposit(article.getDeposit());
-		return aCase;
+		Case c = new Case();
+		c.setArticle(article);
+		c.setPrice(article.getCostPerDay());
+		c.setDeposit(article.getDeposit());
+		return c;
+	}
+
+	private Long convertDateAsLong(int day, int month, int year){
+		return new GregorianCalendar(day, month, year).getTimeInMillis();
 	}
 }
