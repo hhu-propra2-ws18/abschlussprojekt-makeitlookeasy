@@ -1,9 +1,5 @@
 package de.propra2.ausleiherino24.propayhandler;
 
-import de.propra2.ausleiherino24.data.ArticleRepository;
-import de.propra2.ausleiherino24.data.CaseRepository;
-import de.propra2.ausleiherino24.data.PPTransactionRepository;
-import de.propra2.ausleiherino24.model.Case;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -11,6 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.PPTransactionRepository;
+import de.propra2.ausleiherino24.model.Case;
 
 @Service
 public class AccountHandler {

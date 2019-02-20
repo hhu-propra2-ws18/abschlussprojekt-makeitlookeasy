@@ -33,7 +33,7 @@ public class PPTransaction {
 
 	public Double getTotalPayment(){
 		if(cautionPaid){
-			return lendingCost + aCase.deposit;
+			return lendingCost + aCase.getDeposit();
 		}
 		return lendingCost;
 	}
