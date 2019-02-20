@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ArticleRepository extends CrudRepository<Article, Long> {
 
-    /**
+    /** TODO Heading.
      * @return ArrayList of all Article objects in database.
      */
     ArrayList<Article> findAll();

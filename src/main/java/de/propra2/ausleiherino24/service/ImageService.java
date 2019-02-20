@@ -39,6 +39,13 @@ public class ImageService {
         return dest.getName();
     }
 
+    /**
+     * TODO JavaDoc
+     *
+     * @param fileName Description
+     * @param binningId Description
+     * @return Description
+     */
     public File getFile(String fileName, Long binningId) {
         String binName = binningId == null ? "" : resolveBin(binningId).toString();
 
@@ -57,6 +64,11 @@ public class ImageService {
         return uniqueFilepath;
     }
 
+    /**
+     * TODO JavaDoc
+     * @param path Description
+     * @return Description
+     */
     public boolean fileExists(String path) {
         File f = new File(path);
         return f.exists() && !f.isDirectory();
@@ -79,7 +91,11 @@ public class ImageService {
         return builder.toString();
     }
 
-
+    /**
+     * TODO Javadoc
+     * @param binningId Description
+     * @return Description
+     */
     public String ensureBinning(Long binningId) {
         if (binningId == null) {
             return "";
@@ -95,6 +111,10 @@ public class ImageService {
         return binningId % NR_OF_BINS;
     }
 
+    /**
+     * TODO Javadoc
+     * @param name Description
+     */
     public void createBinningDirectory(String name) {
         String binPath = Paths.get(getUploadDirectoryPath(), name).toString();
 
@@ -113,6 +133,11 @@ public class ImageService {
         }
     }
 
+    /**
+     * TODO Javadoc.
+     * @param fileName Description
+     * @return Description
+     */
     public String getFileExtension(String fileName) {
         if (fileName == null) {
             return "";

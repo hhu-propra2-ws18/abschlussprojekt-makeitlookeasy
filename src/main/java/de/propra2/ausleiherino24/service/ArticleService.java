@@ -46,7 +46,7 @@ public class ArticleService {
     }
 
     /**
-     * Filters articles and checks whether they are included in given category
+     * Filters articles and checks whether they are included in given category.
      *
      * @return all Articles, which are not reserved and are of given category
      */
@@ -68,10 +68,8 @@ public class ArticleService {
      * Exception.
      *
      * @param id ID of article to be "deleted".
-     * @return boolean            True, if succeeded. False, if encountered error while processing
-     * request.
-     * @throws Exception 1. Thrown, if article not present in ArticleRepository. 2. Thrown, if
-     * article is reserved,
+     * @return boolean True, if succeeded. False, if encountered error while processing request.
+     * @throws Exception 1. Thrown, if article not present in ArticleRepository. 2. Thrown, if article is reserved.
      */
     public boolean deactivateArticle(Long id) throws Exception {
         Optional<Article> optionalArticle = articleRepository.findById(id);

@@ -36,8 +36,11 @@ public class MainController {
     }
 
     /**
-     * TODO JavaDoc
+     * TODO Javadoc.
+     * @param principal Description
+     * @return Description
      */
+    @SuppressWarnings("Duplicates") // TODO Duplicate code
     @GetMapping(value = {"/", "/index"})
     public ModelAndView getIndex(Principal principal) {
         List<Article> allArticles = articleService.getAllActiveArticles();
@@ -52,8 +55,12 @@ public class MainController {
     }
 
     /**
-     * TODO JavaDoc
+     * TODO Javadoc.
+     * @param category Description
+     * @param principal Description
+     * @return Description
      */
+    @SuppressWarnings("Duplicates") // TODO Duplicate code
     @GetMapping("/categories")
     public ModelAndView getIndexByCategory(@RequestParam String category, Principal principal) {
         List<Article> allArticlesInCategory = articleService
@@ -69,7 +76,8 @@ public class MainController {
     }
 
     /**
-     * TODO JavaDoc
+     * TODO Javadoc.
+     * @return Description
      */
     @GetMapping("/login")
     public ModelAndView getLogin() {
@@ -77,7 +85,8 @@ public class MainController {
     }
 
     /**
-     * TODO JavaDoc
+     * TODO Javadoc.
+     * @return Description
      */
     @GetMapping("/signup")
     public ModelAndView getRegistration() {
@@ -91,7 +100,10 @@ public class MainController {
     }
 
     /**
-     * TODO JavaDoc
+     * TODO Javadoc.
+     * @param user Description
+     * @param person Description
+     * @return
      */
     @PostMapping("/registerNewUser")
     public ModelAndView registerNewUser(@ModelAttribute @Valid User user,

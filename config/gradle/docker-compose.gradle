@@ -6,7 +6,7 @@ dockerCompose {
     startedServices = ['propay']
 //  forceRecreate = false
 //  buildAdditionalArgs = ['--force-rm']
-    waitForTcpPorts = false
+    waitForTcpPorts = true
     tcpPortsToIgnoreWhenWaiting = []
     captureContainersOutput = false // one log to rule them all switch
 //  captureContainersOutputToFile = '/logs'
@@ -14,10 +14,10 @@ dockerCompose {
     composeLogToFile = project.file('./build/logs/compose.log')
     containerLogToDir = project.file('./build/logs/container-logs')
     stopContainers = true
-    removeContainers = true
-    removeImages = "Local"
-    removeVolumes = true
-    removeOrphans = true
+    removeContainers = false
+    removeImages = "None"
+    removeVolumes = false
+    removeOrphans = false
     projectName = 'rentarino24'
 //  dockerComposeWorkingDirectory = '/path/where/docker-compose/is/invoked/from'
 //  dockerComposeStopTimeout = java.time.Duration.ofSeconds(20)

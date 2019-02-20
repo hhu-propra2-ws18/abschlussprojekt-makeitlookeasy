@@ -30,6 +30,16 @@ public class ConflictController {
         this.userService = userService;
     }
 
+    /**
+     * TODO JavaDoc.
+     *
+     * @param conflict Description
+     * @param bindingResult Description
+     * @param model Description
+     * @param principal Description
+     * @return Description
+     * @throws Exception Description
+     */
     @PostMapping("/newConflict")
     public String sendConflict(@RequestBody Conflict conflict, BindingResult bindingResult,
             Model model, Principal principal) throws Exception {
@@ -45,6 +55,14 @@ public class ConflictController {
         return "someView";
     }
 
+    /**
+     * TODO Javadoc.
+     *
+     * @param id Description
+     * @param principal Description
+     * @param model Description
+     * @throws Exception Description
+     */
     @DeleteMapping("/deactivateConflict")
     public String deactivateConflict(@RequestParam Long id, Principal principal, Model model)
             throws Exception {
@@ -56,6 +74,14 @@ public class ConflictController {
         return "someView";
     }
 
+    /**
+     * Todo Javadoc.
+     * @param id Description
+     * @param principal Description
+     * @param model Description
+     * @return Description
+     * @throws Exception Description
+     */
     @GetMapping("/conflict")
     public String displayConflict(@RequestParam("id") Long id, Principal principal, Model model)
             throws Exception {
@@ -67,6 +93,13 @@ public class ConflictController {
         return "someView";
     }
 
+    /**
+     * TODO Javadoc.
+     * @param principal Description
+     * @param model Description
+     * @return Description
+     * @throws Exception Description
+     */
     @GetMapping("/conflicts")
     public String displayAllConflicts(Principal principal, Model model) throws Exception {
         User user = userService.findUserByPrincipal(principal);
@@ -77,6 +110,14 @@ public class ConflictController {
         return "someView";
     }
 
+    /**
+     * TODO Javadoc.
+     * @param id Description
+     * @param principal Description
+     * @param model Description
+     * @return Description
+     * @throws Exception Description
+     */
     @GetMapping("/solveConflictView")
     public String solveConflictView(@RequestParam("id") Long id, Principal principal, Model model)
             throws Exception {
@@ -90,6 +131,14 @@ public class ConflictController {
         return "someView";
     }
 
+    /**
+     * TODO Javadoc.
+     * @param resolveConflict Description
+     * @param principal Description
+     * @param model Description
+     * @return Description
+     * @throws Exception Description
+     */
     @PostMapping("/solveConflict")
     public String solveConflict(@RequestBody ResolveConflict resolveConflict, Principal principal,
             Model model) throws Exception {

@@ -4,8 +4,8 @@ testlogger {
 
 spotbugs {
     toolVersion = '3.1.10'
-    ignoreFailures = false
-    includeFilter = file('./config/spotbugs/java-exclusions.xml')
+    ignoreFailures = true
+//    includeFilter = file('./config/spotbugs/java-exclusions.xml') TODO SpotBugs exclusions
     effort = "min"
     reportLevel = "medium"
 }

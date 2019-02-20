@@ -47,15 +47,15 @@ public class UserService {
     }
 
     /**
-     * Saves User and Person in case the passwords are equal
+     * Saves User and Person in case the passwords are equal.
      *
      * @return status
      */
     public String saveUserIfPasswordsAreEqual(String username, User user, Person person, String pw1,
             String pw2) {
-		if (!pw1.equals(pw2)) {
-			return "PasswordNotEqual";
-		}
+        if (!pw1.equals(pw2)) {
+            return "PasswordNotEqual";
+        }
 
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
@@ -80,7 +80,6 @@ public class UserService {
     /**
      * Searches database for user by username. If user cannot be found, throw an exception. Else,
      * return user.
-     *
      * @param username String by which database gets searched.
      * @return User object from database.
      * @throws Exception Thrown, if no user can be found with user.username == username.
@@ -96,6 +95,12 @@ public class UserService {
         return optionalUser.get();
     }
 
+    /**
+     * TODO Javadoc.
+     *
+     * @param principal Descriptions
+     * @return Descriptions
+     */
     public User findUserByPrincipal(Principal principal) {
         User user;
 
@@ -114,6 +119,12 @@ public class UserService {
         return userRepository.findById(userId).orElse(null);
     }
 
+    /**
+     * TODO Javadoc.
+     * @param username Descriptions
+     * @param currentPrincipalName Descriptions
+     * @return Descriptions
+     */
     public boolean isCurrentUser(String username, String currentPrincipalName) {
         if (username.equals(currentPrincipalName)) {
             return true;

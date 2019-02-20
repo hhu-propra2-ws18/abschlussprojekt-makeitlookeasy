@@ -12,6 +12,5 @@ public class Ausleiherino24ApplicationTests {
     @Test
     public void contextLoads() {
     }
-
 }
 

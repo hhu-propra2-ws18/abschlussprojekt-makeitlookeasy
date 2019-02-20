@@ -16,6 +16,14 @@ public class EmailSender {
     private SimpleMailMessage message;
     private UserService userService;
 
+    /**
+     * TODO JavaDoc.
+     *
+     * @param config Description
+     * @param mailSender Description
+     * @param message Description
+     * @param userService Description
+     */
     @Autowired
     public EmailSender(EmailConfig config, JavaMailSenderImpl mailSender,
             SimpleMailMessage message, UserService userService) {
@@ -25,6 +33,11 @@ public class EmailSender {
         this.userService = userService;
     }
 
+    /**
+     * TODO JavaDoc.
+     * @param conflict Description
+     * @throws Exception Description
+     */
     public void sendEmail(Conflict conflict) throws Exception {
         mailSender.setHost(config.getHost());
         mailSender.setPort(config.getPort());

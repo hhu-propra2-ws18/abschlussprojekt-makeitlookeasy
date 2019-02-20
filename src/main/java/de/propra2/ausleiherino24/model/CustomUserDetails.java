@@ -14,7 +14,7 @@ public class CustomUserDetails extends User implements UserDetails {
     }
 
     /**
-     * TODO Javadoc
+     * TODO Javadoc.
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
