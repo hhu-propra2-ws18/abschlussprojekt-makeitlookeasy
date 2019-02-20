@@ -24,35 +24,63 @@
       var mainFrameOne = document.getElementById("mainFrameOne");
       var mainFrameTwo = document.getElementById("mainFrameTwo");
       var mainFrameThree = document.getElementById("mainFrameThree");
+      var mainFrameFour = document.getElementById("mainFrameFour");
+
       mainFrameOne.style.display = (
           mainFrameOne.style.display == "block" ? "block" : "block");
       mainFrameTwo.style.display = (
           mainFrameTwo.style.display == "none" ? "none" : "none");
       mainFrameThree.style.display = (
           mainFrameThree.style.display == "none" ? "none" : "none");
+      mainFrameFour.style.display = (
+          mainFrameFour.style.display == "none" ? "none" : "none");
     }
     function twoFunction(){
       var mainFrameOne = document.getElementById("mainFrameOne");
       var mainFrameTwo = document.getElementById("mainFrameTwo");
       var mainFrameThree = document.getElementById("mainFrameThree");
+      var mainFrameFour = document.getElementById("mainFrameFour");
+
       mainFrameOne.style.display = (
           mainFrameOne.style.display == "none" ? "none" : "none");
       mainFrameTwo.style.display = (
           mainFrameTwo.style.display == "block" ? "block" : "block");
       mainFrameThree.style.display = (
           mainFrameThree.style.display == "none" ? "none" : "none");
+      mainFrameFour.style.display = (
+          mainFrameFour.style.display == "none" ? "none" : "none");
     }
     function threeFunction(){
       var mainFrameOne = document.getElementById("mainFrameOne");
       var mainFrameTwo = document.getElementById("mainFrameTwo");
       var mainFrameThree = document.getElementById("mainFrameThree");
+      var mainFrameFour = document.getElementById("mainFrameFour");
+
       mainFrameOne.style.display = (
           mainFrameOne.style.display == "none" ? "none" : "none");
       mainFrameTwo.style.display = (
           mainFrameTwo.style.display == "none" ? "none" : "none");
       mainFrameThree.style.display = (
           mainFrameThree.style.display == "block" ? "block" : "block");
+      mainFrameFour.style.display = (
+          mainFrameFour.style.display == "none" ? "none" : "none");
     }
+    function fourFunction() {
+      var mainFrameOne = document.getElementById("mainFrameOne");
+      var mainFrameTwo = document.getElementById("mainFrameTwo");
+      var mainFrameThree = document.getElementById("mainFrameThree");
+      var mainFrameFour = document.getElementById("mainFrameFour");
+
+      mainFrameOne.style.display = (
+          mainFrameOne.style.display == "none" ? "none" : "none");
+      mainFrameTwo.style.display = (
+          mainFrameTwo.style.display == "none" ? "none" : "none");
+      mainFrameThree.style.display = (
+          mainFrameThree.style.display == "none" ? "none" : "none");
+      mainFrameFour.style.display = (
+          mainFrameFour.style.display == "block" ? "block" : "block");
+    }
+
   </script>
 
 </head>
@@ -69,8 +97,10 @@
     <div class="col-lg 9" style="margin-top: 100px;display:block" id="mainFrameOne">
       <table class="table">
         <tr><div class="text-center">
-          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span> <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span><button class="btn btn-light" onclick="threeFunction()"> Returned</button>
-        </div></tr>
+          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span>
+          <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span>
+          <button class="btn btn-light" onclick="threeFunction()"> Returned</button><span> / </span>
+          <button class="btn btn-light" onclick="fourFunction()"> Requests</button>        </div></tr>
         <thead>
         <tr>
           <th scope="col">Name</th>
@@ -95,8 +125,10 @@
     <div class="col-lg 9" style="margin-top: 100px;display:none" id="mainFrameTwo">
       <table class="table">
         <tr><div class="text-center">
-          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span> <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span><button class="btn btn-light" onclick="threeFunction()"> Returned</button>
-        </div></tr>
+          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span>
+          <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span>
+          <button class="btn btn-light" onclick="threeFunction()"> Returned</button><span> / </span>
+          <button class="btn btn-light" onclick="fourFunction()"> Requests</button>        </div></tr>
         <thead>
         <tr>
           <th scope="col">Name</th>
@@ -120,8 +152,10 @@
     <div class="col-lg 9" style="margin-top: 100px;display:none" id="mainFrameThree">
       <table class="table">
         <tr><div class="text-center" >
-          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span> <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span><button class="btn btn-light" onclick="threeFunction()"> Returned</button>
-        </div></tr>
+          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span>
+          <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span>
+          <button class="btn btn-light" onclick="threeFunction()"> Returned</button><span> / </span>
+          <button class="btn btn-light" onclick="fourFunction()"> Requests</button>        </div></tr>
         <thead>
         <tr>
           <th scope="col">Name</th>
@@ -138,6 +172,33 @@
         </tbody>
       </table>
     </div>
+
+    <!-- Fram for accepting people to borrow your article -->
+    <div class="col-lg 9" style="margin-top: 100px;display:none" id="mainFrameFour">
+      <table class="table">
+        <tr><div class="text-center">
+          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span>
+          <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span>
+          <button class="btn btn-light" onclick="threeFunction()"> Returned</button><span> / </span>
+          <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
+        </div></tr>
+        <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Article</th>
+          <th scope="col">Accept</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td><button type="button" class="btn btn-success btn-sm">accept</button><span> </span><button type="button" class="btn btn-danger btn-sm">decline</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
   </div>
 </div>
 <!-- Footer -->
