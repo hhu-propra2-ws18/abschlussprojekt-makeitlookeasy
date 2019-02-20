@@ -22,10 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * UserController manages all requests that are exclusively available to logged-in users of the
- * platform, except article/case handling. This includes profile management.
- */
 @Controller
 public class UserController {
 
@@ -36,6 +32,16 @@ public class UserController {
 
     private final List<Category> allCategories = Category.getAllCategories();
 
+    /**
+     * UserController manages all requests that are exclusively available to logged-in users of the
+     * platform, except article/case handling. This includes profile management. TODO:
+     * Javadoc-Descriptions
+     *
+     * @param userService Descriptions
+     * @param articleService Descriptions
+     * @param accountHandler Descriptions
+     * @param caseService Descriptions
+     */
     @Autowired
     public UserController(UserService userService, ArticleService articleService,
             AccountHandler accountHandler, CaseService caseService) {
@@ -45,7 +51,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    /**
+
+    /** TODO: Javadoc-HTML-Syntax: Change this to HTML-Syntax (<li></li>)
      * Show any user profile to logged-in users. 1.If visitor is not logged-in and tries to access
      * profile, redirect to login. 2. Else, display profile. 2.1 If requested profile of user, is
      * own profile, allow editing via 'self' flag. 2.2 Else, do not allow editing.
@@ -107,7 +114,11 @@ public class UserController {
         }
     }
 
-
+    /**
+     * TODO Javadoc.
+     * @param principal Description
+     * @return Description
+     */
     @GetMapping("/myOverview")
     public ModelAndView getMyArticlePage(Principal principal) {
         User currentUser = userService.findUserByPrincipal(principal);
@@ -129,7 +140,9 @@ public class UserController {
     // TODO: USED ???
 
     /**
-     * TODO JavaDoc
+     * TODO: Javadoc.
+     * @param principal Description
+     * @return Description
      */
     @GetMapping("/newItem")
     public ModelAndView getNewItemPage(Principal principal) {
@@ -143,7 +156,9 @@ public class UserController {
     }
 
     /**
-     * TODO JavaDoc
+     * TODO Javadoc.
+     * @param principal Description
+     * @return Description
      */
     @GetMapping("/bankAccount")
     public ModelAndView getBankAccountPage(Principal principal) {
@@ -160,7 +175,14 @@ public class UserController {
     }
 
     /**
-     * Saves new data if possible and redirects to same page with according param
+     *  Saves new data if possible and redirects to same page with according param.
+     *  TODO: JavaDoc-Descriptions
+     * @param principal Descriptions
+     * @param user Descriptions
+     * @param person Descriptions
+     * @param password Descriptions
+     * @param confirmpass Descriptions
+     * @return Descriptions
      */
     @PostMapping("accessed/user/saveProfile")
     public String saveEditedUserProfile(Principal principal, User user, Person person,

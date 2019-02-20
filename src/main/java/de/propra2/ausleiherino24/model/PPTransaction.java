@@ -30,7 +30,11 @@ public class PPTransaction {
 
     boolean cautionPaid;
 
-
+    /**
+     * TODO JavaDoc.
+     *
+     * @return Description
+     */
     public Double getTotalPayment() {
         if (cautionPaid) {
             return lendingCost + aCase.getDeposit();

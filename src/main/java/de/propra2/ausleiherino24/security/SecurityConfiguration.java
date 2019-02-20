@@ -64,7 +64,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * TODO Javadoc
+     * TODO Javadoc.
      */
     @Bean
     public PasswordEncoder getPasswordEncoder() {

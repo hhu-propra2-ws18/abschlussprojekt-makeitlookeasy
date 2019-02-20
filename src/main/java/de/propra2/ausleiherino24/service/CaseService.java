@@ -18,6 +18,14 @@ public class CaseService {
     private final ArticleService articleService;
     private final UserService userService;
 
+    /**
+     * TODO JavaDoc.
+     *
+     * @param caseRepository Description
+     * @param personRepository Description
+     * @param articleService Description
+     * @param userService Description
+     */
     @Autowired
     public CaseService(CaseRepository caseRepository, PersonRepository personRepository,
             ArticleService articleService,
@@ -88,7 +96,7 @@ public class CaseService {
 
     /**
      * Gibt alle Cases zurück, die zu einem Artikel vom User gehören und dessen requestStatus auf
-     * REQUESTED steht
+     * REQUESTED steht.
      */
     public List<Case> getAllRequestedCasesbyUser(Long userId) {
         return caseRepository
@@ -104,7 +112,6 @@ public class CaseService {
      */
     public void requestArticle(Long articleId, Long starttime, Long endtime, String username)
             throws Exception {
-//		try {
         Case c = new Case();
         c.setArticle(articleService.findArticleById(articleId));
         c.setStartTime(starttime);
@@ -115,8 +122,5 @@ public class CaseService {
         c.setRequestStatus(Case.REQUESTED);
 
         caseRepository.save(c);
-//		} catch(Exception e){
-//			e.printStackTrace();
-//		}
     }
 }

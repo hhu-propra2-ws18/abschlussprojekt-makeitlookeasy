@@ -23,6 +23,13 @@ public class ConflictService {
     private final ReservationHandler reservationHandler;
     private final Logger LOGGER = LoggerFactory.getLogger(ConflictService.class);
 
+    /**
+     * TODO JavaDoc.
+     *
+     * @param conflicts Description
+     * @param emailSender Description
+     * @param reservationHandler Description
+     */
     @Autowired
     public ConflictService(ConflictRepository conflicts, EmailSender emailSender,
             ReservationHandler reservationHandler) {
@@ -31,6 +38,12 @@ public class ConflictService {
         this.reservationHandler = reservationHandler;
     }
 
+    /**
+     * TODO JavaDoc.
+     * @param conflict Description
+     * @param user Description
+     * @throws Exception Description
+     */
     public void saveConflict(Conflict conflict, User user) throws Exception {
         if (conflict == null) {
             throw new Exception("No such conflict");
@@ -43,6 +56,12 @@ public class ConflictService {
         emailSender.sendEmail(conflict);
     }
 
+    /**
+     * TODO Javadoc.
+     * @param id Description
+     * @param user Description
+     * @throws Exception Description
+     */
     public void deactivateConflict(Long id, User user) throws Exception {
         Optional<Conflict> conflictToDeactivate = conflicts.findById(id);
         if (!conflictToDeactivate.isPresent()) {
@@ -53,6 +72,11 @@ public class ConflictService {
         conflicts.delete(conflictToDeactivate.get());
     }
 
+    /**
+     * TODO JavaDoc.
+     * @param user Description
+     * @return Description
+     */
     public List<Conflict> getAllConflictsByUser(User user) {
         List<Conflict> allConflicts = new ArrayList<>();
         allConflicts.addAll(conflicts.findAllByReceiver(user));
@@ -61,6 +85,13 @@ public class ConflictService {
         return allConflicts;
     }
 
+    /**
+     * TODO JavaDoc.
+     * @param id Description
+     * @param user Description
+     * @return Description
+     * @throws Exception Description
+     */
     public Conflict getConflict(Long id, User user) throws Exception {
         Optional<Conflict> conflict = conflicts.findById(id);
         if (!conflict.isPresent()) {
@@ -70,6 +101,13 @@ public class ConflictService {
         return conflict.get();
     }
 
+    /**
+     * TODO JavaDoc.
+     * @param conflict Description
+     * @param user Description
+     * @return Description
+     * @throws Exception Description
+     */
     public boolean isConflictedArticleOwner(Conflict conflict, User user) throws Exception {
         if (user == null) {
             throw new Exception("No such user");
@@ -77,6 +115,12 @@ public class ConflictService {
         return user.equals(conflict.getConflictedCase().getOwner());
     }
 
+    /**
+     * TODO Javadoc.
+     * @param conflict Description
+     * @return Description
+     * @throws Exception Description
+     */
     public List<User> getConflictParticipants(Conflict conflict) throws Exception {
         if (conflict == null) {
             throw new Exception("No such conflict!");
@@ -93,12 +137,16 @@ public class ConflictService {
     }
 
     private boolean isUserAdmin(User user) {
-        if ("admin".equals(user.getRole())) {
-            return true;
-        }
-        return false;
+        return "admin".equals(user.getRole());
     }
 
+    /**
+     * TODO JavaDoc.
+     * @param conflictToSolve Description
+     * @param user Description
+     * @param depositReceiver Description
+     * @throws Exception Description
+     */
     public void solveConflict(Conflict conflictToSolve, User user, User depositReceiver)
             throws Exception {
         if (!isUserAdmin(user)) {

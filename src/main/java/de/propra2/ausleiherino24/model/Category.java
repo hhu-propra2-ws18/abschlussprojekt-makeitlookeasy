@@ -20,7 +20,7 @@ public enum Category {
         this.name = name;
     }
 
-    /**
+    /** TODO: Ueberschrift.
      * @return list with all existing categories.
      */
     public static List<Category> getAllCategories() {

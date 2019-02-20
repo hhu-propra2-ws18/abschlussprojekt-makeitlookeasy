@@ -40,7 +40,7 @@ public class Article {
 
     /**
      * true: it is possible to rent the article false: owner does not want to have the article for
-     * rent right now
+     * rent right now.
      */
     private boolean active;
 
@@ -53,7 +53,7 @@ public class Article {
     private List<Case> cases;
 
     /**
-     * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
+     * Die Konstruktion ist nötig, damit der Case stets mit geupdated wird. Analoges ist im Case
      * Siehe
      * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
      */

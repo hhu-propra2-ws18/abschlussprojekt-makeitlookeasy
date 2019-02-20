@@ -59,6 +59,8 @@ public class User {
         addArticle(article, false);
     }
 
+    @SuppressWarnings("Duplicates")
+        // TODO: Duplicate code
     void addArticle(Article article, boolean repetition) {
         if (article == null) {
             return;

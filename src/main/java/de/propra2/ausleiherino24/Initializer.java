@@ -28,6 +28,15 @@ public class Initializer implements ServletContextInitializer {
     private final ArticleRepository articleRepository;
     private final PersonRepository personRepository;
 
+    /**
+     * TODO Javadoc.
+     *
+     * @param userRepository Descriptions
+     * @param articleRepository Descriptions
+     * @param caseRepository Descriptions
+     * @param personRepository Descriptions
+     * @param caseService Descriptions
+     */
     @Autowired
     public Initializer(UserRepository userRepository, ArticleRepository articleRepository,
             PersonRepository personRepository) {

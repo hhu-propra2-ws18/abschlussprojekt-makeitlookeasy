@@ -20,6 +20,11 @@ public class CustomerReviewService {
         this.caseService = caseService;
     }
 
+    /**
+     * TODO JavaDoc.
+     *
+     * @param customerReview Description
+     */
     public void addCustomerReview(CustomerReview customerReview) {
         customerReviewRepository.save(customerReview);
     }
@@ -31,17 +36,13 @@ public class CustomerReviewService {
                         .contains(customerReview.getACase()))
                 .collect(Collectors.toList());
 
-		/*
-		List<CustomerReview> userReviews = new ArrayList<>();
-		List<CustomerReview> reviews = customerReviewRepository.findAll();
-		for(CustomerReview c : reviews){
-			if(caseService.getAllCasesFromPersonOwner(id).contains(c.getACase())){
-				userReviews.add(c);
-			}
-		}
-		return userReviews;
-		*/
+//        List<CustomerReview> userReviews = new ArrayList<>();
+//        List<CustomerReview> reviews = customerReviewRepository.findAll();
+//        for (CustomerReview c : reviews) {
+//            if (caseService.getAllCasesFromPersonOwner(id).contains(c.getACase())) {
+//                userReviews.add(c);
+//            }
+//        }
+//        return userReviews;
     }
-
-
 }

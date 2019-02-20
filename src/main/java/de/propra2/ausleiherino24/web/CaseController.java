@@ -24,10 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * Manages all requests regarding creating/editing/deleting articles/cases and after-sales. Possible
- * features: transaction rating (karma/voting), chatting
- */
+
 @Controller
 public class CaseController {
 
@@ -38,6 +35,15 @@ public class CaseController {
 
     private final List<Category> allCategories = Category.getAllCategories();
 
+    /**
+     * Manages all requests regarding creating/editing/deleting articles/cases and after-sales.
+     * Possible features: transaction rating (karma/voting), chatting. TODO JavaDoc-Descriptions.
+     *
+     * @param articleService Descriptions
+     * @param userService Descriptions
+     * @param imageService Descriptions
+     * @param caseService Descriptions
+     */
     @Autowired
     public CaseController(ArticleService articleService,
             UserService userService,
@@ -50,9 +56,15 @@ public class CaseController {
     }
 
     /**
-     * TODO JavaDoc
+     * TODO Javadoc.
+     *
+     * @param id Descriptions
+     * @param principal Descriptions
+     * @return Descriptions
+     * @throws Exception Descriptions
      */
     @GetMapping("/article")
+    @SuppressWarnings("Duplicates") // TODO Duplicate code
     public ModelAndView displayArticle(@RequestParam("id") Long id, Principal principal)
             throws Exception {
         Article article = articleService.findArticleById(id);
@@ -66,7 +78,10 @@ public class CaseController {
     }
 
     /**
-     * TODO JavaDoc
+     * TODO Javadoc.
+     *
+     * @param principal Descriptions
+     * @return Descriptions
      */
     @GetMapping("/newArticle")
     public ModelAndView createNewCaseAndArticle(Principal principal) {
@@ -81,7 +96,14 @@ public class CaseController {
     }
 
     /**
-     * TODO JavaDoc
+     * TODO Javadoc.
+     *
+     * @param article Descriptions
+     * @param result Descriptions
+     * @param model Descriptions
+     * @param image Descriptions
+     * @param principal Descriptions
+     * @return Descriptions
      */
     @PostMapping("/saveNewArticle")
     public ModelAndView saveNewCaseAndArticle(@ModelAttribute @Valid Article article,
@@ -97,7 +119,14 @@ public class CaseController {
     }
 
     /**
-     * TODO JavaDoc
+     * TODO Javadoc.
+     *
+     * @param article Descriptions
+     * @param result Descriptions
+     * @param model Descriptions
+     * @param image Descriptions
+     * @param principal Descriptions
+     * @return Descriptions
      */
     @PutMapping("/saveEditedArticle")
     public ModelAndView saveEditedCaseAndArticle(@ModelAttribute @Valid Article article,
@@ -115,6 +144,16 @@ public class CaseController {
         return mav;
     }
 
+    /**
+     * TODO JavaDoc.
+     *
+     * @param id Description
+     * @param startTime Description
+     * @param endTime Description
+     * @param principal Description
+     * @return Description
+     * @throws Exception Description
+     */
     @PostMapping("/bookArticle")
     public String bookArticle(@RequestParam Long id, String startTime, String endTime,
             Principal principal) throws Exception {

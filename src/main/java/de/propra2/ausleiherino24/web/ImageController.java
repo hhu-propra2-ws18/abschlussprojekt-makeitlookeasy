@@ -38,7 +38,10 @@ public class ImageController {
     }
 
     /**
-     * TODO Javadoc
+     * TODO Javadoc.
+     * @param fileName Description
+     * @param response Description
+     * @throws IOException Description
      */
     @GetMapping("/images/{fileName}")
     public void getImage(@PathVariable String fileName, HttpServletResponse response)

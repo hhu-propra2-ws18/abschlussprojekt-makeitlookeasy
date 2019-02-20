@@ -20,6 +20,13 @@ public class AccountHandler {
     private PPTransactionRepository ppTransactionRepository;
     private CaseRepository caseRepository;
 
+    /**
+     * TODO: Javadoc.
+     *
+     * @param caseRepository Description
+     * @param ppTransactionRepository Description
+     * @param restTemplate Description
+     */
     @Autowired
     public AccountHandler(CaseRepository caseRepository,
             PPTransactionRepository ppTransactionRepository, RestTemplate restTemplate) {
@@ -34,6 +41,11 @@ public class AccountHandler {
                 .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
     }
 
+    /**
+     * TODO: JavaDoc.
+     * @param accountName Description
+     * @return Description
+     */
     public double checkFunds(String accountName) {
         PPAccount account = restTemplate
                 .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
@@ -58,6 +70,12 @@ public class AccountHandler {
         return account.getAmount() - reserved >= requestedFunds;
     }
 
+    /**
+     * TODO JavaDoc.
+     * @param username Description
+     * @param amount Description
+     * @return
+     */
     public double addFunds(String username, double amount) {
 
         HttpEntity<Double> request = new HttpEntity<>(amount);

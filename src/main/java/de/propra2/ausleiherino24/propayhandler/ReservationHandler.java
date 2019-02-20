@@ -19,7 +19,13 @@ public class ReservationHandler {
     private PPTransactionRepository ppTransactionRepository;
     private CaseRepository caseRepository;
 
-
+    /**
+     * TODO Javadoc
+     *
+     * @param ppTransactionRepository Description
+     * @param caseRepository Description
+     * @param restTemplate Description
+     */
     public ReservationHandler(PPTransactionRepository ppTransactionRepository,
             CaseRepository caseRepository, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -64,6 +70,12 @@ public class ReservationHandler {
                 .equals(HttpStatus.CREATED);
     }
 
+    /**
+     * TODO Javadoc.
+     * @param account Description
+     * @param reservationId Description
+     * @return Description
+     */
     public boolean punishReservation(String account, Integer reservationId) {
         HttpEntity<Integer> request = new HttpEntity<>(reservationId);
 

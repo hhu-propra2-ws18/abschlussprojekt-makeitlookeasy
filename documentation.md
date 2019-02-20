@@ -26,9 +26,12 @@ To manage the login and permissions we created the `Users` class. Here we store 
 #### Person
 Additional user information, like name or contact is stored in the class `Person`. To connect a Person with a User, a one-to-one relation is provided.
 
-### Article
+#### Article
 An article is represented by the `Article` class which simply stores a name and a description.
 
-### Case
+#### Case
 The class `Case` represents a contract between loaner and borrower. It links two Users, `owner` and `receiver`, together. Additionally time and pricing information are stored here. For every article borrowed a new case is created.
 An article is considered available if no case for the current time is present.
+
+#### Deviations from the task descriptions
+* According to our architectural idea the available offers are **visible even when not logged in.**
