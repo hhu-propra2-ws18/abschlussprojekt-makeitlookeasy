@@ -190,7 +190,7 @@ public class CaseControllerTest {
 		Mockito.verify(articles, Mockito.times(1)).save(ArgumentMatchers.refEq(article));
 		Mockito.verify(cases, Mockito.times(1)).save(ArgumentMatchers.refEq(c1));
 		Assertions.assertThat(c1.getActive()).isFalse();
-		Assertions.assertThat(article.getActive()).isFalse();
+		Assertions.assertThat(article.isActive()).isFalse();
 	}
 
 	// TODO: create new article, when logged in

@@ -21,6 +21,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -52,7 +53,8 @@ public class MainControllerTest {
 	private CaseRepository cases;
 	@MockBean
 	private ConflictRepository conflicts;
-
+	@MockBean
+	private PPTransactionRepository ppTransactions;
 	@MockBean
 	private CustomerReviewRepository customerReviewRepository;
 

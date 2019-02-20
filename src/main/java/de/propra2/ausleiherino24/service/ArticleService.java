@@ -62,10 +62,6 @@ public class ArticleService {
 				: articleRepository.findAllActive();
 	}
 
-	public List<Article> getAllActiveArticlesbyUser(User user) {
-		return articleRepository.findAllActiveByUser(user);
-	}
-
 	/**
 	 * Deactivates an article by ID to hide it from all users and prohibit further cases. Checks, if
 	 * article is present by looking for ID key. If fails, throw Exception. If article is not being

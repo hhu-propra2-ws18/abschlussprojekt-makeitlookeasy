@@ -21,6 +21,8 @@ public class CustomerReview {
 	@NotNull
 	Case aCase;
 
+	Long stars;
+
 	String description;
 
 	Long timestamp;
