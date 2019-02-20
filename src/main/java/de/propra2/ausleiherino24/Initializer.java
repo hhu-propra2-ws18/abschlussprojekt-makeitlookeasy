@@ -55,7 +55,7 @@ public class Initializer implements ServletContextInitializer {
 			User user = createUser(
 					person.getFirstName() + person.getLastName() + "@mail.de",
 					faker.name().fullName(),
-					faker.crypto().sha256(),
+					"password",
 					person);
 
 			ArrayList<Case> cases = IntStream.range(0, faker.random().nextInt(1, 7)).mapToObj(value1 -> {

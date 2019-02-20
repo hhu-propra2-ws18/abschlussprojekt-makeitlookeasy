@@ -1,7 +1,6 @@
 package de.propra2.ausleiherino24.model;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,26 +14,32 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Case {
 
+	public static final String REQUESTED = "Requested";
+	public static final String REQUEST_ACCEPTED = "Request accepted";
+	public static final String REQUEST_DECLINED = "Request declined";
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	Long id;
+	private Long id;
 
-	Long startTime;
+	private Long startTime;
 
-	Long endTime;
+	private Long endTime;
 
-	int price;
+	private int price;
 
-	int deposit;
+	private int deposit;
+
+	private String requestStatus;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	CustomerReview customerReview;
+	private CustomerReview customerReview;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	User receiver;
+	private User receiver;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	Article article;
+	private Article article;
 
 	/**
 	 * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case

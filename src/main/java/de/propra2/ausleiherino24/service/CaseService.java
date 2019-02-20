@@ -81,6 +81,18 @@ public class CaseService {
 	}
 
 	/**
+	 * Gibt alle Cases zurück, die zu einem Artikel vom User gehören und dessen requestStatus auf REQUESTED steht
+	 */
+	public List<Case> getAllRequestedCasesbyUser(Long userId){
+		return caseRepository
+				.findAllByArticleOwner(userService.findUserById(userId))
+				.stream()
+				.filter(c ->
+						c.getRequestStatus() != null && c.getRequestStatus().equals(Case.REQUESTED))
+				.collect(Collectors.toCollection(ArrayList::new));
+	}
+
+	/**
 	 * Erwartet Case mit wo Artikel verliehen werden kann. Case wird modifiziert, dass es nun
 	 * verliehen ist.
 	 */
@@ -93,6 +105,7 @@ public class CaseService {
 			c.setDeposit(c.getArticle().getDeposit());
 			c.setPrice(c.getArticle().getCostPerDay());
 			c.setReceiver(userService.findUserByUsername(username));
+			c.setRequestStatus(Case.REQUESTED);
 
 			caseRepository.save(c);
 		} catch(Exception e){

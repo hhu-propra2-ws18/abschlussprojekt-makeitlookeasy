@@ -115,7 +115,6 @@
           <td th:text="${article.name} "></td>
           <td th:text="${article.costPerDay} + '€'"></td>
           <td th:text="${article.deposit} + '€'"></td>
-          <td><span th:if="${article.reserved==false}" class="badge badge-pill badge-success">Activ</span><span th:unless="${article.reserved==false}" class="badge badge-pill badge-danger">Deactivated</span></td>
         </tr>
         </tbody>
       </table>
@@ -177,22 +176,26 @@
     <div class="col-lg 9" style="margin-top: 100px;display:none" id="mainFrameFour">
       <table class="table">
         <tr><div class="text-center">
-          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span>
-          <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span>
-          <button class="btn btn-light" onclick="threeFunction()"> Returned</button><span> / </span>
+          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> | </span>
+          <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> | </span>
+          <button class="btn btn-light" onclick="threeFunction()"> Returned</button><span> | </span>
           <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
         </div></tr>
         <thead>
         <tr>
           <th scope="col">Name</th>
           <th scope="col">Article</th>
+          <th scope="col">From</th>
+          <th scope="col">To</th>
           <th scope="col">Accept</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td></td>
-          <td></td>
+        <tr th:each="case:${requested}">
+          <td th:text="${case.receiver.username}"></td>
+          <td th:text="${case.article.name}"></td>
+          <td th:text="${case.getFormattedStartTime()}"></td>
+          <td th:text="${case.getFormattedEndTime()}"></td>
           <td><button type="button" class="btn btn-success btn-sm">accept</button><span> </span><button type="button" class="btn btn-danger btn-sm">decline</button></td>
         </tr>
         </tbody>
