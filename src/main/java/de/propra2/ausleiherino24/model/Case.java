@@ -44,7 +44,6 @@ public class Case {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	PPTransaction ppTransaction;
 
-	Boolean active;
 
 	/**
 	 * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
@@ -65,6 +64,20 @@ public class Case {
 
 	public User getOwner() {
 		return this.article.getOwner();
+	}
+
+	public String getFormattedStartTime(){
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		return simpleDateFormat.format(startTime);
+	}
+
+	public String getFormattedEndTime(){
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		return simpleDateFormat.format(endTime);
+	}
+
+	public boolean getActive(){
+		return article.isActive();
 	}
 
 }

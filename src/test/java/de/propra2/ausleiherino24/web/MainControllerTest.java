@@ -1,14 +1,6 @@
 package de.propra2.ausleiherino24.web;
 
-import static org.mockito.Mockito.mock;
-
-import de.propra2.ausleiherino24.data.ArticleRepository;
-import de.propra2.ausleiherino24.data.CaseRepository;
-import de.propra2.ausleiherino24.data.ConflictRepository;
-import de.propra2.ausleiherino24.data.CustomerReviewRepository;
-import de.propra2.ausleiherino24.data.PersonRepository;
-import de.propra2.ausleiherino24.data.TransactionRepository;
-import de.propra2.ausleiherino24.data.UserRepository;
+import de.propra2.ausleiherino24.data.*;
 import de.propra2.ausleiherino24.email.EmailSender;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
@@ -40,6 +32,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.mockito.Mockito.mock;
+
 @RunWith(SpringRunner.class)
 @WebMvcTest
 @ActiveProfiles(profiles = "test")
@@ -58,8 +52,7 @@ public class MainControllerTest {
 	private CaseRepository cases;
 	@MockBean
 	private ConflictRepository conflicts;
-	@MockBean
-	private TransactionRepository transactions;
+
 	@MockBean
 	private CustomerReviewRepository customerReviewRepository;
 
@@ -133,13 +126,6 @@ public class MainControllerTest {
 				.andExpect(
 						MockMvcResultMatchers.model()
 								.attribute("person", Matchers.instanceOf(Person.class)));
-	}
-	@Ignore
-	@Test
-	public void defaultAfterLoginStatusTest() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.get("/default"))
-				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-				.andExpect(MockMvcResultMatchers.redirectedUrl("/accessed/user/index"));
 	}
 
 	@Ignore

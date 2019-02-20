@@ -23,7 +23,7 @@ public class PersonService {
 	 * Saves created/updated Person object to database.
 	 *
 	 * @param person Person object that gets stored in databased.
-	 * @param msg String with message for logger. Either "Created" or "Updated".
+	 * @param msg    String with message for logger. Either "Created" or "Updated".
 	 */
 	void savePerson(Person person, String msg) {
 		personRepository.save(person);

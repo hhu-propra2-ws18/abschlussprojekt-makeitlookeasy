@@ -4,6 +4,7 @@ import de.propra2.ausleiherino24.data.CustomerReviewRepository;
 import de.propra2.ausleiherino24.model.CustomerReview;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,12 @@ public class CustomerReviewService {
 	}
 
 	public List<CustomerReview> findAllReviewsByLenderId(Long id){
+		List<CustomerReview> reviews = customerReviewRepository.findAll();
+		return reviews.stream()
+				.filter(customerReview -> caseService.getAllCasesFromPersonOwner(id).contains(customerReview.getACase()))
+				.collect(Collectors.toList());
+
+		/*
 		List<CustomerReview> userReviews = new ArrayList<>();
 		List<CustomerReview> reviews = customerReviewRepository.findAll();
 		for(CustomerReview c : reviews){
@@ -32,6 +39,7 @@ public class CustomerReviewService {
 			}
 		}
 		return userReviews;
+		*/
 	}
 
 

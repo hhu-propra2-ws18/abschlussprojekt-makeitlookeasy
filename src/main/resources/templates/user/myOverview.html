@@ -108,8 +108,8 @@
         <tbody>
         <tr th:each="borrow: ${borrowed}">
           <td th:text="${borrow.article.name}"></td>
-          <td th:text="${borrow.startTime}"></td>
-          <td th:text="${borrow.endTime}"></td>
+          <td th:text="${borrow.getFormattedStartTime()}"></td>
+          <td th:text="${borrow.getFormattedEndTime()}"></td>
           <td><button type="button" class="btn btn-success btn-sm">Give back</button></td>
         </tr>
         </tbody>

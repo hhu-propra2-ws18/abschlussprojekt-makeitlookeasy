@@ -1,17 +1,16 @@
 package de.propra2.ausleiherino24.email;
 
+import de.propra2.ausleiherino24.model.Case;
+import de.propra2.ausleiherino24.model.Conflict;
+import de.propra2.ausleiherino24.model.User;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Conflict;
-import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.UserService;
 
 public class EmailSenderTest {

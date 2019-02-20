@@ -1,11 +1,12 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.data.ConflictRepository;
+import de.propra2.ausleiherino24.model.Conflict;
 import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import de.propra2.ausleiherino24.data.ConflictRepository;
-import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ConflictService;
 import de.propra2.ausleiherino24.service.UserService;

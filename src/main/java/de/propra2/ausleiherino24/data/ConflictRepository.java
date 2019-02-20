@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.data;
 
+import de.propra2.ausleiherino24.model.Conflict;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
+
 
 public interface ConflictRepository extends CrudRepository<Conflict, Long> {
 
