@@ -1,0 +1,25 @@
+.PreCleanup
+[source,bash]
+----
+sudo rm -rf ~/.gradle
+sudo rm -rf ./.gradle
+sudo rm -rf ./build
+sudo rm -rf ./out
+sudo rm -rf ./jenkins_home
+sudo rm -rf ./propay
+----
+
+.Importing the code-style settings in the intelliJ formatter:
+`File -> Settings -> Editor -> Code Style -> Java -> Import Scheme -> IntelliJ Idea code style XML` +
+Then use ./config/checkstyle/intellij-java-google-style.xml
+
+.Force code formatting on every commit:
+`File -> Settings -> Version Control -> And then check the following:`
+
+  * Reformat code
+  * Rearrange code
+  * Optimize imports
+  * Cleanup
+
+(Rest can/should be unchecked)
+

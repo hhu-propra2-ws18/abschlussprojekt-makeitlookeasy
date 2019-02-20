@@ -1,5 +1,7 @@
 == ausleiherino24
 
+IMPORTANT: On first importing the project `Create separate module per source set` must be unchecked (deprecated).
+
 ==== Login Details
 After starting the Docker Compose file, you can login into the web app
 
@@ -33,7 +35,7 @@ at ~/jenkins_home.
 The task _javadocs_ generates its output to ./build/docs/javadoc/de. 
 
 ==== code-style
-All Sourcefiles are now formatted according to the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html). First time configuration of the IDE is necessary (see init.adoc)
+All Sourcefiles are now formatted according to the Google Java Style Guide (https://google.github.io/styleguide/javaguide.html). First time configuration of the IDE is necessary (see init.adoc)
 
 HINT: Use CTRL+ALT+L to manually trigger a code format the currently opened file.
 
@@ -43,7 +45,7 @@ Select ./config/checkstyle/checkstyle-google.xml.
 
 ==== Code Analysis
 ====== sonarcloud
-The app is now available online on sonarcloud [here](https://sonarcloud.io/organizations/ausleiherino24/).
+The app is now available online on sonarcloud  at https://sonarcloud.io/organizations/ausleiherino24/.
 
 Running the gradle-task _sonarqube_ will trigger a new analysis run, but the analysis is also automatically triggered on every new commit by travisCI.
 
