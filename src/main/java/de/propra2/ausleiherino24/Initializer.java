@@ -2,23 +2,23 @@ package de.propra2.ausleiherino24;
 
 import com.github.javafaker.Faker;
 import de.propra2.ausleiherino24.data.ArticleRepository;
-import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.service.CaseService;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,19 +26,14 @@ public class Initializer implements ServletContextInitializer {
 
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
-    private final CaseRepository caseRepository;
     private final PersonRepository personRepository;
-    private final CaseService caseService;
 
     @Autowired
     public Initializer(UserRepository userRepository, ArticleRepository articleRepository,
-            CaseRepository caseRepository, PersonRepository personRepository,
-            CaseService caseService) {
+            PersonRepository personRepository) {
         this.userRepository = userRepository;
         this.articleRepository = articleRepository;
-        this.caseRepository = caseRepository;
         this.personRepository = personRepository;
-        this.caseService = caseService;
     }
 
     @Override
@@ -63,17 +58,19 @@ public class Initializer implements ServletContextInitializer {
                     person);
 
             ArrayList<Article> articles = IntStream.range(0, faker.random().nextInt(1, 7))
-                    .mapToObj(value1 -> createArticle(
-                            faker.pokemon().name(),
-                            faker.chuckNorris().fact(),
-                            Category.getAllCategories().get(faker.random()
-                                    .nextInt(0, Category.getAllCategories().size() - 1)),
-                            user,
-                            faker.random().nextInt(5, 500),
-                            faker.random().nextInt(100, 2000),
-                            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
-                                    +
-                                    faker.random().nextInt(1, 807) + ".png"))
+                    .mapToObj(value1 -> {
+                        int id = faker.random().nextInt(1, 807);
+                        return createArticle(
+                                readPokemonName(id),
+                                faker.chuckNorris().fact(),
+                                Category.getAllCategories().get(faker.random()
+                                        .nextInt(0, Category.getAllCategories().size() - 1)),
+                                user,
+                                faker.random().nextInt(5, 500),
+                                faker.random().nextInt(100, 2000),
+                                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
+                                        + id + ".png");
+                    })
                     .collect(Collectors.toCollection(ArrayList::new));
 
             personRepository.save(person);
@@ -149,15 +146,17 @@ public class Initializer implements ServletContextInitializer {
         return article;
     }
 
-    private Case createCase(Article article) {
-        Case c = new Case();
-        c.setArticle(article);
-        c.setPrice(article.getCostPerDay());
-        c.setDeposit(article.getDeposit());
-        return c;
-    }
-
-    private Long convertDateAsLong(int day, int month, int year) {
-        return new GregorianCalendar(day, month, year).getTimeInMillis();
+    private String readPokemonName(int id){
+        try {
+            File resource = new ClassPathResource(
+                    "static/Pokemon/names/"+id+".txt").getFile();
+            String name = new String(Files
+                    .readAllBytes(resource.toPath()))
+                    .trim();
+            return name.substring(0, 1).toUpperCase() + name.substring(1, name.length()-1);
+        } catch (IOException e){
+            e.printStackTrace();
+            return "";
+        }
     }
 }
