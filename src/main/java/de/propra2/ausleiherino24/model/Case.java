@@ -21,26 +21,32 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Case {
 
+	public static final int REQUESTED = 1;
+	public static final int REQUEST_ACCEPTED = 2;
+	public static final int REQUEST_DECLINED = 3;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	Long id;
+	private Long id;
 
-	Long startTime;
+	private Long startTime;
 
-	Long endTime;
+	private Long endTime;
 
-	int price;
+	private int price;
 
-	int deposit;
+	private int deposit;
+
+	private int requestStatus;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	CustomerReview customerReview;
+	private CustomerReview customerReview;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	User receiver;
+	private User receiver;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	Article article;
+	private Article article;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	PPTransaction ppTransaction;
@@ -67,11 +73,17 @@ public class Case {
 		return this.article.getOwner();
 	}
 
+	/**
+	 * Formatiert die Startzeit in dd.mm.yyy
+	 */
 	public String getFormattedStartTime(){
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 		return simpleDateFormat.format(startTime);
 	}
 
+	/**
+	 * Formatiert die Endzeit in dd.mm.yyy
+	 */
 	public String getFormattedEndTime(){
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 		return simpleDateFormat.format(endTime);

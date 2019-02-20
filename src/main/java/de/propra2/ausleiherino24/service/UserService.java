@@ -113,6 +113,10 @@ public class UserService {
 		return user;
 	}
 
+	public User findUserById(Long userId){
+		return userRepository.findById(userId).orElse(null);
+	}
+
 	public boolean isCurrentUser(String username, String currentPrincipalName) {
 		if (username.equals(currentPrincipalName)) {
 			return true;

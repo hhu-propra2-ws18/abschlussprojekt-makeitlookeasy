@@ -51,6 +51,7 @@ public class MainController {
 		mav.addObject("all", allArticles);
 		mav.addObject("user", currentUser);
 		mav.addObject("categories", allCategories);
+		mav.addObject("category", "all");
 		return mav;
 	}
 
@@ -70,6 +71,7 @@ public class MainController {
 		mav.addObject("all", allArticlesInCategory);
 		mav.addObject("user", currentUser);
 		mav.addObject("categories", allCategories);
+		mav.addObject("category", category);
 		return mav;
 	}
 
