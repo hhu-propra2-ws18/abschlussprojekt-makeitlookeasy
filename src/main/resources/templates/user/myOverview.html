@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+        name="viewport">
+  <!-- before: content="width=device-width, initial-scale=1, shrink-to-fit=no" -->
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+  <meta content="" name="description">
+  <meta content="" name="author">
+
+  <title>Ausleiherino24</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}">
+
+  <!-- Font awesome Css-->
+  <link rel="stylesheet" th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}">
+
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" th:href="@{~/css/shop-homepage.css}">
+  <script>
+    function oneFunction(){
+      var mainFrameOne = document.getElementById("mainFrameOne");
+      var mainFrameTwo = document.getElementById("mainFrameTwo");
+      var mainFrameThree = document.getElementById("mainFrameThree");
+      mainFrameOne.style.display = (
+          mainFrameOne.style.display == "block" ? "block" : "block");
+      mainFrameTwo.style.display = (
+          mainFrameTwo.style.display == "none" ? "none" : "none");
+      mainFrameThree.style.display = (
+          mainFrameThree.style.display == "none" ? "none" : "none");
+    }
+    function twoFunction(){
+      var mainFrameOne = document.getElementById("mainFrameOne");
+      var mainFrameTwo = document.getElementById("mainFrameTwo");
+      var mainFrameThree = document.getElementById("mainFrameThree");
+      mainFrameOne.style.display = (
+          mainFrameOne.style.display == "none" ? "none" : "none");
+      mainFrameTwo.style.display = (
+          mainFrameTwo.style.display == "block" ? "block" : "block");
+      mainFrameThree.style.display = (
+          mainFrameThree.style.display == "none" ? "none" : "none");
+    }
+    function threeFunction(){
+      var mainFrameOne = document.getElementById("mainFrameOne");
+      var mainFrameTwo = document.getElementById("mainFrameTwo");
+      var mainFrameThree = document.getElementById("mainFrameThree");
+      mainFrameOne.style.display = (
+          mainFrameOne.style.display == "none" ? "none" : "none");
+      mainFrameTwo.style.display = (
+          mainFrameTwo.style.display == "none" ? "none" : "none");
+      mainFrameThree.style.display = (
+          mainFrameThree.style.display == "block" ? "block" : "block");
+    }
+  </script>
+
+</head>
+<body>
+<!-- Navigation -->
+<div name="navbar" th:replace="/../fragments/navbar ::navbar"></div>
+
+<div class="container">
+  <div class="row">
+    <!-- Categories -->
+    <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
+
+    <!-- Frame for articles from User-->
+    <div class="col-lg 9" style="margin-top: 100px;display:block" id="mainFrameOne">
+      <table class="table">
+        <tr><div class="text-center">
+          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span> <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span><button class="btn btn-light" onclick="threeFunction()"> Returned</button>
+        </div></tr>
+        <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Price</th>
+          <th scope="col">Deposit</th>
+          <th scope="col">Status</th>
+          <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="article: ${myArticles}">
+          <td th:text="${article.name} "></td>
+          <td th:text="${article.costPerDay} + '€'"></td>
+          <td th:text="${article.deposit} + '€'"></td>
+          <td><span th:if="${article.reserved==false}" class="badge badge-pill badge-success">Activ</span><span th:unless="${article.reserved==false}" class="badge badge-pill badge-danger">Deactivated</span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Frame for borrowed articles from other users -->
+    <div class="col-lg 9" style="margin-top: 100px;display:none" id="mainFrameTwo">
+      <table class="table">
+        <tr><div class="text-center">
+          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span> <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span><button class="btn btn-light" onclick="threeFunction()"> Returned</button>
+        </div></tr>
+        <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">From</th>
+          <th scope="col">To</th>
+          <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="borrow: ${borrowed}">
+          <td th:text="${borrow.article.name}"></td>
+          <td th:text="${borrow.getFormattedStartTime()}"></td>
+          <td th:text="${borrow.getFormattedEndTime()}"></td>
+          <td><button type="button" class="btn btn-success btn-sm">Give back</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Frame for returned articles from other users -->
+    <div class="col-lg 9" style="margin-top: 100px;display:none" id="mainFrameThree">
+      <table class="table">
+        <tr><div class="text-center" >
+          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span> <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span><button class="btn btn-light" onclick="threeFunction()"> Returned</button>
+        </div></tr>
+        <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Borrower</th>
+          <th scope="col">Accept</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td><button type="button" class="btn btn-success btn-sm">accept</button><span> </span><button type="button" class="btn btn-danger btn-sm">decline</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<div name="footer" th:replace="/../fragments/footer ::footer"></div>
+<script crossorigin="anonymous"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+<script src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
+
+
+<script crossorigin="anonymous"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+<script crossorigin="anonymous"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"
+        integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU=" crossorigin="anonymous"></script>
+<!--
+<script th:href="@{~/vendor/jquery/jquery.min.js}"></script>
+<script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script> -->
+</body>
+</html>

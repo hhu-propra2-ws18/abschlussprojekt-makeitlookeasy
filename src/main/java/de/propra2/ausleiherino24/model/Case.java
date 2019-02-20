@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.model;
 
+import java.text.SimpleDateFormat;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -41,7 +42,9 @@ public class Case {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	Article article;
 
-	Boolean active;
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	PPTransaction ppTransaction;
+
 
 	/**
 	 * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
@@ -62,6 +65,20 @@ public class Case {
 
 	public User getOwner() {
 		return this.article.getOwner();
+	}
+
+	public String getFormattedStartTime(){
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		return simpleDateFormat.format(startTime);
+	}
+
+	public String getFormattedEndTime(){
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		return simpleDateFormat.format(endTime);
+	}
+
+	public boolean getActive(){
+		return article.isActive();
 	}
 
 }

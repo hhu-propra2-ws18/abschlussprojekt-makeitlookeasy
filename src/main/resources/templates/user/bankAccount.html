@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+  <meta content="" name="description">
+  <meta content="" name="author">
+
+  <title>Ausleiherino24</title>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}">
+
+  <!-- Font awesome Css-->
+  <link rel="stylesheet" th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}">
+
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" th:href="@{~/css/shop-homepage.css}">
+
+</head>
+<body>
+<!-- Navigation -->
+<div name="navbar" th:replace="/../fragments/navbar ::navbar"></div>
+<div class="container" style="margin-bottom: 100px;margin-top:50px">
+  <div class="row">
+    <!-- Categories -->
+    <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
+
+    <div class="col-lg 9 text-center" style="margin-top: 50px">
+      <h1 th:text="|Your bank amount is : ${pp} €|"></h1>
+    </div>
+  </div>
+</div>
+<div class="container profile profile-view" id="profile">
+
+</div>
+<!-- Footer -->
+<div name="footer" th:replace="/../fragments/footer ::footer"></div>
+<script crossorigin="anonymous"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+<script crossorigin="anonymous"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+<script crossorigin="anonymous"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<!--
+<script th:href="@{~/vendor/jquery/jquery.min.js}"></script>
+<script th:href="@{~/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script> -->
+</body>
+</html>
+

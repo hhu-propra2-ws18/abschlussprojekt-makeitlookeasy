@@ -2,6 +2,7 @@ package de.propra2.ausleiherino24.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User hat neben Person eine eigene ID, um diesen als Plattformbenutzer explizit separat ansteuern
@@ -48,9 +53,6 @@ public class User {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Person person;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Conflict> conflicts;
-
 	public User(User user) {
 		this.username = user.getUsername();
 		this.password = user.getPassword();
@@ -77,16 +79,6 @@ public class User {
 		if (!repetition) {
 			article.setOwner(this, true);
 		}
-	}
-
-	public void addConflict(Conflict conflict) {
-		if (conflict == null) {
-			return;
-		}
-		if (conflicts == null) {
-			conflicts = new ArrayList<>();
-		}
-		conflicts.add(conflict);
 	}
 
 	public void removeArticle(Article article) {

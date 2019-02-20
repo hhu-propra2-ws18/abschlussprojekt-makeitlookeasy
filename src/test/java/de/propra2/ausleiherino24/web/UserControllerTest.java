@@ -9,7 +9,6 @@ import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.ImageStoreService;
 import de.propra2.ausleiherino24.service.SearchUserService;
 import de.propra2.ausleiherino24.service.UserService;
-import java.util.Optional;
 import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -22,6 +21,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest

@@ -1,18 +1,13 @@
 package de.propra2.ausleiherino24.web;
 
-import static org.mockito.Mockito.mock;
-
-import de.propra2.ausleiherino24.data.ArticleRepository;
-import de.propra2.ausleiherino24.data.CaseRepository;
-import de.propra2.ausleiherino24.data.ConflictRepository;
-import de.propra2.ausleiherino24.data.CustomerReviewRepository;
-import de.propra2.ausleiherino24.data.PersonRepository;
-import de.propra2.ausleiherino24.data.UserRepository;
+import de.propra2.ausleiherino24.data.*;
 import de.propra2.ausleiherino24.email.EmailSender;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CaseService;
+import de.propra2.ausleiherino24.service.ConflictService;
 import de.propra2.ausleiherino24.service.ImageStoreService;
 import de.propra2.ausleiherino24.service.PersonService;
 import de.propra2.ausleiherino24.service.RoleService;
@@ -26,6 +21,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -36,6 +32,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.mockito.Mockito.mock;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
@@ -55,10 +53,13 @@ public class MainControllerTest {
 	private CaseRepository cases;
 	@MockBean
 	private ConflictRepository conflicts;
-
+	@MockBean
+	private PPTransactionRepository ppTransactions;
 	@MockBean
 	private CustomerReviewRepository customerReviewRepository;
 
+	@MockBean
+	private ConflictService cfs;
 	@MockBean
 	private ImageStoreService is;
 	@MockBean
@@ -73,7 +74,8 @@ public class MainControllerTest {
 	private RoleService rs;
 	@MockBean
 	private AccountHandler ah;
-
+	@MockBean
+	private CaseService cs;
 	@MockBean
 	private EmailSender es;
 	@MockBean
@@ -126,13 +128,6 @@ public class MainControllerTest {
 				.andExpect(
 						MockMvcResultMatchers.model()
 								.attribute("person", Matchers.instanceOf(Person.class)));
-	}
-	@Ignore
-	@Test
-	public void defaultAfterLoginStatusTest() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.get("/default"))
-				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-				.andExpect(MockMvcResultMatchers.redirectedUrl("/accessed/user/index"));
 	}
 
 	@Ignore

@@ -1,18 +1,22 @@
 package de.propra2.ausleiherino24.propayhandler;
 
-import java.util.ArrayList;
-import java.util.List;
+import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.PPTransactionRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 public class ReservationHandlerTest {
@@ -27,14 +31,17 @@ public class ReservationHandlerTest {
 	private ReservationHandler reservationHandler;
 	private PPAccount acc1;
 	private List<Reservation> resList;
+	@MockBean
+	private PPTransactionRepository ppTransactionRepository;
+	@MockBean
+	private CaseRepository caseRepository;
 
 	@Before
 	public void init() {
 		restTemplate = Mockito.mock(RestTemplate.class);
 		responseEntityMockInt = Mockito.mock(ResponseEntity.class);
 		responseEntityMockDouble = Mockito.mock(ResponseEntity.class);
-		reservationHandler = new ReservationHandler(restTemplate);
-
+		reservationHandler = new ReservationHandler(ppTransactionRepository,caseRepository,restTemplate);
 		acc1 = new PPAccount("acc1", 100.0);
 
 		resList = new ArrayList<>();

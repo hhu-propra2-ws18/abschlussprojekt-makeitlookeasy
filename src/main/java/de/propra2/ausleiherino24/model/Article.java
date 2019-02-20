@@ -1,19 +1,12 @@
 package de.propra2.ausleiherino24.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -23,45 +16,45 @@ public class Article {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	Long id;
+	private Long id;
 
-	String name;
+	private String name;
 
 	@Column(length = 10485760)
-	String description;
+	private String description;
 
-	String image;
+	private String image;
 
-	Boolean reserved;  // If this is true the article is not available for rental ("reserved/rented")
+	private int deposit;
 
-	int deposit;
+	private int costPerDay;
 
-	int costPerDay;
+	private String location;
 
-	String location;
+	/**
+	 * true: it is possible to rent the article
+	 * false: owner does not want to have the article for rent right now
+	 */
+	private boolean active;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	User owner;
+	private User owner;
 
-	Boolean active;    // If this is true the article is not available for rental ("deleted")
-
-	Category category;
+	private Category category;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	List<Case> cases;
+	private List<Case> cases;
 
 	/**
 	 * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
 	 * Siehe
 	 * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
 	 */
-    public void addCase(Case aCase) {
-        addCase(aCase, false);
-    }
+	public void addCase(Case aCase) {
+		addCase(aCase, false);
+	}
 
-    // TODO Duplicate Code.
-	@SuppressWarnings("Duplicates")
-    void addCase(Case aCase, boolean repetition) {
+	void addCase(Case aCase, boolean repetition) {
 		if (aCase == null) {
 			return;
 		}
@@ -73,14 +66,14 @@ public class Article {
 		} else {
 			cases.add(aCase);
 		}
-		if(!repetition) {
+		if (!repetition) {
 			aCase.setArticle(this, true);
 		}
-    }
+	}
 
-    public void removeCase(Case aCase){
-    	cases.remove(aCase);
-    	aCase.setArticle(null);
+	public void removeCase(Case aCase) {
+		cases.remove(aCase);
+		aCase.setArticle(null);
 	}
 
 	public void setOwner(User user) {

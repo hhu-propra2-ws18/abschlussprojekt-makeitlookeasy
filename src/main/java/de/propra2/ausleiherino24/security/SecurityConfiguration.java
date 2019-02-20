@@ -45,21 +45,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		registry.addResourceHandler("/**").addResourceLocations("/", "classpath:/static/");
 	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.authorizeRequests()
-                .antMatchers("/", "/login", "/signup", "/css/**", "/img/**", "/vendor/**", "/js/**","/categories**").permitAll()
-                .antMatchers("/**").hasAnyRole("admin", "user")
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .defaultSuccessUrl("/", true)
-                .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout");
-    }
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable();
+		http.authorizeRequests()
+				.antMatchers("/", "/index", "/login", "/signup", "/css/**", "/img/**", "/vendor/**", "/js/**").permitAll()
+				.antMatchers("/**").hasAnyRole("admin", "user")
+				.and()
+				.formLogin()
+				.loginPage("/login")
+				.permitAll()
+				.defaultSuccessUrl("/", true)
+				.and()
+				.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.logoutSuccessUrl("/login?logout");
+	}
 
 	/**
 	 * TODO Javadoc

@@ -1,5 +1,8 @@
 package de.propra2.ausleiherino24.propayhandler;
 
+import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.PPTransactionRepository;
+import de.propra2.ausleiherino24.model.Case;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -12,14 +15,22 @@ public class ReservationHandler {
 	private static final String RESERVATION_URL = "http://localhost:8888/reservation";
 	private RestTemplate restTemplate;
 	private AccountHandler accountHandler;
+	private PPTransactionRepository ppTransactionRepository;
+	private CaseRepository caseRepository;
 
-	@Autowired
-	public ReservationHandler(RestTemplate restTemplate) {
+
+	public ReservationHandler(PPTransactionRepository ppTransactionRepository, CaseRepository caseRepository,RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
-		accountHandler = new AccountHandler(restTemplate);
+		this.caseRepository = caseRepository;
+		this.ppTransactionRepository = ppTransactionRepository;
+		accountHandler = new AccountHandler(caseRepository,ppTransactionRepository,restTemplate);
 	}
 
-	public boolean createReservation(String sourceUser, String targetUser, Double amount) {
+	public boolean createReservation(Case aCase){
+		return createReservation(aCase.getReceiver().getUsername(),aCase.getOwner().getUsername(),new Double(aCase.getDeposit()));
+	}
+
+	boolean createReservation(String sourceUser, String targetUser, Double amount) {
 
 		if (accountHandler.hasValidFunds(sourceUser, amount)) {
 
@@ -37,7 +48,7 @@ public class ReservationHandler {
 		return false;
 	}
 
-	public boolean releaseReservation(String account, Integer reservationId) {
+	boolean releaseReservation(String account, Integer reservationId) {
 		HttpEntity<Integer> request = new HttpEntity<>(reservationId);
 
 		ResponseEntity<Integer> responseEntity = restTemplate
