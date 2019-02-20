@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.model;
 
+import java.text.SimpleDateFormat;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
