@@ -77,6 +77,12 @@ public class ArticleRepoTest {
 	}
 
 	@Test
+	public void customQueryFindAllActiveByUserShouldReturnEmptyList(){
+		List<Article> us = articles.findAllActiveByUser(article2.getOwner());
+		Assertions.assertThat(us.isEmpty());
+	}
+
+	@Test
 	public void customQueryFindAllActiveByUserShouldReturnAllActiveArticleWithCorrespondingOwner() {
 		Article article3 = new Article();
 		article3.setOwner(article1.getOwner());
@@ -92,5 +98,12 @@ public class ArticleRepoTest {
 	public void customQueryFindAllActiveByUserShouldReturnNoArticle(){
 		List<Article> us = articles.findAllActiveByUser(article2.getOwner());
 		Assertions.assertThat(us.size()).isEqualTo(0);
+	}
+
+	@Test
+	public void customQueryFindAllActiveShouldRrturnFirstArticle(){
+		List<Article> us = articles.findAllActive();
+		Assertions.assertThat(us.size()).isEqualTo(1);
+		Assertions.assertThat(us.get(0)).isEqualTo(article1);
 	}
 }
