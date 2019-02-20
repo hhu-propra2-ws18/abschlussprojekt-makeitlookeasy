@@ -204,9 +204,14 @@
           <td th:text="${((case.endTime-case.startTime)/(1000*3600*24)*case.price)+'€'}"></td>
           <td>
             <th:block th:if="${case.requestStatus==1}">
-              <button type="button" class="btn btn-success btn-sm" >accept</button>
-              <span> </span>
-              <button type="button" class="btn btn-danger btn-sm">decline</button>
+              <div class="row">
+                <form method="post" th:href="@{~/acceptCase(id=${case.id})}">
+                  <button type="submit" class="btn btn-success btn-sm">accept</button>
+                </form>
+                <form method="post" th:href="@{~/declineCase(id=${case.id})}">
+                  <button type="button" class="btn btn-danger btn-sm">decline</button>
+                </form>
+              </div>
             </th:block>
             <th:block th:unless="${case.requestStatus==1}">
               <div class="alert alert-info">

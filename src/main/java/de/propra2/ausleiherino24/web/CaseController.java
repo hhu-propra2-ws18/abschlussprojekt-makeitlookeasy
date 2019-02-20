@@ -1,7 +1,6 @@
 package de.propra2.ausleiherino24.web;
 
 import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
@@ -83,6 +82,16 @@ public class CaseController {
 		}
 		//TODO: Show the user, whether die request was successful or not
 		return "redirect:/article?id="+id;
+	}
+
+	@PostMapping("/acceptCase")
+	public String acceptCase(){
+		return "redirect:/myOverview";
+	}
+
+	@PostMapping("/declineCase")
+	public String declineCase(){
+		return "redirect:/myOverview";
 	}
 
     /**
