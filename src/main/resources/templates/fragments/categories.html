@@ -11,11 +11,13 @@
     </li>
 
     <th:block th:each="cat: ${categories}">
-      <li th:if="${category != null && category.toLowerCase().equals(cat.getName().toLowerCase())}" class="list-group-item active">
+      <li th:if="${category != null && category.toLowerCase().equals(cat.getName().toLowerCase())}"
+          class="list-group-item active">
         <a th:href="@{/categories(category=${cat.getName()})}"
            th:text="${cat.getName()}" class="text-white">Dummy Kategorie</a>
       </li>
-      <li th:unless="${category != null && category.toLowerCase().equals(cat.getName().toLowerCase())}" class="list-group-item">
+      <li th:unless="${category != null && category.toLowerCase().equals(cat.getName().toLowerCase())}"
+          class="list-group-item">
         <a th:href="@{/categories(category=${cat.getName()})}"
            th:text="${cat.getName()}">Dummy Kategorie</a>
       </li>
