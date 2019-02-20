@@ -18,13 +18,9 @@ public class PersonServiceTest {
 
 	private PersonService personService;
 	private PersonRepository persons;
-	private Logger logger;
 
 	@Before
 	public void init() {
-		PowerMockito.mockStatic(LoggerFactory.class);
-		logger = PowerMockito.mock(Logger.class);
-		PowerMockito.when(LoggerFactory.getLogger(PersonService.class)).thenReturn(logger);
 
 		persons = Mockito.mock(PersonRepository.class);
 		personService = new PersonService(persons);
@@ -41,6 +37,5 @@ public class PersonServiceTest {
 		personService.savePerson(person, "str");
 
 		Mockito.verify(persons, Mockito.times(1)).save(person);
-		Mockito.verify(logger, Mockito.times(1)).info("%s person profile [ID=%L]", "str", 1L);
 	}
 }
