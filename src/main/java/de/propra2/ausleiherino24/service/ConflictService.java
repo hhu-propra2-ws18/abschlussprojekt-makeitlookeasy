@@ -15,20 +15,20 @@ import de.propra2.ausleiherino24.data.ConflictRepository;
 import de.propra2.ausleiherino24.email.EmailSender;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.propayhandler.AccountHandler;
+import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 
 @Service
 public class ConflictService {
 	private final ConflictRepository conflicts;
 	private final EmailSender emailSender;
-	private final AccountHandler accountHandler;
+	private final ReservationHandler reservationHandler;
 	private final Logger LOGGER = LoggerFactory.getLogger(ConflictService.class);
 
 	@Autowired
-	public ConflictService(ConflictRepository conflicts, EmailSender emailSender, AccountHandler accountHandler) {
+	public ConflictService(ConflictRepository conflicts, EmailSender emailSender, ReservationHandler reservationHandler) {
 		this.conflicts = conflicts;
 		this.emailSender = emailSender;
-		this.accountHandler = accountHandler;
+		this.reservationHandler = reservationHandler;
 	}
 
 	public void saveConflict(Conflict conflict, User user) throws Exception {
@@ -90,7 +90,7 @@ public class ConflictService {
 		return true;
 	}
 
-	public boolean isUserAdmin(User user) {
+	private boolean isUserAdmin(User user) {
 		if("admin".equals(user.getRole())) {
 			return true;
 		}
@@ -102,8 +102,9 @@ public class ConflictService {
 			throw new Exception("No permission!");
 		}
 		if(depositReceiver.equals(conflictToSolve.getOwner())) {
+			//release reservation
 			return;
 		}
-		accountHandler.refundDeposit(conflictToSolve.getConflictedCase());
+		//punish reservation
 	}
 }

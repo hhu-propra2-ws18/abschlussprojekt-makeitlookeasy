@@ -15,39 +15,25 @@ import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.propayhandler.AccountHandler;
+import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 
 @RunWith(SpringRunner.class)
 public class ConflictServiceTest {
-	private AccountHandler accountHandler;
 	private EmailSender emailSender;
 	private ConflictRepository conflictRepository;
+	private ReservationHandler reservationHandler;
 	private ConflictService conflictService;
 
 	@Before
 	public void init() {
 		emailSender = Mockito.mock(EmailSender.class);
 		conflictRepository = Mockito.mock(ConflictRepository.class);
-		accountHandler = Mockito.mock(AccountHandler.class);
-		conflictService = new ConflictService(conflictRepository, emailSender, accountHandler);
-	}
-
-	@Test
-	public void test() {
-		User user = new User();
-		user.setRole("admin");
-		Assertions.assertThat(conflictService.isUserAdmin(user)).isTrue();
-	}
-
-	@Test
-	public void test2() {
-		User user = new User();
-		user.setRole("user");
-		Assertions.assertThat(conflictService.isUserAdmin(user)).isFalse();
+		reservationHandler = Mockito.mock(ReservationHandler.class);
+		conflictService = new ConflictService(conflictRepository, emailSender, reservationHandler);
 	}
 
 	@Test(expected=Exception.class)
-	public void test3() throws Exception {
+	public void isConflictedArticleOwnerShouldThrowExceptionIfUserIsNull() throws Exception {
 		User user = null;
 		Conflict c1 = new Conflict();
 		Conflict c2 = new Conflict();
@@ -56,7 +42,7 @@ public class ConflictServiceTest {
 	}
 
 	@Test
-	public void test4() throws Exception {
+	public void isConflictedArticleOwnerShouldReturnTrueIfUserIsOwnerOfConflictedArticle() throws Exception {
 		User user = new User();
 		Article art = new Article();
 		art.setOwner(user);
@@ -70,7 +56,7 @@ public class ConflictServiceTest {
 	}
 
 	@Test
-	public void test5() throws Exception {
+	public void isConflictedArticleOwnerShouldReturnFalseIfUserIsOwnerOfConflictedArticle() throws Exception {
 		User user = new User();
 		User user2 = new User();
 		Article art = new Article();

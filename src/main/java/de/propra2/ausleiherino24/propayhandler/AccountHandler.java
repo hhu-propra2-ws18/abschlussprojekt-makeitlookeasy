@@ -73,10 +73,6 @@ public class AccountHandler {
 		return transferFunds(aCase.getReceiver().getUsername(),aCase.getOwner().getUsername(),aCase.getPrice());
 	}
 
-	public double refundDeposit(Case aCase) {
-		return transferFunds(aCase.getOwner().getUsername(), aCase.getReceiver().getUsername(), aCase.getDeposit());
-	}
-
 	double transferFunds(String sourceUser, String targetUser, double amount) {
 
 		if (hasValidFunds(sourceUser, amount)) {
