@@ -67,4 +67,8 @@ public class Case {
 		return simpleDateFormat.format(endTime);
 	}
 
+	public boolean getActive(){
+		return article.isActive();
+	}
+
 }
