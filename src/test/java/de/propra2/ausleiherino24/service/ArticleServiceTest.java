@@ -3,6 +3,7 @@ package de.propra2.ausleiherino24.service;
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Category;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -38,6 +39,13 @@ public class ArticleServiceTest {
 				"", true, null, Category.TOYS, null);
 		article04 = new Article(3L, "","", "", 0, 0,
 				"", true, null, Category.TOYS, null);
+	}
+
+	@Test
+	public void saveNewArticle(){
+		articleService.saveArticle(new Article(), "");
+
+		verify(articleRepositoryMock).save(new Article());
 	}
 
 	@Test
@@ -126,4 +134,11 @@ public class ArticleServiceTest {
 		verify(articleRepositoryMock).save(argument.capture());
 		assertFalse(argument.getValue().isActive());
 	}
+
+	@Test(expected = Exception.class)
+    public void deactivateNotExistingArticle() throws Exception {
+	    when(articleRepositoryMock.findById(0L)).thenReturn(Optional.empty());
+
+		articleService.deactivateArticle(0L);
+    }
 }
