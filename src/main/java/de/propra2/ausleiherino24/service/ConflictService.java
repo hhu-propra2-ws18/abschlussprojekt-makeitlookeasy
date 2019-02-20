@@ -104,9 +104,6 @@ public class ConflictService {
 		if(depositReceiver.equals(conflictToSolve.getOwner())) {
 			return;
 		}
-		//if(accountHandler.hasValidFunds(accountName, conflictToSolve.getDeposit())) {
-		//
-		//}
+		accountHandler.refundDeposit(conflictToSolve.getConflictedCase());
 	}
-
 }
