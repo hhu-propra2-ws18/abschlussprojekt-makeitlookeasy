@@ -7,20 +7,13 @@ import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-//import org.powermock.api.mockito.PowerMockito;
-//import org.powermock.core.classloader.annotations.PowerMockIgnore;
-//import org.powermock.core.classloader.annotations.PrepareForTest;
-//import org.powermock.modules.junit4.PowerMockRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.security.Principal;
 import java.util.Optional;
 
-@Ignore
+// TODO: Replace PowerMock with JMockit (Logger was removed)
 //@PowerMockIgnore("javax.security.*")
 //@RunWith(PowerMockRunner.class)
 //@PrepareForTest({UserService.class, LoggerFactory.class})
@@ -29,11 +22,10 @@ public class UserServiceTest {
 	private UserRepository users;
 	private PersonService personService;
 	private UserService userService;
-	private Logger logger;
 	private User user;
 
 	@Before
-	@Ignore
+	@Ignore // TODO: Replace PowerMock with JMockit (Logger was removed)
 	public void setup() {
 		users = Mockito.mock(UserRepository.class);
 		personService = Mockito.mock(PersonService.class);
@@ -53,12 +45,14 @@ public class UserServiceTest {
 		Assertions.assertThat(userService.findUserByUsername("user1")).isEqualTo(user);
 	}
 
-	@Test(expected = Exception.class)
-	public void findUserByUsernameTest2() throws Exception {
-		userService.findUserByUsername("user2");
-		Mockito.verify(logger).warn("Couldn't find user %s in UserRepository.", "user2");
-	}
+//	TODO: Replace PowerMock with JMockit (Logger was removed)
+//	@Test(expected = Exception.class)
+//	public void findUserByUsernameTest2() throws Exception {
+//		userService.findUserByUsername("user2");
+//		Mockito.verify(logger).warn("Couldn't find user %s in UserRepository.", "user2");
+//	}
 
+  // TODO: Logger was removed
 	@Test
 	public void saveUserWithProfileTest() {
 		Person person = new Person();
@@ -69,7 +63,6 @@ public class UserServiceTest {
 		Assertions.assertThat(person.getUser()).isEqualTo(user);
 
 		Mockito.verify(users, Mockito.times(1)).save(user);
-		Mockito.verify(logger).info("%s user profile %s [ID=%L]", "str", "user1", 1L);
 		Mockito.verify(personService, Mockito.times(1)).savePerson(person, "str");
 	}
 

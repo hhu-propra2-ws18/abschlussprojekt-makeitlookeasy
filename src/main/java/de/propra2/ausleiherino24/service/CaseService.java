@@ -103,8 +103,9 @@ public class CaseService {
 	 * Erwartet Case mit wo Artikel verliehen werden kann. Case wird modifiziert, dass es nun
 	 * verliehen ist.
 	 */
-	public void requestArticle(Long articleId, Long starttime, Long endtime, String username) {
-		try {
+	public void 	requestArticle(Long articleId, Long starttime, Long endtime, String username) throws Exception
+			{
+//		try {
 			Case c = new Case();
 			c.setArticle(articleService.findArticleById(articleId));
 			c.setStartTime(starttime);
@@ -115,8 +116,8 @@ public class CaseService {
 			c.setRequestStatus(Case.REQUESTED);
 
 			caseRepository.save(c);
-		} catch(Exception e){
-			e.printStackTrace();
-		}
+//		} catch(Exception e){
+//			e.printStackTrace();
+//		}
 	}
 }

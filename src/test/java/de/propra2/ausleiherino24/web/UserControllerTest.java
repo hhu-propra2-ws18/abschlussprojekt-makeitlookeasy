@@ -12,7 +12,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,7 +23,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.security.Principal;
 import java.util.Optional;
 
-@PowerMockIgnore("javax.security.*")
+
+//@PowerMockIgnore("javax.security.*") TODO: Replace PowerMock with JMockit
 @RunWith(SpringRunner.class)
 @WebMvcTest
 public class UserControllerTest {

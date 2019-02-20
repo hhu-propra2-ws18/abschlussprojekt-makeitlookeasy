@@ -4,16 +4,11 @@ import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.model.Person;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+// TODO: Replace Powermock with JMockit
 //@RunWith(PowerMockRunner.class)
-//@PrepareForTest({PersonService.class, LoggerFactory.class})
+//@PrepareForTest({PersonService.class})
 public class PersonServiceTest {
 
 	private PersonService personService;

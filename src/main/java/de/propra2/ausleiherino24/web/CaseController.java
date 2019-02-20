@@ -137,7 +137,7 @@ public class CaseController {
 
 	@PostMapping("/bookArticle")
 	public String bookArticle(@RequestParam Long id, String startTime, String endTime,
-							  Principal principal){
+							  Principal principal) throws Exception {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 		try {
 			caseService.requestArticle(

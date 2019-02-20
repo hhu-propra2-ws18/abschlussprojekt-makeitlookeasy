@@ -162,7 +162,7 @@ public class CaseServiceTest {
 		assertEquals(50, argument.getValue().getPrice());
 	}
 
-	@Test
+	@Test(expected = Exception.class)
 	public void requestArticleCatchException() throws Exception {
 		Long articleId = 0L, st = 5L, et = 10L;
 		String username = "";
