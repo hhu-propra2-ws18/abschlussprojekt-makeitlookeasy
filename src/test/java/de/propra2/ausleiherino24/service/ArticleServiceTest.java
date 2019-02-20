@@ -4,7 +4,6 @@ import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Category;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -40,41 +39,17 @@ public class ArticleServiceTest {
 		article04 = new Article(3L, "","", "", 0, 0,
 				"", true, null, Category.TOYS, null);
 	}
-	@Ignore
-	@Test
-	public void threeActiveArticles() {
-		articles.add(article01);
-		articles.add(article02);
-		articles.add(article03);
-
-		when(articleRepositoryMock.findAll()).thenReturn(articles);
-
-		assertEquals(articles, articleService.getAllActiveArticles());
-	}
-
 
 	@Test
-	public void threeInactiveArticles() {
-		article01.setActive(false);
+	public void tripleArticle() {
 		article02.setActive(false);
 		article03.setActive(false);
 
 		articles.add(article01);
-		articles.add(article02);
-		articles.add(article03);
-
-		when(articleRepositoryMock.findAll()).thenReturn(articles);
-
-		assertTrue(articleService.getAllActiveArticles().isEmpty());
-	}
-	@Ignore
-	@Test
-	public void tripleArticle() {
-		articles.add(article01);
 		articles.add(article01);
 		articles.add(article01);
 
-		when(articleRepositoryMock.findAll()).thenReturn(articles);
+		when(articleRepositoryMock.findAllActive()).thenReturn(articles);
 
 		articles.remove(1);
 		articles.remove(1);
@@ -82,14 +57,13 @@ public class ArticleServiceTest {
 		assertEquals(articles, articleService.getAllActiveArticles());
 	}
 
-	@Ignore
 	@Test
 	public void threeToys() {
 		articles.add(article01);
 		articles.add(article02);
 		articles.add(article03);
 
-		when(articleRepositoryMock.findAll()).thenReturn(articles);
+		when(articleRepositoryMock.findAllActive()).thenReturn(articles);
 
 		assertEquals(articles, articleService.getAllArticlesByCategory(Category.TOYS));
 	}
@@ -100,11 +74,11 @@ public class ArticleServiceTest {
 		articles.add(article02);
 		articles.add(article03);
 
-		when(articleRepositoryMock.findAll()).thenReturn(articles);
+		when(articleRepositoryMock.findAllActive()).thenReturn(articles);
 
 		assertTrue(articleService.getAllArticlesByCategory(Category.TOOLS).isEmpty());
 	}
-	@Ignore
+
 	@Test
 	public void twoToysTwoTools() {
 		article02.setCategory(Category.TOOLS);
@@ -115,7 +89,7 @@ public class ArticleServiceTest {
 		articles.add(article03);
 		articles.add(article04);
 
-		when(articleRepositoryMock.findAll()).thenReturn(articles);
+		when(articleRepositoryMock.findAllActive()).thenReturn(articles);
 
 		articles.remove(3);
 		articles.remove(1);
@@ -123,7 +97,6 @@ public class ArticleServiceTest {
 		assertEquals(articles, articleService.getAllArticlesByCategory(Category.TOYS));
 	}
 
-	@Ignore
 	@Test
 	public void twoToysTwoTools2() {
 		article02.setCategory(Category.TOOLS);
@@ -134,7 +107,7 @@ public class ArticleServiceTest {
 		articles.add(article03);
 		articles.add(article04);
 
-		when(articleRepositoryMock.findAll()).thenReturn(articles);
+		when(articleRepositoryMock.findAllActive()).thenReturn(articles);
 
 		articles.remove(2);
 		articles.remove(0);
