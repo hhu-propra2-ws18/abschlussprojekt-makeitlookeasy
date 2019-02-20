@@ -59,6 +59,8 @@ public class Article {
         addCase(aCase, false);
     }
 
+    // TODO Duplicate Code.
+	@SuppressWarnings("Duplicates")
     void addCase(Case aCase, boolean repetition) {
 		if (aCase == null) {
 			return;
