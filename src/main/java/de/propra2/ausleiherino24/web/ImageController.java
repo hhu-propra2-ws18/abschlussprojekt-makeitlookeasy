@@ -1,6 +1,6 @@
 package de.propra2.ausleiherino24.web;
 
-import de.propra2.ausleiherino24.service.ImageStoreService;
+import de.propra2.ausleiherino24.service.ImageService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,10 +20,10 @@ import java.nio.file.Files;
 @Controller
 public class ImageController {
 
-	private ImageStoreService imageStorageService;
+	private ImageService imageStorageService;
 
 	@Autowired
-	public ImageController(ImageStoreService imageStorageService) {
+	public ImageController(ImageService imageStorageService) {
 		this.imageStorageService = imageStorageService;
 	}
 

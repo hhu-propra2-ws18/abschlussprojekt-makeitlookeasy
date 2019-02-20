@@ -10,13 +10,13 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
-public class ImageStoreService {
+public class ImageService {
 
 	private static final int NR_OF_BINS = 100;
 	private String uploadDirectoryPath;
 
 	@Autowired
-	public ImageStoreService(@Value("${uploadDirectoryPath}") String uploadDirectoryPath) {
+	public ImageService(@Value("${uploadDirectoryPath}") String uploadDirectoryPath) {
 		this.uploadDirectoryPath = uploadDirectoryPath;
 		createUploadDirectoryIfNotExists();
 	}

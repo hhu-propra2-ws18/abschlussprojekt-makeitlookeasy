@@ -9,14 +9,14 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-public class ImageStoreServiceTest {
+public class ImageServiceTest {
 
-	private ImageStoreService imageStoreService;
+	private ImageService imageService;
 	private String path = "imagestoretest";
 
 	@Before
 	public void init() {
-		imageStoreService = new ImageStoreService(path);
+		imageService = new ImageService(path);
 	}
 
 	@After
@@ -26,44 +26,44 @@ public class ImageStoreServiceTest {
 
 	@Test
 	public void uploadDirectoryDontExists() {
-		imageStoreService.createUploadDirectoryIfNotExists();
+		imageService.createUploadDirectoryIfNotExists();
 		assertTrue(new File("/").exists());
 	}
 
 	@Test
 	public void extensionOfTxt() {
-		assertEquals("txt", imageStoreService.getFileExtension("test.txt"));
+		assertEquals("txt", imageService.getFileExtension("test.txt"));
 	}
 
 	@Test
 	public void extensionOfPng() {
-		assertEquals("png", imageStoreService.getFileExtension("test.png"));
+		assertEquals("png", imageService.getFileExtension("test.png"));
 	}
 
 	@Test
 	public void extensionOfEmptySting() {
-		assertEquals("", imageStoreService.getFileExtension(null));
+		assertEquals("", imageService.getFileExtension(null));
 	}
 
 	@Test
 	public void createDirectory() {
-		imageStoreService.createBinningDirectory("x");
+		imageService.createBinningDirectory("x");
 		assertTrue(new File(path + "/x").exists());
 		assertEquals(1, new File(path).listFiles().length);
 	}
 
 	@Test
 	public void createDirectoryTwice() {
-		imageStoreService.createBinningDirectory("x");
-		imageStoreService.createBinningDirectory("x");
+		imageService.createBinningDirectory("x");
+		imageService.createBinningDirectory("x");
 		assertTrue(new File(path + "/x").exists());
 		assertEquals(1, new File(path).listFiles().length);
 	}
 
 	@Test
 	public void createTwoDirectories() {
-		imageStoreService.createBinningDirectory("x");
-		imageStoreService.createBinningDirectory("y");
+		imageService.createBinningDirectory("x");
+		imageService.createBinningDirectory("y");
 		assertTrue(new File(path + "/x").exists());
 		assertTrue(new File(path + "/y").exists());
 		assertEquals(2, new File(path).listFiles().length);
@@ -71,8 +71,8 @@ public class ImageStoreServiceTest {
 
 	@Test
 	public void createDirectoryTree() {
-		imageStoreService.createBinningDirectory("x");
-		imageStoreService.createBinningDirectory("x/y");
+		imageService.createBinningDirectory("x");
+		imageService.createBinningDirectory("x/y");
 		assertTrue(new File(path + "/x").exists());
 		assertTrue(new File(path + "/x/y").exists());
 		assertEquals(1, new File(path).listFiles().length);
@@ -81,22 +81,22 @@ public class ImageStoreServiceTest {
 
 	@Test
 	public void testBinning() {
-		imageStoreService.ensureBinning(0L);
+		imageService.ensureBinning(0L);
 		assertTrue(new File(path + "/0").exists());
 		assertEquals(1, new File(path).listFiles().length);
 	}
 
 	@Test
 	public void testBinning2() {
-		imageStoreService.ensureBinning(100L);
+		imageService.ensureBinning(100L);
 		assertTrue(new File(path + "/0").exists());
 		assertEquals(1, new File(path).listFiles().length);
 	}
 
 	@Test
 	public void testBinning3() {
-		imageStoreService.ensureBinning(0L);
-		imageStoreService.ensureBinning(100L);
+		imageService.ensureBinning(0L);
+		imageService.ensureBinning(100L);
 		assertTrue(new File(path + "/0").exists());
 		assertEquals(1, new File(path).listFiles().length);
 	}
@@ -106,12 +106,12 @@ public class ImageStoreServiceTest {
 		File file = new File(path + "/x.txt");
 		file.createNewFile();
 
-		assertTrue(imageStoreService.fileExists(path + "/x.txt"));
+		assertTrue(imageService.fileExists(path + "/x.txt"));
 	}
 
 	@Test
 	public void fileDoesNotExists() {
-		assertFalse(imageStoreService.fileExists(path + "/x.txt"));
+		assertFalse(imageService.fileExists(path + "/x.txt"));
 	}
 
 	@Test
@@ -119,7 +119,7 @@ public class ImageStoreServiceTest {
 		File file = new File(path + "/x");
 		file.mkdir();
 
-		assertFalse(imageStoreService.fileExists(path + "/x"));
+		assertFalse(imageService.fileExists(path + "/x"));
 	}
 
 
