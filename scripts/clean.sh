@@ -3,7 +3,7 @@
 i=""
 j=`pwd`
 
-for i in $j/{build/logs/services,build/logs/container-logs,build/logs,pgsql-01/data,pgsql-01/conf,pgsql-01,PPdata}
+for i in $j/{build,PPdata,out,.gradle,pgsql-01}
 do
         if [[ ! -d "$i" ]]; then
           echo "$i" does not exist

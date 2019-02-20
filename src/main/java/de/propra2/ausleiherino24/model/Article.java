@@ -50,10 +50,12 @@ public class Article {
 	 * Siehe
 	 * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
 	 */
+
 	public void addCase(Case aCase) {
 		addCase(aCase, false);
 	}
 
+	@SuppressWarnings("Duplicates") // TODO: Duplicate code
 	void addCase(Case aCase, boolean repetition) {
 		if (aCase == null) {
 			return;
