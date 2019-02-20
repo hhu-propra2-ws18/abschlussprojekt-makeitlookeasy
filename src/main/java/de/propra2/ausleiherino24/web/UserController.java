@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -165,7 +166,7 @@ public class UserController {
 	 * @param confirmpass
 	 * @return
 	 */
-	@PutMapping("/user/saveProfile")
+	@PostMapping("accessed/user/saveProfile")
 	public String saveEditedUserProfile(Principal principal, User user, Person person,
 			String password, String confirmpass){
 		String url = "redirect:/profile/"+principal.getName();
