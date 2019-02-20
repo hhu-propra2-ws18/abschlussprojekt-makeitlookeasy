@@ -65,10 +65,11 @@ public class Initializer implements ServletContextInitializer {
 						Category.getAllCategories().get(faker.random().nextInt(0, Category.getAllCategories().size() - 1)),
 						user,
 						faker.random().nextInt(5, 500),
-						faker.random().nextInt(100, 2000));
+						faker.random().nextInt(100, 2000),
+						"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+
+								faker.random().nextInt(1, 807)+".png");
 
 				return createCase(
-						faker.random().nextBoolean(),
 						article2);
 			}).collect(Collectors.toCollection(ArrayList::new));
 
@@ -134,7 +135,8 @@ public class Initializer implements ServletContextInitializer {
 		return user;
 	}
 
-	private Article createArticle(String name, String description, Category category, User owner, int costPerDay, int deposit) {
+	private Article createArticle(String name, String description, Category category, User owner,
+			int costPerDay, int deposit, String image) {
 		Article article = new Article();
 		article.setActive(true);
 		article.setName(name);
@@ -143,10 +145,11 @@ public class Initializer implements ServletContextInitializer {
 		article.setOwner(owner);
 		article.setCostPerDay(costPerDay);
 		article.setDeposit(deposit);
+		article.setImage(image);
 		return article;
 	}
 
-	private Case createCase(boolean active, Article article) {
+	private Case createCase(Article article) {
 		Case aCase = new Case();
 		aCase.setArticle(article);
 		aCase.setPrice(article.getCostPerDay());
