@@ -8,15 +8,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmailConfig {
 
-	@Value("${spring.mail.host}")
-	private String host;
+    @Value("${spring.mail.host}")
+    private String host;
 
-	@Value("${spring.mail.port}")
-	private Integer port;
+    @Value("${spring.mail.port}")
+    private Integer port;
 
-	@Value("${spring.mail.username}")
-	private String username;
+    @Value("${spring.mail.username}")
+    private String username;
 
-	@Value("${spring.mail.password}")
-	private String password;
+    @Value("${spring.mail.password}")
+    private String password;
 }

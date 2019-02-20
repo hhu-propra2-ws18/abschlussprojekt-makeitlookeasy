@@ -50,7 +50,7 @@ consoleReporter {
         colorEnabled true
         partialSourceInsertionEnabled true
     }
-    
+
     jacoco {
         enabled true
         onlyWhenCoverageTaskExecuted false

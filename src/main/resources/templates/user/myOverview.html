@@ -2,8 +2,9 @@
 <html lang="en" xmlns:="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-        name="viewport">
+  <meta
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+      name="viewport">
   <!-- before: content="width=device-width, initial-scale=1, shrink-to-fit=no" -->
   <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
   <meta content="" name="description">
@@ -20,7 +21,7 @@
   <!-- Custom styles for this template -->
   <link rel="stylesheet" th:href="@{~/css/shop-homepage.css}">
   <script>
-    function oneFunction(){
+    function oneFunction() {
       var mainFrameOne = document.getElementById("mainFrameOne");
       var mainFrameTwo = document.getElementById("mainFrameTwo");
       var mainFrameThree = document.getElementById("mainFrameThree");
@@ -35,7 +36,8 @@
       mainFrameFour.style.display = (
           mainFrameFour.style.display == "none" ? "none" : "none");
     }
-    function twoFunction(){
+
+    function twoFunction() {
       var mainFrameOne = document.getElementById("mainFrameOne");
       var mainFrameTwo = document.getElementById("mainFrameTwo");
       var mainFrameThree = document.getElementById("mainFrameThree");
@@ -50,7 +52,8 @@
       mainFrameFour.style.display = (
           mainFrameFour.style.display == "none" ? "none" : "none");
     }
-    function threeFunction(){
+
+    function threeFunction() {
       var mainFrameOne = document.getElementById("mainFrameOne");
       var mainFrameTwo = document.getElementById("mainFrameTwo");
       var mainFrameThree = document.getElementById("mainFrameThree");
@@ -65,6 +68,7 @@
       mainFrameFour.style.display = (
           mainFrameFour.style.display == "none" ? "none" : "none");
     }
+
     function fourFunction() {
       var mainFrameOne = document.getElementById("mainFrameOne");
       var mainFrameTwo = document.getElementById("mainFrameTwo");
@@ -94,13 +98,19 @@
     <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
 
     <!-- Frame for articles from User-->
-    <div class="col-lg 9" style="margin-top: 100px;display:block" id="mainFrameOne">
+    <div class="col-lg 9" id="mainFrameOne" style="margin-top: 100px;display:block">
       <table class="table">
-        <tr><div class="text-center">
-          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span>
-          <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span>
-          <button class="btn btn-light" onclick="threeFunction()"> Returned</button><span> / </span>
-          <button class="btn btn-light" onclick="fourFunction()"> Requests</button>        </div></tr>
+        <tr>
+          <div class="text-center">
+            <button class="btn btn-light" onclick="oneFunction()">My articles</button>
+            <span> / </span>
+            <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
+            <span> / </span>
+            <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
+            <span> / </span>
+            <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
+          </div>
+        </tr>
         <thead>
         <tr>
           <th scope="col">Name</th>
@@ -121,13 +131,19 @@
     </div>
 
     <!-- Frame for borrowed articles from other users -->
-    <div class="col-lg 9" style="margin-top: 100px;display:none" id="mainFrameTwo">
+    <div class="col-lg 9" id="mainFrameTwo" style="margin-top: 100px;display:none">
       <table class="table">
-        <tr><div class="text-center">
-          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span>
-          <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span>
-          <button class="btn btn-light" onclick="threeFunction()"> Returned</button><span> / </span>
-          <button class="btn btn-light" onclick="fourFunction()"> Requests</button>        </div></tr>
+        <tr>
+          <div class="text-center">
+            <button class="btn btn-light" onclick="oneFunction()">My articles</button>
+            <span> / </span>
+            <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
+            <span> / </span>
+            <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
+            <span> / </span>
+            <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
+          </div>
+        </tr>
         <thead>
         <tr>
           <th scope="col">Name</th>
@@ -141,20 +157,28 @@
           <td th:text="${borrow.article.name}"></td>
           <td th:text="${borrow.getFormattedStartTime()}"></td>
           <td th:text="${borrow.getFormattedEndTime()}"></td>
-          <td><button type="button" class="btn btn-success btn-sm">Give back</button></td>
+          <td>
+            <button class="btn btn-success btn-sm" type="button">Give back</button>
+          </td>
         </tr>
         </tbody>
       </table>
     </div>
 
     <!-- Frame for returned articles from other users -->
-    <div class="col-lg 9" style="margin-top: 100px;display:none" id="mainFrameThree">
+    <div class="col-lg 9" id="mainFrameThree" style="margin-top: 100px;display:none">
       <table class="table">
-        <tr><div class="text-center" >
-          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span>
-          <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span>
-          <button class="btn btn-light" onclick="threeFunction()"> Returned</button><span> / </span>
-          <button class="btn btn-light" onclick="fourFunction()"> Requests</button>        </div></tr>
+        <tr>
+          <div class="text-center">
+            <button class="btn btn-light" onclick="oneFunction()">My articles</button>
+            <span> / </span>
+            <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
+            <span> / </span>
+            <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
+            <span> / </span>
+            <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
+          </div>
+        </tr>
         <thead>
         <tr>
           <th scope="col">Name</th>
@@ -166,21 +190,30 @@
         <tr>
           <td></td>
           <td></td>
-          <td><button type="button" class="btn btn-success btn-sm">accept</button><span> </span><button type="button" class="btn btn-danger btn-sm">decline</button></td>
+          <td>
+            <button class="btn btn-success btn-sm" type="button">accept</button>
+            <span> </span>
+            <button class="btn btn-danger btn-sm" type="button">decline</button>
+          </td>
         </tr>
         </tbody>
       </table>
     </div>
 
     <!-- Fram for accepting people to borrow your article -->
-    <div class="col-lg 9" style="margin-top: 100px;display:none" id="mainFrameFour">
+    <div class="col-lg 9" id="mainFrameFour" style="margin-top: 100px;display:none">
       <table class="table">
-        <tr><div class="text-center">
-          <button class="btn btn-light" onclick="oneFunction()">My articles</button><span> / </span>
-          <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button> <span> / </span>
-          <button class="btn btn-light" onclick="threeFunction()"> Returned</button><span> / </span>
-          <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
-        </div></tr>
+        <tr>
+          <div class="text-center">
+            <button class="btn btn-light" onclick="oneFunction()">My articles</button>
+            <span> / </span>
+            <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
+            <span> / </span>
+            <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
+            <span> / </span>
+            <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
+          </div>
+        </tr>
         <thead>
         <tr>
           <th scope="col">Name</th>
@@ -193,11 +226,11 @@
         </thead>
         <tbody>
         <tr th:each="case:${requested}">
-          <td> <a th:text="${case.receiver.username}"
-                  th:href="@{~/profile/{username}(username=${case.receiver.username})}"></a>
+          <td><a th:href="@{~/profile/{username}(username=${case.receiver.username})}"
+                 th:text="${case.receiver.username}"></a>
           </td>
-          <td> <a th:text="${case.article.name}"
-                  th:href="@{/article(id=${case.article.getId()})}"></a>
+          <td><a th:href="@{/article(id=${case.article.getId()})}"
+                 th:text="${case.article.name}"></a>
           </td>
           <td th:text="${case.getFormattedStartTime()}"></td>
           <td th:text="${case.getFormattedEndTime()}"></td>
@@ -206,10 +239,10 @@
             <th:block th:if="${case.requestStatus==1}">
               <div class="row">
                 <form method="post" th:href="@{~/acceptCase(id=${case.id})}">
-                  <button type="submit" class="btn btn-success btn-sm">accept</button>
+                  <button class="btn btn-success btn-sm" type="submit">accept</button>
                 </form>
                 <form method="post" th:href="@{~/declineCase(id=${case.id})}">
-                  <button type="button" class="btn btn-danger btn-sm">decline</button>
+                  <button class="btn btn-danger btn-sm" type="button">decline</button>
                 </form>
               </div>
             </th:block>
@@ -244,9 +277,10 @@
         src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"
-        integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU=" crossorigin="anonymous"></script>
+<script
+    crossorigin="anonymous"
+    integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU="
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <!--
 <script th:href="@{~/vendor/jquery/jquery.min.js}"></script>
 <script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script> -->

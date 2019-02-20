@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 public interface PPTransactionRepository extends CrudRepository<PPTransaction, Long> {
-	@Override
-	List<PPTransaction> findAll();
+
+    @Override
+    List<PPTransaction> findAll();
 }

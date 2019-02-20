@@ -29,15 +29,15 @@
                   <i class="fa fa-cog"></i>
                 </button>
                 <div class="dropdown-menu " role="menu">
-                  <a class="dropdown-item" th:href="@{~/bankAccount}" role="prsentation">
+                  <a class="dropdown-item" role="prsentation" th:href="@{~/bankAccount}">
                     Bank Account <i class="fa fa-money"></i></a>
-                  <a class="dropdown-item" th:href="@{~/myOverview}" role="prsentation">
+                  <a class="dropdown-item" role="prsentation" th:href="@{~/myOverview}">
                     Overview <i class="fa fa-list"></i></a>
-                  <a class="dropdown-item" th:href="@{/newArticle}" role="presentation">Add
+                  <a class="dropdown-item" role="presentation" th:href="@{/newArticle}">Add
                     item <i class="fa fa-plus"></i></a>
                   <a class="dropdown-item"
-                     th:href="@{'/profile/' + ${user.getUsername()}}"
-                     role="presentation">Profil <i class="fa fa-user"></i></a>
+                     role="presentation"
+                     th:href="@{'/profile/' + ${user.getUsername()}}">Profil <i class="fa fa-user"></i></a>
                   <a class="dropdown-item" href="/logout" role="presentation">Logout  <i
                       class="fa fa-sign-out"></i></a>
                 </div>

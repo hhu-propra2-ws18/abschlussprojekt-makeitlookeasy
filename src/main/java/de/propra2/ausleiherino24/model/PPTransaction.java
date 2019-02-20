@@ -18,25 +18,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PPTransaction {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
 
-	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	@NotNull
-	Case aCase;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @NotNull
+    Case aCase;
 
-	Double lendingCost;
+    Double lendingCost;
 
-	boolean cautionPaid;
+    boolean cautionPaid;
 
 
-	public Double getTotalPayment(){
-		if(cautionPaid){
-			return lendingCost + aCase.getDeposit();
-		}
-		return lendingCost;
-	}
+    public Double getTotalPayment() {
+        if (cautionPaid) {
+            return lendingCost + aCase.getDeposit();
+        }
+        return lendingCost;
+    }
 
 
 }

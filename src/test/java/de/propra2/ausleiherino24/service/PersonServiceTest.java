@@ -11,26 +11,26 @@ import org.mockito.Mockito;
 //@PrepareForTest({PersonService.class})
 public class PersonServiceTest {
 
-	private PersonService personService;
-	private PersonRepository persons;
+    private PersonService personService;
+    private PersonRepository persons;
 
-	@Before
-	public void init() {
+    @Before
+    public void init() {
 
-		persons = Mockito.mock(PersonRepository.class);
-		personService = new PersonService(persons);
-	}
+        persons = Mockito.mock(PersonRepository.class);
+        personService = new PersonService(persons);
+    }
 
-	@Test
-	public void savePersonShouldSavePerson() throws Exception {
-		Person person = new Person();
-		person.setId(1L);
+    @Test
+    public void savePersonShouldSavePerson() throws Exception {
+        Person person = new Person();
+        person.setId(1L);
 
-		persons = Mockito.mock(PersonRepository.class);
-		personService = new PersonService(persons);
+        persons = Mockito.mock(PersonRepository.class);
+        personService = new PersonService(persons);
 
-		personService.savePerson(person, "str");
+        personService.savePerson(person, "str");
 
-		Mockito.verify(persons, Mockito.times(1)).save(person);
-	}
+        Mockito.verify(persons, Mockito.times(1)).save(person);
+    }
 }

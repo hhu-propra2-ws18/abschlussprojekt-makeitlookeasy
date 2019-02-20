@@ -19,38 +19,40 @@ import org.springframework.test.context.junit4.SpringRunner;
 @ActiveProfiles(profiles = "test")
 
 public class CustomerReviewRepoTest {
-	@Autowired
-	private CustomerReviewRepository customerReviews;
 
-	private Case case1;
-	private Case case2;
-	private List<CustomerReview> customerReviewList;
-	@Before
-	public void init(){
-		CustomerReview customerReview1 = new CustomerReview();
-		CustomerReview customerReview2 = new CustomerReview();
-		customerReviewList = new ArrayList<>();
-		customerReview1.setDescription("test1");
-		customerReview1.setTimestamp(10012019L);
-		customerReview1.setStars(3L);
-		customerReview1.setACase(new Case());
-		customerReview2.setDescription("test2");
-		customerReview2.setTimestamp(11012019L);
-		customerReview2.setStars(5L);
-		customerReview2.setACase(new Case());
-		customerReviewList.add(customerReview1);
-		customerReviewList.add(customerReview2);
-	}
+    @Autowired
+    private CustomerReviewRepository customerReviews;
 
-	@Test
-	public void databaseShouldSaveEntities() {
-		customerReviews.saveAll(customerReviewList);
+    private Case case1;
+    private Case case2;
+    private List<CustomerReview> customerReviewList;
 
-		List<CustomerReview> crvws = customerReviews.findAll();
-		Assertions.assertThat(crvws.size()).isEqualTo(2);
-		Assert.assertTrue(crvws.contains(customerReviewList.get(0)));
-		Assert.assertTrue(crvws.contains(customerReviewList.get(1)));
-	}
+    @Before
+    public void init() {
+        CustomerReview customerReview1 = new CustomerReview();
+        CustomerReview customerReview2 = new CustomerReview();
+        customerReviewList = new ArrayList<>();
+        customerReview1.setDescription("test1");
+        customerReview1.setTimestamp(10012019L);
+        customerReview1.setStars(3L);
+        customerReview1.setACase(new Case());
+        customerReview2.setDescription("test2");
+        customerReview2.setTimestamp(11012019L);
+        customerReview2.setStars(5L);
+        customerReview2.setACase(new Case());
+        customerReviewList.add(customerReview1);
+        customerReviewList.add(customerReview2);
+    }
+
+    @Test
+    public void databaseShouldSaveEntities() {
+        customerReviews.saveAll(customerReviewList);
+
+        List<CustomerReview> crvws = customerReviews.findAll();
+        Assertions.assertThat(crvws.size()).isEqualTo(2);
+        Assert.assertTrue(crvws.contains(customerReviewList.get(0)));
+        Assert.assertTrue(crvws.contains(customerReviewList.get(1)));
+    }
 
 
 }

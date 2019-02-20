@@ -46,7 +46,7 @@
           </div>
         </div>
       </div>
-      <form method="post" action="/accessed/user/saveProfile">
+      <form action="/accessed/user/saveProfile" method="post">
         <div class="form-row profile-row">
           <div class="col-md-4 relative"></div>
           <div class="col-md-8">
@@ -55,24 +55,24 @@
             <div class="form-row">
               <div class="col-sm-12 col-md-6">
                 <div class="form-group"><label>First Name </label>
-                  <input class="form-control" name="firstName" type="text" required
-                         th:value="${user.person.firstName}">
+                  <input class="form-control" name="firstName" required th:value="${user.person.firstName}"
+                         type="text">
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
                 <div class="form-group"><label>Last Name </label>
-                  <input class="form-control" name="lastName" type="text" required
-                         th:value="${user.person.lastName}">
+                  <input class="form-control" name="lastName" required th:value="${user.person.lastName}"
+                         type="text">
                 </div>
               </div>
             </div>
             <div class="form-group"><label>Email </label>
               <input autocomplete="off" class="form-control" name="email" required
-                     type="email" th:value="${user.email}">
+                     th:value="${user.email}" type="email">
             </div>
             <div class="form-group"><label>Address </label>
               <input autocomplete="off" class="form-control" name="address" required
-                     type="text" th:value="${user.person.address}">
+                     th:value="${user.person.address}" type="text">
             </div>
             <div class="form-row">
               <div class="col-sm-12 col-md-6">

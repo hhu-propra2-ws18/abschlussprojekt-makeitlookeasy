@@ -21,42 +21,31 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Case {
 
-	public static final int REQUESTED = 1;
-	public static final int REQUEST_ACCEPTED = 2;
-	public static final int REQUEST_DECLINED = 3;
+    public static final int REQUESTED = 1;
+    public static final int REQUEST_ACCEPTED = 2;
+    public static final int REQUEST_DECLINED = 3;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    PPTransaction ppTransaction;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private Long startTime;
+    private Long endTime;
+    private int price;
+    private int deposit;
+    private int requestStatus;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private CustomerReview customerReview;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private User receiver;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Article article;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-
-	private Long startTime;
-
-	private Long endTime;
-
-	private int price;
-
-	private int deposit;
-
-	private int requestStatus;
-
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private CustomerReview customerReview;
-
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private User receiver;
-
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Article article;
-
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	PPTransaction ppTransaction;
-
-
-	/**
-	 * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
-	 * Siehe
-	 * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
-	 */
+    /**
+     * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
+     * Siehe
+     * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
+     */
 
     public void setArticle(Article article) {
         setArticle(article, false);
@@ -69,28 +58,28 @@ public class Case {
         }
     }
 
-	public User getOwner() {
-		return this.article.getOwner();
-	}
+    public User getOwner() {
+        return this.article.getOwner();
+    }
 
-	/**
-	 * Formatiert die Startzeit in dd.mm.yyy
-	 */
-	public String getFormattedStartTime(){
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-		return simpleDateFormat.format(startTime);
-	}
+    /**
+     * Formatiert die Startzeit in dd.mm.yyy
+     */
+    public String getFormattedStartTime() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        return simpleDateFormat.format(startTime);
+    }
 
-	/**
-	 * Formatiert die Endzeit in dd.mm.yyy
-	 */
-	public String getFormattedEndTime(){
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-		return simpleDateFormat.format(endTime);
-	}
+    /**
+     * Formatiert die Endzeit in dd.mm.yyy
+     */
+    public String getFormattedEndTime() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        return simpleDateFormat.format(endTime);
+    }
 
-	public boolean getActive(){
-		return article.isActive();
-	}
+    public boolean getActive() {
+        return article.isActive();
+    }
 
 }

@@ -11,31 +11,31 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 public class RoleServiceTest {
 
-	private MockHttpServletRequest requestMock;
+    private MockHttpServletRequest requestMock;
 
-	@Before
-	public void init() {
-		requestMock = new MockHttpServletRequest();
-	}
+    @Before
+    public void init() {
+        requestMock = new MockHttpServletRequest();
+    }
 
-	@Test
-	public void getUserRoleTest() {
-		requestMock.addUserRole("user");
+    @Test
+    public void getUserRoleTest() {
+        requestMock.addUserRole("user");
 
-		Assertions.assertThat(RoleService.getUserRole(requestMock)).isEqualTo("user");
-	}
+        Assertions.assertThat(RoleService.getUserRole(requestMock)).isEqualTo("user");
+    }
 
-	@Test
-	public void getUserRoleTest2() {
-		requestMock.addUserRole("admin");
+    @Test
+    public void getUserRoleTest2() {
+        requestMock.addUserRole("admin");
 
-		Assertions.assertThat(RoleService.getUserRole(requestMock)).isEqualTo("admin");
-	}
+        Assertions.assertThat(RoleService.getUserRole(requestMock)).isEqualTo("admin");
+    }
 
-	@Test
-	public void getUserRoleTest3() {
-		requestMock.addUserRole("");
+    @Test
+    public void getUserRoleTest3() {
+        requestMock.addUserRole("");
 
-		Assertions.assertThat(RoleService.getUserRole(requestMock)).isEqualTo("");
-	}
+        Assertions.assertThat(RoleService.getUserRole(requestMock)).isEqualTo("");
+    }
 }

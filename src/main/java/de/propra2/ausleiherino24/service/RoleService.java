@@ -4,16 +4,16 @@ import javax.servlet.http.HttpServletRequest;
 
 public class RoleService {
 
-	private RoleService() {
-	}
+    private RoleService() {
+    }
 
-	public static String getUserRole(HttpServletRequest request) {
-		if (request.isUserInRole("user")) {
-			return "user";
-		} else if (request.isUserInRole("admin")) {
-			return "admin";
-		} else {
-			return "";
-		}
-	}
+    public static String getUserRole(HttpServletRequest request) {
+        if (request.isUserInRole("user")) {
+            return "user";
+        } else if (request.isUserInRole("admin")) {
+            return "admin";
+        } else {
+            return "";
+        }
+    }
 }

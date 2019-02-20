@@ -9,37 +9,36 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import lombok.Data;
 
 @Data
 @Entity
 public class Conflict {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@NotNull
-	Case conflictedCase;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @NotNull
+    Case conflictedCase;
 
-	@NotNull
-	@Size(min = 15, max = 2048)
-	String conflictDescription;
+    @NotNull
+    @Size(min = 15, max = 2048)
+    String conflictDescription;
 
-	@NotNull
-	String conflictReporterUsername;
+    @NotNull
+    String conflictReporterUsername;
 
-	public User getOwner() {
-		return conflictedCase.getOwner();
-	}
+    public User getOwner() {
+        return conflictedCase.getOwner();
+    }
 
-	public User getReceiver() {
-		return conflictedCase.getReceiver();
-	}
+    public User getReceiver() {
+        return conflictedCase.getReceiver();
+    }
 
-	public int getDeposit() {
-		return conflictedCase.getDeposit();
-	}
+    public int getDeposit() {
+        return conflictedCase.getDeposit();
+    }
 }

@@ -30,13 +30,7 @@ addons:
 
 script:
   - ./gradlew sonarqube
-  - ./gradlew pmdMain
-  - ./gradlew jacocoTestReport
-  - ./gradlew checkstyleMain
-  - ./gradlew spotbugsMain
-  - ./gradlew analyzeDependencies
-  - ./gradlew test
-  - ./gradlew reportCoverage
+  - ./gradlew check
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
