@@ -43,9 +43,9 @@ public class CaseServiceTest {
 
 	@Test
 	public void OwnerWithThreeCases() {
-		cases.add(new Case(0L, null,  null, 0, 0, null, null, null, null));
-		cases.add(new Case(0L, null, null, 0, 0, null, null, null,null));
-		cases.add(new Case(0L, null, null, 0, 0, null, null, null,null));
+		cases.add(new Case(0L, null,  null, 0, 0,  0, null, null, null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, null,null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, null,null, null));
 
 		when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
 		Optional<Person> o = Optional.of(new Person());
@@ -56,10 +56,10 @@ public class CaseServiceTest {
 
 	@Test
 	public void OwnerWithThreeCases2() {
-		cases.add(new Case(0L, null, null, 0, 0, null, null, null, null));
-		cases.add(new Case(0L, null, null, 0, 0, null, null, null, null));
-		cases.add(new Case(1L, null, null, 0, 0, null, null, null, null));
-		cases.add(new Case(0L, null, null, 0, 0, null, null, null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, null, null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, null, null, null));
+		cases.add(new Case(1L, null, null, 0, 0, 0, null, null, null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, null, null, null));
 
 		when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
 		Optional<Person> o = Optional.of(new Person());
@@ -71,10 +71,10 @@ public class CaseServiceTest {
 
 	@Test
 	public void OwnerWithTwoLendCases() {
-		cases.add(new Case(0L, null, null, 0, 0, null, null, null, null));
-		cases.add(new Case(0L, null, null, 0, 0, null, new User(), null, null));
-		cases.add(new Case(0L, null, null, 0, 0, null, null, null, null));
-		cases.add(new Case(0L, null, null, 0, 0, null, new User(), null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, null, null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, new User(), null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, null, null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, new User(), null, null));
 
 		when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
 		Optional<Person> o = Optional.of(new Person());
@@ -87,9 +87,9 @@ public class CaseServiceTest {
 
 	@Test
 	public void OwnerWithNoLendCases() {
-		cases.add(new Case(0L, null, null, 0, 0, null, null, null, null));
-		cases.add(new Case(0L, null, null, 0, 0, null, null, null, null));
-		cases.add(new Case(0L, null, null, 0, 0, null, null, null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, null, null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, null, null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, null, null, null));
 
 		when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
 		Optional<Person> o = Optional.of(new Person());
@@ -100,10 +100,10 @@ public class CaseServiceTest {
 
 	@Test
 	public void OwnerWithTwoFreeCases() {
-		cases.add(new Case(0L, null, null, 0, 0, null, null, null, null));
-		cases.add(new Case(0L, null, null, 0, 0, null, new User(), null, null));
-		cases.add(new Case(0L, null, null, 0, 0, null, null, null, null));
-		cases.add(new Case(0L, null, null, 0, 0, null, new User(), null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, null, null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, new User(), null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, null, null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, new User(), null, null));
 
 		when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
 		Optional<Person> o = Optional.of(new Person());
@@ -116,9 +116,9 @@ public class CaseServiceTest {
 
 	@Test
 	public void OwnerWithNoFreeCases() {
-		cases.add(new Case(0L, null, null, 0, 0, null, new User(), null, null));
-		cases.add(new Case(0L, null, null, 0, 0, null, new User(), null, null));
-		cases.add(new Case(0L, null, null, 0, 0, null, new User(), null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, new User(), null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, new User(), null, null));
+		cases.add(new Case(0L, null, null, 0, 0, 0, null, new User(), null, null));
 
 		when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
 		Optional<Person> o = Optional.of(new Person());
