@@ -1,14 +1,14 @@
 package de.propra2.ausleiherino24.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import de.propra2.ausleiherino24.data.ConflictRepository;
@@ -46,7 +46,7 @@ public class ConflictService {
 	public void deactivateConflict(Long id, User user) throws Exception {
 		Optional<Conflict> conflictToDeactivate = conflicts.findById(id);
 		if(!conflictToDeactivate.isPresent()) {
-			throw new Exception("No such conflict");
+			throw new DataAccessException("No such Conflict") {};
 		}
 		isCorrectUser(conflictToDeactivate.get(), user);
 		conflicts.delete(conflictToDeactivate.get());
@@ -76,25 +76,37 @@ public class ConflictService {
 		return user.equals(conflict.getConflictedCase().getOwner());
 	}
 
+	public List<User> getConflictParticipants(Conflict conflict) throws Exception {
+		if(conflict == null) {
+			throw new Exception("No such conflict!");
+		}
+		return Arrays.asList(conflict.getOwner(), conflict.getReceiver());
+	}
+
 	private boolean isCorrectUser(Conflict conflict, User user) throws Exception {
-		if(!user.getUsername().equals(conflict.getConflictReporterUsername())) {
+		if(!user.getUsername().equals(conflict.getConflictReporterUsername()) && !isUserAdmin(user)) {
 			throw new Exception("Access denied!");
 		}
 		return true;
 	}
 
-	public boolean isUserAdmin(HttpServletRequest request) {
-		if("admin".equals(RoleService.getUserRole(request))) {
+	public boolean isUserAdmin(User user) {
+		if("admin".equals(user.getRole())) {
 			return true;
 		}
 		return false;
 	}
 
-	public void solveConflict(HttpServletRequest request) throws Exception {
-		if(!isUserAdmin(request)) {
+	public void solveConflict(Conflict conflictToSolve, User user, User depositReceiver) throws Exception {
+		if(!isUserAdmin(user)) {
 			throw new Exception("No permission!");
 		}
-		//accountHandler
+		if(depositReceiver.equals(conflictToSolve.getOwner())) {
+			return;
+		}
+		//if(accountHandler.hasValidFunds(accountName, conflictToSolve.getDeposit())) {
+		//
+		//}
 	}
 
 }

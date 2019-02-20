@@ -27,8 +27,26 @@
     <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
 
     <div class="col-lg 9 text-center" style="margin-top: 50px">
-      <h1 th:text="|Your bank amount is : ${pp} €|"></h1>
+      <h1 th:text="|Your bank amount is : ${pp} €|" style="margin-bottom: 20px"></h1>
+      <table class="table table-striped">
+        <tr>
+          <div class="text-center"><h1>Transactions</h1></div>
+        </tr>
+        <thead>
+        <tr>
+          <th scope="col">Type</th>
+          <th scope="col">Ammount</th>
+          <th scope="col">Date</th>
+          <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tr></tr>
+      </table>
+
     </div>
+
   </div>
 </div>
 <div class="container profile profile-view" id="profile">
@@ -54,4 +72,3 @@
 <script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script> -->
 </body>
 </html>
-

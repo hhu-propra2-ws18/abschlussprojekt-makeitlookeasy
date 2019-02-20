@@ -4,39 +4,39 @@
 <!-- before: http://www.w3.org/2005/Atom -->
 
 <head>
-    <meta charset="utf-8">
-    <meta
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-            name="viewport">
-    <!-- before: content="width=device-width, initial-scale=1, shrink-to-fit=no" -->
-    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-    <meta content="" name="description">
-    <meta content="" name="author">
+  <meta charset="utf-8">
+  <meta
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+      name="viewport">
+  <!-- before: content="width=device-width, initial-scale=1, shrink-to-fit=no" -->
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+  <meta content="" name="description">
+  <meta content="" name="author">
 
-    <title>Ausleiherino24</title>
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}">
+  <title>Ausleiherino24</title>
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" th:href="@{~/vendor/bootstrap/css/bootstrap.min.css}">
 
-    <!-- Font awesome Css-->
-    <link rel="stylesheet" th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}">
+  <!-- Font awesome Css-->
+  <link rel="stylesheet" th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}">
 
-    <!-- Custom styles for this template -->
-    <link rel="stylesheet" th:href="@{~/css/loginstyles.min.css}">
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" th:href="@{~/css/loginstyles.min.css}">
 </head>
 
 <body class="text-center" style="background-color: rgb(255,255,255);"><a href="/"><img
-        src="img/mainpage/logo.jpg"
-        style="width: 250px;height: 250px;margin-top: 40px;"></a>
+    src="img/mainpage/logo.jpg"
+    style="width: 250px;height: 250px;margin-top: 40px;"></a>
 <div class="login-card" style="font-family:Roboto, sans-serif;">
-    <!-- Offenes Schloss -->
-    <p class="profile-name-card" th:if="${param.logout}"><i class="fa fa-unlock-alt d-inline"
-                                                            style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i>
-    </p>
-    <!-- Geschlossenes Schloss -->
-    <!--/*@thymesVar id="param" type=""*/-->
-    <p class="profile-name-card" th:unless="${param.logout}"><i class="fa fa-lock d-inline"
-                                                                style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i>
-    </p>
+  <!-- Offenes Schloss -->
+  <p class="profile-name-card" th:if="${param.logout}"><i class="fa fa-unlock-alt d-inline"
+                                                          style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i>
+  </p>
+  <!-- Geschlossenes Schloss -->
+  <!--/*@thymesVar id="param" type=""*/-->
+  <p class="profile-name-card" th:unless="${param.logout}"><i class="fa fa-lock d-inline"
+                                                              style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i>
+  </p>
 
   <form class="form-signin" method="post" th:action="@{/login}">
     <span class="reauth-email" style="margin:11px;"></span>

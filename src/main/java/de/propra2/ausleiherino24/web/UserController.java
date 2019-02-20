@@ -1,6 +1,7 @@
 package de.propra2.ausleiherino24.web;
 
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -109,13 +111,17 @@ public class UserController {
     public ModelAndView getMyArticlePage (Principal principal) {
 		User currentUser = userService.findUserByPrincipal(principal);
 		List<Article> myArticles = articleService.findAllActiveByUser(currentUser);
+		List<Case> borrowedArticles = caseService
+				.getLendCasesFromPersonReceiver(currentUser.getPerson().getId());
+		List<Case> requestedArticles = caseService.findAllCasesbyUserId(currentUser.getId());
 
 		ModelAndView mav = new ModelAndView("/user/myOverview");
-		mav.addObject("myArticles", myArticles);
 		mav.addObject("user", currentUser);
 		mav.addObject("categories", allCategories);
-        mav.addObject("borrowed", caseService.getLendCasesFromPersonReceiver(currentUser.getPerson().getId()));
+		mav.addObject("myArticles", myArticles);
+        mav.addObject("borrowed", borrowedArticles);
         mav.addObject("returned");
+        mav.addObject("requested", requestedArticles);
         return mav;
     }
 
@@ -165,7 +171,7 @@ public class UserController {
 	 * @param confirmpass
 	 * @return
 	 */
-	@PutMapping("/user/saveProfile")
+	@PostMapping("accessed/user/saveProfile")
 	public String saveEditedUserProfile(Principal principal, User user, Person person,
 			String password, String confirmpass){
 		String url = "redirect:/profile/"+principal.getName();

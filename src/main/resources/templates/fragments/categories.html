@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <div class="col-lg-3" th:fragment="categories">
-    <h1 style="margin-top: 50px">Categories</h1>
-    <ul class="list-group">
-        <li class="list-group-item"><a th:href="@{~/}">All</a></li>
+  <h1 style="margin-top: 50px">Categories</h1>
+  <ul class="list-group">
+    <li th:if="${category != null && category.equals('all')}" class="list-group-item active">
+      <a th:href="@{~/}" class="text-white">All</a>
+    </li>
+    <li th:unless="${category != null && category.equals('all')}" class="list-group-item">
+      <a th:href="@{~/}">All</a>
+    </li>
 
-        <li class="list-group-item" th:each="category: ${categories}">
-            <a th:href="@{/categories(category=${category.getName()})}"
-               th:text="${category.getName()}">Dummy Kategorie</a>
-        </li>
-
-    </ul>
+    <th:block th:each="cat: ${categories}">
+      <li th:if="${category != null && category.toLowerCase().equals(cat.getName().toLowerCase())}"
+          class="list-group-item active">
+        <a th:href="@{/categories(category=${cat.getName()})}"
+           th:text="${cat.getName()}" class="text-white">Dummy Kategorie</a>
+      </li>
+      <li th:unless="${category != null && category.toLowerCase().equals(cat.getName().toLowerCase())}"
+          class="list-group-item">
+        <a th:href="@{/categories(category=${cat.getName()})}"
+           th:text="${cat.getName()}">Dummy Kategorie</a>
+      </li>
+    </th:block>
+  </ul>
 </div>
 </html>

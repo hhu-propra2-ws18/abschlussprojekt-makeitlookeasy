@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import de.propra2.ausleiherino24.data.ConflictRepository;
@@ -35,16 +34,16 @@ public class ConflictServiceTest {
 
 	@Test
 	public void test() {
-		MockHttpServletRequest req = new MockHttpServletRequest();
-		req.addUserRole("admin");
-		Assertions.assertThat(conflictService.isUserAdmin(req)).isTrue();
+		User user = new User();
+		user.setRole("admin");
+		Assertions.assertThat(conflictService.isUserAdmin(user)).isTrue();
 	}
 
 	@Test
 	public void test2() {
-		MockHttpServletRequest req = new MockHttpServletRequest();
-		req.addUserRole("user");
-		Assertions.assertThat(conflictService.isUserAdmin(req)).isFalse();
+		User user = new User();
+		user.setRole("user");
+		Assertions.assertThat(conflictService.isUserAdmin(user)).isFalse();
 	}
 
 	@Test(expected=Exception.class)
@@ -141,5 +140,4 @@ public class ConflictServiceTest {
 		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.empty());
 		conflictService.getConflict(1L, user);
 	}
-
 }

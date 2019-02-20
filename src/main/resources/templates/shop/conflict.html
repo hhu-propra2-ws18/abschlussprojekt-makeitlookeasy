@@ -30,6 +30,11 @@
 public void addAttributes(Model model) {
     model.addAttribute("conflict", new Conflict());
 }
+
+@ModelAttribute
+public void addAttributes(Model model) {
+    model.addAttribute("conflictResolver", new ConflictResolver());
+}
  -->
 <form th:object="${conflict}" th:action="@{/conflict/newConflict}" method="post">
     <div class="form-group">
