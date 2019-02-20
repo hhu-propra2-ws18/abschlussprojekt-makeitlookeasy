@@ -1,0 +1,25 @@
+dockerCompose.isRequiredBy(bootRun)
+//dockerCompose.isRequiredBy(tasks.sonarqube)
+//dockerCompose.isRequiredBy(tasks.check)
+dockerCompose {
+    useComposeFiles = ['docker-compose.yml']
+    startedServices = ['propay']
+//  forceRecreate = false
+//  buildAdditionalArgs = ['--force-rm']
+    waitForTcpPorts = false
+    tcpPortsToIgnoreWhenWaiting = []
+    captureContainersOutput = false // one log to rule them all switch
+//  captureContainersOutputToFile = '/logs'
+    captureContainersOutputToFiles = './build/logs/services/'
+    composeLogToFile = project.file('./build/logs/compose.log')
+    containerLogToDir = project.file('./build/logs/container-logs')
+    stopContainers = true
+    removeContainers = true
+    removeImages = "Local"
+    removeVolumes = true
+    removeOrphans = true
+    projectName = 'ausleiherino24'
+//  dockerComposeWorkingDirectory = '/path/where/docker-compose/is/invoked/from'
+//  dockerComposeStopTimeout = java.time.Duration.ofSeconds(20)
+//  environment.put 'BACKEND_ADDRESS', '192.168.1.100'
+}

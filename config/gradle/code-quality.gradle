@@ -1,12 +1,3 @@
-
-analyzeClassesDependencies {
-    justWarn = true
-}
-
-analyzeTestClassesDependencies {
-    justWarn = true
-}
-
 testlogger {
     theme 'mocha-parallel'
 }
@@ -20,7 +11,6 @@ spotbugs {
 }
 
 checkstyle {
-    toolVersion '8.16'
     configFile file("./config/checkstyle/checkstyle-google.xml")
 }
 
@@ -36,24 +26,8 @@ tasks.withType(Checkstyle) {
 
 pmd {
     consoleOutput = true
-    ruleSets = [
-            'java-android', 'java-basic', 'java-braces',
-            'java-clone', 'java-codesize', 'java-comments',
-            'java-controversial', 'java-coupling', 'java-design',
-            'java-empty', 'java-finalizers', 'java-imports',
-            'java-j2ee', 'java-javabeans', 'java-junit',
-            'java-logging-jakarta-commons', 'java-logging-java',
-            'java-migrating', 'java-naming', 'java-optimizations',
-            'java-strictexception', 'java-strings', 'java-sunsecure',
-            'java-typeresolution', 'java-unnecessary', 'java-unusedcode'
-    ]
     group = "verification"
-    toolVersion = '5.1.1'
     ignoreFailures = true
-}
-
-jacoco {
-    toolVersion = "0.8.2"
 }
 
 jacocoTestReport {
