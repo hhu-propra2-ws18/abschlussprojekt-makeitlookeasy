@@ -1,10 +1,8 @@
-== ausleiherino24
+= ausleiherino24
 
-IMPORTANT: On first importing the project `Create separate module per source set` must be unchecked (deprecated).
+IMPORTANT: On first importing the project `Create separate module per source set` must be unchecked.
 
-==== Login Details
-After starting the Docker Compose file, you can login into the web app
-
+== Login Details
   * as user :
     - username : user
 	- password : password
@@ -12,47 +10,48 @@ After starting the Docker Compose file, you can login into the web app
 	- username : admin
 	- password : password
 
-==== gradle-tasks
+== gradle configuration/tasks
 **bootRun** now automatically starts jenkins on 9000 and postgres on 5432. Folder structure is generated automatically and the app will be started first once postgres is ready. The app will be running on 8080 as usual.
 
-**manualinit** can trigger the folder structure creation manually if needed.
+**manual** can trigger the folder structure creation manually if needed.
 
-**cleanUp** tries to delete all folders created, though it may be possible that it fails with a permission error, then one can run the clean.sh with elevation like so: ` ./scripts/clean.sh`.
+**cleanUp** tries to delete all folders created, though it may be possible that it fails with a permission error, then one can run the clean.sh with elevation like so: `sudo ./scripts/clean.sh`.
 
 **dockerReboot**, **dockerClean**, **dockerReset** do cleanup tasks in different intensitys.
 
-==== docker
-Permissions of the database persistence folder (pgsql-01) are now synchronized with the invoking user, so that it should be visible and accessible from within the IDE.
+== docker
+Permissions of the database persistence folder (pgsql-01) are synchronized with the invoking user, so that it should be visible and accessible from within the IDE.
 
-Container/service and compose-logsconfigure the checkstyle intellij plugin like so: +
-`File -> Settings -> Other Settings -> Checkstyle -> +` + Use local checkstyle-file are now automatically written to ./build/logs/
+Logs of all running services can be found at ./build/logs/
 
-==== jenkins
-Does the same as travis, just more and better. It can be reached on localhost:9000. Persistent local storage is located
-at ~/jenkins_home.
+== jenkins
+Does the same as travis, just more and better. It can be reached on localhost:9000 (if enabled in ./config/gradle/docker-compose.gradle). Persistent local storage is located at ~/jenkins_home.
 
-==== javadocs
+== javadocs
+
 The task _javadocs_ generates its output to ./build/docs/javadoc/de. 
 
-==== code-style
-All Sourcefiles are now formatted according to the Google Java Style Guide (https://google.github.io/styleguide/javaguide.html). First time configuration of the IDE is necessary (see init.adoc)
+== code-style
+All Sourcefiles are formatted according to the Google Java Style Guide (https://google.github.io/styleguide/javaguide.html). **First time configuration of the IDE is necessary (see init.adoc)**
 
 HINT: Use CTRL+ALT+L to manually trigger a code format the currently opened file.
 
 To get visual feedback regarding styleguide violations on-the-fly check "Treat Checkstyle errors as warnings." and configure the checkstyle intellij plugin like so: +
 `File -> Settings -> Other Settings -> Checkstyle -> + -> Use local checkstyle-file and set a name` +
-Select ./config/checkstyle/checkstyle-google.xml.
 
-==== Code Analysis
-====== sonarcloud
+== Code Analysis
+=== sonarcloud
 The app is now available online on sonarcloud  at https://sonarcloud.io/organizations/ausleiherino24/.
 
 Running the gradle-task _sonarqube_ will trigger a new analysis run, but the analysis is also automatically triggered on every new commit by travisCI.
 
 The plugin _SonarLint_ marks sonarqubes findings locally in the IDE.
 
-====== PMD
-Apart from the report that is generated when running the task **check** to ./build/reports/pmd automatically through gradle one can do a local run with the intellij PMD plugin. Once installed it can be configured acc. to Jens rules like so: +
-`Settings -> Other Settings -> PMD -> + and then select ./config/pmd/ruleset.xml.` +
-To run the analysis: Tools -> Run PMD -> custom rles -> ruleset.
+=== PMD
+To perform a local PMD run with the intellij PMD plugin do the following: 
 
+`Settings -> Other Settings -> PMD -> + and then select ./config/pmd/ruleset.xml.` +
+To run the analysis: Tools -> Run PMD -> custom rles -> ruleset. +
+
+=== General
+Spotbugs, Pitest, jacoco and the build time is being run automatically along with the task _check_. Its output is visible via stdout on the console.
