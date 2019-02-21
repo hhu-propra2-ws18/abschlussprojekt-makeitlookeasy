@@ -35,13 +35,16 @@ public class Case {
     private int price;
     private int deposit;
     private int requestStatus;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "aCase")
     private CustomerReview customerReview;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn
     private User receiver;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn
     private Article article;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Conflict conflict;
 
     /**
      * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
