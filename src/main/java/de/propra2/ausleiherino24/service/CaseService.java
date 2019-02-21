@@ -5,6 +5,7 @@ import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -178,5 +179,13 @@ public class CaseService {
                 return false;
         }
         return true;
+    }
+
+    public List<Case> findAllExpiredCasesbyUserId(Long id) {
+        return findAllCasesbyUserId(id)
+                .stream()
+                .filter(c -> c.getEndTime() < new Date().getTime())
+                .filter(c -> c.getRequestStatus() == Case.RUNNING)
+                .collect(Collectors.toList());
     }
 }

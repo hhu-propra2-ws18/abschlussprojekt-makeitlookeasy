@@ -40,12 +40,13 @@ public class ConflictController {
      * @return Description
      * @throws Exception Description
      */
-    @PostMapping("/newConflict")
-    public String sendConflict(@RequestBody Conflict conflict, BindingResult bindingResult,
-            Model model, Principal principal) throws Exception {
+    @PostMapping("/accessed/user/openconflict")
+    public String sendConflict(@RequestParam Long id, @RequestBody Conflict conflict,
+            BindingResult bindingResult, Model model, Principal principal) throws Exception {
         if (bindingResult.hasErrors()) {
             throw new ValidationException("Conflict is not Valid");
         }
+
         User user = userService.findUserByPrincipal(principal);
         conflictService.saveConflict(conflict, user);
         conflictService.sendConflictEmail(conflict);
