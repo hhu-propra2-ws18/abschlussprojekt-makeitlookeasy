@@ -68,7 +68,7 @@ public class ConflictService {
             throw new DataAccessException("No such Conflict") {
             };
         }
-        isConflictReporter(conflictToDeactivate.get(), user);
+        isConflictReporterOrAdmin(conflictToDeactivate.get(), user);
         conflicts.delete(conflictToDeactivate.get());
     }
 
@@ -136,11 +136,11 @@ public class ConflictService {
         return true;
     }
 
-    private boolean isConflictReporter(Conflict conflict, User user){
-        if(conflict.getConflictReporterUsername().equals(user.getUsername())){
-            return true;
+    private boolean isConflictReporterOrAdmin(Conflict conflict, User user) throws Exception {
+        if(!(conflict.getConflictReporterUsername().equals(user.getUsername()) || "admin".equals(user.getRole()))){
+            throw new Exception("Access denied!");
         }
-        return false;
+        return true;
     }
 
     private boolean isUserAdmin(User user) {

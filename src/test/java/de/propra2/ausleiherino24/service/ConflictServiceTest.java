@@ -52,6 +52,7 @@ public class ConflictServiceTest {
 		ca.setArticle(art);
 		ca.setReceiver(user);
 		c1.setConflictedCase(ca);
+		c1.setConflictReporterUsername("user1");
 
 	}
 
@@ -166,11 +167,33 @@ public class ConflictServiceTest {
 	}
 
 	@Test
-	public void deactivateConflict() throws Exception {
+	public void deactivateConflictShouldDeactivateConflictIfUserIsConflictReporter() throws Exception {
 		c1.setId(1L);
 		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
 		conflictService.deactivateConflict(1L, user);
+
+		Mockito.verify(conflictRepository, Mockito.times(1)).delete(c1);
+	}
+
+	@Test(expected=Exception.class)
+	public void deactivateConflictShouldNotDeactivateConflictIfUserIsNotConflictReporter() throws Exception {
+		c1.setId(1L);
+		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
+
+		conflictService.deactivateConflict(1L, user2);
+
+		Mockito.verify(conflictRepository, Mockito.times(0)).delete(c1);
+	}
+
+	@Test
+	public void deactivateConflictShouldDeactivateConflictIfUserIsAdmin() throws Exception {
+		User admin = new User();
+		admin.setRole("admin");
+		c1.setId(1L);
+		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
+
+		conflictService.deactivateConflict(1L, admin);
 
 		Mockito.verify(conflictRepository, Mockito.times(1)).delete(c1);
 	}
