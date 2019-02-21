@@ -41,4 +41,8 @@ public class Conflict {
     public int getDeposit() {
         return conflictedCase.getDeposit();
     }
+
+    public void setConflictedCaseConflict(Conflict conflict){
+        conflictedCase.setConflict(conflict);
+    }
 }

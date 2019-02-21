@@ -49,6 +49,7 @@ public class ConflictService {
             throw new Exception("No such conflict");
         }
         isCorrectUser(conflict, user);
+        conflict.setConflictedCaseConflict(conflict);
         conflicts.save(conflict);
     }
 
