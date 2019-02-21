@@ -2,9 +2,11 @@ package de.propra2.ausleiherino24;
 
 import com.github.javafaker.Faker;
 import de.propra2.ausleiherino24.data.ArticleRepository;
+import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
@@ -12,10 +14,12 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.servlet.ServletContext;
+import javax.sound.midi.Receiver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.core.io.ClassPathResource;
@@ -27,34 +31,41 @@ public class Initializer implements ServletContextInitializer {
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
     private final PersonRepository personRepository;
+    private final CaseRepository caseRepository;
 
     /**
      * TODO Javadoc.
-     *
-     * @param userRepository Descriptions
+     *  @param userRepository Descriptions
      * @param articleRepository Descriptions
-     * @param caseRepository Descriptions
      * @param personRepository Descriptions
-     * @param caseService Descriptions
+     * @param caseRepository
      */
     @Autowired
     public Initializer(UserRepository userRepository, ArticleRepository articleRepository,
-            PersonRepository personRepository) {
+            PersonRepository personRepository, CaseRepository caseRepository) {
         this.userRepository = userRepository;
         this.articleRepository = articleRepository;
         this.personRepository = personRepository;
+        this.caseRepository = caseRepository;
     }
 
     @Override
     public void onStartup(final ServletContext servletContext) {
+        deleteAll();
         initTestAccounts();
         initTestArticleWithinUsers();
     }
 
-    private void initTestArticleWithinUsers() {
+    private void deleteAll() {
         articleRepository.deleteAll();
+        personRepository.deleteAll();
+        caseRepository.deleteAll();
+        userRepository.deleteAll();
+    }
+
+    private void initTestArticleWithinUsers() {
         Faker faker = new Faker(Locale.GERMAN);
-        IntStream.range(0, 15).forEach(value -> {
+        ArrayList<Person> persons = IntStream.range(0, 15).mapToObj(value -> {
             Person person = createPerson(
                     faker.address().fullAddress(),
                     faker.name().firstName(),
@@ -66,10 +77,10 @@ public class Initializer implements ServletContextInitializer {
                     "password",
                     person);
 
-            ArrayList<Article> articles = IntStream.range(0, faker.random().nextInt(1, 7))
-                    .mapToObj(value1 -> {
+            IntStream.range(0, faker.random().nextInt(1, 7))
+                    .forEach(value1 -> {
                         int id = faker.random().nextInt(1, 807);
-                        return createArticle(
+                        Article article = createArticle(
                                 readPokemonName(id),
                                 faker.chuckNorris().fact(),
                                 Category.getAllCategories().get(faker.random()
@@ -79,17 +90,45 @@ public class Initializer implements ServletContextInitializer {
                                 faker.random().nextInt(100, 2000),
                                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
                                         + id + ".png");
-                    })
-                    .collect(Collectors.toCollection(ArrayList::new));
+                        user.addArticle(article);
+                    });
 
-            personRepository.save(person);
-            userRepository.save(user);
-            articles.forEach(articleRepository::save);
+            return person;
+        }).collect(Collectors.toCollection(ArrayList::new));
+
+        persons.forEach(person -> {
+            person.getUser().getArticleList().forEach(article -> {
+                IntStream.range(0, faker.random().nextInt(0, 2)).forEach(a -> {
+                    Case c = createCase(
+                            article,
+                            persons.get(randNumbExcept(0, persons.size()-1, persons.indexOf(person))).getUser(),
+                            convertDateAsLong(
+                                    faker.random().nextInt(1, 31),
+                                    faker.random().nextInt(1, 12),
+                                    2018),
+                            convertDateAsLong(
+                                    faker.random().nextInt(1, 31),
+                                    faker.random().nextInt(1, 12),
+                                    2019),
+                            faker.random().nextInt(1, 3)
+                    );
+                    article.addCase(c);
+                });
+            });
         });
+
+        for (Person person: persons) {
+            personRepository.save(person);
+            userRepository.save(person.getUser());
+            person.getUser().getArticleList().forEach(article -> {
+                articleRepository.save(article);
+                if(article.getCases() != null)
+                    caseRepository.saveAll(article.getCases());
+            });
+        }
     }
 
     private void initTestAccounts() {
-        userRepository.deleteAll();
 
         User user = createUser(
                 "user@mail.com",
@@ -155,6 +194,19 @@ public class Initializer implements ServletContextInitializer {
         return article;
     }
 
+    private Case createCase(Article article, User receiver, Long starttime, Long endtime,
+            int requestStatus){
+        Case c = new Case();
+        c.setReceiver(receiver);
+        c.setPrice(article.getCostPerDay());
+        c.setDeposit(article.getDeposit());
+        c.setStartTime(starttime);
+        c.setEndTime(endtime);
+        c.setArticle(article);
+        c.setRequestStatus(requestStatus);
+        return c;
+    }
+
     private String readPokemonName(int id){
         try {
             File resource = new ClassPathResource(
@@ -167,5 +219,15 @@ public class Initializer implements ServletContextInitializer {
             e.printStackTrace();
             return "";
         }
+    }
+
+    private int randNumbExcept(int a, int b, int z){
+        int x = new Faker().random().nextInt(a, b-1);
+        if(x >= z) return x+1;
+        else return x;
+    }
+
+    private Long convertDateAsLong(int day, int month, int year) {
+        return new GregorianCalendar(year, month, day).getTimeInMillis();
     }
 }
