@@ -62,11 +62,13 @@ public class ConflictRepoTest {
         case2.setEndTime(15022019L);
 
         c1 = new Conflict();
+        case1.setConflict(c1);
         c1.setConflictedCase(case1);
         c1.setConflictReporterUsername(case1.getReceiver().getUsername());
         c1.setConflictDescription("Article not as described");
 
         c2 = new Conflict();
+        case2.setConflict(c2);
         c2.setConflictedCase(case2);
         c2.setConflictReporterUsername(case2.getOwner().getUsername());
         c2.setConflictDescription("Article returned damaged");
