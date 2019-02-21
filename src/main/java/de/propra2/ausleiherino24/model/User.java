@@ -42,11 +42,14 @@ public class User {
 
     private String role;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private List<Article> articleList;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Person person;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Case> casesReceiver;
 
     public User(User user) {
         this.username = user.getUsername();
