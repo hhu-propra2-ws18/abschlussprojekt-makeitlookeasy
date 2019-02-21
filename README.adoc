@@ -1,63 +1,117 @@
-= ausleiherino24
+`[.line-through]#= Softwareentwicklung im Team: Blockpraktikum#`
+WS18/19
+:icons: font
+:icon-set: octicon
 
-IMPORTANT: When first importing the project `Create separate module per source set` must be **unchecked.** +
-           If cleanup is desired, make sure to follow all steps of init.adoc again.
+== Änderung an der `gruppe.json`-Datei
 
-== Login Details
-  * as user :
-    - username : user
-	- password : password
-  * as admin :
-	- username : admin
-	- password : password
+Wir haben nur beschränkt Plätze zur Verfügung. Daher ist es notwendig, dass
+einige Gruppen mit ihren eigenen Notebooks arbeiten und so keine Plätze in den
+Praktikumsräumen der HHU benötigen. Sie bekommen dann einen Seminarraum als
+Arbeitsraum zur Verfügung gestellt.
 
-== gradle configuration/tasks
-**bootRun** now automatically starts propay on 8888 and postgres on 5432 (As soon as we switch to production phase). The folder structure is generated automatically and the app will be started first once postgres is ready. The app will be running on 8080 as usual.
+[IMPORTANT]
+====
+Bitte fügen Sie zur `gruppe.json` folgenden Key mit hinzu und setzen
+Sie den Wert auf `true`, wenn Ihre Gruppe vollständig mit eigenen Geräten
+auskommt. Andernfalls setzen Sie bitte `false`.
 
-=== customtasks folder in gradle-tasks
-**manualInit** can trigger the folder structure creation manually if needed.
+Beispiel:
 
-**cleanUp** tries to delete all folders and caches created, though it may be possible that it fails with a permission error, then one can run the clean.sh with elevation like so: `sudo ./scripts/clean.sh`.
+[source,json]
+----
+{
+    // ...
+    "isNotebookGroup": true,
+    // ...
+}
+----
+====
 
-**dockerReboot**, **dockerClean**, **dockerReset** do cleanup tasks in different intensitys.
-(Delete Containers only, delete containers and images, delete everything including volumes)
+== Termine
 
-== docker
-Permissions of the database persistence folder (pgsql-01) are synchronized with the invoking user, so that it should be visible and accessible from within the IDE.
+Das Praktikum findet in der Zeit vom 11.02.2019 bis 01.03.2019 statt. In dieser
+Zeit werden Sie täglich in der Zeit von 9:30 Uhr bis 15:30 Uhr in Gruppen an
+einer Webanwendung mit Datenbankanbindung arbeiten. Es besteht
+Anwesenheitspflicht für *alle* Tage.
 
-Services that are desired to be started can be enabled/configured in ./config/gradle/docker-compose.gradle
+== Verhaltenscodex
 
-Logs of all running services can be found at ./build/logs/
+=== Umgang miteinander
 
-== jenkins
-Does the same as travis, just more and better. It can be reached on localhost:9000 (if enabled in ./config/gradle/docker-compose.gradle). Persistent local storage is located at ~/jenkins_home.
+Wir erwarten von Ihnen, dass Sie einen höflichen und respektvollen Umgang
+miteinander pflegen. Meinungsverschiedenheiten (besonders in einem Team) können
+vorkommen, sollten aber nicht in einen Streit ausufern, sondern konstruktiv
+gelöst werden.
 
-== javadocs
-The task _javadocs_ generates its output to ./build/docs/javadoc/de. 
+Das Praktikum soll eine freundliche, sichere und einladende Umgebung sein,
+unabhängig von Geschlecht, Aussehen, sexueller Orientierung, Herkunft, Religion
+oder gesellschaftlichem und wirtschaftlichem Status.
 
-== code-style
-All files containing sourcecode are formatted according to the Google Java Style Guide (https://google.github.io/styleguide/javaguide.html). Code formatting is enforced on every commit.
+Wir erwarten von Ihnen,
 
- **First time configuration of the IDE is necessary (see init.adoc)**
+* dass Sie ein respektvolles Verhalten an den Tag legen und respektvoll
+  miteinander kommunizieren. Insbesondere erniedrigendes, diskriminierendes oder
+  belästigendes Verhalten oder Sprache wird nicht geduldet.
+* dass Sie Rücksicht auf Andere nehmen.
+* dass Sie auf Andere aufpassen. Machen Sie uns darauf aufmerksam, wenn Sie
+  Verletzungen dieses Verhaltenskodexes bemerken, selbst wenn sie zunächst
+  belanglos erscheinen.
 
-HINT: Use CTRL+ALT+L (or Code -> reformat code) to manually trigger a code format of the currently opened file.
+=== Verhalten in den Räumlichkeiten
 
-To get visual feedback regarding styleguide violations on-the-fly check "Treat Checkstyle errors as warnings." and configure the checkstyle intellij plugin like so: +
-`File -> Settings -> Other Settings -> Checkstyle -> + -> Use local checkstyle-file and set a name` +
+Während des Praktikums müssen Sie (sowohl innerhalb der Gruppe als auch zwischen
+Gruppen) aufeinander Rücksicht nehmen und niemanden bei der Arbeit stören. Neben
+der
+https://www.uni-duesseldorf.de/home/fileadmin/redaktion/Oeffentliche_Medien/ZUV/Dezernat_6/Hausordnung/16-12-06_Hausordnung_HHU_A4.pdf[Hausordnung
+der Universität] gelten insbesondere folgende Regeln:
 
-== Code Analysis
-=== sonarcloud
-The app is now available online on sonarcloud  at https://sonarcloud.io/organizations/ausleiherino24/.
+* In den Praktikumsräumen ist das Essen verboten.
+* Sie dürfen Getränke zu sich nehmen, aber nicht in der Nähe von Computern.
+* Musik darf nur leise per Kopfhörer gehört werden, sofern niemand belästigt 
+  wird.
+* Den Anweisungen der Aufsicht ist Folge zu leisten.
 
-Running the gradle-task _sonarqube_ will trigger a new analysis run, but the analysis is also automatically triggered on every new commit by travisCI.
+IMPORTANT: Verstöße gegen die Verhaltens- oder Praktikumsregeln können zum
+Ausschluss von der Veranstaltung führen. Sie können dann den Schein in diesem
+Semester nicht mehr bekommen.
 
-The plugin _SonarLint_ marks sonarqubes findings locally in the IDE.
+== Regeln für Fehlzeiten
 
-=== PMD
-To perform a local PMD run with the intellij PMD plugin do the following: 
+=== Urlaub
 
-`Settings -> Other Settings -> PMD -> + and then select ./config/pmd/ruleset.xml.` +
-To run the analysis: Tools -> Run PMD -> custom rules -> ruleset. +
+Für die Teilnahme an den Umfragen während des Semesters können Sie Urlaub
+bekommen. Insgesamt haben Sie einen Urlaubstag. Sie können den Urlaub
+stundenweise (mind. eine Stunde) nehmen oder auch am Stück einen Tag frei
+machen. Sie müssen den Urlaub mit Ihrem Team absprechen und bei der Aufsicht
+vorher anmelden.
 
-=== General
-Spotbugs, Pitest ("tests the tests"), jacoco (coverage) and the build time is being run/calculated automatically along with the task _check_. Its output is visible via stdout on the console.
+=== Krankheit
+
+Bei krankheitsbedingtem Fehlen müssen Sie ein ärztliches Attest vorlegen.
+Sollten Sie länger als 3 Tage in der gesamten Zeit fehlen, ist ein Bestehen des
+Praktikums nur noch in sehr gut begründbaren Ausnahmen möglich. Ein Beispiel:
+Sie fehlen in der letzten Woche, das Projekt hat Ihre Gruppe aber schon nach der
+Woche praktisch fertiggestellt und es fehlt nur noch der Feinschliff.
+
+Wenn Sie sichtbar krank zum Praktikum erscheinen, behalten wir uns vor, Sie zu
+Ihrem eigenen und dem Schutz der anderen TeilnehmerInnen auszuschließen.
+
+=== Prüfungstermine
+
+Wenn Sie Prüfungstermine in den Praktikumszeiten haben, sind Sie bei vorheriger
+Ankündigung (mind. ein Tag vor der Prüfung) für die Dauer der Prüfung Entschuldigt.
+
+=== Pünktlichkeit
+
+Wir erwarten von Ihnen, dass Sie pünktlich um 9:30 Uhr da sind. Wir werden
+Verspätungen dokumentieren. Falls Sie sich deutlich verspäten oder häufig
+fehlen, werden wir die Verspätungen von Ihrem Urlaub abziehen. Falls Sie keinen
+Urlaub mehr haben, kann es passieren, dass wir Sie vom Praktikum ausschließen.
+
+== Gruppenbildung
+
+Am Praktikum dürfen nur Studierende teilnehmen, die alle Projekte im Semester
+bestanden haben. Die Gruppengröße soll 6 nicht unterschreiten und darf 8 nicht
+überschreiten. Die Bildung der Gruppen erfolgt durch die Studierenden selbst, es
+gibt keine Zuweisungen. Das Ilias Forum kann zur Gruppenfindung benutzt werden.
