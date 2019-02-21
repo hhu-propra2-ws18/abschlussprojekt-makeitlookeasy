@@ -15,11 +15,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.servlet.ServletContext;
-import javax.sound.midi.Receiver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.core.io.ClassPathResource;
@@ -32,6 +32,8 @@ public class Initializer implements ServletContextInitializer {
     private final ArticleRepository articleRepository;
     private final PersonRepository personRepository;
     private final CaseRepository caseRepository;
+
+    private final Faker faker = new Faker(Locale.GERMAN);
 
     /**
      * TODO Javadoc.
@@ -52,8 +54,24 @@ public class Initializer implements ServletContextInitializer {
     @Override
     public void onStartup(final ServletContext servletContext) {
         deleteAll();
-        initTestAccounts();
-        initTestArticleWithinUsers();
+        List<Person> persons = initTestArticleWithinUsers();
+        persons.addAll(initTestAccounts(persons));
+        addtoDatabases(persons);
+    }
+
+    private void addtoDatabases(List<Person> persons) {
+        personRepository.saveAll(persons);
+        persons.forEach(person -> {
+            User user = person.getUser();
+            userRepository.save(user);
+            if(user.getArticleList() != null) {
+                user.getArticleList().forEach(article -> {
+                    articleRepository.save(article);
+                    if (article.getCases() != null)
+                        article.getCases().forEach(caseRepository::save);
+                });
+            }
+        });
     }
 
     private void deleteAll() {
@@ -63,9 +81,8 @@ public class Initializer implements ServletContextInitializer {
         userRepository.deleteAll();
     }
 
-    private void initTestArticleWithinUsers() {
-        Faker faker = new Faker(Locale.GERMAN);
-        ArrayList<Person> persons = IntStream.range(0, 15).mapToObj(value -> {
+    private List<Person> initTestArticleWithinUsers() {
+        return IntStream.range(0, 15).mapToObj(value -> {
             Person person = createPerson(
                     faker.address().fullAddress(),
                     faker.name().firstName(),
@@ -96,6 +113,9 @@ public class Initializer implements ServletContextInitializer {
             return person;
         }).collect(Collectors.toCollection(ArrayList::new));
 
+
+        //Fügt Cases hinzu
+        /*
         persons.forEach(person -> {
             person.getUser().getArticleList().forEach(article -> {
                 IntStream.range(0, faker.random().nextInt(0, 2)).forEach(a -> {
@@ -116,37 +136,30 @@ public class Initializer implements ServletContextInitializer {
                 });
             });
         });
-
-        for (Person person: persons) {
-            personRepository.save(person);
-            userRepository.save(person.getUser());
-            person.getUser().getArticleList().forEach(article -> {
-                articleRepository.save(article);
-                if(article.getCases() != null)
-                    caseRepository.saveAll(article.getCases());
-            });
-        }
+        */
     }
 
-    private void initTestAccounts() {
-
-        User user = createUser(
+    private List<Person> initTestAccounts(List<Person> persons) {
+        List<Person> testPersons = new ArrayList<>();
+        testPersons.add(createUser(
                 "user@mail.com",
                 "user",
                 "password",
                 createPerson(
                         "HHU",
                         "Max",
-                        "Mustermann"));
+                        "Mustermann"))
+                .getPerson());
 
-        User admin = createUser(
+        testPersons.add(createUser(
                 "useradmin@mail.com",
                 "admine",
                 "password",
                 createPerson(
                         "HHU",
                         "Maxi",
-                        "Mustermann"));
+                        "Mustermann"))
+                .getPerson());
 
         User hans = createUser(
                 "hans@mail.de",
@@ -157,9 +170,43 @@ public class Initializer implements ServletContextInitializer {
                         "Hans",
                         "Peter"));
 
-        userRepository.save(hans);
-        userRepository.save(admin);
-        userRepository.save(user);
+        IntStream.range(0, 7)
+                .forEach(value1 -> {
+                    int id = faker.random().nextInt(1, 807);
+                    Article article = createArticle(
+                            readPokemonName(id),
+                            faker.chuckNorris().fact(),
+                            Category.getAllCategories().get(faker.random()
+                                    .nextInt(0, Category.getAllCategories().size() - 1)),
+                            hans,
+                            faker.random().nextInt(5, 500),
+                            faker.random().nextInt(100, 2000),
+                            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
+                                    + id + ".png");
+                    hans.addArticle(article);
+                });
+
+        hans.getArticleList().forEach(article ->
+            IntStream.range(0, 2).forEach(a -> {
+                Case c = createCase(
+                        article,
+                        persons.get(faker.random().nextInt(0, persons.size() - 1)).getUser(),
+                        convertDateAsLong(
+                                faker.random().nextInt(1, 31),
+                                faker.random().nextInt(1, 12),
+                                2018),
+                        convertDateAsLong(
+                                faker.random().nextInt(1, 31),
+                                faker.random().nextInt(1, 12),
+                                2019),
+                        1
+                );
+                article.addCase(c);
+            })
+        );
+
+        testPersons.add(hans.getPerson());
+        return testPersons;
     }
 
     private Person createPerson(String address, String firstname, String lastname) {
