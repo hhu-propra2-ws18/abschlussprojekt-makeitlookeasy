@@ -171,13 +171,17 @@ public class CaseController {
         return "redirect:/article?id=" + id;
     }
 
-    @PostMapping("/acceptCase")
-    public String acceptCase() {
-        return "redirect:/myOverview";
+    @PostMapping("/accessed/user/acceptCase")
+    public String acceptCase(@RequestParam Long id) {
+        if(caseService.acceptArticleRequest(id))
+            return "redirect:/myOverview?requests";
+        else
+            return "redirect:/myOverview?requests&declined";
     }
 
-    @PostMapping("/declineCase")
-    public String declineCase() {
-        return "redirect:/myOverview";
+    @PostMapping("/accessed/user/declineCase")
+    public String declineCase(@RequestParam Long id) {
+        caseService.declineArticleRequest(id);
+        return "redirect:/myOverview?requests";
     }
 }

@@ -7,6 +7,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -24,6 +25,8 @@ public class Case {
     public static final int REQUESTED = 1;
     public static final int REQUEST_ACCEPTED = 2;
     public static final int REQUEST_DECLINED = 3;
+    public static final int RENTAL_NOT_POSSIBLE = 4; //Falls der Artikel zu gegebenem Zeitraum bereits verliehen ist
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     PPTransaction ppTransaction;
     @Id
@@ -36,9 +39,10 @@ public class Case {
     private int requestStatus;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private CustomerReview customerReview;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private User receiver;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn
     private Article article;
 
     /**
