@@ -24,6 +24,8 @@ public class Case {
     public static final int REQUESTED = 1;
     public static final int REQUEST_ACCEPTED = 2;
     public static final int REQUEST_DECLINED = 3;
+    public static final int RENTAL_NOT_POSSIBLE = 4; //Falls der Artikel zu gegebenem Zeitraum bereits verliehen ist
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     PPTransaction ppTransaction;
     @Id

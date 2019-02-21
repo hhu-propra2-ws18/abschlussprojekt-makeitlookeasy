@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -125,13 +126,26 @@ public class CaseService {
         caseRepository.save(c);
     }
 
-    public void acceptArticleRequest(Long id) {
+    /**
+     * return true, falls Erfolg
+     * return false, falls Misserfolg
+     */
+    public boolean acceptArticleRequest(Long id) {
         Optional<Case> optCase = caseRepository.findById(id);
-        if(!optCase.isPresent())
-            return;
+        if (!optCase.isPresent())
+            return false;
         Case c = optCase.get();
-        c.setRequestStatus(Case.REQUEST_ACCEPTED);
-        caseRepository.save(c);
+
+        //Check whether the article is not reserved in this period of time
+        if (requestIsOk(id)){
+            c.setRequestStatus(Case.REQUEST_ACCEPTED);
+            caseRepository.save(c);
+            return true;
+        } else {
+            c.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
+            caseRepository.save(c);
+            return false;
+        }
     }
 
     public void declineArticleRequest(Long id) {
@@ -141,5 +155,26 @@ public class CaseService {
         Case c = optCase.get();
         c.setRequestStatus(Case.REQUEST_DECLINED);
         caseRepository.save(c);
+    }
+
+    /**
+     * Überprüft, ob der Artikel zu gegebener CaseId in gegebenen Zeitraum noch verliehen werden kann oder nicht
+     * True: kann verliehen werden
+     * False: kann nicht verliehen werden
+     * Die Methode nimmt an, dass die Id korrekt ist
+     */
+    private boolean requestIsOk(Long id) {
+        Case c = caseRepository.findById(id).get();
+        Article article = c.getArticle();
+        List<Case> cases = article.getCases().stream()
+                .filter(ca -> ca.getRequestStatus() == Case.REQUEST_ACCEPTED)
+                .collect(Collectors.toList());
+        cases.remove(c); //Makes sure, that c is not an element in cases
+
+        for(Case ca: cases){
+            if(!(ca.getStartTime() > c.getEndTime() || ca.getEndTime() < c.getStartTime()))
+                return false;
+        }
+        return true;
     }
 }

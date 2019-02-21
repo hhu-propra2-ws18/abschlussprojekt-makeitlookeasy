@@ -97,115 +97,121 @@
     <!-- Categories -->
     <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
 
-    <!-- Frame for articles from User-->
-    <div class="col-lg 9" id="mainFrameOne"
-         th:style="'margin-top: 100px;display:'+${(param.articles!=null || (param.borrowed==null && param.returned==null && param.requests==null))? 'block' : 'none'}">
-      <table class="table">
-        <tr>
-          <div class="text-center">
-            <button class="btn btn-light" onclick="oneFunction()">My articles</button>
-            <span> / </span>
-            <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
-            <span> / </span>
-            <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
-            <span> / </span>
-            <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
-          </div>
-        </tr>
-        <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Price</th>
-          <th scope="col">Deposit</th>
-          <th scope="col">Status</th>
-          <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="article: ${myArticles}">
-          <td th:text="${article.name} "></td>
-          <td th:text="${article.costPerDay} + '€'"></td>
-          <td th:text="${article.deposit} + '€'"></td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+    <!-- Warnmeldungen -->
 
-    <!-- Frame for borrowed articles from other users -->
-    <div class="col-lg 9" id="mainFrameTwo"
-         th:style="'margin-top: 100px;display:'+${(param.borrowed!=null)? 'block' : 'none'}">
-      <table class="table">
-        <tr>
-          <div class="text-center">
-            <button class="btn btn-light" onclick="oneFunction()">My articles</button>
-            <span> / </span>
-            <button class="btn btn-light" onclick="twoFunction()">Borrowed</button>
-            <span> / </span>
-            <button class="btn btn-light" onclick="threeFunction()">Returned</button>
-            <span> / </span>
-            <button class="btn btn-light" onclick="fourFunction()">Requests</button>
-          </div>
-        </tr>
-        <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">From</th>
-          <th scope="col">To</th>
-          <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="borrow: ${borrowed}">
-          <td th:text="${borrow.article.name}"></td>
-          <td th:text="${borrow.getFormattedStartTime()}"></td>
-          <td th:text="${borrow.getFormattedEndTime()}"></td>
-          <td>
-            <button class="btn btn-success btn-sm" type="button">Give back</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+    <div class="col-lg 9" style="margin-top: 70px">
+      <div class="alert alert-warning absolue center" th:if="${param.declined}">
+        Could not accept article, because its already rented in the requested time.
+      </div>
+      <!-- Frame for articles from User-->
+      <div id="mainFrameOne"
+           th:style="'margin-top: 20px;display:'+${(param.articles!=null || (param.borrowed==null && param.returned==null && param.requests==null))? 'block' : 'none'}">
+        <table class="table">
+          <tr>
+            <div class="text-center">
+              <button class="btn btn-light" onclick="oneFunction()">My articles</button>
+              <span> / </span>
+              <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
+              <span> / </span>
+              <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
+              <span> / </span>
+              <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
+            </div>
+          </tr>
+          <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Deposit</th>
+            <th scope="col">Status</th>
+            <th scope="col"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="article: ${myArticles}">
+            <td th:text="${article.name} "></td>
+            <td th:text="${article.costPerDay} + '€'"></td>
+            <td th:text="${article.deposit} + '€'"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
 
-    <!-- Frame for returned articles from other users -->
-    <div class="col-lg 9" id="mainFrameThree"
-         th:style="'margin-top: 100px;display:'+${(param.returned!=null)? 'block' : 'none'}">
-      <table class="table">
-        <tr>
-          <div class="text-center">
-            <button class="btn btn-light" onclick="oneFunction()">My articles</button>
-            <span> / </span>
-            <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
-            <span> / </span>
-            <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
-            <span> / </span>
-            <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
-          </div>
-        </tr>
-        <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Borrower</th>
-          <th scope="col">Accept</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td></td>
-          <td></td>
-          <td>
-            <button class="btn btn-success btn-sm" type="button">accept</button>
-            <span> </span>
-            <button class="btn btn-danger btn-sm" type="button">decline</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+      <!-- Frame for borrowed articles from other users -->
+      <div id="mainFrameTwo"
+           th:style="'margin-top: 20px;display:'+${(param.borrowed!=null)? 'block' : 'none'}">
+        <table class="table">
+          <tr>
+            <div class="text-center">
+              <button class="btn btn-light" onclick="oneFunction()">My articles</button>
+              <span> / </span>
+              <button class="btn btn-light" onclick="twoFunction()">Borrowed</button>
+              <span> / </span>
+              <button class="btn btn-light" onclick="threeFunction()">Returned</button>
+              <span> / </span>
+              <button class="btn btn-light" onclick="fourFunction()">Requests</button>
+            </div>
+          </tr>
+          <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="borrow: ${borrowed}">
+            <td th:text="${borrow.article.name}"></td>
+            <td th:text="${borrow.getFormattedStartTime()}"></td>
+            <td th:text="${borrow.getFormattedEndTime()}"></td>
+            <td>
+              <button class="btn btn-success btn-sm" type="button">Give back</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
 
-    <!-- Fram for accepting people to borrow your article -->
-    <div class="col-lg 9" id="mainFrameFour"
-         th:style="'margin-top: 100px;display:'+${(param.requests!=null)? 'block' : 'none'}">
+      <!-- Frame for returned articles from other users -->
+      <div id="mainFrameThree"
+           th:style="'margin-top: 20px;display:'+${(param.returned!=null)? 'block' : 'none'}">
+        <table class="table">
+          <tr>
+            <div class="text-center">
+              <button class="btn btn-light" onclick="oneFunction()">My articles</button>
+              <span> / </span>
+              <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
+              <span> / </span>
+              <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
+              <span> / </span>
+              <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
+            </div>
+          </tr>
+          <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Borrower</th>
+            <th scope="col">Accept</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>
+              <button class="btn btn-success btn-sm" type="button">accept</button>
+              <span> </span>
+              <button class="btn btn-danger btn-sm" type="button">decline</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Frame for accepting people to borrow your article -->
+      <div id="mainFrameFour"
+         th:style="'margin-top: 20px;display:'+${(param.requests!=null)? 'block' : 'none'}">
       <table class="table">
         <tr>
           <div class="text-center">
@@ -261,12 +267,17 @@
                 <button class="btn btn-outline-danger btn-sm" style="height:30px;width:80px">Declined</button>
               </div>
             </th:block>
+            <th:block th:if="${case.requestStatus==4}">
+              <div class="row">
+                <button class="btn btn-outline-info btn-sm" style="height:30px;width:120px">Already rented</button>
+              </div>
+            </th:block>
           </td>
         </tr>
         </tbody>
       </table>
     </div>
-
+    </div>
   </div>
 </div>
 <!-- Footer -->

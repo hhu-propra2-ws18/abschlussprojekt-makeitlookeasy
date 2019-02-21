@@ -173,8 +173,10 @@ public class CaseController {
 
     @PostMapping("/accessed/user/acceptCase")
     public String acceptCase(@RequestParam Long id) {
-        caseService.acceptArticleRequest(id);
-        return "redirect:/myOverview?requests";
+        if(caseService.acceptArticleRequest(id))
+            return "redirect:/myOverview?requests";
+        else
+            return "redirect:/myOverview?requests&declined";
     }
 
     @PostMapping("/accessed/user/declineCase")
