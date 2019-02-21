@@ -28,9 +28,9 @@ public class CustomerReviewServiceTest {
         customerReviewService = new CustomerReviewService(customerReviewRepository, caseService);
 
         cases = new ArrayList<>();
-        Case case1 = new Case(null, 0L, null, null, 0, 0, 0, null, null, null);
-        Case case2 = new Case(null, 0L, null, null, 0, 0, 0, null, null, null);
-        Case case3 = new Case(null, 0L, null, null, 0, 0, 0, null, null, null);
+        Case case1 = new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null);
+        Case case2 = new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null);
+        Case case3 = new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null);
 
         customerReviews = new ArrayList<>();
         CustomerReview customerReview1 = new CustomerReview();
