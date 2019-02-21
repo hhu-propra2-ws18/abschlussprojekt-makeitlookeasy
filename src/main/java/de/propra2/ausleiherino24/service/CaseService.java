@@ -114,6 +114,8 @@ public class CaseService {
      */
     public void requestArticle(Long articleId, Long starttime, Long endtime, String username)
             throws Exception {
+        //TODO: Check whether receiver has enough money
+
         Case c = new Case();
         c.setArticle(articleService.findArticleById(articleId));
         c.setStartTime(starttime);

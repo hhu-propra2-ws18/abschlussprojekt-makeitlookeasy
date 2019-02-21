@@ -199,7 +199,7 @@ public class Initializer implements ServletContextInitializer {
                                 faker.random().nextInt(1, 31),
                                 faker.random().nextInt(1, 12),
                                 2019),
-                        1
+                        Case.REQUESTED
                 );
                 article.addCase(c);
             })

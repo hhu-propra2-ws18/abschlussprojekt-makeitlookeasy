@@ -155,18 +155,43 @@
           <thead>
           <tr>
             <th scope="col">Name</th>
+            <th scope="col">Article</th>
             <th scope="col">From</th>
             <th scope="col">To</th>
-            <th scope="col"></th>
+            <th scope="col">Costs</th>
+            <th scope="col">Status</th>
           </tr>
           </thead>
           <tbody>
-          <tr th:each="borrow: ${borrowed}">
-            <td th:text="${borrow.article.name}"></td>
-            <td th:text="${borrow.getFormattedStartTime()}"></td>
-            <td th:text="${borrow.getFormattedEndTime()}"></td>
+          <tr th:each="case: ${borrowed}">
+            <td><a th:href="@{~/profile/{username}(username=${case.article.owner.username})}"
+                   th:text="${case.article.owner.username}"></a>
+            </td>
+            <td><a th:href="@{/article(id=${case.article.getId()})}"
+                   th:text="${case.article.name}"></a>
+            </td>
+            <td th:text="${case.getFormattedStartTime()}"></td>
+            <td th:text="${case.getFormattedEndTime()}"></td>
+            <td th:text="${((case.endTime-case.startTime)/(1000*3600*24)*case.price)+'€'}"></td>
             <td>
-              <button class="btn btn-success btn-sm" type="button">Give back</button>
+              <th:block th:if="${case.requestStatus==1}">
+                <button style="height:30px;width:80px" class="btn btn-outline-primary btn-sm">Pending</button>
+              </th:block>
+              <th:block th:if="${case.requestStatus==2}">
+                <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm">Accepted</button>
+              </th:block>
+              <th:block th:if="${case.requestStatus==12 || case.requestStatus==4}">
+                <button style="height:30px;width:80px" class="btn btn-outline-danger btn-sm">Declined</button>
+              </th:block>
+              <th:block th:if="${case.requestStatus==10}">
+                <button style="height:30px;width:80px" class="btn btn-outline-warning btn-sm">Open Conflict</button>
+              </th:block>
+              <th:block th:if="${case.requestStatus==7}">
+                <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm">Running</button>
+              </th:block>
+              <th:block th:if="${case.requestStatus==14}">
+                <button style="height:30px;width:80px" class="btn btn-outline-info btn-sm">Finished</button>
+              </th:block>
             </td>
           </tr>
           </tbody>
@@ -262,7 +287,7 @@
                 <button class="btn btn-outline-success btn-sm" style="height:30px;width:80px">Accepted</button>
               </div>
             </th:block>
-            <th:block th:if="${case.requestStatus==3}">
+            <th:block th:if="${case.requestStatus==12}">
               <div class="row">
                 <button class="btn btn-outline-danger btn-sm" style="height:30px;width:80px">Declined</button>
               </div>

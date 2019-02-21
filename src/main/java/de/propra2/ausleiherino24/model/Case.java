@@ -22,10 +22,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Case {
 
+    /**
+     * Bitte die Werte nicht ändern. Diese dienen zur Sortierung
+     * und müssen gegebenefalls in myOverview.html mit angepasst werden
+     */
+
     public static final int REQUESTED = 1;
     public static final int REQUEST_ACCEPTED = 2;
-    public static final int REQUEST_DECLINED = 3;
+    public static final int REQUEST_DECLINED = 12;
     public static final int RENTAL_NOT_POSSIBLE = 4; //Falls der Artikel zu gegebenem Zeitraum bereits verliehen ist
+
+    public static final int RUNNING = 7; //Verleih läuft aktuell
+    public static final int OPEN_CONFLICT = 10; //Es gibt noch einen offenen Konflikt
+    public static final int FINISHED = 14; //Verleih ist beendet
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     PPTransaction ppTransaction;
