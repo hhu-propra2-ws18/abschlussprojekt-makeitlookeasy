@@ -6,6 +6,7 @@ import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -121,6 +122,24 @@ public class CaseService {
         c.setReceiver(userService.findUserByUsername(username));
         c.setRequestStatus(Case.REQUESTED);
 
+        caseRepository.save(c);
+    }
+
+    public void acceptArticleRequest(Long id) {
+        Optional<Case> optCase = caseRepository.findById(id);
+        if(!optCase.isPresent())
+            return;
+        Case c = optCase.get();
+        c.setRequestStatus(Case.REQUEST_ACCEPTED);
+        caseRepository.save(c);
+    }
+
+    public void declineArticleRequest(Long id) {
+        Optional<Case> optCase = caseRepository.findById(id);
+        if(!optCase.isPresent())
+            return;
+        Case c = optCase.get();
+        c.setRequestStatus(Case.REQUEST_DECLINED);
         caseRepository.save(c);
     }
 }

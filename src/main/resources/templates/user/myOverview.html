@@ -98,7 +98,8 @@
     <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
 
     <!-- Frame for articles from User-->
-    <div class="col-lg 9" id="mainFrameOne" style="margin-top: 100px;display:block">
+    <div class="col-lg 9" id="mainFrameOne"
+         th:style="'margin-top: 100px;display:'+${(param.articles!=null || (param.borrowed==null && param.returned==null && param.requests==null))? 'block' : 'none'}">
       <table class="table">
         <tr>
           <div class="text-center">
@@ -131,17 +132,18 @@
     </div>
 
     <!-- Frame for borrowed articles from other users -->
-    <div class="col-lg 9" id="mainFrameTwo" style="margin-top: 100px;display:none">
+    <div class="col-lg 9" id="mainFrameTwo"
+         th:style="'margin-top: 100px;display:'+${(param.borrowed!=null)? 'block' : 'none'}">
       <table class="table">
         <tr>
           <div class="text-center">
             <button class="btn btn-light" onclick="oneFunction()">My articles</button>
             <span> / </span>
-            <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
+            <button class="btn btn-light" onclick="twoFunction()">Borrowed</button>
             <span> / </span>
-            <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
+            <button class="btn btn-light" onclick="threeFunction()">Returned</button>
             <span> / </span>
-            <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
+            <button class="btn btn-light" onclick="fourFunction()">Requests</button>
           </div>
         </tr>
         <thead>
@@ -166,7 +168,8 @@
     </div>
 
     <!-- Frame for returned articles from other users -->
-    <div class="col-lg 9" id="mainFrameThree" style="margin-top: 100px;display:none">
+    <div class="col-lg 9" id="mainFrameThree"
+         th:style="'margin-top: 100px;display:'+${(param.returned!=null)? 'block' : 'none'}">
       <table class="table">
         <tr>
           <div class="text-center">
@@ -201,7 +204,8 @@
     </div>
 
     <!-- Fram for accepting people to borrow your article -->
-    <div class="col-lg 9" id="mainFrameFour" style="margin-top: 100px;display:none">
+    <div class="col-lg 9" id="mainFrameFour"
+         th:style="'margin-top: 100px;display:'+${(param.requests!=null)? 'block' : 'none'}">
       <table class="table">
         <tr>
           <div class="text-center">
@@ -238,22 +242,23 @@
           <td>
             <th:block th:if="${case.requestStatus==1}">
               <div class="row">
-                <form method="post" th:href="@{~/acceptCase(id=${case.id})}">
+                <form method="post" th:action="@{~/accessed/user/acceptCase(id=${case.id})}">
                   <button style="height:30px;width:80px" class="btn btn-success btn-sm" type="submit">accept</button>
                 </form>
-                <form method="post" th:href="@{~/declineCase(id=${case.id})}">
-                  <button style="height:30px;width:80px" class="btn btn-danger btn-sm" type="button">decline</button>
+                <span>  </span>
+                <form method="post" th:action="@{~/accessed/user/declineCase(id=${case.id})}">
+                  <button style="height:30px;width:80px" class="btn btn-danger btn-sm" type="submit">decline</button>
                 </form>
               </div>
             </th:block>
             <th:block th:if="${case.requestStatus==2}">
               <div class="row">
-                <button style="height:30px;width:80px" class="btn btn-success btn-sm">Accepted</button>
+                <button class="btn btn-outline-success btn-sm" style="height:30px;width:80px">Accepted</button>
               </div>
             </th:block>
             <th:block th:if="${case.requestStatus==3}">
               <div class="row">
-                <button style="height:30px;width:80px" class="btn btn-light btn-sm">Declined</button>
+                <button class="btn btn-outline-danger btn-sm" style="height:30px;width:80px">Declined</button>
               </div>
             </th:block>
           </td>
