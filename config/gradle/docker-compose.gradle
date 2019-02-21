@@ -18,7 +18,7 @@ dockerCompose {
     removeImages = "None"
     removeVolumes = false
     removeOrphans = false
-    projectName = 'rentarino24'
+    projectName = 'ausleiherino24'
 //  dockerComposeWorkingDirectory = '/path/where/docker-compose/is/invoked/from'
 //  dockerComposeStopTimeout = java.time.Duration.ofSeconds(20)
 //  environment.put 'BACKEND_ADDRESS', '192.168.1.100'

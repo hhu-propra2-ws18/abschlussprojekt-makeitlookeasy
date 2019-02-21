@@ -12,7 +12,7 @@ IMPORTANT: When first importing the project `Create separate module per source s
 	- password : password
 
 == gradle configuration/tasks
-**bootRun** now automatically starts propay on 8888 and postgres on 5432 (As soon as we switch to production phase). The folder structure is generated automatically and the app will be started first once postgres is ready. The app will be running on 8080 as usual.
+**bootRun** automatically starts propay on 8888 and postgres on 5432 (As soon as we switch to production phase). The folder structure is generated automatically and the app will be started first once postgres is ready. The app will be running on 8080 as usual.
 
 === customtasks folder in gradle-tasks
 **manualInit** can trigger the folder structure creation manually if needed.
