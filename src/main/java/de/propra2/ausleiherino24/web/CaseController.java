@@ -186,8 +186,8 @@ public class CaseController {
     }
 
     @PostMapping("/accessed/user/acceptCaseReturn")
-    public String acceptCaseReturn(@RequestParam Long id){
-        //TODO: Accept Case return
+    public String acceptCaseReturn(@RequestParam Long id) {
+        caseService.acceptCaseReturn(id);
         return "redirect:/myOverview?returned&successfulreturned";
     }
 }

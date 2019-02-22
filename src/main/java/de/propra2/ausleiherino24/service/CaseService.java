@@ -130,17 +130,17 @@ public class CaseService {
     }
 
     /**
-     * return true, falls Erfolg
-     * return false, falls Misserfolg
+     * return true, falls Erfolg return false, falls Misserfolg
      */
     public boolean acceptArticleRequest(Long id) {
         Optional<Case> optCase = caseRepository.findById(id);
-        if (!optCase.isPresent())
+        if (!optCase.isPresent()) {
             return false;
+        }
         Case c = optCase.get();
 
         //Check whether the article is not reserved in this period of time
-        if (requestIsOk(id)){
+        if (requestIsOk(id)) {
             c.setRequestStatus(Case.REQUEST_ACCEPTED);
             caseRepository.save(c);
             return true;
@@ -153,18 +153,18 @@ public class CaseService {
 
     public void declineArticleRequest(Long id) {
         Optional<Case> optCase = caseRepository.findById(id);
-        if(!optCase.isPresent())
+        if (!optCase.isPresent()) {
             return;
+        }
         Case c = optCase.get();
         c.setRequestStatus(Case.REQUEST_DECLINED);
         caseRepository.save(c);
     }
 
     /**
-     * Überprüft, ob der Artikel zu gegebener CaseId in gegebenen Zeitraum noch verliehen werden kann oder nicht
-     * True: kann verliehen werden
-     * False: kann nicht verliehen werden
-     * Die Methode nimmt an, dass die Id korrekt ist
+     * Überprüft, ob der Artikel zu gegebener CaseId in gegebenen Zeitraum noch verliehen werden
+     * kann oder nicht True: kann verliehen werden False: kann nicht verliehen werden Die Methode
+     * nimmt an, dass die Id korrekt ist
      */
     private boolean requestIsOk(Long id) {
         Case c = caseRepository.findById(id).get();
@@ -174,9 +174,10 @@ public class CaseService {
                 .collect(Collectors.toList());
         cases.remove(c); //Makes sure, that c is not an element in cases
 
-        for(Case ca: cases){
-            if(!(ca.getStartTime() > c.getEndTime() || ca.getEndTime() < c.getStartTime()))
+        for (Case ca : cases) {
+            if (!(ca.getStartTime() > c.getEndTime() || ca.getEndTime() < c.getStartTime())) {
                 return false;
+            }
         }
         return true;
     }
@@ -185,7 +186,53 @@ public class CaseService {
         return findAllCasesbyUserId(id)
                 .stream()
                 .filter(c -> c.getEndTime() < new Date().getTime())
-                .filter(c -> c.getRequestStatus() == Case.RUNNING)
+                .filter(c -> c.getRequestStatus() == Case.RUNNING ||
+                        c.getRequestStatus() == Case.FINISHED ||
+                        c.getRequestStatus() == Case.OPEN_CONFLICT)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Stellt den Status von Case mit id id auf Case.OPEN_CONFLICT
+     *
+     * @param id CaseId
+     */
+    public void conflictOpened(Long id) {
+        Optional<Case> opt = caseRepository.findById(id);
+        if (opt.isPresent()) {
+            Case c = opt.get();
+            c.setRequestStatus(Case.OPEN_CONFLICT);
+            caseRepository.save(c);
+        }
+    }
+
+    /**
+     * Stellt den Status von Case mit id id auf Case.FINISHED
+     *
+     * @param id CaseId
+     */
+    public void acceptCaseReturn(Long id) {
+        Optional<Case> opt = caseRepository.findById(id);
+        if (opt.isPresent()) {
+            Case c = opt.get();
+            c.setRequestStatus(Case.FINISHED);
+            caseRepository.save(c);
+        }
+    }
+
+    /**
+     * Findet alle Cases mit Status in {REQUESTED, REQUEST_ACCEPTED, REQUEST_DECLINED,
+     * RENTAL_NOT_POSSIBLE}
+     * @param id
+     * @return
+     */
+    public List<Case> findAllRequestedCasesbyUserId(Long id) {
+        return findAllCasesbyUserId(id)
+                .stream()
+                .filter(c -> c.getRequestStatus() == Case.REQUESTED
+                        || c.getRequestStatus() == Case.REQUEST_ACCEPTED
+                        || c.getRequestStatus() == Case.REQUEST_DECLINED
+                        || c.getRequestStatus() == Case.RENTAL_NOT_POSSIBLE)
                 .collect(Collectors.toList());
     }
 }

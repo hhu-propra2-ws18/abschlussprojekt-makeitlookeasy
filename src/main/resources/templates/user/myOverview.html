@@ -170,7 +170,7 @@
             <th scope="col">From</th>
             <th scope="col">To</th>
             <th scope="col">Costs</th>
-            <th scope="col">Status</th>
+            <th scope="col"></th>
           </tr>
           </thead>
           <tbody>
@@ -186,22 +186,34 @@
             <td th:text="${((case.endTime-case.startTime)/(1000*3600*24)*case.price)+'€'}"></td>
             <td>
               <th:block th:if="${case.requestStatus==1}">
-                <button style="height:30px;width:80px" class="btn btn-outline-primary btn-sm">Pending</button>
+                <button style="height:30px;width:80px" class="btn btn-outline-primary btn-sm">
+                  Pending
+                </button>
               </th:block>
               <th:block th:if="${case.requestStatus==2}">
-                <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm">Accepted</button>
+                <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm">
+                  Accepted
+                </button>
               </th:block>
               <th:block th:if="${case.requestStatus==12 || case.requestStatus==4}">
-                <button style="height:30px;width:80px" class="btn btn-outline-danger btn-sm">Declined</button>
+                <button style="height:30px;width:80px" class="btn btn-outline-danger btn-sm">
+                  Declined
+                </button>
               </th:block>
               <th:block th:if="${case.requestStatus==10}">
-                <button style="height:30px;width:80px" class="btn btn-outline-warning btn-sm">Open Conflict</button>
+                <button style="height:30px;width:80px" class="btn btn-outline-warning btn-sm">Open
+                  Conflict
+                </button>
               </th:block>
               <th:block th:if="${case.requestStatus==7}">
-                <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm">Running</button>
+                <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm">
+                  Running
+                </button>
               </th:block>
               <th:block th:if="${case.requestStatus==14}">
-                <button style="height:30px;width:80px" class="btn btn-outline-info btn-sm">Finished</button>
+                <button style="height:30px;width:80px" class="btn btn-outline-info btn-sm">
+                  Finished
+                </button>
               </th:block>
             </td>
           </tr>
@@ -231,7 +243,7 @@
             <th scope="col">Return Date</th>
             <th scope="col">Incoming</th>
             <th scope="col">Deposit</th>
-            <th scope="col">Accept</th>
+            <th scope="col"></th>
           </tr>
           </thead>
           <tbody>
@@ -245,46 +257,73 @@
             <td th:text="${case.getFormattedEndTime()}"></td>
             <td th:text="${((case.endTime-case.startTime)/(1000*3600*24)*case.price)+'€'}"></td>
             <td th:text="${case.deposit+'€'}"></td>
+
             <td style="white-space: nowrap">
-              <div class="ml-auto flex-md-row" >
-                <form style="display:inline-block" method="post" th:action="@{/accessed/user/acceptCaseReturn(id=${case.id})}">
-                  <button class="btn btn-success btn-sm" type="submit">accept</button>
-                </form>
-                <span> </span>
+              <th:block th:if="${case.requestStatus==7}">
+                <div class="ml-auto flex-md-row">
+                  <form style="display:inline-block" method="post"
+                        th:action="@{/accessed/user/acceptCaseReturn(id=${case.id})}">
+                    <button style="height:30px;width:80px" class="btn btn-success btn-sm"
+                            type="submit">accept</button>
+                  </form>
+                  <span> </span>
 
-                <!-- Button trigger modal -->
-                <button class="btn btn-primary btn-sm" data-target="#exampleModal" data-toggle="modal"
-                        type="button">conflict</button>
+                  <!-- Button trigger modal -->
+                  <button class="btn btn-primary btn-sm" data-target="#exampleModal"
+                          data-toggle="modal" style="height:30px;width:80px"
+                          type="button">conflict
+                  </button>
 
-                <!-- Modal -->
-                <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade"
-                     id="exampleModal" role="dialog" tabindex="-1">
-                  <div class="modal-dialog" role="document">
-                    <form method="post" th:action="@{/accessed/user/openconflict(id=${case.id})}">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Open Conflict</h5>
-                          <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
+                  <!-- Modal -->
+                  <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade"
+                       id="exampleModal" role="dialog" tabindex="-1">
+                    <div class="modal-dialog" role="document">
+                      <form method="post" th:action="@{/accessed/user/openconflict(id=${case.id})}">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Open Conflict</h5>
+                            <button aria-label="Close" class="close" data-dismiss="modal"
+                                    type="button">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <span>Article: </span> <span th:text="${case.article.name}"></span><br>
+                            <span>Borrower: </span> <span
+                              th:text="${case.receiver.username}"></span>
+                            <textarea class="form-control" style="height:300px;margin-top:20px"
+                                      placeholder="What went wrong?"
+                                      name="conflictDescription"></textarea>
+                          </div>
+                          <div class="modal-footer">
+                            <button class="btn btn-secondary" data-dismiss="modal" type="button">
+                              Close
+                            </button>
+                            <button class="btn btn-primary" type="submit">Send</button>
+                          </div>
                         </div>
-                        <div class="modal-body">
-                          <span>Article: </span> <span th:text="${case.article.name}"></span><br>
-                          <span>Borrower: </span> <span th:text="${case.receiver.username}"></span>
-                          <textarea class="form-control" style="height:300px;margin-top:20px" placeholder="What went wrong?"
-                          name="conflictDescription"></textarea>
-                        </div>
-                        <div class="modal-footer">
-                          <button class="btn btn-secondary" data-dismiss="modal" type="button">Close
-                          </button>
-                          <button class="btn btn-primary" type="submit">Send</button>
-                        </div>
-                      </div>
-                    </form>
+                      </form>
+                    </div>
                   </div>
-                </div>
 
-              </div>
+                </div>
+              </th:block>
+
+              <th:block th:if="${case.requestStatus==10}">
+                <div class="ml-auto flex-md-row">
+                  <button style="height:30px;width:120px" class="btn btn-outline-primary btn-sm" >
+                    Running Conlict
+                  </button>
+                </div>
+              </th:block>
+
+              <th:block th:if="${case.requestStatus==14}">
+                <div class="ml-auto flex-md-row">
+                  <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm">
+                    Finished
+                  </button>
+                </div>
+              </th:block>
             </td>
           </tr>
           </tbody>
@@ -293,72 +332,84 @@
 
       <!-- Frame for accepting people to borrow your article -->
       <div id="mainFrameFour"
-         th:style="'margin-top: 20px;display:'+${(param.requests!=null)? 'block' : 'none'}">
-      <table class="table">
-        <tr>
-          <div class="text-center">
-            <button class="btn btn-light" onclick="oneFunction()">My articles</button>
-            <span> / </span>
-            <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
-            <span> / </span>
-            <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
-            <span> / </span>
-            <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
-          </div>
-        </tr>
-        <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Article</th>
-          <th scope="col">From</th>
-          <th scope="col">To</th>
-          <th scope="col">Profit</th>
-          <th scope="col">Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="case:${requested}">
-          <td><a th:href="@{~/profile/{username}(username=${case.receiver.username})}"
-                 th:text="${case.receiver.username}"></a>
-          </td>
-          <td><a th:href="@{/article(id=${case.article.getId()})}"
-                 th:text="${case.article.name}"></a>
-          </td>
-          <td th:text="${case.getFormattedStartTime()}"></td>
-          <td th:text="${case.getFormattedEndTime()}"></td>
-          <td th:text="${((case.endTime-case.startTime)/(1000*3600*24)*case.price)+'€'}"></td>
-          <td>
-            <th:block th:if="${case.requestStatus==1}">
-              <div class="row">
-                <form method="post" th:action="@{~/accessed/user/acceptCase(id=${case.id})}">
-                  <button style="height:30px;width:80px" class="btn btn-success btn-sm" type="submit">accept</button>
-                </form>
-                <span>  </span>
-                <form method="post" th:action="@{~/accessed/user/declineCase(id=${case.id})}">
-                  <button style="height:30px;width:80px" class="btn btn-danger btn-sm" type="submit">decline</button>
-                </form>
-              </div>
-            </th:block>
-            <th:block th:if="${case.requestStatus==2}">
-              <div class="row">
-                <button class="btn btn-outline-success btn-sm" style="height:30px;width:80px">Accepted</button>
-              </div>
-            </th:block>
-            <th:block th:if="${case.requestStatus==12}">
-              <div class="row">
-                <button class="btn btn-outline-danger btn-sm" style="height:30px;width:80px">Declined</button>
-              </div>
-            </th:block>
-            <th:block th:if="${case.requestStatus==4}">
-              <div class="row">
-                <button class="btn btn-outline-info btn-sm" style="height:30px;width:120px">Already rented</button>
-              </div>
-            </th:block>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+           th:style="'margin-top: 20px;display:'+${(param.requests!=null)? 'block' : 'none'}">
+        <table class="table">
+          <tr>
+            <div class="text-center">
+              <button class="btn btn-light" onclick="oneFunction()">My articles</button>
+              <span> / </span>
+              <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
+              <span> / </span>
+              <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
+              <span> / </span>
+              <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
+            </div>
+          </tr>
+          <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Article</th>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col">Profit</th>
+            <th scope="col"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="case:${requested}">
+            <td><a th:href="@{~/profile/{username}(username=${case.receiver.username})}"
+                   th:text="${case.receiver.username}"></a>
+            </td>
+            <td><a th:href="@{/article(id=${case.article.getId()})}"
+                   th:text="${case.article.name}"></a>
+            </td>
+            <td th:text="${case.getFormattedStartTime()}"></td>
+            <td th:text="${case.getFormattedEndTime()}"></td>
+            <td th:text="${((case.endTime-case.startTime)/(1000*3600*24)*case.price)+'€'}"></td>
+            <td style="white-space: nowrap">
+              <th:block th:if="${case.requestStatus==1}">
+                <div class="ml-auto flex-md-row">
+                  <form style="display:inline-block" method="post"
+                        th:action="@{~/accessed/user/acceptCase(id=${case.id})}">
+                    <button style="height:30px;width:80px" class="btn btn-success btn-sm"
+                            type="submit">accept
+                    </button>
+                  </form>
+                  <span> </span>
+                  <form style="display:inline-block" method="post"
+                        th:action="@{~/accessed/user/declineCase(id=${case.id})}">
+                    <button style="height:30px;width:80px" class="btn btn-danger btn-sm"
+                            type="submit">decline
+                    </button>
+                  </form>
+                </div>
+              </th:block>
+              <th:block th:if="${case.requestStatus==2}">
+                <div class="ml-auto flex-md-row">
+                  <button class="btn btn-outline-success btn-sm" style="height:30px;width:80px">
+                    Accepted
+                  </button>
+                </div>
+              </th:block>
+              <th:block th:if="${case.requestStatus==12}">
+                <div class="ml-auto flex-md-row">
+                  <button class="btn btn-outline-danger btn-sm" style="height:30px;width:80px">
+                    Declined
+                  </button>
+                </div>
+              </th:block>
+              <th:block th:if="${case.requestStatus==4}">
+                <div class="ml-auto flex-md-row">
+                  <button class="btn btn-outline-info btn-sm" style="height:30px;width:120px">
+                    Already rented
+                  </button>
+                </div>
+              </th:block>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

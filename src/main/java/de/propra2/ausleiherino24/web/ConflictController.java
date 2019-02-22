@@ -57,9 +57,10 @@ public class ConflictController {
         conflict.setConflictDescription(conflictDescription);
         conflict.setConflictedCase(optionalCase.get());
         conflict.setConflictReporterUsername(optionalCase.get().getArticle().getOwner().getUsername());
+        caseService.conflictOpened(id);
 
         conflictService.saveConflict(conflict, optionalCase.get().getOwner());
-        conflictService.sendConflictEmail(conflict);
+        //conflictService.sendConflictEmail(conflict);
 
         return "redirect:/myOverview?returned&openedconflict";
     }
