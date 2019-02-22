@@ -126,14 +126,15 @@ public class UserController {
         List<Article> myArticles = articleService.findAllActiveByUser(currentUser);
         List<Case> borrowedArticles = caseService
                 .getLendCasesFromPersonReceiver(currentUser.getPerson().getId());
-        List<Case> requestedArticles = caseService.findAllCasesbyUserId(currentUser.getId());
+        List<Case> requestedArticles = caseService.findAllRequestedCasesbyUserId(currentUser.getId());
+        List<Case> returnedArticles = caseService.findAllExpiredCasesbyUserId(currentUser.getId());
 
         ModelAndView mav = new ModelAndView("/user/myOverview");
         mav.addObject("user", currentUser);
         mav.addObject("categories", allCategories);
         mav.addObject("myArticles", myArticles);
         mav.addObject("borrowed", borrowedArticles);
-        mav.addObject("returned");
+        mav.addObject("returned", returnedArticles);
         mav.addObject("requested", requestedArticles);
         return mav;
     }

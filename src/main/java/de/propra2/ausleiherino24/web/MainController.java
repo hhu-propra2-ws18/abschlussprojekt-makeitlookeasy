@@ -43,7 +43,7 @@ public class MainController {
     @SuppressWarnings("Duplicates") // TODO Duplicate code
     @GetMapping(value = {"/", "/index"})
     public ModelAndView getIndex(Principal principal) {
-        List<Article> allArticles = articleService.getAllActiveArticles();
+        List<Article> allArticles = articleService.getAllActiveAndForRentalArticles();
         User currentUser = userService.findUserByPrincipal(principal);
 
         ModelAndView mav = new ModelAndView("index");

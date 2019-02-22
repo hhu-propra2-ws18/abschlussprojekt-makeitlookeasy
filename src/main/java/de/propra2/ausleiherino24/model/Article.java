@@ -40,10 +40,16 @@ public class Article {
     private String location;
 
     /**
-     * true: it is possible to rent the article false: owner does not want to have the article for
-     * rent right now.
+     * true: Artikel existiert noch
+     * false: Artikel gelöscht
      */
     private boolean active;
+
+    /**
+     * true: Artikel kann zur Zeit ausgeliehen werden
+     * false: Artikel ist zur Zeit nicht zum Ausleihen verfügbar
+     */
+    private boolean forRental;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn

@@ -184,4 +184,10 @@ public class CaseController {
         caseService.declineArticleRequest(id);
         return "redirect:/myOverview?requests";
     }
+
+    @PostMapping("/accessed/user/acceptCaseReturn")
+    public String acceptCaseReturn(@RequestParam Long id) {
+        caseService.acceptCaseReturn(id);
+        return "redirect:/myOverview?returned&successfulreturned";
+    }
 }
