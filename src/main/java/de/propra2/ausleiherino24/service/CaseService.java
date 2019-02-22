@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CaseService {
 
+    //TODO some methods need tests
     private final CaseRepository caseRepository;
     private final PersonRepository personRepository;
     private final ArticleService articleService;

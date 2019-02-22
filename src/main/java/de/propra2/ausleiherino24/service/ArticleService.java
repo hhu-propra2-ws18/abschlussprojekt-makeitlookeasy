@@ -61,6 +61,7 @@ public class ArticleService {
                 : articleRepository.findAllActive();
     }
 
+    //Todo test
     public List<Article> getAllActiveAndForRentalArticles() {
         return getAllActiveArticles()
                 .stream()
