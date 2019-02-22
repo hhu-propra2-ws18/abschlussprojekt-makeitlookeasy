@@ -23,6 +23,8 @@
 
   <!-- Toggle css -->
   <link rel="stylesheet" th:href="@{~/css/toggle.css}">
+
+  <!-- Functions to change view -->
   <script>
     function oneFunction() {
       var mainFrameOne = document.getElementById("mainFrameOne");
@@ -103,7 +105,7 @@
 
     <div class="col-lg 9" style="margin-top: 70px">
 
-      <!-- Warnmeldungen -->
+      <!-- Warnings -->
       <div class="alert alert-warning absolue center" th:if="${param.declined}">
         Could not accept article, because its already rented in the requested time.
       </div>
@@ -287,7 +289,7 @@
                           <button class="btn btn-secondary" data-dismiss="modal" type="button">
                             Close
                           </button>
-                          <button class="btn btn-primary" type="submit">Send</button>
+                          <button class="btn btn-primary" type="submit">Save</button>
                         </div>
                       </div>
                     </form>
@@ -570,6 +572,8 @@
 
 <!-- Footer -->
 <div name="footer" th:replace="/../fragments/footer ::footer"></div>
+
+<!-- JS imports -->
 <script crossorigin="anonymous"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
@@ -590,8 +594,5 @@
     crossorigin="anonymous"
     integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU="
     src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-<!--
-<script th:href="@{~/vendor/jquery/jquery.min.js}"></script>
-<script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script> -->
 </body>
 </html>
