@@ -3,14 +3,15 @@ package de.propra2.ausleiherino24.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,8 +57,8 @@ public class ArticleServiceTest {
         article03.setActive(false);
 
         articles.add(article01);
-        articles.add(article01);
-        articles.add(article01);
+        articles.add(article02);
+        articles.add(article03);
 
         when(articleRepositoryMock.findAllActive()).thenReturn(articles);
 
@@ -65,6 +66,23 @@ public class ArticleServiceTest {
         articles.remove(1);
 
         assertEquals(articles, articleService.getAllActiveArticles());
+    }
+
+    @Test
+    public void twoArticlesForRental() {
+        Case c = new Case();
+        c.setRequestStatus(7);  //requestStatus = RUNNING
+        article03.setCases(Arrays.asList(c));
+
+        articles.add(article01);
+        articles.add(article02);
+        articles.add(article03);
+
+        when(articleRepositoryMock.findAllActive()).thenReturn(articles);
+
+        articles.remove(2);
+
+        assertEquals(articles, articleService.getAllActiveAndForRentalArticles());
     }
 
     @Test
@@ -127,6 +145,45 @@ public class ArticleServiceTest {
 
     @Test
     public void deactivateArticle() throws Exception {
+        Optional<Article> op = Optional.of(article01);
+        when(articleRepositoryMock.findById(0L)).thenReturn(op);
+
+        ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
+
+        assertTrue(articleService.deactivateArticle(0L));
+        verify(articleRepositoryMock).save(argument.capture());
+        assertFalse(argument.getValue().isActive());
+    }
+
+    @Test
+    public void deactivateLendArticle() throws Exception {
+        Case c = new Case();
+        c.setRequestStatus(7);  //requestStatus = RUNNING
+        article01.setCases(Arrays.asList(c));
+        Optional<Article> op = Optional.of(article01);
+        when(articleRepositoryMock.findById(0L)).thenReturn(op);
+
+        assertFalse(articleService.deactivateArticle(0L));
+        verify(articleRepositoryMock, times(0)).save(any());
+    }
+
+    @Test
+    public void deactivateArticleWithConflict() throws Exception {
+        Case c = new Case();
+        c.setRequestStatus(10);  //requestStatus = OPEN_CONFLICT
+        article01.setCases(Arrays.asList(c));
+        Optional<Article> op = Optional.of(article01);
+        when(articleRepositoryMock.findById(0L)).thenReturn(op);
+
+        assertFalse(articleService.deactivateArticle(0L));
+        verify(articleRepositoryMock, times(0)).save(any());
+    }
+
+    @Test
+    public void deactivateFinishedArticle() throws Exception {
+        Case c = new Case();
+        c.setRequestStatus(14);  //requestStatus = FINISHED
+        article01.setCases(Arrays.asList(c));
         Optional<Article> op = Optional.of(article01);
         when(articleRepositoryMock.findById(0L)).thenReturn(op);
 
