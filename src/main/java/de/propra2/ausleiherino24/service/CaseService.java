@@ -172,7 +172,7 @@ public class CaseService {
      * kann oder nicht True: kann verliehen werden False: kann nicht verliehen werden Die Methode
      * nimmt an, dass die Id korrekt ist
      */
-    private boolean requestIsOk(Long id) {
+    public boolean requestIsOk(Long id) {
         Case c = caseRepository.findById(id).get();
         Article article = c.getArticle();
         List<Case> cases = article.getCases().stream()
