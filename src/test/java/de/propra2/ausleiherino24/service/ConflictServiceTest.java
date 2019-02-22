@@ -22,6 +22,7 @@ import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 
 @RunWith(SpringRunner.class)
 public class ConflictServiceTest {
+	private CaseService caseService;
 	private EmailSender emailSender;
 	private ConflictRepository conflictRepository;
 	private ReservationHandler reservationHandler;
@@ -35,10 +36,11 @@ public class ConflictServiceTest {
 
 	@Before
 	public void init() {
+		caseService = Mockito.mock(CaseService.class);
 		emailSender = Mockito.mock(EmailSender.class);
 		conflictRepository = Mockito.mock(ConflictRepository.class);
 		reservationHandler = Mockito.mock(ReservationHandler.class);
-		conflictService = new ConflictService(conflictRepository, emailSender, reservationHandler);
+		conflictService = Mockito.spy(new ConflictService(conflictRepository, emailSender, reservationHandler, caseService));
 
 		user = new User();
 		user2 = new User();
@@ -48,12 +50,13 @@ public class ConflictServiceTest {
 
 		user2.setUsername("user2");
 		user.setUsername("user1");
-		art.setOwner(user2);
+		art.setOwner(user);
 		ca.setArticle(art);
-		ca.setReceiver(user);
+		ca.setReceiver(user2);
+		ca.setId(1L);
 		c1.setConflictedCase(ca);
 		c1.setConflictReporterUsername("user1");
-
+		c1.setConflictDescription("TestDescription");
 	}
 
 	@Test(expected=Exception.class)
@@ -205,5 +208,13 @@ public class ConflictServiceTest {
 		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.empty());
 
 		conflictService.deactivateConflict(1L, user);
+	}
+
+	@Test()
+	public void openConflictTest() throws Exception {
+		conflictService.openConflict(ca, "TestDescription");
+		Mockito.verify(caseService).conflictOpened(1L);
+		Mockito.verify(conflictService).saveConflict(c1, user);
+		Mockito.verify(conflictService).sendConflictEmail(c1);
 	}
 }

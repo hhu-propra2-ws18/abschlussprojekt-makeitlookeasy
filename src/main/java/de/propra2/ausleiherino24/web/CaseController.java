@@ -7,6 +7,7 @@ import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ImageService;
 import de.propra2.ausleiherino24.service.UserService;
+import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,10 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -144,6 +148,21 @@ public class CaseController {
         return mav;
     }
 
+    @RequestMapping("/updateArticle")
+    public String updateArticle(@RequestParam Long id, Article article) throws Exception {
+        System.out.println("New Article: "+article.isForRental());
+        System.out.println("Old Article: "+articleService.findArticleById(id).isForRental());
+        articleService.updateArticle(id, article);
+        System.out.println("Old Article: "+articleService.findArticleById(id).isForRental());
+        return "redirect:/myOverview?articles&updatedarticle";
+    }
+
+    @RequestMapping("/deleteArticle")
+    public String deleteArticle(@RequestParam Long id) throws Exception {
+        articleService.deactivateArticle(id);
+        return "redirect:/myOverview?articles&deletedarticle";
+    }
+
     /**
      * TODO JavaDoc.
      *
@@ -189,5 +208,21 @@ public class CaseController {
     public String acceptCaseReturn(@RequestParam Long id) {
         caseService.acceptCaseReturn(id);
         return "redirect:/myOverview?returned&successfulreturned";
+    }
+
+    /**
+     * Liefert einen Methode für Springboot um das Feld Article.category korrekt zu empfangen und
+     * zu verknüpfen.
+     * @param webDataBinder
+     */
+    @InitBinder
+    public void initBinder(final WebDataBinder webDataBinder) {
+        webDataBinder.registerCustomEditor(Category.class, new CategoryConverter());
+    }
+
+    private class CategoryConverter extends PropertyEditorSupport {
+        public void setAsText(final String text) throws IllegalArgumentException {
+            setValue(Category.fromValue(text));
+        }
     }
 }

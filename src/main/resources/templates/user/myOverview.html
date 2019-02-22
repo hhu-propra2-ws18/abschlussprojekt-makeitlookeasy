@@ -116,6 +116,12 @@
       <div class="alert alert-danger absolue center" th:if="${param.conflictfailed}">
         Failed to open a conflict.
       </div>
+      <div class="alert alert-success absolue center" th:if="${param.updatedarticle}">
+        Article successfully updated.
+      </div>
+      <div class="alert alert-warning absolue center" th:if="${param.deletedarticle}">
+        Article successfully deleted.
+      </div>
 
       <!-- Frame for articles from User-->
       <div id="mainFrameOne"
@@ -134,6 +140,7 @@
           </tr>
           <thead>
           <tr>
+            <th scope="col"></th>
             <th scope="col">Article</th>
             <th scope="col">Price</th>
             <th scope="col">Deposit</th>
@@ -142,6 +149,18 @@
           </thead>
           <tbody>
           <tr th:each="article: ${myArticles}">
+            <td>
+              <th:block th:if="${article.forRental==true}">
+                <svg height="20" width="20">
+                  <circle cx="10" cy="10" r="8" fill="green"> </circle>
+                </svg>
+              </th:block>
+              <th:block th:unless="${article.forRental==true}">
+                <svg height="20" width="20">
+                  <circle cx="10" cy="10" r="8" fill="red"> </circle>
+                </svg>
+              </th:block>
+            </td>
             <td><a th:href="@{/article(id=${article.getId()})}"
                    th:text="${article.name}"></a>
             </td>
@@ -149,29 +168,117 @@
             <td th:text="${article.deposit} + '€'"></td>
             <td style="white-space: nowrap">
               <div class="ml-auto flex-md-row">
-                <button class="btn btn-primary btn-sm" data-target="#exampleModal"
+                <button class="btn btn-primary btn-sm" th:data-target="${'#'+article.id+'article'}"
                         data-toggle="modal" style="height:30px;width:120px"
                         type="button">update Article
                 </button>
+                <span> </span>
+                <button class="btn btn-danger btn-sm" th:data-target="${'#'+article.id+'delete'}"
+                        data-toggle="modal" style="height:30px;width:80px" type="button">delete
+                </button>
 
                 <!-- Modal -->
-                <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade"
-                     id="exampleModal" role="dialog" tabindex="-1">
+                <div aria-hidden="true" aria-labelledby="deleteModalLabel" class="modal fade"
+                     th:id="${article.id+'delete'}" role="dialog" tabindex="-1">
                   <div class="modal-dialog" role="document">
-                    <form method="post" action="#">
+                    <form method="post"
+                          th:action="@{/deleteArticle(id=${article.id})}">
+                      <div class="modal-content">
+                        <div class="modal-body">
+                          <label>Are you sure you want to delete <span
+                              th:text="${article.name}"></span>?</label>
+                        </div>
+                        <div class="modal-footer">
+                          <button class="btn btn-success" data-dismiss="modal" type="button">No
+                          </button>
+                          <button class="btn btn-danger" type="submit">Yes</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <!-- Modal -->
+                <div aria-hidden="true" aria-labelledby="updateModalLabel" class="modal fade"
+                     th:id="${article.id+'article'}" role="dialog" tabindex="-1">
+                  <div class="modal-dialog" role="document">
+                    <form method="post"
+                          th:action="@{/updateArticle(id=${article.id})}">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">Update Article</h5>
+                          <h5 class="modal-title" id="updateArticleModalLabel">Update Article</h5>
                           <button aria-label="Close" class="close" data-dismiss="modal"
                                   type="button">
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
                         <div class="modal-body">
-
-                          <textarea class="form-control" style="height:300px;margin-top:20px"
-                                    placeholder="Description"
-                                    name="conflictDescription"></textarea>
+                          <div class="form-row form-group">
+                            <div class="col-sm-4 label-column"><label class="col-form-label"
+                                                                      for="name">Articlename:</label>
+                            </div>
+                            <div class="col-sm-6 input-column">
+                              <input class="form-control" id="name" name="name" required
+                                     type="text" th:value="${article.name}">
+                            </div>
+                          </div>
+                          <div class="form-row form-group">
+                            <div class="col-sm-4 label-column"><label class="col-form-label"
+                                                                      for="price">Cost Per
+                              Day:</label>
+                            </div>
+                            <div class="col-sm-6 input-column">
+                              <input class="form-control" id="price" name="costPerDay" required
+                                     type="number" th:value="${article.costPerDay}">
+                            </div>
+                          </div>
+                          <div class="form-row form-group">
+                            <div class="col-sm-4 label-column"><label class="col-form-label"
+                                                                      for="deposit">Deposit:</label>
+                            </div>
+                            <div class="col-sm-6 input-column">
+                              <input class="form-control" id="deposit" name="deposit" required
+                                     type="number" th:value="${article.deposit}">
+                            </div>
+                          </div>
+                          <div class="form-row form-group">
+                            <div class="col-sm-4 label-column"><label class="col-form-label"
+                                                                      for="category">Category:</label>
+                            </div>
+                            <div class="col-sm-6 input-column">
+                              <select class="form-control" id="category" name="category"
+                                      type="Category">
+                                <div th:each="category : ${categories}">
+                                  <option th:text="|${category.name}|"
+                                          th:selected="${article.category == category}">Motors
+                                  </option>
+                                </div>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-row form-group">
+                            <div class="col-sm-4 label-column"><label class="col-form-label"
+                                                                      for="description">Description:</label>
+                            </div>
+                            <div class="col-sm-6 input-column">
+                              <textarea class="form-control" id="description" name="description"
+                                        required type="text" th:value="${article.description}"
+                                        style="height:150px">
+                              </textarea>
+                            </div>
+                          </div>
+                          <div class="form-row form-group">
+                            <div class="col-sm-4 label-column"><label class="col-form-label"
+                                                                      for="forRental">Article for
+                              Rental:</label>
+                            </div>
+                            <div class="col-sm-6 input-column">
+                              <label class="switch">
+                                <input type="checkbox" th:checked="${article.forRental}"
+                                       name="forRental" id="forRental">
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
+                          </div>
                         </div>
                         <div class="modal-footer">
                           <button class="btn btn-secondary" data-dismiss="modal" type="button">
@@ -307,24 +414,25 @@
                   <form style="display:inline-block" method="post"
                         th:action="@{/accessed/user/acceptCaseReturn(id=${case.id})}">
                     <button style="height:30px;width:80px" class="btn btn-success btn-sm"
-                            type="submit">accept</button>
+                            type="submit">accept
+                    </button>
                   </form>
                   <span> </span>
 
                   <!-- Button trigger modal -->
-                  <button class="btn btn-primary btn-sm" data-target="#exampleModal"
+                  <button class="btn btn-primary btn-sm" th:data-target="${'#'+case.id+'conflict'}"
                           data-toggle="modal" style="height:30px;width:80px"
                           type="button">conflict
                   </button>
 
                   <!-- Modal -->
                   <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade"
-                       id="exampleModal" role="dialog" tabindex="-1">
+                       th:id="${case.id+'conflict'}" role="dialog" tabindex="-1">
                     <div class="modal-dialog" role="document">
                       <form method="post" th:action="@{/accessed/user/openconflict(id=${case.id})}">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Open Conflict</h5>
+                            <h5 class="modal-title" id="conflictModalLabel">Open Conflict</h5>
                             <button aria-label="Close" class="close" data-dismiss="modal"
                                     type="button">
                               <span aria-hidden="true">&times;</span>
@@ -354,7 +462,7 @@
 
               <th:block th:if="${case.requestStatus==10}">
                 <div class="ml-auto flex-md-row">
-                  <button style="height:30px;width:120px" class="btn btn-outline-primary btn-sm" >
+                  <button style="height:30px;width:120px" class="btn btn-outline-primary btn-sm">
                     Running Conlict
                   </button>
                 </div>
@@ -456,6 +564,7 @@
     </div>
   </div>
 </div>
+
 <!-- Footer -->
 <div name="footer" th:replace="/../fragments/footer ::footer"></div>
 <script crossorigin="anonymous"

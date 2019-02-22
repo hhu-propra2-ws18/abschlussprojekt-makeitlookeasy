@@ -5,33 +5,31 @@ import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import java.security.Principal;
 import java.util.Optional;
+
+import mockit.*;
+import mockit.Verifications;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-// TODO: Replace PowerMock with JMockit (Logger was removed)
-//@PowerMockIgnore("javax.security.*")
-//@RunWith(PowerMockRunner.class)
-//@PrepareForTest({UserService.class, LoggerFactory.class})
+
 public class UserServiceTest {
 
     private UserRepository users;
     private PersonService personService;
     private UserService userService;
     private User user;
+    @Mocked
+    private Logger logger;
 
     @Before
-    @Ignore // TODO: Replace PowerMock with JMockit (Logger was removed)
     public void setup() {
         users = Mockito.mock(UserRepository.class);
         personService = Mockito.mock(PersonService.class);
-//		PowerMockito.mockStatic(LoggerFactory.class);
-//		logger = PowerMockito.mock(Logger.class);
-//		PowerMockito.when(LoggerFactory.getLogger(UserService.class)).thenReturn(logger);
-
         user = new User();
         user.setUsername("user1");
         user.setId(1L);
@@ -44,14 +42,14 @@ public class UserServiceTest {
         Assertions.assertThat(userService.findUserByUsername("user1")).isEqualTo(user);
     }
 
-//	TODO: Replace PowerMock with JMockit (Logger was removed)
-//	@Test(expected = Exception.class)
-//	public void findUserByUsernameTest2() throws Exception {
-//		userService.findUserByUsername("user2");
-//		Mockito.verify(logger).warn("Couldn't find user %s in UserRepository.", "user2");
-//	}
+	@Test(expected = Exception.class)
+	public void findUserByUsernameTest2() throws Exception {
+		userService.findUserByUsername("user2");
+		new Verifications(){{
+            logger.warn("Couldn't find user %s in UserRepository.", "user2"); times = 1;
+        }};
+    }
 
-    // TODO: Logger was removed
     @Test
     public void saveUserWithProfileTest() {
         Person person = new Person();
