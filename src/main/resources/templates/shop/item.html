@@ -96,7 +96,7 @@
     <!-- Item  -->
     <div class="col-lg-9">
       <div class="card mt-4">
-        <img alt="" class="card-img-top img-fluid" src="http://placehold.it/900x400">
+        <img alt="" class="card-img-top img-fluid" src="http://placehold.it/900x400"  th:src="${article.getImage()}" style="height: 400px;width: 900;">
         <div class="card-body">
           <h3 class="card-title" th:text="|${article.getName()}|">Product Name</h3>
           <h4 th:text="|${article.getCostPerDay()}€ per day|">24.99€ pro Tag</h4>
@@ -204,9 +204,10 @@
   </div>
 </div>
 </div>
+<!-- Solange der Kalendar nicht geht ist er auskommentiert 
 <div class="container" style="width: 300px;height:500px">
   <div id='calendar1'></div>
-</div>
+</div> -->
 <!-- Footer -->
 <div name="footer" th:replace="/../fragments/footer ::footer"></div>
 
