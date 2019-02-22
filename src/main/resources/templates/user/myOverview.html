@@ -110,6 +110,9 @@
       <div class="alert alert-success absolue center" th:if="${param.openedconflict}">
         A conflict is now open for given case. You will be informed by our employees.
       </div>
+      <div class="alert alert-danger absolue center" th:if="${param.conflictfailed}">
+        Failed to open a conflict.
+      </div>
 
       <!-- Frame for articles from User-->
       <div id="mainFrameOne"
@@ -266,8 +269,10 @@
                           </button>
                         </div>
                         <div class="modal-body">
-                          <textarea class="form-control" style="height:300px" placeholder="How can we help you?"
-                                    th:field="*{conflictDescription}"></textarea>
+                          <span>Article: </span> <span th:text="${case.article.name}"></span><br>
+                          <span>Borrower: </span> <span th:text="${case.receiver.username}"></span>
+                          <textarea class="form-control" style="height:300px;margin-top:20px" placeholder="What went wrong?"
+                          name="conflictDescription"></textarea>
                         </div>
                         <div class="modal-footer">
                           <button class="btn btn-secondary" data-dismiss="modal" type="button">Close
