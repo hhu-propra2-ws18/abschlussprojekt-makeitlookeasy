@@ -94,4 +94,18 @@ public class ArticleService {
         LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
         return true;
     }
+
+    public void updateArticle(Long id, Article article) {
+        Optional<Article> optionalArticle = articleRepository.findById(id);
+        if(!optionalArticle.isPresent())
+            return;
+        Article oldArticle = optionalArticle.get();
+        oldArticle.setForRental(article.isForRental());
+        oldArticle.setDeposit(article.getDeposit());
+        oldArticle.setCostPerDay(article.getCostPerDay());
+        oldArticle.setCategory(article.getCategory());
+        oldArticle.setDescription(article.getDescription());
+        oldArticle.setName(article.getName());
+        articleRepository.save(oldArticle);
+    }
 }
