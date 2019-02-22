@@ -2,6 +2,7 @@ package de.propra2.ausleiherino24.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,6 +50,7 @@ public class Article {
      * true: Artikel kann zur Zeit ausgeliehen werden
      * false: Artikel ist zur Zeit nicht zum Ausleihen verfügbar
      */
+    //TODO must be changed if status changes
     private boolean forRental;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -103,5 +105,21 @@ public class Article {
         if (user != null && !repetition) {
             user.addArticle(this, true);
         }
+    }
+
+    /**
+     * @return returns true if article has only cases where the requeststatus is REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED, otherwise returns false
+     */
+    public boolean isForRental(){
+        List<Case> activeCases;
+        if(getCases() != null) {
+            activeCases = getCases().stream()
+                    .filter(c -> c.getRequestStatus() != 12 && c.getRequestStatus() != 4 && c.getRequestStatus() != 14)
+                    .collect(Collectors.toList());
+        }
+        else {
+            activeCases = new ArrayList<>();
+        }
+        return activeCases.isEmpty() ? true : false;
     }
 }

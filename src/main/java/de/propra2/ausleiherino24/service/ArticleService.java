@@ -90,16 +90,7 @@ public class ArticleService {
         Article article = optionalArticle.get();
 
         //only able to deactive if article has only cases where the requeststatus is REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED
-        List<Case> activeCases;
-        if(article.getCases() != null) {
-            activeCases = article.getCases().stream()
-                    .filter(c -> c.getRequestStatus() != 12 && c.getRequestStatus() != 4 && c.getRequestStatus() != 14)
-                    .collect(Collectors.toList());
-        }
-        else {
-            activeCases = new ArrayList<>();
-        }
-        if(!activeCases.isEmpty()){
+        if(!article.isForRental()){
             LOGGER.warn("Article %L is still reserved, lent or has an open conflict.", id);
             return false;
         }
