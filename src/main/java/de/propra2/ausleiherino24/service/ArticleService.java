@@ -114,4 +114,13 @@ public class ArticleService {
         oldArticle.setName(article.getName());
         articleRepository.save(oldArticle);
     }
+
+    /**
+     * Gives back all article where the name is like the search string. Is used for the search.
+     * @param searchstr
+     * @return List<Article>  List of all articles where the name is like the search string.
+     */
+    public List<Article> getAllArticlesByName(String searchstr) {
+        return articleRepository.findByNameContainsIgnoreCase(searchstr);
+    }
 }

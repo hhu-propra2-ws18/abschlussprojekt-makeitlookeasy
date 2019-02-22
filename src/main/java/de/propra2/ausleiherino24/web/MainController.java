@@ -99,6 +99,19 @@ public class MainController {
         return mav;
     }
 
+    @GetMapping("/search")
+    public ModelAndView getIndexBySearchString(@RequestParam String searchstr, Principal principal) {
+        List<Article> allArticlesWithNameLikeSearchStr = articleService.getAllArticlesByName(searchstr);
+        User currentUser = userService.findUserByPrincipal(principal);
+
+        ModelAndView mav = new ModelAndView("index");
+        mav.addObject("all", allArticlesWithNameLikeSearchStr);
+        mav.addObject("user", currentUser);
+        mav.addObject("categories", allCategories);
+        mav.addObject("category", "");
+        return mav;
+    }
+
     /**
      * TODO Javadoc.
      * @param user Description
