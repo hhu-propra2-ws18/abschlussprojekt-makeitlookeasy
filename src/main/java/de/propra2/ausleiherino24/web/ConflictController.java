@@ -14,6 +14,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,15 +66,13 @@ public class ConflictController {
      * @param model Description
      * @throws Exception Description
      */
-    @DeleteMapping("/deactivateConflict")
+    @DeleteMapping("/accessed/user/deactivateconflict")
     public String deactivateConflict(@RequestParam Long id, Principal principal, Model model)
             throws Exception {
         User user = userService.findUserByPrincipal(principal);
         conflictService.deactivateConflict(id, user);
 
-        model.addAttribute("user", user);
-        model.addAttribute("conflicts", conflictService.getAllConflictsByUser(user));
-        return "someView";
+        return "redirect:/myOverview?returned&deactivatedconflict";
     }
 
     /**
@@ -92,7 +91,11 @@ public class ConflictController {
 
         model.addAttribute("conflict", conflictToDisplay);
         model.addAttribute("user", user);
-        return "someView";
+        if(conflictService.isConflictedArticleOwner(conflictToDisplay, user)){
+            // view with delete-conflict-button
+        }
+
+        return "someView"; //view without delete button
     }
 
     /**
