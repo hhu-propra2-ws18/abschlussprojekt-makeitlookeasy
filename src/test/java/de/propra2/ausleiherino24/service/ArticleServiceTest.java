@@ -200,4 +200,22 @@ public class ArticleServiceTest {
 
         articleService.deactivateArticle(0L);
     }
+
+    @Test
+    public void updateArticle(){
+        Article article = new Article();
+        article.setForRental(true);
+        article.setDeposit(0);
+        article.setCostPerDay(0);
+        article.setCategory(Category.TOOLS);
+        article.setDescription("");
+        article.setName("");
+        when(articleRepositoryMock.findById(0L)).thenReturn(Optional.of(article));
+        ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
+
+        articleService.updateArticle(0L, article);
+
+        verify(articleRepositoryMock).save(argument.capture());
+        assertEquals(article, argument.getValue());
+    }
 }
