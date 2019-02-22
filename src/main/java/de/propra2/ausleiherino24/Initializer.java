@@ -37,10 +37,10 @@ public class Initializer implements ServletContextInitializer {
 
     /**
      * TODO Javadoc.
-     *  @param userRepository Descriptions
+     *
+     * @param userRepository Descriptions
      * @param articleRepository Descriptions
      * @param personRepository Descriptions
-     * @param caseRepository
      */
     @Autowired
     public Initializer(UserRepository userRepository, ArticleRepository articleRepository,
@@ -64,11 +64,12 @@ public class Initializer implements ServletContextInitializer {
         persons.forEach(person -> {
             User user = person.getUser();
             userRepository.save(user);
-            if(user.getArticleList() != null) {
+            if (user.getArticleList() != null) {
                 user.getArticleList().forEach(article -> {
                     articleRepository.save(article);
-                    if (article.getCases() != null)
+                    if (article.getCases() != null) {
                         article.getCases().forEach(caseRepository::save);
+                    }
                 });
             }
         });
@@ -112,7 +113,6 @@ public class Initializer implements ServletContextInitializer {
 
             return person;
         }).collect(Collectors.toCollection(ArrayList::new));
-
 
         //Fügt Cases hinzu
         /*
@@ -187,22 +187,22 @@ public class Initializer implements ServletContextInitializer {
                 });
 
         hans.getArticleList().forEach(article ->
-            IntStream.range(0, 2).forEach(a -> {
-                Case c = createCase(
-                        article,
-                        persons.get(faker.random().nextInt(0, persons.size() - 1)).getUser(),
-                        convertDateAsLong(
-                                faker.random().nextInt(0, 31),
-                                faker.random().nextInt(0, 11),
-                                2018),
-                        convertDateAsLong(
-                                faker.random().nextInt(0, 31),
-                                faker.random().nextInt(0, 11),
-                                2019),
-                        Case.REQUESTED
-                );
-                article.addCase(c);
-            })
+                IntStream.range(0, 2).forEach(a -> {
+                    Case c = createCase(
+                            article,
+                            persons.get(faker.random().nextInt(0, persons.size() - 1)).getUser(),
+                            convertDateAsLong(
+                                    faker.random().nextInt(0, 31),
+                                    faker.random().nextInt(0, 11),
+                                    2018),
+                            convertDateAsLong(
+                                    faker.random().nextInt(0, 31),
+                                    faker.random().nextInt(0, 11),
+                                    2019),
+                            Case.REQUESTED
+                    );
+                    article.addCase(c);
+                })
         );
         hans.getArticleList().forEach(article ->
                 IntStream.range(0, 1).forEach(a -> {
@@ -216,7 +216,7 @@ public class Initializer implements ServletContextInitializer {
                                     startMonth,
                                     2018),
                             convertDateAsLong(
-                                    startDay+faker.random().nextInt(2, 100),
+                                    startDay + faker.random().nextInt(2, 100),
                                     startMonth,
                                     2018),
                             Case.RUNNING
@@ -275,24 +275,18 @@ public class Initializer implements ServletContextInitializer {
         return c;
     }
 
-    private String readPokemonName(int id){
+    private String readPokemonName(int id) {
         try {
             File resource = new ClassPathResource(
-                    "static/Pokemon/names/"+id+".txt").getFile();
+                    "static/Pokemon/names/" + id + ".txt").getFile();
             String name = new String(Files
                     .readAllBytes(resource.toPath()))
                     .trim();
-            return name.substring(0, 1).toUpperCase() + name.substring(1, name.length()-1);
-        } catch (IOException e){
+            return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+        } catch (IOException e) {
             e.printStackTrace();
             return "";
         }
-    }
-
-    private int randNumbExcept(int a, int b, int z){
-        int x = new Faker().random().nextInt(a, b-1);
-        if(x >= z) return x+1;
-        else return x;
     }
 
     private Long convertDateAsLong(int day, int month, int year) {
