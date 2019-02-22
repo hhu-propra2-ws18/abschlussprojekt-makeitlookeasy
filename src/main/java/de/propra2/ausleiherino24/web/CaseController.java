@@ -114,7 +114,7 @@ public class CaseController {
             BindingResult result, Model model,
             @RequestParam("image") MultipartFile image, Principal principal) {
         User user = userService.findUserByPrincipal(principal);
-
+        article.setActive(true);
         article.setOwner(user);
         article.setImage(imageService.store(image, null));
         articleService.saveArticle(article, "Created");
