@@ -164,21 +164,21 @@ public class CaseController {
      * TODO JavaDoc.
      *
      * @param id Description
-     * @param startTime Description
-     * @param endTime Description
+     * @param startDate Description
+     * @param endDate Description
      * @param principal Description
      * @return Description
      * @throws Exception Description
      */
     @PostMapping("/bookArticle")
-    public String bookArticle(@RequestParam Long id, String startTime, String endTime,
+    public String bookArticle(@RequestParam Long id, String startDate, String endDate,
             Principal principal) throws Exception {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         try {
             caseService.requestArticle(
                     id,
-                    simpleDateFormat.parse(startTime).getTime(),
-                    simpleDateFormat.parse(endTime).getTime(),
+                    simpleDateFormat.parse(startDate).getTime(),
+                    simpleDateFormat.parse(endDate).getTime(),
                     principal.getName());
         } catch (ParseException e) {
             e.printStackTrace();
