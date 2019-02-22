@@ -9,8 +9,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,23 +22,25 @@ public class CaseService {
     private final PersonRepository personRepository;
     private final ArticleService articleService;
     private final UserService userService;
+    private final AccountHandler accountHandler;
 
     /**
      * TODO JavaDoc.
-     *
-     * @param caseRepository Description
+     *  @param caseRepository Description
      * @param personRepository Description
      * @param articleService Description
      * @param userService Description
+     * @param accountHandler Description
      */
     @Autowired
     public CaseService(CaseRepository caseRepository, PersonRepository personRepository,
-            ArticleService articleService,
-            UserService userService) {
+                       ArticleService articleService,
+                       UserService userService, AccountHandler accountHandler) {
         this.caseRepository = caseRepository;
         this.personRepository = personRepository;
         this.articleService = articleService;
         this.userService = userService;
+        this.accountHandler = accountHandler;
     }
 
     /**
@@ -116,10 +119,12 @@ public class CaseService {
      */
     public void requestArticle(Long articleId, Long starttime, Long endtime, String username)
             throws Exception {
-        //TODO: Check whether receiver has enough money
+        Article article = articleService.findArticleById(articleId);
+        int costs = (int) (article.getDeposit() + article.getCostPerDay() * (endtime - starttime));
+        if(accountHandler.checkFunds(username) >= costs) return;
 
         Case c = new Case();
-        c.setArticle(articleService.findArticleById(articleId));
+        c.setArticle(article);
         c.setStartTime(starttime);
         c.setEndTime(endtime);
         c.setDeposit(c.getArticle().getDeposit());

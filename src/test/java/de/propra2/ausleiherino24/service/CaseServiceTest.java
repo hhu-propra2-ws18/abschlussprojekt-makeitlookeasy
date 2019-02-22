@@ -16,6 +16,8 @@ import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import java.util.ArrayList;
 import java.util.Optional;
+
+import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -25,6 +27,7 @@ public class CaseServiceTest {
     private CaseRepository caseRepositoryMock;
     private PersonRepository personRepositoryMock;
     private ArticleService articleServiceMock;
+    private AccountHandler accountHandlerMock;
     private UserService userServiceMock;
     private CaseService caseService;
     private ArrayList<Case> cases;
@@ -35,8 +38,9 @@ public class CaseServiceTest {
         personRepositoryMock = mock(PersonRepository.class);
         articleServiceMock = mock(ArticleService.class);
         userServiceMock = mock(UserService.class);
+        accountHandlerMock = mock(AccountHandler.class);
         caseService = new CaseService(caseRepositoryMock, personRepositoryMock, articleServiceMock,
-                userServiceMock);
+                userServiceMock, accountHandlerMock);
         cases = new ArrayList<>();
     }
 
