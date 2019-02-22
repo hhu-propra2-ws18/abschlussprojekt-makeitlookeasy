@@ -258,11 +258,12 @@ public class Initializer implements ServletContextInitializer {
         article.setCostPerDay(costPerDay);
         article.setDeposit(deposit);
         article.setImage(image);
+        article.setForRental(true);
         return article;
     }
 
     private Case createCase(Article article, User receiver, Long starttime, Long endtime,
-            int requestStatus){
+            int requestStatus) {
         Case c = new Case();
         c.setReceiver(receiver);
         c.setPrice(article.getCostPerDay());

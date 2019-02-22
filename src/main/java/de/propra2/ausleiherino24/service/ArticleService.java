@@ -51,7 +51,7 @@ public class ArticleService {
      * @return all Articles, which are not reserved and are of given category
      */
     public List<Article> getAllArticlesByCategory(Category category) {
-        return getAllActiveArticles().stream()
+        return getAllActiveAndForRentalArticles().stream()
                 .filter(article -> article.getCategory() == category)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -59,6 +59,13 @@ public class ArticleService {
     public List<Article> getAllActiveArticles() {
         return articleRepository.findAllActive().isEmpty() ? new ArrayList<>()
                 : articleRepository.findAllActive();
+    }
+
+    public List<Article> getAllActiveAndForRentalArticles() {
+        return getAllActiveArticles()
+                .stream()
+                .filter(Article::isForRental)
+                .collect(Collectors.toList());
     }
 
     /**
