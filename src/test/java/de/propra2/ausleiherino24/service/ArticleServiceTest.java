@@ -57,8 +57,8 @@ public class ArticleServiceTest {
         article03.setActive(false);
 
         articles.add(article01);
-        articles.add(article01);
-        articles.add(article01);
+        articles.add(article02);
+        articles.add(article03);
 
         when(articleRepositoryMock.findAllActive()).thenReturn(articles);
 
@@ -66,6 +66,23 @@ public class ArticleServiceTest {
         articles.remove(1);
 
         assertEquals(articles, articleService.getAllActiveArticles());
+    }
+
+    @Test
+    public void twoArticlesForRental() {
+        Case c = new Case();
+        c.setRequestStatus(7);  //requestStatus = RUNNING
+        article03.setCases(Arrays.asList(c));
+
+        articles.add(article01);
+        articles.add(article02);
+        articles.add(article03);
+
+        when(articleRepositoryMock.findAllActive()).thenReturn(articles);
+
+        articles.remove(2);
+
+        assertEquals(articles, articleService.getAllActiveAndForRentalArticles());
     }
 
     @Test
