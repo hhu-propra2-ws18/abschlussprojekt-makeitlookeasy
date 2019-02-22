@@ -150,6 +150,7 @@ public class CaseServiceTest {
         article.setCostPerDay(50);
         when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
         when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
+        when(accountHandlerMock.checkFunds(any())).thenReturn(1000.0);
         ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         caseService.requestArticle(articleId, st, et, username);
@@ -161,6 +162,22 @@ public class CaseServiceTest {
         assertEquals(new User(), argument.getValue().getReceiver());
         assertEquals(100, argument.getValue().getDeposit());
         assertEquals(50, argument.getValue().getPrice());
+    }
+
+    @Test
+    public void requestArticleWithoutEnoughtMoney() throws Exception {
+        Long articleId = 0L, st = 5L, et = 10L;
+        String username = "";
+        Article article = new Article();
+        article.setDeposit(100);
+        article.setCostPerDay(50);
+        when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
+        when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
+        when(accountHandlerMock.checkFunds(any())).thenReturn(99.0);
+
+        caseService.requestArticle(articleId, st, et, username);
+
+        verify(caseRepositoryMock, times(0)).save(any());
     }
 
     @Test(expected = Exception.class)

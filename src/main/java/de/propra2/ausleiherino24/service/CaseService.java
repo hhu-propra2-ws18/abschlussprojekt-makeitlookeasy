@@ -121,7 +121,7 @@ public class CaseService {
             throws Exception {
         Article article = articleService.findArticleById(articleId);
         int costs = (int) (article.getDeposit() + article.getCostPerDay() * (endtime - starttime));
-        if(accountHandler.checkFunds(username) >= costs) return;
+        if(accountHandler.checkFunds(username) < costs) return;
 
         Case c = new Case();
         c.setArticle(article);
