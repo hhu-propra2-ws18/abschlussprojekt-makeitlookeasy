@@ -1,7 +1,6 @@
 package de.propra2.ausleiherino24.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -15,7 +14,11 @@ import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+
+import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -25,6 +28,7 @@ public class CaseServiceTest {
     private CaseRepository caseRepositoryMock;
     private PersonRepository personRepositoryMock;
     private ArticleService articleServiceMock;
+    private AccountHandler accountHandlerMock;
     private UserService userServiceMock;
     private CaseService caseService;
     private ArrayList<Case> cases;
@@ -35,8 +39,9 @@ public class CaseServiceTest {
         personRepositoryMock = mock(PersonRepository.class);
         articleServiceMock = mock(ArticleService.class);
         userServiceMock = mock(UserService.class);
+        accountHandlerMock = mock(AccountHandler.class);
         caseService = new CaseService(caseRepositoryMock, personRepositoryMock, articleServiceMock,
-                userServiceMock);
+                userServiceMock, accountHandlerMock);
         cases = new ArrayList<>();
     }
 
@@ -146,6 +151,7 @@ public class CaseServiceTest {
         article.setCostPerDay(50);
         when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
         when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
+        when(accountHandlerMock.checkFunds(any())).thenReturn(1000.0);
         ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         caseService.requestArticle(articleId, st, et, username);
@@ -159,6 +165,22 @@ public class CaseServiceTest {
         assertEquals(50, argument.getValue().getPrice());
     }
 
+    @Test
+    public void requestArticleWithoutEnoughtMoney() throws Exception {
+        Long articleId = 0L, st = 5L, et = 10L;
+        String username = "";
+        Article article = new Article();
+        article.setDeposit(100);
+        article.setCostPerDay(50);
+        when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
+        when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
+        when(accountHandlerMock.checkFunds(any())).thenReturn(99.0);
+
+        caseService.requestArticle(articleId, st, et, username);
+
+        verify(caseRepositoryMock, times(0)).save(any());
+    }
+
     @Test(expected = Exception.class)
     public void requestArticleCatchException() throws Exception {
         Long articleId = 0L, st = 5L, et = 10L;
@@ -169,5 +191,224 @@ public class CaseServiceTest {
         caseService.requestArticle(articleId, st, et, username);
 
         verify(caseRepositoryMock, times(0)).save(any());
+    }
+
+    @Test
+    public void articleAlreadyRequestedInTheTime(){
+        Article article = new Article();
+        Case c1 = new Case();
+        c1.setRequestStatus(Case.REQUEST_ACCEPTED);
+        c1.setStartTime(0L);
+        c1.setEndTime(5L);
+        c1.setArticle(article);
+        Case c2 = new Case();
+        c2.setRequestStatus(Case.REQUEST_ACCEPTED);
+        c2.setStartTime(1L);
+        c2.setEndTime(4L);
+        c2.setArticle(article);
+        article.setCases(Arrays.asList(c1, c2));
+        when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
+
+        assertFalse(caseService.requestIsOk(0L));
+    }
+
+    @Test
+    public void articleAlreadyRequestedInTheTime2(){
+        Article article = new Article();
+        Case c1 = new Case();
+        c1.setRequestStatus(Case.REQUEST_ACCEPTED);
+        c1.setStartTime(0L);
+        c1.setEndTime(5L);
+        c1.setArticle(article);
+        Case c2 = new Case();
+        c2.setRequestStatus(Case.REQUEST_ACCEPTED);
+        c2.setStartTime(1L);
+        c2.setEndTime(4L);
+        c2.setArticle(article);
+        article.setCases(Arrays.asList(c1, c2));
+        when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c2));
+
+        assertFalse(caseService.requestIsOk(0L));
+    }
+
+    @Test
+    public void articleAlreadyRequestedInTheTime3(){
+        Article article = new Article();
+        Case c1 = new Case();
+        c1.setRequestStatus(Case.REQUEST_ACCEPTED);
+        c1.setStartTime(1L);
+        c1.setEndTime(4L);
+        c1.setArticle(article);
+        Case c2 = new Case();
+        c2.setRequestStatus(Case.REQUEST_ACCEPTED);
+        c2.setStartTime(3L);
+        c2.setEndTime(5L);
+        c2.setArticle(article);
+        article.setCases(Arrays.asList(c1, c2));
+        when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
+
+        assertFalse(caseService.requestIsOk(0L));
+    }
+
+    @Test
+    public void articleNotRequestedInTheTime(){
+        Article article = new Article();
+        Case c1 = new Case();
+        c1.setRequestStatus(Case.REQUEST_ACCEPTED);
+        c1.setStartTime(0L);
+        c1.setEndTime(1L);
+        c1.setArticle(article);
+        Case c2 = new Case();
+        c2.setRequestStatus(Case.REQUEST_ACCEPTED);
+        c2.setStartTime(2L);
+        c2.setEndTime(3L);
+        c2.setArticle(article);
+        article.setCases(Arrays.asList(c1, c2));
+        when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
+
+        assertTrue(caseService.requestIsOk(0L));
+    }
+
+    @Test
+    public void acceptingRequestPossible(){
+        Article article = new Article();
+        Case c1 = new Case();
+        c1.setRequestStatus(Case.REQUEST_ACCEPTED);
+        c1.setStartTime(0L);
+        c1.setEndTime(1L);
+        c1.setArticle(article);
+        Case c2 = new Case();
+        c2.setRequestStatus(Case.REQUEST_ACCEPTED);
+        c2.setStartTime(2L);
+        c2.setEndTime(3L);
+        c2.setArticle(article);
+        article.setCases(Arrays.asList(c1, c2));
+        when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
+        ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+
+        assertTrue(caseService.acceptArticleRequest(0L));
+        verify(caseRepositoryMock).save(argument.capture());
+        assertEquals(Case.REQUEST_ACCEPTED, argument.getValue().getRequestStatus());
+    }
+
+    @Test
+    public void acceptingRequestNotPossible(){
+        Article article = new Article();
+        Case c1 = new Case();
+        c1.setRequestStatus(Case.REQUEST_ACCEPTED);
+        c1.setStartTime(0L);
+        c1.setEndTime(4L);
+        c1.setArticle(article);
+        Case c2 = new Case();
+        c2.setRequestStatus(Case.REQUEST_ACCEPTED);
+        c2.setStartTime(3L);
+        c2.setEndTime(5L);
+        c2.setArticle(article);
+        article.setCases(Arrays.asList(c1, c2));
+        when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
+        ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+
+        assertFalse(caseService.acceptArticleRequest(0L));
+        verify(caseRepositoryMock).save(argument.capture());
+        assertEquals(Case.RENTAL_NOT_POSSIBLE, argument.getValue().getRequestStatus());
+    }
+
+    @Test
+    public void acceptNotExistingRequest(){
+        when(caseRepositoryMock.findById(0L)).thenReturn(Optional.empty());
+
+        assertFalse(caseService.acceptArticleRequest(0L));
+    }
+
+    @Test
+    public void declineRequest(){
+        when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(new Case()));
+        ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+
+        caseService.declineArticleRequest(0L);
+
+        verify(caseRepositoryMock).save(argument.capture());
+        assertEquals(Case.REQUEST_DECLINED, argument.getValue().getRequestStatus());
+    }
+
+    @Test
+    public void declineNotExistingRequest(){
+        when(caseRepositoryMock.findById(0L)).thenReturn(Optional.empty());
+
+        caseService.declineArticleRequest(0L);
+
+        verify(caseRepositoryMock, times(0)).save(any());
+    }
+
+    @Test
+    public void openConflict(){
+        when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(new Case()));
+        ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+
+        caseService.conflictOpened(0L);
+
+        verify(caseRepositoryMock).save(argument.capture());
+        assertEquals(Case.OPEN_CONFLICT, argument.getValue().getRequestStatus());
+    }
+
+    @Test
+    public void finishCase(){
+        when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(new Case()));
+        ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+
+        caseService.acceptCaseReturn(0L);
+
+        verify(caseRepositoryMock).save(argument.capture());
+        assertEquals(Case.FINISHED, argument.getValue().getRequestStatus());
+    }
+
+    @Test
+    public void onlyRequestCases(){
+        Case c1 = new Case();
+        c1.setRequestStatus(Case.REQUESTED);
+        Case c2 = new Case();
+        c2.setRequestStatus(Case.REQUEST_ACCEPTED);
+        Case c3 = new Case();
+        c3.setRequestStatus(Case.REQUEST_DECLINED);
+        Case c4 = new Case();
+        c4.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
+        ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
+        when(caseRepositoryMock.findAllByArticleOwnerId(0L)).thenReturn(cases);
+
+        assertEquals(cases, caseService.findAllRequestedCasesbyUserId(0L));
+    }
+
+    @Test
+    public void zeroRequestCases(){
+        Case c1 = new Case();
+        c1.setRequestStatus(Case.FINISHED);
+        Case c2 = new Case();
+        c2.setRequestStatus(Case.OPEN_CONFLICT);
+        Case c3 = new Case();
+        c3.setRequestStatus(Case.RUNNING);
+        Case c4 = new Case();
+        c4.setRequestStatus(Case.RUNNING);
+        ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
+        when(caseRepositoryMock.findAllByArticleOwnerId(0L)).thenReturn(cases);
+
+        assertTrue(caseService.findAllRequestedCasesbyUserId(0L).isEmpty());
+    }
+
+    @Test
+    public void twoRequestCases(){
+        Case c1 = new Case();
+        c1.setRequestStatus(Case.RUNNING);
+        Case c2 = new Case();
+        c2.setRequestStatus(Case.REQUEST_ACCEPTED);
+        Case c3 = new Case();
+        c3.setRequestStatus(Case.FINISHED);
+        Case c4 = new Case();
+        c4.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
+        ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
+        when(caseRepositoryMock.findAllByArticleOwnerId(0L)).thenReturn(cases);
+        cases.remove(c1);
+        cases.remove(c3);
+
+        assertEquals(cases, caseService.findAllRequestedCasesbyUserId(0L));
     }
 }
