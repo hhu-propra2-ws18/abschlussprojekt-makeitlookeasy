@@ -149,8 +149,11 @@ public class CaseController {
     }
 
     @RequestMapping("/updateArticle")
-    public String updateArticle(@RequestParam Long id, Article article) {
+    public String updateArticle(@RequestParam Long id, Article article) throws Exception {
+        System.out.println("New Article: "+article.isForRental());
+        System.out.println("Old Article: "+articleService.findArticleById(id).isForRental());
         articleService.updateArticle(id, article);
+        System.out.println("Old Article: "+articleService.findArticleById(id).isForRental());
         return "redirect:/myOverview?articles&updatedarticle";
     }
 
