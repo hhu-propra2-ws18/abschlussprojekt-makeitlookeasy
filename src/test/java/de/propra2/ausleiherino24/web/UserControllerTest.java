@@ -91,6 +91,9 @@ public class UserControllerTest {
     @MockBean
     private ReservationHandler reservationHandler;
 
+    @MockBean
+    private ChatController chatController;
+
     @Ignore
     @Test
     public void displayUserProfileStatusTest() throws Exception {
