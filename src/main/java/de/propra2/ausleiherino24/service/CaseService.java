@@ -4,11 +4,21 @@ import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -235,5 +245,25 @@ public class CaseService {
                         || c.getRequestStatus() == Case.REQUEST_DECLINED
                         || c.getRequestStatus() == Case.RENTAL_NOT_POSSIBLE)
                 .collect(Collectors.toList());
+    }
+
+    public List<LocalDate> findAllReservedDaysbyArticle(Long id) throws Exception {
+        return caseRepository
+                .findAllByArticleAndRequestStatus(articleService.findArticleById(id), 2)
+                .stream()
+                .map(c -> {
+                    LocalDate start = LocalDate.ofInstant(Instant.ofEpochMilli(c.getStartTime()),
+                            ZoneId.systemDefault());
+                    LocalDate end = LocalDate.ofInstant(Instant.ofEpochMilli(c.getEndTime()),
+                            ZoneId.systemDefault());
+                    int daysInBetween = Period.between(start, end).getDays();
+                    return IntStream
+                            .range(0, daysInBetween+1)
+                            .mapToObj(start::plusDays);
+                })
+                .flatMap(Function.identity())
+                .collect(Collectors.toList());
+
+
     }
 }

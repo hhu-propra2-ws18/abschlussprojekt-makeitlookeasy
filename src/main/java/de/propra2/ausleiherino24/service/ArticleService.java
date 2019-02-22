@@ -6,6 +6,7 @@ import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -90,7 +91,7 @@ public class ArticleService {
         Article article = optionalArticle.get();
 
         //only able to deactive if article has only cases where the requeststatus is REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED
-        if(!article.isForRental()){
+        if(!article.allCasesClosed()){
             LOGGER.warn("Article %L is still reserved, lent or has an open conflict.", id);
             return false;
         }
