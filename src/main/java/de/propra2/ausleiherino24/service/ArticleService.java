@@ -2,6 +2,7 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
 import java.util.ArrayList;
@@ -80,7 +81,20 @@ public class ArticleService {
 
         Article article = optionalArticle.get();
 
-        //TODO: Check whether there are open cases in the feature, which reserve the article
+        //only able to deactive if article has only cases where the requeststatus is REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED
+        List<Case> activeCases;
+        if(article.getCases() != null) {
+            activeCases = article.getCases().stream()
+                    .filter(c -> c.getRequestStatus() != 12 && c.getRequestStatus() != 4 && c.getRequestStatus() != 14)
+                    .collect(Collectors.toList());
+        }
+        else {
+            activeCases = new ArrayList<>();
+        }
+        if(!activeCases.isEmpty()){
+            LOGGER.warn("Article %L is still reserved, lent or has an open conflict.", id);
+            return false;
+        }
 
         article.setActive(false);
         articleRepository.save(article);
