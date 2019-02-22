@@ -46,4 +46,6 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
     //Optional<Case> findByArticleOwnerId(Long id);
 
     //Optional<Case> findByReceiverId(Long id);
+
+    ArrayList<Case> findAllByArticleAndRequestStatus(Article article,int status);
 }
