@@ -1,34 +1,84 @@
 version: '3.5'
 services:
+  # (production)
+  #  propay:
+  #    container_name: propay
+  #    image: propra/propay:latest
+  #    restart: always
+  #    ports:
+  #      - 8888:8888
+  #    volumes:
+  #      - ./PPdata:/code/data
+
+  # (final)
   propay:
-    image: propra/propay:latest
     container_name: propay
+    image: propra/propay:latest
     restart: always
     ports:
       - 8888:8888
     volumes:
       - ./PPdata:/code/data
 
-  #  ausleiherino24:
-  #    container_name: ausleiherino24
-  #    build: .
-  #    volumes:
-  #      - .:/app
-  #    working_dir: /app
-  #    user: appuser
+  # (dev)
+  ausleiherino24:
+    container_name: ausleiherino24
+    build:
+      context: ./
+      dockerfile: ausleiherinoDevDockerfile
+    volumes:
+      - .:/app
+    working_dir: /app
+    #     user: appuser
+    ports:
+      - 8080:8080
+    env_file:
+      - ./.env
+    command: java -jar app.jar
+    depends_on:
+      - db
+      - propay
+
+
+  #   (production)
+  #    ausleiherino24:
+  #      container_name: ausleiherino24
+  #      build:
+  #        context: ./
+  #        dockerfile: ausleiherinoProdDockerfile
+  #      volumes:
+  #        - .:/app
+  #      working_dir: /app
+  #      user: appuser
+  #      ports:
+  #        - 8080:8080
+  #      env_file:
+  #        - ./.env
+  #      command: dockerize -wait tcp://db:5432 -timeout 600s java -jar app.jar
+
+  #  (development)
+  #  db:
+  #    container_name: pgsql-01
+  #    build:
+  #      context: ./
+  #      dockerfile: PGSQLDockerfile
+  #    restart: always
+  #    user: "${PUID}:${PGID}"
   #    ports:
-  #      - 8081:8081
+  #      - 5432:5432
   #    env_file:
   #      - ./.env
-  #    command: dockerize -wait tcp://localhost:5432 -timeout 600s  -wait tcp://localhost:8888 -timeout 600s./gradlew bootRun
+  #    volumes:
+  #      - ./pgsql-01/data:/var/lib/postgresql/data
+  #      - ./pgsql-01/conf:/config
 
   # (production)
   db:
+    container_name: pgsql-01
     build:
       context: ./
       dockerfile: PGSQLDockerfile
     restart: always
-    container_name: pgsql-01
     user: "${PUID}:${PGID}"
     ports:
       - 5432:5432
@@ -38,12 +88,13 @@ services:
       - ./pgsql-01/data:/var/lib/postgresql/data
       - ./pgsql-01/conf:/config
 
-  jenkins:
-    image: jenkins/jenkins:latest
-    container_name: jenkins
-    restart: unless-stopped
-    ports:
-      - 9000:8080
-      - 50000:50000
-    volumes:
-      - ~/jenkins_home:/var/jenkins_home
+#  jenkins:
+#    container_name: jenkins
+#    image: jenkins/jenkins:latest
+#
+#    restart: unless-stopped
+#    ports:
+#      - 9000:8080
+#      - 50000:50000
+#    volumes:
+#      - ~/jenkins_home:/var/jenkins_home

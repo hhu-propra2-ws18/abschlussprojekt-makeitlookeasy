@@ -3,9 +3,9 @@ dockerCompose.isRequiredBy(bootRun)
 //dockerCompose.isRequiredBy(tasks.check)
 dockerCompose {
     useComposeFiles = ['docker-compose.yml']
-    startedServices = ['propay']
+    startedServices = ['propay','db']
 //  forceRecreate = false
-//  buildAdditionalArgs = ['--force-rm']
+  buildAdditionalArgs = ['--force-rm']
     waitForTcpPorts = true
     tcpPortsToIgnoreWhenWaiting = []
     captureContainersOutput = false // one log to rule them all switch
@@ -14,11 +14,11 @@ dockerCompose {
     composeLogToFile = project.file('./build/logs/compose.log')
     containerLogToDir = project.file('./build/logs/container-logs')
     stopContainers = true
-    removeContainers = false
-    removeImages = "None"
-    removeVolumes = false
-    removeOrphans = false
-    projectName = 'ausleiherino24'
+    removeContainers = true
+    removeImages = "Local"
+    removeVolumes = true
+    removeOrphans = true
+//    projectName = 'rentarino24'
 //  dockerComposeWorkingDirectory = '/path/where/docker-compose/is/invoked/from'
 //  dockerComposeStopTimeout = java.time.Duration.ofSeconds(20)
 //  environment.put 'BACKEND_ADDRESS', '192.168.1.100'
