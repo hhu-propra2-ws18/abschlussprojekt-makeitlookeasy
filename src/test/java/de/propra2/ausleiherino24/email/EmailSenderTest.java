@@ -80,4 +80,37 @@ public class EmailSenderTest {
         verify(javaMailSenderMock).send(expectedMessage);
     }
 
+    @Test
+    public void sendOneEmailAndCheckEmailConfig() throws Exception {
+        when(emailConfigMock.getHost()).thenReturn("TestHost");
+        when(emailConfigMock.getPort()).thenReturn(4321);
+        when(emailConfigMock.getUsername()).thenReturn("TestUsername");
+        when(emailConfigMock.getPassword()).thenReturn("password");
+
+        User conflictReporter = new User();
+        conflictReporter.setEmail("test@mail.de");
+        conflictReporter.setUsername("user2");
+        Case conflictCase = new Case();
+        conflictCase.setId(1L);
+        conflictCase.setReceiver(conflictReporter);
+        Conflict conflict = new Conflict();
+        conflict.setConflictReporterUsername("user2");
+        conflict.setConflictedCase(conflictCase);
+        conflict.setConflictDescription("Dies hier ist ein einfacher Test");
+
+        when(userService.findUserByUsername("user2")).thenReturn(conflictReporter);
+
+        SimpleMailMessage expectedMessage = new SimpleMailMessage();
+        expectedMessage.setFrom("test@mail.de");
+        expectedMessage.setTo("Clearing@Service.com");
+        expectedMessage.setSubject("Conflicting Case id: 1");
+        expectedMessage.setText("Dies hier ist ein einfacher Test");
+
+        emailSender.sendEmail(conflict);
+        verify(javaMailSenderMock).setHost("TestHost");
+        verify(javaMailSenderMock).setPort(4321);
+        verify(javaMailSenderMock).setUsername("TestUsername");
+        verify(javaMailSenderMock).setPassword("password");
+    }
+
 }

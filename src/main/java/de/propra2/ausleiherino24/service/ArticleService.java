@@ -2,6 +2,7 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class ArticleService {
      * @return all Articles, which are not reserved and are of given category
      */
     public List<Article> getAllArticlesByCategory(Category category) {
-        return getAllActiveArticles().stream()
+        return getAllActiveAndForRentalArticles().stream()
                 .filter(article -> article.getCategory() == category)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
@@ -59,6 +60,13 @@ public class ArticleService {
     public List<Article> getAllActiveArticles() {
         return articleRepository.findAllActive().isEmpty() ? new ArrayList<>()
                 : articleRepository.findAllActive();
+    }
+
+    public List<Article> getAllActiveAndForRentalArticles() {
+        return getAllActiveArticles()
+                .stream()
+                .filter(Article::isForRental)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -80,11 +88,29 @@ public class ArticleService {
 
         Article article = optionalArticle.get();
 
-        //TODO: Check whether there are open cases in the feature, which reserve the article
+        //only able to deactive if article has only cases where the requeststatus is REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED
+        if(!article.isForRental()){
+            LOGGER.warn("Article %L is still reserved, lent or has an open conflict.", id);
+            return false;
+        }
 
         article.setActive(false);
         articleRepository.save(article);
         LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
         return true;
+    }
+
+    public void updateArticle(Long id, Article article) {
+        Optional<Article> optionalArticle = articleRepository.findById(id);
+        if(!optionalArticle.isPresent())
+            return;
+        Article oldArticle = optionalArticle.get();
+        oldArticle.setForRental(article.isForRental());
+        oldArticle.setDeposit(article.getDeposit());
+        oldArticle.setCostPerDay(article.getCostPerDay());
+        oldArticle.setCategory(article.getCategory());
+        oldArticle.setDescription(article.getDescription());
+        oldArticle.setName(article.getName());
+        articleRepository.save(oldArticle);
     }
 }

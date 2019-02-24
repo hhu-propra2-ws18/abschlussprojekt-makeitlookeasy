@@ -1,13 +1,16 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.ResolveConflict;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ConflictService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
 import java.util.List;
-import javax.validation.ValidationException;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,36 +26,36 @@ public class ConflictController {
 
     private final ConflictService conflictService;
     private final UserService userService;
+    private final CaseService caseService;
+    private final CaseRepository caseRepository;
 
     @Autowired
-    public ConflictController(ConflictService conflictService, UserService userService) {
+    public ConflictController(ConflictService conflictService, UserService userService,
+            CaseService caseService, CaseRepository caseRepository) {
         this.conflictService = conflictService;
         this.userService = userService;
+        this.caseService = caseService;
+        this.caseRepository = caseRepository;
     }
 
     /**
-     * TODO JavaDoc.
-     *
-     * @param conflict Description
-     * @param bindingResult Description
-     * @param model Description
-     * @param principal Description
-     * @return Description
-     * @throws Exception Description
+     * Methode wird aufgerufen, wenn ein Conflict abgesendet wird. Sie erstellt dann einen
+     * entsprechenden Conflict, speichert diesen und sendet eine Conflict-Email.
+     * Weitergeleitet wird wieder auf myOverview
+     * @param id CaseId
+     * @param conflictDescription Beschreibung (mind. 15 Zeichen, max. 2048 Zeichen)
+     * @return redirect myOverview mit entsprechendem Parameter
+     * @throws Exception Wirft tatsächlich nie eine exception
      */
-    @PostMapping("/newConflict")
-    public String sendConflict(@RequestBody Conflict conflict, BindingResult bindingResult,
-            Model model, Principal principal) throws Exception {
-        if (bindingResult.hasErrors()) {
-            throw new ValidationException("Conflict is not Valid");
+    @PostMapping("/accessed/user/openconflict")
+    public String sendConflict(@RequestParam Long id, String conflictDescription) throws Exception {
+        Optional<Case> optionalCase = caseRepository.findById(id);
+        if(!optionalCase.isPresent()) {
+            return "redirect:/myOverview?returned&conflictfailed";
         }
-        User user = userService.findUserByPrincipal(principal);
-        conflictService.saveConflict(conflict, user);
-        conflictService.sendConflictEmail(conflict);
+        conflictService.openConflict(optionalCase.get(), conflictDescription);
 
-        model.addAttribute("user", user);
-        model.addAttribute("conflicts", conflictService.getAllConflictsByUser(user));
-        return "someView";
+        return "redirect:/myOverview?returned&openedconflict";
     }
 
     /**
@@ -63,15 +66,13 @@ public class ConflictController {
      * @param model Description
      * @throws Exception Description
      */
-    @DeleteMapping("/deactivateConflict")
+    @DeleteMapping("/accessed/user/deactivateconflict")
     public String deactivateConflict(@RequestParam Long id, Principal principal, Model model)
             throws Exception {
         User user = userService.findUserByPrincipal(principal);
         conflictService.deactivateConflict(id, user);
 
-        model.addAttribute("user", user);
-        model.addAttribute("conflicts", conflictService.getAllConflictsByUser(user));
-        return "someView";
+        return "redirect:/myOverview?returned&deactivatedconflict";
     }
 
     /**
@@ -90,7 +91,11 @@ public class ConflictController {
 
         model.addAttribute("conflict", conflictToDisplay);
         model.addAttribute("user", user);
-        return "someView";
+        if(conflictService.isConflictedArticleOwner(conflictToDisplay, user)){
+            // view with delete-conflict-button
+        }
+
+        return "someView"; //view without delete button
     }
 
     /**

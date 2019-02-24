@@ -33,13 +33,13 @@ public class ArticleServiceTest {
         articleService = new ArticleService(articleRepositoryMock);
 
         articles = new ArrayList<>();
-        article01 = new Article(0L, "", "", "", 0D, 0D,
+        article01 = new Article(0L, "", "", "", 0, 0,
                 "", true, null, Category.TOYS, null);
-        article02 = new Article(1L, "", "", "", 0D, 0D,
+        article02 = new Article(1L, "", "", "", 0, 0,
                 "", true, null, Category.TOYS, null);
-        article03 = new Article(2L, "", "", "", 0D, 0D,
+        article03 = new Article(2L, "", "", "", 0, 0,
                 "", true, null, Category.TOYS, null);
-        article04 = new Article(3L, "", "", "", 0D, 0D,
+        article04 = new Article(3L, "", "", "", 0, 0,
                 "", true, null, Category.TOYS, null);
     }
 
@@ -65,6 +65,23 @@ public class ArticleServiceTest {
         articles.remove(1);
 
         assertEquals(articles, articleService.getAllActiveArticles());
+    }
+
+    @Test
+    public void twoArticlesForRental() {
+        Case c = new Case();
+        c.setRequestStatus(7);  //requestStatus = RUNNING
+        article03.setCases(Arrays.asList(c));
+
+        articles.add(article01);
+        articles.add(article02);
+        articles.add(article03);
+
+        when(articleRepositoryMock.findAllActive()).thenReturn(articles);
+
+        articles.remove(2);
+
+        assertEquals(articles, articleService.getAllActiveAndForRentalArticles());
     }
 
     @Test
@@ -137,10 +154,67 @@ public class ArticleServiceTest {
         assertFalse(argument.getValue().isActive());
     }
 
+    @Test
+    public void deactivateLendArticle() throws Exception {
+        Case c = new Case();
+        c.setRequestStatus(7);  //requestStatus = RUNNING
+        article01.setCases(Arrays.asList(c));
+        Optional<Article> op = Optional.of(article01);
+        when(articleRepositoryMock.findById(0L)).thenReturn(op);
+
+        assertFalse(articleService.deactivateArticle(0L));
+        verify(articleRepositoryMock, times(0)).save(any());
+    }
+
+    @Test
+    public void deactivateArticleWithConflict() throws Exception {
+        Case c = new Case();
+        c.setRequestStatus(10);  //requestStatus = OPEN_CONFLICT
+        article01.setCases(Arrays.asList(c));
+        Optional<Article> op = Optional.of(article01);
+        when(articleRepositoryMock.findById(0L)).thenReturn(op);
+
+        assertFalse(articleService.deactivateArticle(0L));
+        verify(articleRepositoryMock, times(0)).save(any());
+    }
+
+    @Test
+    public void deactivateFinishedArticle() throws Exception {
+        Case c = new Case();
+        c.setRequestStatus(14);  //requestStatus = FINISHED
+        article01.setCases(Arrays.asList(c));
+        Optional<Article> op = Optional.of(article01);
+        when(articleRepositoryMock.findById(0L)).thenReturn(op);
+
+        ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
+
+        assertTrue(articleService.deactivateArticle(0L));
+        verify(articleRepositoryMock).save(argument.capture());
+        assertFalse(argument.getValue().isActive());
+    }
+
     @Test(expected = Exception.class)
     public void deactivateNotExistingArticle() throws Exception {
         when(articleRepositoryMock.findById(0L)).thenReturn(Optional.empty());
 
         articleService.deactivateArticle(0L);
+    }
+
+    @Test
+    public void updateArticle(){
+        Article article = new Article();
+        article.setForRental(true);
+        article.setDeposit(0);
+        article.setCostPerDay(0);
+        article.setCategory(Category.TOOLS);
+        article.setDescription("");
+        article.setName("");
+        when(articleRepositoryMock.findById(0L)).thenReturn(Optional.of(article));
+        ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
+
+        articleService.updateArticle(0L, article);
+
+        verify(articleRepositoryMock).save(argument.capture());
+        assertEquals(article, argument.getValue());
     }
 }

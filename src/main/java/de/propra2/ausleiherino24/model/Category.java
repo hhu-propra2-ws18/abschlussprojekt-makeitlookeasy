@@ -30,4 +30,14 @@ public enum Category {
     public String getName() {
         return name;
     }
+
+    public static Category fromValue(String value) {
+        for (Category category : values()) {
+            if (category.name.equalsIgnoreCase(value)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException(
+                "Unknown enum type " + value + ", Allowed values are " + Arrays.toString(values()));
+    }
 }

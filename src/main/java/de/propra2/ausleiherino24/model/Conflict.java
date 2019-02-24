@@ -42,7 +42,7 @@ public class Conflict {
         return conflictedCase.getDeposit();
     }
 
-    public void setConflictedCaseConflict(Conflict conflict){
+    public void setConflictedCaseConflict(Conflict conflict) {
         conflictedCase.setConflict(conflict);
     }
 }

@@ -4,16 +4,12 @@ import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.PPTransaction;
-import de.propra2.ausleiherino24.propayhandler.AccountHandler;
-import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,8 +19,6 @@ public class CaseService {
     private final PersonRepository personRepository;
     private final ArticleService articleService;
     private final UserService userService;
-    private final AccountHandler accountHandler;
-    private final ReservationHandler reservationHandler;
 
     /**
      * TODO JavaDoc.
@@ -37,20 +31,17 @@ public class CaseService {
     @Autowired
     public CaseService(CaseRepository caseRepository, PersonRepository personRepository,
             ArticleService articleService,
-            UserService userService, AccountHandler accountHandler,
-            ReservationHandler reservationHandler) {
+            UserService userService) {
         this.caseRepository = caseRepository;
         this.personRepository = personRepository;
         this.articleService = articleService;
         this.userService = userService;
-        this.accountHandler = accountHandler;
-        this.reservationHandler = reservationHandler;
     }
 
     /**
      * Fügt einen Artikel, welcher frei zum Verleih ist, von einer Person hinzu.
      */
-    public void addCaseForNewArticle(Article article, Double price, Double deposit) {
+    public void addCaseForNewArticle(Article article, int price, int deposit) {
         Case c = new Case();
         c.setArticle(article);
         c.setDeposit(deposit);
@@ -121,48 +112,21 @@ public class CaseService {
      * Erwartet Case mit wo Artikel verliehen werden kann. Case wird modifiziert, dass es nun
      * verliehen ist.
      */
-    public boolean requestArticle(Long articleId, Long starttime, Long endtime, String username)
+    public void requestArticle(Long articleId, Long starttime, Long endtime, String username)
             throws Exception {
+        //TODO: Check whether receiver has enough money
 
-        Double totalCost = getCostForAllDays(articleId, starttime, endtime);
+        Case c = new Case();
+        c.setArticle(articleService.findArticleById(articleId));
+        c.setStartTime(starttime);
+        c.setEndTime(endtime);
+        c.setDeposit(c.getArticle().getDeposit());
+        c.setPrice(c.getArticle().getCostPerDay());
+        c.setReceiver(userService.findUserByUsername(username));
+        c.setRequestStatus(Case.REQUESTED);
 
-        if (accountHandler.hasValidFunds(username,
-                totalCost + articleService.findArticleById(articleId).getDeposit())) {
-
-            PPTransaction ppTransaction = new PPTransaction();
-            ppTransaction.setLendingCost(totalCost);
-            ppTransaction.setCautionPaid(false);
-
-            Case c = new Case();
-            c.setArticle(articleService.findArticleById(articleId));
-            c.setStartTime(starttime);
-            c.setEndTime(endtime);
-            c.setDeposit(c.getArticle().getDeposit());
-            c.setPrice(c.getArticle().getCostPerDay());
-            c.setReceiver(userService.findUserByUsername(username));
-            c.setRequestStatus(Case.REQUESTED);
-            c.setPpTransaction(ppTransaction);
-
-            caseRepository.save(c);
-
-            reservationHandler.handleReservedMoney(c);
-
-            return true;
-        }
-        return false;
+        caseRepository.save(c);
     }
-
-    Double getCostForAllDays(Long articleId, Long starttime, Long endtime) throws Exception {
-
-        Double dailyCost = articleService.findArticleById(articleId).getCostPerDay();
-        Date startdate = new Date(starttime);
-        Date enddate = new Date(endtime);
-
-        long diffInMillies = Math.abs(enddate.getTime() - startdate.getTime());
-
-        return new Double(TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS)) * dailyCost;
-    }
-
 
     /**
      * return true, falls Erfolg
@@ -175,9 +139,8 @@ public class CaseService {
         Case c = optCase.get();
 
         //Check whether the article is not reserved in this period of time
-        if (requestIsOk(id) && accountHandler.hasValidFunds(c)) {
+        if (requestIsOk(id)){
             c.setRequestStatus(Case.REQUEST_ACCEPTED);
-            reservationHandler.handleReservedMoney(c);
             caseRepository.save(c);
             return true;
         } else {
@@ -193,8 +156,6 @@ public class CaseService {
             return;
         Case c = optCase.get();
         c.setRequestStatus(Case.REQUEST_DECLINED);
-        reservationHandler.releaseReservation(c);
-        c.setPpTransaction(new PPTransaction());
         caseRepository.save(c);
     }
 
@@ -217,5 +178,59 @@ public class CaseService {
                 return false;
         }
         return true;
+    }
+
+    public List<Case> findAllExpiredCasesbyUserId(Long id) {
+        return findAllCasesbyUserId(id)
+                .stream()
+                .filter(c -> c.getEndTime() < new Date().getTime())
+                .filter(c -> c.getRequestStatus() == Case.RUNNING ||
+                        c.getRequestStatus() == Case.FINISHED ||
+                        c.getRequestStatus() == Case.OPEN_CONFLICT)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Stellt den Status von Case mit id id auf Case.OPEN_CONFLICT
+     *
+     * @param id CaseId
+     */
+    public void conflictOpened(Long id) {
+        Optional<Case> opt = caseRepository.findById(id);
+        if (opt.isPresent()) {
+            Case c = opt.get();
+            c.setRequestStatus(Case.OPEN_CONFLICT);
+            caseRepository.save(c);
+        }
+    }
+
+    /**
+     * Stellt den Status von Case mit id id auf Case.FINISHED
+     *
+     * @param id CaseId
+     */
+    public void acceptCaseReturn(Long id) {
+        Optional<Case> opt = caseRepository.findById(id);
+        if (opt.isPresent()) {
+            Case c = opt.get();
+            c.setRequestStatus(Case.FINISHED);
+            caseRepository.save(c);
+        }
+    }
+
+    /**
+     * Findet alle Cases mit Status in {REQUESTED, REQUEST_ACCEPTED, REQUEST_DECLINED,
+     * RENTAL_NOT_POSSIBLE}
+     * @param id
+     * @return
+     */
+    public List<Case> findAllRequestedCasesbyUserId(Long id) {
+        return findAllCasesbyUserId(id)
+                .stream()
+                .filter(c -> c.getRequestStatus() == Case.REQUESTED
+                        || c.getRequestStatus() == Case.REQUEST_ACCEPTED
+                        || c.getRequestStatus() == Case.REQUEST_DECLINED
+                        || c.getRequestStatus() == Case.RENTAL_NOT_POSSIBLE)
+                .collect(Collectors.toList());
     }
 }

@@ -7,6 +7,7 @@ import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ImageService;
 import de.propra2.ausleiherino24.service.UserService;
+import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,10 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -145,25 +149,37 @@ public class CaseController {
         return mav;
     }
 
+    @RequestMapping("/updateArticle")
+    public String updateArticle(@RequestParam Long id, Article article) {
+        articleService.updateArticle(id, article);
+        return "redirect:/myOverview?articles&updatedarticle";
+    }
+
+    @RequestMapping("/deleteArticle")
+    public String deleteArticle(@RequestParam Long id) throws Exception {
+        articleService.deactivateArticle(id);
+        return "redirect:/myOverview?articles&deletedarticle";
+    }
+
     /**
      * TODO JavaDoc.
      *
      * @param id Description
-     * @param startTime Description
-     * @param endTime Description
+     * @param startDate Description
+     * @param endDate Description
      * @param principal Description
      * @return Description
      * @throws Exception Description
      */
     @PostMapping("/bookArticle")
-    public String bookArticle(@RequestParam Long id, String startTime, String endTime,
+    public String bookArticle(@RequestParam Long id, String startDate, String endDate,
             Principal principal) throws Exception {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         try {
             caseService.requestArticle(
                     id,
-                    simpleDateFormat.parse(startTime).getTime(),
-                    simpleDateFormat.parse(endTime).getTime(),
+                    simpleDateFormat.parse(startDate).getTime(),
+                    simpleDateFormat.parse(endDate).getTime(),
                     principal.getName());
         } catch (ParseException e) {
             e.printStackTrace();
@@ -184,5 +200,27 @@ public class CaseController {
     public String declineCase(@RequestParam Long id) {
         caseService.declineArticleRequest(id);
         return "redirect:/myOverview?requests";
+    }
+
+    @PostMapping("/accessed/user/acceptCaseReturn")
+    public String acceptCaseReturn(@RequestParam Long id) {
+        caseService.acceptCaseReturn(id);
+        return "redirect:/myOverview?returned&successfulreturned";
+    }
+
+    /**
+     * Liefert einen Methode für Springboot um das Feld Article.category korrekt zu empfangen und
+     * zu verknüpfen.
+     * @param webDataBinder
+     */
+    @InitBinder
+    public void initBinder(final WebDataBinder webDataBinder) {
+        webDataBinder.registerCustomEditor(Category.class, new CategoryConverter());
+    }
+
+    private class CategoryConverter extends PropertyEditorSupport {
+        public void setAsText(final String text) throws IllegalArgumentException {
+            setValue(Category.fromValue(text));
+        }
     }
 }

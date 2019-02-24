@@ -1,7 +1,9 @@
 package de.propra2.ausleiherino24.service;
 
+import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.ConflictRepository;
 import de.propra2.ausleiherino24.email.EmailSender;
+import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
@@ -17,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ConflictService {
-
+    private final CaseService caseService;
     private final ConflictRepository conflicts;
     private final EmailSender emailSender;
     private final ReservationHandler reservationHandler;
@@ -32,10 +34,11 @@ public class ConflictService {
      */
     @Autowired
     public ConflictService(ConflictRepository conflicts, EmailSender emailSender,
-            ReservationHandler reservationHandler) {
+            ReservationHandler reservationHandler, CaseService caseService) {
         this.conflicts = conflicts;
         this.emailSender = emailSender;
         this.reservationHandler = reservationHandler;
+        this.caseService = caseService;
     }
 
     /**
@@ -44,16 +47,25 @@ public class ConflictService {
      * @param user Description
      * @throws Exception Description
      */
-    public void saveConflict(Conflict conflict, User user) throws Exception {
-        if (conflict == null) {
-            throw new Exception("No such conflict");
-        }
+    void saveConflict(Conflict conflict, User user) throws Exception {
         isCorrectUser(conflict, user);
         conflict.setConflictedCaseConflict(conflict);
         conflicts.save(conflict);
+
+        sendConflictEmail(conflict);
     }
 
-    public void sendConflictEmail(Conflict conflict) throws Exception {
+    public void openConflict(Case conflictedCase, String conflictDescription) throws Exception {
+        Conflict conflict = new Conflict();
+        conflict.setConflictDescription(conflictDescription);
+        conflict.setConflictedCase(conflictedCase);
+        conflict.setConflictReporterUsername(conflictedCase.getOwner().getUsername());
+        caseService.conflictOpened(conflictedCase.getId());
+
+        saveConflict(conflict, conflictedCase.getOwner());
+    }
+
+    void sendConflictEmail(Conflict conflict) throws Exception {
         emailSender.sendEmail(conflict);
     }
 
@@ -70,7 +82,10 @@ public class ConflictService {
             };
         }
         isConflictReporterOrAdmin(conflictToDeactivate.get(), user);
-        conflicts.delete(conflictToDeactivate.get());
+        Conflict theConflictToDeactivate = conflictToDeactivate.get();
+        theConflictToDeactivate.setConflictDescription("ConflictDeactivated by :" + user.getUsername());
+        sendConflictEmail(theConflictToDeactivate);
+        conflicts.delete(theConflictToDeactivate);
     }
 
     /**
@@ -113,7 +128,7 @@ public class ConflictService {
         if (user == null) {
             throw new Exception("No such user");
         }
-        return user.equals(conflict.getConflictedCase().getOwner());
+        return user.equals(conflict.getOwner());
     }
 
     /**
@@ -138,7 +153,7 @@ public class ConflictService {
     }
 
     private boolean isConflictReporterOrAdmin(Conflict conflict, User user) throws Exception {
-        if(!(conflict.getConflictReporterUsername().equals(user.getUsername()) || "admin".equals(user.getRole()))){
+        if(!(conflict.getConflictReporterUsername().equals(user.getUsername()) || isUserAdmin(user))){
             throw new Exception("Access denied!");
         }
         return true;
