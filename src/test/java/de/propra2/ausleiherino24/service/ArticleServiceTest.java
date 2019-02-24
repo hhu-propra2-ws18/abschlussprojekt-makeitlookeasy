@@ -33,13 +33,13 @@ public class ArticleServiceTest {
         articleService = new ArticleService(articleRepositoryMock);
 
         articles = new ArrayList<>();
-        article01 = new Article(0L, "", "", "", 0, 0,
+        article01 = new Article(0L, "", "", "", 0D, 0D,
                 "", true, null, Category.TOYS, null);
-        article02 = new Article(1L, "", "", "", 0, 0,
+        article02 = new Article(1L, "", "", "", 0D, 0D,
                 "", true, null, Category.TOYS, null);
-        article03 = new Article(2L, "", "", "", 0, 0,
+        article03 = new Article(2L, "", "", "", 0D, 0D,
                 "", true, null, Category.TOYS, null);
-        article04 = new Article(3L, "", "", "", 0, 0,
+        article04 = new Article(3L, "", "", "", 0D, 0D,
                 "", true, null, Category.TOYS, null);
     }
 

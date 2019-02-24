@@ -8,6 +8,7 @@ import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
+import de.propra2.ausleiherino24.model.PPTransaction;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import java.io.File;
@@ -103,8 +104,8 @@ public class Initializer implements ServletContextInitializer {
                                 Category.getAllCategories().get(faker.random()
                                         .nextInt(0, Category.getAllCategories().size() - 1)),
                                 user,
-                                faker.random().nextInt(5, 500),
-                                faker.random().nextInt(100, 2000),
+                                new Double(faker.random().nextInt(5, 500)),
+                                new Double(faker.random().nextInt(100, 2000)),
                                 "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
                                         + id + ".png");
                         user.addArticle(article);
@@ -179,8 +180,8 @@ public class Initializer implements ServletContextInitializer {
                             Category.getAllCategories().get(faker.random()
                                     .nextInt(0, Category.getAllCategories().size() - 1)),
                             hans,
-                            faker.random().nextInt(5, 500),
-                            faker.random().nextInt(100, 2000),
+                            new Double(faker.random().nextInt(5, 500)),
+                            new Double(faker.random().nextInt(100, 2000)),
                             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
                                     + id + ".png");
                     hans.addArticle(article);
@@ -228,7 +229,7 @@ public class Initializer implements ServletContextInitializer {
     }
 
     private Article createArticle(String name, String description, Category category, User owner,
-            int costPerDay, int deposit, String image) {
+            Double costPerDay, Double deposit, String image) {
         Article article = new Article();
         article.setActive(true);
         article.setName(name);
@@ -251,6 +252,10 @@ public class Initializer implements ServletContextInitializer {
         c.setEndTime(endtime);
         c.setArticle(article);
         c.setRequestStatus(requestStatus);
+        PPTransaction ppTransaction = new PPTransaction();
+        c.setPpTransaction(ppTransaction);
+        ppTransaction.setReservationId(-1L);
+        ppTransaction.setLendingCost(1D);
         return c;
     }
 
