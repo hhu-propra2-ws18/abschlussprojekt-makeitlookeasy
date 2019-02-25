@@ -104,4 +104,18 @@ public class ArticleRepoTest {
         Assertions.assertThat(us.size()).isEqualTo(1);
         Assertions.assertThat(us.get(0)).isEqualTo(article1);
     }
+
+    @Test
+    public void queryShoulgFindArticleContainingString(){
+        List<Article> us = articles.findByNameContainsIgnoreCase("saw");
+        Assertions.assertThat(us.size()).isEqualTo(1);
+        Assertions.assertThat(us.get(0)).isEqualTo(article2);
+    }
+
+    @Test
+    public void queryShoulgFindArticleContainingStringIgnoringCase(){
+        List<Article> us = articles.findByNameContainsIgnoreCase("mOUNTAIN");
+        Assertions.assertThat(us.size()).isEqualTo(1);
+        Assertions.assertThat(us.get(0)).isEqualTo(article1);
+    }
 }
