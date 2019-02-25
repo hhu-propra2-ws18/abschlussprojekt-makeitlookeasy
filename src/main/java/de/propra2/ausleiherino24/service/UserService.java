@@ -26,7 +26,7 @@ public class UserService {
 
     private void saveUser(User user, String msg) {
         userRepository.save(user);
-        logger.info("%s user profile %s [ID=%L]", msg, user.getUsername(), user.getId());
+        logger.info("{} user profile {} [ID={}]", msg, user.getUsername(), user.getId());
     }
 
     /**

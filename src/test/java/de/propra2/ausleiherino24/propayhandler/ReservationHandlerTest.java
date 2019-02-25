@@ -21,8 +21,8 @@ import org.springframework.web.client.RestTemplate;
 @RunWith(SpringRunner.class)
 public class ReservationHandlerTest {
 
-    private final String ACCOUNT_URL = "http://localhost:8888/account";
-    private final String RESERVATION_URL = "http://localhost:8888/reservation";
+    private static final String ACCOUNT_URL = "http://localhost:8888/account";
+    private static final String RESERVATION_URL = "http://localhost:8888/reservation";
     private Reservation res1 = new Reservation();
     private Reservation res2 = new Reservation();
     private RestTemplate restTemplate;
@@ -45,9 +45,9 @@ public class ReservationHandlerTest {
 
         resList = new ArrayList<>();
         res1 = new Reservation();
-        res1.setNumber(10.0);
+        res1.setAmount(10.0);
         res2 = new Reservation();
-        res2.setNumber(10.0);
+        res2.setAmount(10.0);
         resList.add(res1);
         resList.add(res2);
 

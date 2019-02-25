@@ -95,8 +95,8 @@ public class UserController {
         List<Case> borrowedArticles = caseService
                 .getLendCasesFromPersonReceiver(currentUser.getPerson().getId());
         List<Case> requestedArticles = caseService
-                .findAllRequestedCasesbyUserId(currentUser.getId());
-        List<Case> returnedArticles = caseService.findAllExpiredCasesbyUserId(currentUser.getId());
+                .findAllRequestedCasesByUserId(currentUser.getId());
+        List<Case> returnedArticles = caseService.findAllExpiredCasesByUserId(currentUser.getId());
 
         ModelAndView mav = new ModelAndView("/user/myOverview");
         mav.addObject("user", currentUser);
@@ -123,6 +123,8 @@ public class UserController {
     public ModelAndView getBankAccountPage(Principal principal) {
         ModelAndView mav = new ModelAndView("/user/bankAccount");
         mav.addObject(CATEGORIES, Category.getAllCategories());
+        mav.addObject("transactions", caseService.getAllTransactionsFromPersonReceiver(
+                userService.findUserByPrincipal(principal).getId()));
         mav.addObject("pp", accountHandler.checkFunds(principal.getName()));
         mav.addObject("user", userService.findUserByPrincipal(principal));
         mav.addObject("allArticles", articleService);

@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -22,15 +20,7 @@ public class ConflictService {
     private final ConflictRepository conflicts;
     private final EmailSender emailSender;
     private final ReservationHandler reservationHandler;
-    private final Logger LOGGER = LoggerFactory.getLogger(ConflictService.class);
 
-    /**
-     * TODO JavaDoc.
-     *
-     * @param conflicts Description
-     * @param emailSender Description
-     * @param reservationHandler Description
-     */
     @Autowired
     public ConflictService(ConflictRepository conflicts, EmailSender emailSender,
             ReservationHandler reservationHandler, CaseService caseService) {
@@ -40,12 +30,6 @@ public class ConflictService {
         this.caseService = caseService;
     }
 
-    /**
-     * TODO JavaDoc.
-     * @param conflict Description
-     * @param user Description
-     * @throws Exception Description
-     */
     void saveConflict(Conflict conflict, User user) throws Exception {
         isCorrectUser(conflict, user);
         conflict.setConflictedCaseConflict(conflict);
@@ -64,20 +48,14 @@ public class ConflictService {
         saveConflict(conflict, conflictedCase.getOwner());
     }
 
-    void sendConflictEmail(Conflict conflict) throws Exception {
+    void sendConflictEmail(Conflict conflict) {
         emailSender.sendConflictEmail(conflict);
     }
 
-    /**
-     * TODO Javadoc.
-     * @param id Description
-     * @param user Description
-     * @throws Exception Description
-     */
     public void deactivateConflict(Long id, User user) throws Exception {
         Optional<Conflict> conflictToDeactivate = conflicts.findById(id);
         if (!conflictToDeactivate.isPresent()) {
-            throw new DataAccessException("No such Conflict") {
+            throw new DataAccessException("No such conflict.") {
             };
         }
         isConflictReporterOrAdmin(conflictToDeactivate.get(), user);
@@ -87,11 +65,6 @@ public class ConflictService {
         conflicts.delete(theConflictToDeactivate);
     }
 
-    /**
-     * TODO JavaDoc.
-     * @param user Description
-     * @return Description
-     */
     public List<Conflict> getAllConflictsByUser(User user) {
         List<Conflict> allConflicts = new ArrayList<>();
         allConflicts.addAll(conflicts.findAllByReceiver(user));
@@ -100,13 +73,6 @@ public class ConflictService {
         return allConflicts;
     }
 
-    /**
-     * TODO JavaDoc.
-     * @param id Description
-     * @param user Description
-     * @return Description
-     * @throws Exception Description
-     */
     public Conflict getConflict(Long id, User user) throws Exception {
         Optional<Conflict> conflict = conflicts.findById(id);
         if (!conflict.isPresent()) {
@@ -116,13 +82,6 @@ public class ConflictService {
         return conflict.get();
     }
 
-    /**
-     * TODO JavaDoc.
-     * @param conflict Description
-     * @param user Description
-     * @return Description
-     * @throws Exception Description
-     */
     public boolean isConflictedArticleOwner(Conflict conflict, User user) throws Exception {
         if (user == null) {
             throw new Exception("No such user");
@@ -130,12 +89,6 @@ public class ConflictService {
         return user.equals(conflict.getOwner());
     }
 
-    /**
-     * TODO Javadoc.
-     * @param conflict Description
-     * @return Description
-     * @throws Exception Description
-     */
     public List<User> getConflictParticipants(Conflict conflict) throws Exception {
         if (conflict == null) {
             throw new Exception("No such conflict!");
@@ -162,13 +115,6 @@ public class ConflictService {
         return "admin".equals(user.getRole());
     }
 
-    /**
-     * TODO JavaDoc.
-     * @param conflictToSolve Description
-     * @param user Description
-     * @param depositReceiver Description
-     * @throws Exception Description
-     */
     public void solveConflict(Conflict conflictToSolve, User user, User depositReceiver)
             throws Exception {
         if (!isUserAdmin(user)) {
