@@ -134,13 +134,12 @@
         <table class="table">
           <tr>
             <div class="text-center">
-              <button class="btn btn-light" onclick="oneFunction()">My articles</button>
-              <span> / </span>
-              <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
-              <span> / </span>
-              <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
-              <span> / </span>
-              <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
+              <div class="btn-group">
+                <button class="btn btn-dark " style="margin-bottom: 10px" onclick="oneFunction()">My articles</button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="twoFunction()"> Borrowed</button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="threeFunction()"> Returned</button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="fourFunction()"> Requests</button>
+              </div>
             </div>
           </tr>
           <thead>
@@ -266,7 +265,7 @@
                             </div>
                             <div class="col-sm-6 input-column">
                               <textarea class="form-control" id="description" name="description"
-                                        required type="text" th:value="${article.description}"
+                                        required type="text" th:text="${article.description}"
                                         style="height:150px">
                               </textarea>
                             </div>
@@ -309,13 +308,12 @@
         <table class="table">
           <tr>
             <div class="text-center">
-              <button class="btn btn-light" onclick="oneFunction()">My articles</button>
-              <span> / </span>
-              <button class="btn btn-light" onclick="twoFunction()">Borrowed</button>
-              <span> / </span>
-              <button class="btn btn-light" onclick="threeFunction()">Returned</button>
-              <span> / </span>
-              <button class="btn btn-light" onclick="fourFunction()">Requests</button>
+              <div class="btn-group">
+                <button class="btn btn-outline-dark " style="margin-bottom: 10px" onclick="oneFunction()">My articles</button>
+                <button class="btn btn-dark" style="margin-bottom: 10px" onclick="twoFunction()"> Borrowed</button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="threeFunction()"> Returned</button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="fourFunction()"> Requests</button>
+              </div>
             </div>
           </tr>
           <thead>
@@ -341,32 +339,32 @@
             <td th:text="${((case.endTime-case.startTime)/(1000*3600*24)*case.price)+'€'}"></td>
             <td>
               <th:block th:if="${case.requestStatus==1}">
-                <button style="height:30px;width:80px" class="btn btn-outline-primary btn-sm">
+                <button style="height:30px;width:80px" class="btn btn-outline-primary btn-sm disabled">
                   Pending
                 </button>
               </th:block>
               <th:block th:if="${case.requestStatus==2}">
-                <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm">
+                <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm disabled">
                   Accepted
                 </button>
               </th:block>
               <th:block th:if="${case.requestStatus==12 || case.requestStatus==4}">
-                <button style="height:30px;width:80px" class="btn btn-outline-danger btn-sm">
+                <button style="height:30px;width:80px" class="btn btn-outline-danger btn-sm disabled">
                   Declined
                 </button>
               </th:block>
               <th:block th:if="${case.requestStatus==10}">
-                <button style="height:30px;width:80px" class="btn btn-outline-warning btn-sm">Open
+                <button style="height:30px;width:80px" class="btn btn-outline-warning btn-sm disabled">Open
                   Conflict
                 </button>
               </th:block>
               <th:block th:if="${case.requestStatus==7}">
-                <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm">
+                <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm disabled">
                   Running
                 </button>
               </th:block>
               <th:block th:if="${case.requestStatus==14}">
-                <button style="height:30px;width:80px" class="btn btn-outline-info btn-sm">
+                <button style="height:30px;width:80px" class="btn btn-outline-info btn-sm disabled">
                   Finished
                 </button>
               </th:block>
@@ -382,13 +380,12 @@
         <table class="table">
           <tr>
             <div class="text-center">
-              <button class="btn btn-light" onclick="oneFunction()">My articles</button>
-              <span> / </span>
-              <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
-              <span> / </span>
-              <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
-              <span> / </span>
-              <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
+              <div class="btn-group">
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="oneFunction()">My articles</button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="twoFunction()"> Borrowed</button>
+                <button class="btn btn-dark" style="margin-bottom: 10px" onclick="threeFunction()"> Returned</button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="fourFunction()"> Requests</button>
+              </div>
             </div>
           </tr>
           <thead>
@@ -467,7 +464,7 @@
 
               <th:block th:if="${case.requestStatus==10}">
                 <div class="ml-auto flex-md-row">
-                  <button style="height:30px;width:120px" class="btn btn-outline-primary btn-sm">
+                  <button style="height:30px;width:120px" class="btn btn-outline-primary btn-sm disabled">
                     Running Conlict
                   </button>
                 </div>
@@ -475,7 +472,7 @@
 
               <th:block th:if="${case.requestStatus==14}">
                 <div class="ml-auto flex-md-row">
-                  <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm">
+                  <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm disabled">
                     Finished
                   </button>
                 </div>
@@ -492,13 +489,12 @@
         <table class="table">
           <tr>
             <div class="text-center">
-              <button class="btn btn-light" onclick="oneFunction()">My articles</button>
-              <span> / </span>
-              <button class="btn btn-light" onclick="twoFunction()"> Borrowed</button>
-              <span> / </span>
-              <button class="btn btn-light" onclick="threeFunction()"> Returned</button>
-              <span> / </span>
-              <button class="btn btn-light" onclick="fourFunction()"> Requests</button>
+              <div class="btn-group">
+                <button class="btn btn-outline-dark " style="margin-bottom: 10px" onclick="oneFunction()">My articles</button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="twoFunction()"> Borrowed</button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="threeFunction()"> Returned</button>
+                <button class="btn btn-dark" style="margin-bottom: 10px" onclick="fourFunction()"> Requests</button>
+              </div>
             </div>
           </tr>
           <thead>
@@ -542,21 +538,21 @@
               </th:block>
               <th:block th:if="${case.requestStatus==2}">
                 <div class="ml-auto flex-md-row">
-                  <button class="btn btn-outline-success btn-sm" style="height:30px;width:80px">
+                  <button class="btn btn-outline-success btn-sm disabled" style="height:30px;width:80px">
                     Accepted
                   </button>
                 </div>
               </th:block>
               <th:block th:if="${case.requestStatus==12}">
                 <div class="ml-auto flex-md-row">
-                  <button class="btn btn-outline-danger btn-sm" style="height:30px;width:80px">
+                  <button class="btn btn-outline-danger btn-sm disabled" style="height:30px;width:80px">
                     Declined
                   </button>
                 </div>
               </th:block>
               <th:block th:if="${case.requestStatus==4}">
                 <div class="ml-auto flex-md-row">
-                  <button class="btn btn-outline-info btn-sm" style="height:30px;width:120px">
+                  <button class="btn btn-outline-info btn-sm disabled" style="height:30px;width:120px">
                     Already rented
                   </button>
                 </div>
