@@ -207,22 +207,27 @@ public class CaseController {
         return "redirect:/article?id=" + id;
     }
 
-    @PostMapping("/accessed/user/acceptCase")
+    @PostMapping("/acceptCase")
     public String acceptCase(@RequestParam Long id) {
-        if (caseService.acceptArticleRequest(id)) {
-            return "redirect:/myOverview?requests";
-        } else {
-            return "redirect:/myOverview?requests&declined";
+        switch(caseService.acceptArticleRequest(id)) {
+            case 1:
+                return "redirect:/myOverview?requests";
+            case 2:
+                return "redirect:/myOverview?requests&alreadyrented";
+            case 3:
+                return "redirect:/myOverview?requests&receiveroutofmoney";
+            default:
+                return  "redirect:/myOverview?requests&error";
         }
     }
 
-    @PostMapping("/accessed/user/declineCase")
+    @PostMapping("/declineCase")
     public String declineCase(@RequestParam Long id) {
         caseService.declineArticleRequest(id);
-        return "redirect:/myOverview?requests";
+        return "redirect:/myOverview?requests&declined";
     }
 
-    @PostMapping("/accessed/user/acceptCaseReturn")
+    @PostMapping("/acceptCaseReturn")
     public String acceptCaseReturn(@RequestParam Long id) {
         caseService.acceptCaseReturn(id);
         return "redirect:/myOverview?returned&successfullyreturned";

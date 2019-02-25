@@ -289,7 +289,7 @@ public class CaseServiceTest {
         when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
         ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
-        assertTrue(caseService.acceptArticleRequest(0L));
+        assertEquals(1, caseService.acceptArticleRequest(0L));
         verify(caseRepositoryMock).save(argument.capture());
         assertEquals(Case.REQUEST_ACCEPTED, argument.getValue().getRequestStatus());
     }
@@ -312,7 +312,7 @@ public class CaseServiceTest {
         when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
         ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
-        assertFalse(caseService.acceptArticleRequest(0L));
+        assertEquals(2, caseService.acceptArticleRequest(0L));
         verify(caseRepositoryMock).save(argument.capture());
         assertEquals(Case.RENTAL_NOT_POSSIBLE, argument.getValue().getRequestStatus());
     }
@@ -321,7 +321,7 @@ public class CaseServiceTest {
     public void acceptNotExistingRequest(){
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.empty());
 
-        assertFalse(caseService.acceptArticleRequest(0L));
+        assertEquals(0, caseService.acceptArticleRequest(0L));
     }
 
     @Test

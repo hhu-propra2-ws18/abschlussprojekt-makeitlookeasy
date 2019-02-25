@@ -175,12 +175,15 @@ public class CaseService {
 
 
     /**
-     * return true, falls Erfolg return false, falls Misserfolg
+     * return 0: case could not be found
+     * return 1: everything alright
+     * return 2: the article is already rented in the given time
+     * return 3: receiver does not have enough money on Propay
      */
-    public boolean acceptArticleRequest(Long id) {
+    public int acceptArticleRequest(Long id) {
         Optional<Case> optCase = caseRepository.findById(id);
         if (!optCase.isPresent()) {
-            return false;
+            return 0;
         }
         Case c = optCase.get();
 
@@ -189,14 +192,23 @@ public class CaseService {
             c.setRequestStatus(Case.REQUEST_ACCEPTED);
             reservationHandler.handleReservedMoney(c);
             caseRepository.save(c);
-            return true;
+            return 1;
         } else {
             c.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
             caseRepository.save(c);
-            return false;
+            if (!requestIsOk(id)) {
+                return 2;
+            } else {
+                return 3;
+            }
         }
     }
 
+    /**
+     * checks whether the article is not rented in the given time
+     * @param id
+     * @return
+     */
     boolean requestIsOk(Long id) {
         Case c = caseRepository.findById(id).get();
         Article article = c.getArticle();
