@@ -21,7 +21,7 @@ public class CaseEndTimeReminder {
     private EmailSender emailSender;
 
     @Autowired
-    public CaseEndTimeReminder(CaseRepository cases, EmailSender emailSender){
+    public CaseEndTimeReminder(CaseRepository cases, EmailSender emailSender) {
         this.cases = cases;
         this.emailSender = emailSender;
     }
@@ -29,11 +29,13 @@ public class CaseEndTimeReminder {
     //@Scheduled(fixedDelay = 5000, initialDelay = 20000)
     void sendRemindingEmail() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        LocalDateTime currentTime = LocalDate.parse(LocalDateTime.now().format(formatter), formatter).atStartOfDay();
+        LocalDateTime currentTime = LocalDate
+                .parse(LocalDateTime.now().format(formatter), formatter).atStartOfDay();
         List<Case> activeCases = cases.findAll()
                 .stream()
                 .filter(c -> c.getRequestStatus() == Case.RUNNING)
-                .filter(c -> LocalDate.parse(c.getFormattedEndTime(), formatter).atStartOfDay().isEqual(currentTime.plusDays(1L)))
+                .filter(c -> LocalDate.parse(c.getFormattedEndTime(), formatter).atStartOfDay()
+                        .isEqual(currentTime.plusDays(1L)))
                 .collect(Collectors.toList());
 
         activeCases.forEach(c -> {

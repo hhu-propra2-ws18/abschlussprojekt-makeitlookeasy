@@ -2,7 +2,6 @@ package de.propra2.ausleiherino24.propayhandler;
 
 import de.propra2.ausleiherino24.model.Case;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,9 +24,7 @@ public class AccountHandler {
     }
 
     public double checkFunds(String accountName) {
-        PPAccount account;
-        account = restTemplate
-                .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
+        PPAccount account = getAccountData(accountName);
         return account.getAmount() - account.reservationAmount();
     }
 
@@ -43,10 +40,9 @@ public class AccountHandler {
 
     //TODO: Used? Fix!
     public void addFunds(String username, Double amount) {
-        HttpEntity<Double> request = new HttpEntity<>(amount);
 
         restTemplate.postForLocation(ACCOUNT_URL + ACCOUNT_DEFAULT + "?amount=" + amount.toString(),
-                request, username);
+                null, username);
     }
 
     //TODO: Method extraction necessary? Discuss!
@@ -56,11 +52,10 @@ public class AccountHandler {
     }
 
     private void transferFunds(String sourceUser, String targetUser, Double amount) {
-        HttpEntity<Double> request = new HttpEntity<>(amount);
 
         restTemplate.postForLocation(
                 ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}" + "?amount=" + amount
-                        .toString(), request, sourceUser, targetUser);
+                        .toString(), null, sourceUser, targetUser);
     }
 
 }

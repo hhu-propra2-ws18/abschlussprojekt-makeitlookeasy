@@ -22,7 +22,7 @@ public class CaseEndTimeReminderTest {
     private LocalDateTime today;
 
     @Before
-    public void init(){
+    public void init() {
         formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         es = Mockito.mock(EmailSender.class);
         CaseRepository caseRepository = Mockito.mock(CaseRepository.class);

@@ -45,13 +45,14 @@ public class EmailSender {
 
         message.setFrom("Clearing@Service.com");
         message.setTo(c.getReceiver().getEmail());
-        message.setSubject("Reminder: Article: "+ c.getArticle().getName()+" has to be returned tomorrow!");
+        message.setSubject(
+                "Reminder: Article: " + c.getArticle().getName() + " has to be returned tomorrow!");
         message.setText("Please do not forget to return the article on time!");
 
         mailSender.send(message);
     }
 
-    private void configureMailSender(){
+    private void configureMailSender() {
         Properties properties = new Properties();
         properties.putAll(config.getProperties());
         mailSender.setHost(config.getHost());

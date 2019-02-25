@@ -47,9 +47,7 @@ public class CaseService {
         this.reservationHandler = reservationHandler;
     }
 
-    /**
-     * Fügt einen Artikel, welcher frei zum Verleih ist, von einer Person hinzu.
-     */
+    // TODO: Only implemented in tests. Necessary?
     void addCaseForNewArticle(Article article, Double price, Double deposit) {
         Case c = new Case();
         c.setArticle(article);
@@ -59,25 +57,16 @@ public class CaseService {
         caseRepository.save(c);
     }
 
-    /**
-     * Gibt alle Cases zurück, wo die Person der Verleihende ist.
-     */
     List<Case> getAllCasesFromPersonOwner(Long personId) {
         return caseRepository
                 .findAllByArticleOwner(personService.findPersonById(personId).getUser());
     }
 
-    /**
-     * Gibt alle Cases zurück, wo die Person der Verleihende ist.
-     */
     private List<Case> findAllCasesByUserId(Long userId) {
         return caseRepository.findAllByArticleOwnerId(userId);
     }
 
-    /**
-     * Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan verliehen
-     * ist.
-     */
+    // TODO: Only implemented in tests. Necessary?
     List<Case> getLendCasesFromPersonOwner(Long personId) {
         List<Case> cases = getAllCasesFromPersonOwner(personId);
         return cases.stream()
@@ -94,10 +83,7 @@ public class CaseService {
         return ppTransactions;
     }
 
-    /**
-     * Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan nicht
-     * verliehen ist.
-     */
+    // TODO: Only implemented in tests. Necessary?
     List<Case> getFreeCasesFromPersonOwner(Long personId) {
         List<Case> cases = getAllCasesFromPersonOwner(personId);
         return cases.stream()
@@ -105,17 +91,11 @@ public class CaseService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    /**
-     * Gibt alle Cases zurück, wo die Person sich von jemanden etwas geliehen hat.
-     */
     public List<Case> getLendCasesFromPersonReceiver(Long personId) {
         return caseRepository.findAllByReceiver(personService.findPersonById(personId).getUser());
     }
 
-    /**
-     * Gibt alle Cases zurück, die zu einem Artikel vom User gehören und dessen requestStatus auf
-     * REQUESTED steht.
-     */
+    // TODO: Method is never used. Delete?
     public List<Case> getAllRequestedCasesbyUser(Long userId) {
         return caseRepository
                 .findAllByArticleOwner(userService.findUserById(userId))
@@ -124,13 +104,9 @@ public class CaseService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    /**
-     * Erwartet Case mit wo Artikel verliehen werden kann. Case wird modifiziert, dass es nun
-     * verliehen ist.
-     */
-    public boolean requestArticle(Long articleId, Long starttime, Long endtime, String username) {
-
-        Double totalCost = getCostForAllDays(articleId, starttime, endtime);
+    // TODO: Return value is never used. Update implementing methods or void?
+    public boolean requestArticle(Long articleId, Long startTime, Long endTime, String username) {
+        Double totalCost = getCostForAllDays(articleId, startTime, endTime);
 
         if (accountHandler.hasValidFunds(username,
                 totalCost + articleService.findArticleById(articleId).getDeposit())) {
@@ -141,8 +117,8 @@ public class CaseService {
 
             Case c = new Case();
             c.setArticle(articleService.findArticleById(articleId));
-            c.setStartTime(starttime);
-            c.setEndTime(endtime);
+            c.setStartTime(startTime);
+            c.setEndTime(endTime);
             c.setDeposit(c.getArticle().getDeposit());
             c.setPrice(c.getArticle().getCostPerDay());
             c.setReceiver(userService.findUserByUsername(username));
@@ -158,15 +134,15 @@ public class CaseService {
         return false;
     }
 
-    Double getCostForAllDays(Long articleId, Long starttime, Long endtime) {
+    private Double getCostForAllDays(Long articleId, Long startTime, Long endTime) {
 
         Double dailyCost = articleService.findArticleById(articleId).getCostPerDay();
-        Date startdate = new Date(starttime);
-        Date enddate = new Date(endtime);
+        Date startDate = new Date(startTime);
+        Date endDate = new Date(endTime);
 
-        long diffInMillies = Math.abs(enddate.getTime() - startdate.getTime());
+        long diffInMilliseconds = Math.abs(endDate.getTime() - startDate.getTime());
 
-        return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) * dailyCost;
+        return TimeUnit.DAYS.convert(diffInMilliseconds, TimeUnit.MILLISECONDS) * dailyCost;
     }
 
 
@@ -273,11 +249,6 @@ public class CaseService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Stellt den Status von Case mit id id auf Case.OPEN_CONFLICT
-     *
-     * @param id CaseId
-     */
     void conflictOpened(Long id) {
         Optional<Case> opt = caseRepository.findById(id);
         if (opt.isPresent()) {
@@ -287,11 +258,6 @@ public class CaseService {
         }
     }
 
-    /**
-     * Stellt den Status von Case mit id id auf Case.FINISHED
-     *
-     * @param id CaseId
-     */
     public void acceptCaseReturn(Long id) {
         Optional<Case> opt = caseRepository.findById(id);
         if (opt.isPresent()) {
@@ -301,10 +267,6 @@ public class CaseService {
         }
     }
 
-    /**
-     * Findet alle Cases mit Status in {REQUESTED, REQUEST_ACCEPTED, REQUEST_DECLINED,
-     * RENTAL_NOT_POSSIBLE}
-     */
     public List<Case> findAllRequestedCasesByUserId(Long id) {
         return findAllCasesByUserId(id)
                 .stream()

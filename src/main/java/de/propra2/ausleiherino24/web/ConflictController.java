@@ -38,8 +38,9 @@ public class ConflictController {
 
     /**
      * Methode wird aufgerufen, wenn ein Conflict abgesendet wird. Sie erstellt dann einen
-     * entsprechenden Conflict, speichert diesen und sendet eine Conflict-Email.
-     * Weitergeleitet wird wieder auf myOverview
+     * entsprechenden Conflict, speichert diesen und sendet eine Conflict-Email. Weitergeleitet wird
+     * wieder auf myOverview
+     *
      * @param id CaseId
      * @param conflictDescription Beschreibung (mind. 15 Zeichen, max. 2048 Zeichen)
      * @return redirect myOverview mit entsprechendem Parameter
@@ -48,7 +49,7 @@ public class ConflictController {
     @PostMapping("/openconflict")
     public String sendConflict(@RequestParam Long id, String conflictDescription) throws Exception {
         Optional<Case> optionalCase = caseRepository.findById(id);
-        if(!optionalCase.isPresent()) {
+        if (!optionalCase.isPresent()) {
             return "redirect:/myOverview?returned&conflictfailed";
         }
         conflictService.openConflict(optionalCase.get(), conflictDescription);

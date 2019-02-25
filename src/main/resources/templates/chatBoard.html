@@ -2,30 +2,30 @@
 <html lang="en" xmlns:="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>Spring Boot WebSocket Chat Application</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>Spring Boot WebSocket Chat Application</title>
 
-    <link rel="stylesheet" th:href="@{~/css/chat.css}">
+  <link rel="stylesheet" th:href="@{~/css/chat.css}">
 </head>
 <body>
 <noscript>
-    <h2>Sorry! Your browser doesn't support Javascript</h2>
+  <h2>Sorry! Your browser doesn't support Javascript</h2>
 </noscript>
 
 <div id="chat-page" class="chat-hidden">
-    <div class="chat-container">
-      <div class="chat-header">
-        <h2>Ausleiherino-Chat</h2>
-        <input class="receiver" name="receiver" type="text" placeholder="Receiver"></input> 
-      </div>    
-      <ul class="messageArea">    
-      </ul>    
-         
-      <form name="messageForm" class="chat-form messageForm">
-        <textarea type="text" placeholder="Type a message..." class="chat-input message"></textarea>
-        <button type="submit" class="chat-send">Send</button>
-      </form>
+  <div class="chat-container">
+    <div class="chat-header">
+      <h2>Ausleiherino-Chat</h2>
+      <input class="receiver" name="receiver" type="text" placeholder="Receiver"></input>
     </div>
+    <ul class="messageArea">
+    </ul>
+
+    <form name="messageForm" class="chat-form messageForm">
+      <textarea type="text" placeholder="Type a message..." class="chat-input message"></textarea>
+      <button type="submit" class="chat-send">Send</button>
+    </form>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
@@ -33,8 +33,8 @@
 
 <script src="js/scopedChat.js"></script>
 <script>
-    initializeChat("/user/queue/specific-user", true, null, "/chat.privateMessage");
-    // initializeChat("/topic/public", false, "/chat.addUser", "/chat.sendMessage");
+  initializeChat("/user/queue/specific-user", true, null, "/chat.privateMessage");
+  // initializeChat("/topic/public", false, "/chat.addUser", "/chat.sendMessage");
 </script>
 </body>
 </html>
