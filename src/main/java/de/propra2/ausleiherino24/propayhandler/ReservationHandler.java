@@ -1,7 +1,6 @@
 package de.propra2.ausleiherino24.propayhandler;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
-import de.propra2.ausleiherino24.data.PPTransactionRepository;
 import de.propra2.ausleiherino24.model.Case;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -17,7 +16,6 @@ public class ReservationHandler {
     private RestTemplate restTemplate;
     private AccountHandler accountHandler;
 
-    private PPTransactionRepository ppTransactionRepository;
     private CaseRepository caseRepository;
 
     /**
@@ -26,12 +24,10 @@ public class ReservationHandler {
      * @param caseRepository Description
      * @param restTemplate Description
      */
-    public ReservationHandler(PPTransactionRepository ppTransactionRepository,
-            CaseRepository caseRepository, RestTemplate restTemplate) {
+    public ReservationHandler(CaseRepository caseRepository, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.caseRepository = caseRepository;
-        this.ppTransactionRepository = ppTransactionRepository;
-        accountHandler = new AccountHandler(caseRepository, ppTransactionRepository, restTemplate);
+        accountHandler = new AccountHandler(restTemplate);
     }
 
     public void handleReservedMoney(Case aCase) {
@@ -93,8 +89,8 @@ public class ReservationHandler {
      * @return Description
      */
 
-    boolean punishReservation(Case aCase) {
-        return punishReservation(aCase.getReceiver().getUsername(),
+    void punishReservation(Case aCase) {
+        punishReservation(aCase.getReceiver().getUsername(),
                 aCase.getPpTransaction().getReservationId());
     }
 
