@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,12 +22,13 @@ public class PPTransaction {
     Long id;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "ppTransaction")
-    @NotNull
     Case aCase;
 
     Double lendingCost;
 
     boolean cautionPaid;
+
+    Long reservationId;
 
     /**
      * TODO JavaDoc.

@@ -96,6 +96,9 @@ public class MainControllerTest {
     @MockBean
     private ReservationHandler reservationHandler;
 
+    @MockBean
+    private ChatController chatController;
+
     @Ignore
     @Test
     public void getIndex() throws Exception {

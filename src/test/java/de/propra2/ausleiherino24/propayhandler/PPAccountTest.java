@@ -26,7 +26,7 @@ public class PPAccountTest {
 
     @Test
     public void getAmountShouldReturnZeroIfAmountIsNull() {
-        acc.setNumber(null);
+        acc.setAmount(0D);
 
         Assertions.assertThat(acc.getAmount()).isEqualByComparingTo(0.0);
     }
@@ -34,9 +34,9 @@ public class PPAccountTest {
     @Test
     public void getReservationsShouldReturnCorrectListOfReservationsIfReservationsIsNotNull() {
         Reservation res1 = new Reservation();
-        res1.setId(1);
+        res1.setId(1L);
         Reservation res2 = new Reservation();
-        res2.setId(2);
+        res2.setId(2L);
         List<Reservation> resList = new ArrayList<>();
         resList.add(res1);
         resList.add(res2);
@@ -56,7 +56,7 @@ public class PPAccountTest {
         acc.addReservation(45.0);
 
         Assertions.assertThat(acc.getReservations())
-                .isEqualTo(Arrays.asList(new Reservation(1, 80.0), new Reservation(2, 45.0)));
+                .isEqualTo(Arrays.asList(new Reservation(1L, 80.0), new Reservation(2L, 45.0)));
     }
 
 }

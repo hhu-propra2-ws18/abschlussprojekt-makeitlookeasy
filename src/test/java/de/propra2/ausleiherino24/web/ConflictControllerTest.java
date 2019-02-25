@@ -9,6 +9,9 @@ import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.email.EmailConfig;
 import de.propra2.ausleiherino24.email.EmailSender;
+import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Case;
+import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
@@ -22,26 +25,30 @@ import de.propra2.ausleiherino24.service.RoleService;
 import de.propra2.ausleiherino24.service.SearchUserService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.Optional;
-import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatcher;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-
-//@PowerMockIgnore("javax.security.*") TODO: Replace PowerMock with JMockit
 @RunWith(SpringRunner.class)
 @WebMvcTest
-public class UserControllerTest {
-
+@ActiveProfiles(profiles = "test")
+public class ConflictControllerTest {
     @Autowired
     private MockMvc mvc;
 
@@ -94,58 +101,50 @@ public class UserControllerTest {
     @MockBean
     private ChatController chatController;
 
-    @Ignore
-    @Test
-    public void displayUserProfileStatusTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/accessed/user/user?id=1"))
-                .andExpect(MockMvcResultMatchers
-                        .status().is3xxRedirection());
+    private User user;
+    private User user2;
+    private Article art;
+    private Case ca;
+    private Conflict c1;
+
+    @Before
+    public void init(){
+        user = new User();
+        user2 = new User();
+        art = new Article();
+        ca = new Case();
+        c1 = new Conflict();
+
+        user2.setUsername("user2");
+        user.setUsername("user1");
+        art.setOwner(user);
+        ca.setArticle(art);
+        ca.setReceiver(user2);
+        c1.setConflictedCase(ca);
+        c1.setConflictReporterUsername("user1");
+        c1.setConflictDescription("TestDescription");
     }
 
-    @Ignore //TODO: fix test
     @Test
-    public void displayUserProfileViewTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/accessed/user?id=1"))
-                .andExpect(MockMvcResultMatchers
-                        .view().name("profile"));
+    @WithMockUser(roles = "user")
+    public void test() throws Exception {
+        Mockito.when(caseRepository.findById(1L)).thenReturn(Optional.of(ca));
+
+        mvc.perform(MockMvcRequestBuilders.post("/accessed/user/openconflict?id=1")
+                .flashAttr("conflictDescription", "TestDescription"))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/myOverview?returned&openedconflict"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+        //Mockito.verify(conflictService, Mockito.times(1)).openConflict(ca, "TestDescription");
     }
 
-    @Ignore //TODO: fix test
     @Test
-    public void displayUserProfileModelTest() throws Exception {
-        User user = User.builder()
-                .id(1L)
-                .email("user@mail.com")
-                .password("password")
-                .username("user1")
-                .role("admin")
-                .build();
+    @WithMockUser(roles = "user")
+    public void test2() throws Exception {
+        Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class))).thenReturn(user);
 
-        Mockito.when(userService.findUserByUsername("user1")).thenReturn(user);
-
-        mvc.perform(MockMvcRequestBuilders.get("/accessed/user/profile/user1"))
-                .andExpect(MockMvcResultMatchers
-                        .model().attribute("user", Matchers.is(Optional.of(user))));
-        Mockito.verify(userService, Mockito.times(1)).findUserByUsername("user1");
+        mvc.perform(MockMvcRequestBuilders.delete("/accessed/user/deactivateconflict?id=1"))
+        .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+        .andExpect(MockMvcResultMatchers.redirectedUrl("/myOverview?returned&deactivatedconflict"));
+        //Mockito.verify(conflictService).deactivateConflict(1L, user);
     }
-
-    @Ignore
-    @Test
-    public void getIndexStatusTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/accessed/user/index"))
-                .andExpect(MockMvcResultMatchers
-                        .status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers
-                        .redirectedUrl("http://localhost/login"));
-    }
-
-// TODO: Dead?
-//	@SuppressWarnings("static-access")
-//	@Test
-//	public void getIndexModelTest() throws Exception {
-//		RoleService rs = Mockito.control(RoleService.class);
-//		MockHttpServletRequest req = new MockHttpServletRequest();
-//		Mockito.when(rs.getUserRole(Mockito.anyObject())).thenReturn("user");
-//		mvc.perform(MockMvcRequestBuilders.get("/accessed/user/index")).andExpect(MockMvcResultMatchers.model().attribute("role", "user"));
-//	}
 }

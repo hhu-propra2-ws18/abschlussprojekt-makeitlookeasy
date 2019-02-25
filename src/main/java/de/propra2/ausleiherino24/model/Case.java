@@ -43,8 +43,8 @@ public class Case {
     private Long id;
     private Long startTime;
     private Long endTime;
-    private int price;
-    private int deposit;
+    private Double price;
+    private Double deposit;
     private int requestStatus;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "aCase")
     private CustomerReview customerReview;

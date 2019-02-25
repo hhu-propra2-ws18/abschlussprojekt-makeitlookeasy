@@ -30,16 +30,16 @@ public class ArticleRepoTest {
         article1.setOwner(new User());
         article1.setName("Mountain-Bike");
         article1.setDescription("Looks like shit");
-        article1.setDeposit(500);
-        article1.setCostPerDay(24);
+        article1.setDeposit(500D);
+        article1.setCostPerDay(24D);
         article1.setActive(true);
 
         article2 = new Article();
         article2.setOwner(new User());
         article2.setName("Chainsaw");
         article2.setDescription("bloody");
-        article2.setDeposit(1);
-        article2.setCostPerDay(99);
+        article2.setDeposit(1D);
+        article2.setCostPerDay(99D);
         article2.setActive(false);
 
         articles.saveAll(Arrays.asList(article1, article2));

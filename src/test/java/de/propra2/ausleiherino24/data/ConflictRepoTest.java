@@ -46,8 +46,8 @@ public class ConflictRepoTest {
         case1 = new Case();
         case1.setReceiver(user1);
         case1.setArticle(case1Art);
-        case1.setPrice(80);
-        case1.setDeposit(200);
+        case1.setPrice(80D);
+        case1.setDeposit(200D);
         case1.setStartTime(12022019L);
         case1.setEndTime(19022019L);
 
@@ -56,8 +56,8 @@ public class ConflictRepoTest {
         case2 = new Case();
         case2.setReceiver(user2);
         case2.setArticle(case2Art);
-        case2.setPrice(60);
-        case2.setDeposit(150);
+        case2.setPrice(60D);
+        case2.setDeposit(150D);
         case2.setStartTime(10022019L);
         case2.setEndTime(15022019L);
 

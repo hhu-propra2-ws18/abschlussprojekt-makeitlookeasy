@@ -3,42 +3,31 @@ package de.propra2.ausleiherino24.propayhandler;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 class PPAccount {
 
     String account;
-    Double number;
+    double amount;
     List<Reservation> reservations;
 
-    public PPAccount() {
-        this.account = "";
-        this.number = 0D;
-        this.reservations = new ArrayList<>();
-    }
-
-    PPAccount(String account, Double number) {
+    PPAccount(String account, Double amount) {
         this.account = account;
-        this.number = number;
+        this.amount = amount;
         this.reservations = new ArrayList<>();
     }
 
-
-    double getAmount() {
-        if (number == null) {
-            return 0;
+    double reservationAmount() {
+        double reserved = 0;
+        for (Reservation r : reservations) {
+            reserved += r.getNumber();
         }
-        return number;
-    }
-
-    List<Reservation> getReservations() {
-        if (this.reservations == null) {
-            return new ArrayList<>();
-        }
-        return this.reservations;
+        return reserved;
     }
 
     void addReservation(Double amount) {
-        this.reservations.add(new Reservation(this.reservations.size() + 1, amount));
+        this.reservations.add(new Reservation(this.reservations.size() + 1L, amount));
     }
 }

@@ -103,6 +103,9 @@ public class CaseControllerTest {
     @MockBean
     private ReservationHandler reservationHandler;
 
+    @MockBean
+    private ChatController chatController;
+
     private User user;
     private Article article;
 
