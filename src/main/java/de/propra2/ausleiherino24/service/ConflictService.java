@@ -169,14 +169,15 @@ public class ConflictService {
      * @param depositReceiver Description
      * @throws Exception Description
      */
-    public boolean solveConflict(Conflict conflictToSolve, User user, User depositReceiver)
+    public void solveConflict(Conflict conflictToSolve, User user, User depositReceiver)
             throws Exception {
         if (!isUserAdmin(user)) {
             throw new Exception("No permission!");
         }
         if (depositReceiver.equals(conflictToSolve.getOwner())) {
-            return reservationHandler.punishReservation(conflictToSolve.getConflictedCase());
+            reservationHandler.punishReservation(conflictToSolve.getConflictedCase());
+            return;
         }
-        return reservationHandler.releaseReservation(conflictToSolve.getConflictedCase());
+        reservationHandler.releaseReservation(conflictToSolve.getConflictedCase());
     }
 }
