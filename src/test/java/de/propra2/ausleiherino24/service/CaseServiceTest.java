@@ -3,7 +3,9 @@ package de.propra2.ausleiherino24.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -11,14 +13,17 @@ import static org.mockito.Mockito.when;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
-import de.propra2.ausleiherino24.model.*;
+import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Case;
+import de.propra2.ausleiherino24.model.PPTransaction;
+import de.propra2.ausleiherino24.model.Person;
+import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -48,7 +53,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void OwnerWithThreeCases() {
+    public void ownerWithThreeCases() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
@@ -61,7 +66,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void OwnerWithThreeCases2() {
+    public void ownerWithThreeCases2() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
         cases.add(new Case(null, 1L, null, null, 0D, 0D, 0, null, null, null, null));
@@ -76,7 +81,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void OwnerWithTwoLendCases() {
+    public void ownerWithTwoLendCases() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
@@ -91,7 +96,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void OwnerWithNoLendCases() {
+    public void ownerWithNoLendCases() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
@@ -104,7 +109,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void OwnerWithTwoFreeCases() {
+    public void ownerWithTwoFreeCases() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
@@ -119,7 +124,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void OwnerWithNoFreeCases() {
+    public void ownerWithNoFreeCases() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null));
