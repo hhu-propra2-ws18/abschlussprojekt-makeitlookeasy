@@ -150,7 +150,10 @@ public class ConflictController {
         User user = userService.findUserByPrincipal(principal);
         Conflict conflictToSolve = conflictService
                 .getConflict(resolveConflict.getConflictId(), user);
-        conflictService.solveConflict(conflictToSolve, user, resolveConflict.getDepositReceiver());
+        if(!conflictService.solveConflict(conflictToSolve, user, resolveConflict.getDepositReceiver())){
+            throw new Exception("Conflict could not be solved");
+        }
+
         conflictService.deactivateConflict(resolveConflict.getConflictId(), user);
         List<Conflict> conflicts = conflictService.getAllConflictsByUser(user);
 

@@ -93,12 +93,12 @@ public class ReservationHandler {
      * @return Description
      */
 
-    boolean punishReservation(Case aCase) {
+    public boolean punishReservation(Case aCase) {
         return punishReservation(aCase.getReceiver().getUsername(),
                 aCase.getPpTransaction().getReservationId());
     }
 
-    public boolean punishReservation(String account,
+    boolean punishReservation(String account,
             Long reservationId) { //TODO: anpassen entsprechend den anderen
         HttpEntity<Long> request = new HttpEntity<>(reservationId);
 
