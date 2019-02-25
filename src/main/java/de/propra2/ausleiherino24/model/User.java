@@ -63,7 +63,7 @@ public class User {
     }
 
     @SuppressWarnings("Duplicates")
-        // TODO: Duplicate code
+        // TODO: Extract duplicate code.
     void addArticle(Article article, boolean repetition) {
         if (article == null) {
             return;
