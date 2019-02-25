@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.slf4j.Logger;
@@ -145,43 +145,77 @@ public class CaseService {
         return TimeUnit.DAYS.convert(diffInMilliseconds, TimeUnit.MILLISECONDS) * dailyCost;
     }
 
-    public boolean acceptArticleRequest(Long id) {
+
+    /**
+     * return 0: case could not be found
+     * return 1: everything alright
+     * return 2: the article is already rented in the given time
+     * return 3: receiver does not have enough money on Propay
+     */
+    public int acceptArticleRequest(Long id) {
         Optional<Case> optCase = caseRepository.findById(id);
         if (!optCase.isPresent()) {
-            return false;
+            return 0;
         }
         Case c = optCase.get();
 
         //Check whether the article is not reserved in this period of time
-        if (requestIsOk(id) && accountHandler.hasValidFunds(c)) {
+        boolean articleRented = articleNotRented(id);
+        if (articleRented && accountHandler.hasValidFunds(c)) {
             c.setRequestStatus(Case.REQUEST_ACCEPTED);
             reservationHandler.handleReservedMoney(c);
             caseRepository.save(c);
-            return true;
+            return 1;
         } else {
             c.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
             caseRepository.save(c);
-            return false;
+            if (articleRented) {
+                return 3;
+            } else {
+                return 2;
+            }
         }
     }
 
-    boolean requestIsOk(Long id) {
-        Case c = findCaseById(id);
-        Article article = c.getArticle();
+    /**
+     * checks whether the article is not rented in the given time
+     * @param id CaseId
+     * @return
+     */
+    boolean articleNotRented(Long id) {
+        Optional<Case> c = caseRepository.findById(id);
+        if (!c.isPresent()) {
+            return false;
+        }
+
+        Article article = c.get().getArticle();
         List<Case> cases = article.getCases().stream()
                 .filter(ca -> ca.getRequestStatus() == Case.REQUEST_ACCEPTED)
                 .collect(Collectors.toList());
-        cases.remove(c); //Makes sure, that c is not an element in cases
+        cases.remove(c.get());
 
         for (Case ca : cases) {
-            if (!(ca.getStartTime() > c.getEndTime() || ca.getEndTime() < c.getStartTime())) {
+            if (!(ca.getStartTime() > c.get().getEndTime() || ca.getEndTime() < c.get().getStartTime())) {
                 return false;
             }
         }
         return true;
     }
 
-    private Case findCaseById(Long id) {
+    boolean articleNotRented(Article article, Long startTime, Long endTime, Case c) {
+        List<Case> cases = article.getCases().stream()
+                .filter(ca -> ca.getRequestStatus() == Case.REQUEST_ACCEPTED)
+                .collect(Collectors.toList());
+
+        for (Case ca : cases) {
+            if (!(ca.getStartTime() > endTime || ca.getEndTime() < startTime)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Case findCaseById(Long id) {
         Optional<Case> optionalCase = caseRepository.findById(id);
 
         if (!optionalCase.isPresent()) {
