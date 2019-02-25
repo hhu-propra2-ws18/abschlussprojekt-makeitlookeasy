@@ -69,12 +69,12 @@ public class EmailSender {
     }
 
     private void configureMailSender(){
-        Properties p = new Properties();
-        p.putAll(config.getProperties());
+        Properties properties = new Properties();
+        properties.putAll(config.getProperties());
         mailSender.setHost(config.getHost());
         mailSender.setPort(config.getPort());
         mailSender.setUsername(config.getUsername());
         mailSender.setPassword(config.getPassword());
-        mailSender.setJavaMailProperties(p);
+        mailSender.setJavaMailProperties(properties);
     }
 }
