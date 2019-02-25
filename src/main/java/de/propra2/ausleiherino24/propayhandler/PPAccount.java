@@ -1,12 +1,13 @@
 package de.propra2.ausleiherino24.propayhandler;
 
-import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 class PPAccount {
 
     String account;
@@ -16,18 +17,17 @@ class PPAccount {
     PPAccount(String account, Double amount) {
         this.account = account;
         this.amount = amount;
-        this.reservations = new ArrayList<>();
     }
 
     double reservationAmount() {
         double reserved = 0;
-        for (Reservation r : reservations) {
-            reserved += r.getNumber();
+        for (int i = 0; i < reservations.size(); i++) {
+            reserved += reservations.get(i).getAmount();
         }
         return reserved;
     }
 
-    void addReservation(Double amount) {
+    public void addReservation(Double amount) {
         this.reservations.add(new Reservation(this.reservations.size() + 1L, amount));
     }
 }

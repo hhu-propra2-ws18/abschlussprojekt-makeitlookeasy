@@ -6,39 +6,45 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CaseEndTimeReminder {
 
-    @Autowired
-    public CaseEndTimeReminder(CaseRepository cases, EmailSender emailSender){
-        this.cases = cases;
-        this.emailSender = emailSender;
-    }
+    private final Logger logger = LoggerFactory.getLogger(CaseEndTimeReminder.class);
 
     private CaseRepository cases;
     private EmailSender emailSender;
 
+    @Autowired
+    public CaseEndTimeReminder(CaseRepository cases, EmailSender emailSender) {
+        this.cases = cases;
+        this.emailSender = emailSender;
+    }
+
     //@Scheduled(fixedDelay = 5000, initialDelay = 20000)
-    public void sendRemindingEmail() throws MailException {
+    void sendRemindingEmail() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        LocalDateTime currentTime = LocalDate.parse(LocalDateTime.now().format(formatter), formatter).atStartOfDay();
+        LocalDateTime currentTime = LocalDate
+                .parse(LocalDateTime.now().format(formatter), formatter).atStartOfDay();
         List<Case> activeCases = cases.findAll()
                 .stream()
                 .filter(c -> c.getRequestStatus() == Case.RUNNING)
-                .filter(c -> LocalDate.parse(c.getFormattedEndTime(), formatter).atStartOfDay().isEqual(currentTime.plusDays(1L)))
+                .filter(c -> LocalDate.parse(c.getFormattedEndTime(), formatter).atStartOfDay()
+                        .isEqual(currentTime.plusDays(1L)))
                 .collect(Collectors.toList());
 
         activeCases.forEach(c -> {
             try {
                 emailSender.sendRemindingEmail(c);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.info("Could not send reminder email for case {}.", c.getId());
             }
         });
     }
+
 }

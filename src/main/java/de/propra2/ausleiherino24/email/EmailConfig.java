@@ -1,22 +1,23 @@
 package de.propra2.ausleiherino24.email;
 
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Data
 @Component
+@ConfigurationProperties(prefix = "spring.mail")
 public class EmailConfig {
 
-    @Value("${spring.mail.host}")
     private String host;
 
-    @Value("${spring.mail.port}")
     private Integer port;
 
-    @Value("${spring.mail.username}")
     private String username;
 
-    @Value("${spring.mail.password}")
     private String password;
+
+    private Map<String, String> properties = new HashMap<>();
 }

@@ -9,16 +9,16 @@ import lombok.Data;
 class Reservation {
 
     Long id;
-    Double number;
+    Double amount;
 
-    public Reservation() {
+    Reservation() {
         this.id = 0L;
-        this.number = 0D;
+        this.amount = 0D;
     }
 
-    public Reservation(Long id, Double number) {
+    Reservation(Long id, Double number) {
         this.id = id;
-        this.number = number;
+        this.amount = number;
     }
 
 }

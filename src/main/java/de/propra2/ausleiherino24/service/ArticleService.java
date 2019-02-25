@@ -2,11 +2,9 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,7 +18,7 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
 
-    private final Logger LOGGER = LoggerFactory.getLogger(ArticleService.class);
+    private final Logger logger = LoggerFactory.getLogger(ArticleService.class);
 
     @Autowired
     public ArticleService(ArticleRepository articleRepository) {
@@ -29,21 +27,21 @@ public class ArticleService {
 
     public void saveArticle(Article article, String msg) {
         articleRepository.save(article);
-        LOGGER.info("%s article '%s' [ID=%L]", msg, article.getName(), article.getId());
+        logger.info("{} article '{}' {}.", msg, article.getName(), article.getId());
     }
 
-    public Article findArticleById(Long id) throws Exception {
+    public Article findArticleById(Long id) {
         Optional<Article> article = articleRepository.findById(id);
 
         if (!article.isPresent()) {
-            LOGGER.warn("Couldn't find article %L in UserRepository.", id);
-            throw new Exception("Couldn't find article in ArticleRepository.");
+            logger.warn("Couldn't find article {} in UserRepository.", id);
+            throw new NullPointerException("Couldn't find article in ArticleRepository.");
         }
 
         return article.get();
     }
 
-    public ArrayList<Article> findAllActiveByUser(User user) {
+    public List<Article> findAllActiveByUser(User user) {
         return articleRepository.findAllActiveByUser(user);
     }
 
@@ -58,7 +56,7 @@ public class ArticleService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<Article> getAllActiveArticles() {
+    List<Article> getAllActiveArticles() {
         return articleRepository.findAllActive().isEmpty() ? new ArrayList<>()
                 : articleRepository.findAllActive();
     }
@@ -78,33 +76,36 @@ public class ArticleService {
      *
      * @param id ID of article to be "deleted".
      * @return boolean True, if succeeded. False, if encountered error while processing request.
-     * @throws Exception 1. Thrown, if article not present in ArticleRepository. 2. Thrown, if article is reserved.
      */
-    public boolean deactivateArticle(Long id) throws Exception {
+    public boolean deactivateArticle(Long id) {
         Optional<Article> optionalArticle = articleRepository.findById(id);
+
         if (!optionalArticle.isPresent()) {
-            LOGGER.warn("Couldn't find article %L in ArticleRepository.", id);
-            throw new Exception("Couldn't find requested article in ArticleRepository.");
+            logger.warn("Couldn't find article {} in ArticleRepository.", id);
+            throw new NullPointerException("Couldn't find requested article in ArticleRepository.");
         }
 
         Article article = optionalArticle.get();
 
         //only able to deactive if article has only cases where the requeststatus is REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED
-        if(!article.allCasesClosed()){
-            LOGGER.warn("Article %L is still reserved, lent or has an open conflict.", id);
+        if (!article.allCasesClosed()) {
+            logger.warn("Article {} is still reserved, lent or has an open conflict.", id);
             return false;
         }
 
         article.setActive(false);
         articleRepository.save(article);
-        LOGGER.info("Deactivated article %s [ID=%L]", article.getName(), article.getId());
+        logger.info("Deactivated article {} [ID={}]", article.getName(), article.getId());
         return true;
     }
 
     public void updateArticle(Long id, Article article) {
         Optional<Article> optionalArticle = articleRepository.findById(id);
-        if(!optionalArticle.isPresent())
+
+        if (!optionalArticle.isPresent()) {
             return;
+        }
+
         Article oldArticle = optionalArticle.get();
         oldArticle.setForRental(article.isForRental());
         oldArticle.setDeposit(article.getDeposit());
@@ -115,12 +116,7 @@ public class ArticleService {
         articleRepository.save(oldArticle);
     }
 
-    /**
-     * Gives back all article where the name is like the search string. Is used for the search.
-     * @param searchstr
-     * @return List<Article>  List of all articles where the name is like the search string.
-     */
-    public List<Article> getAllArticlesByName(String searchstr) {
-        return articleRepository.findByNameContainsIgnoreCase(searchstr);
+    public List<Article> getAllArticlesByName(String searchString) {
+        return articleRepository.findByNameContainsIgnoreCase(searchString);
     }
 }

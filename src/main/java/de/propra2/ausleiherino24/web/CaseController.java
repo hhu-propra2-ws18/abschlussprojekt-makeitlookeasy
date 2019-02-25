@@ -12,13 +12,12 @@ import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -31,26 +30,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+// TODO: Exatrct duplicate code. Fix!
 
 @Controller
 public class CaseController {
+
+    private final Logger logger = LoggerFactory.getLogger(CaseController.class);
 
     private final ArticleService articleService;
     private final ImageService imageService;
     private final UserService userService;
     private final CaseService caseService;
 
+    private static final String ARTICLE_STRING = "article";
     private final List<Category> allCategories = Category.getAllCategories();
 
-    /**
-     * Manages all requests regarding creating/editing/deleting articles/cases and after-sales.
-     * Possible features: transaction rating (karma/voting), chatting. TODO JavaDoc-Descriptions.
-     *
-     * @param articleService Descriptions
-     * @param userService Descriptions
-     * @param imageService Descriptions
-     * @param caseService Descriptions
-     */
     @Autowired
     public CaseController(ArticleService articleService,
             UserService userService,
@@ -62,59 +56,32 @@ public class CaseController {
         this.caseService = caseService;
     }
 
-    /**
-     * TODO Javadoc.
-     *
-     * @param id Descriptions
-     * @param principal Descriptions
-     * @return Descriptions
-     * @throws Exception Descriptions
-     */
     @GetMapping("/article")
-    @SuppressWarnings("Duplicates") // TODO Duplicate code
-    public ModelAndView displayArticle(@RequestParam("id") Long id, Principal principal)
-            throws Exception {
+    public ModelAndView displayArticle(@RequestParam("id") Long id, Principal principal) {
         Article article = articleService.findArticleById(id);
         User currentUser = userService.findUserByPrincipal(principal);
 
         ModelAndView mav = new ModelAndView("/shop/item");
-        mav.addObject("article", article);
+        mav.addObject(ARTICLE_STRING, article);
         mav.addObject("user", currentUser);
         mav.addObject("categories", allCategories);
         return mav;
     }
 
-    /**
-     * TODO Javadoc.
-     *
-     * @param principal Descriptions
-     * @return Descriptions
-     */
     @GetMapping("/newArticle")
     public ModelAndView createNewCaseAndArticle(Principal principal) {
         Article article = new Article();
         User currentUser = userService.findUserByPrincipal(principal);
 
         ModelAndView mav = new ModelAndView("/shop/newItem");
-        mav.addObject("article", article);
+        mav.addObject(ARTICLE_STRING, article);
         mav.addObject("user", currentUser);
         mav.addObject("categories", allCategories);
         return mav;
     }
 
-    /**
-     * TODO Javadoc.
-     *
-     * @param article Descriptions
-     * @param result Descriptions
-     * @param model Descriptions
-     * @param image Descriptions
-     * @param principal Descriptions
-     * @return Descriptions
-     */
     @PostMapping("/saveNewArticle")
     public ModelAndView saveNewCaseAndArticle(@ModelAttribute @Valid Article article,
-            BindingResult result, Model model,
             @RequestParam("image") MultipartFile image, Principal principal) {
         User user = userService.findUserByPrincipal(principal);
         article.setActive(true);
@@ -127,19 +94,8 @@ public class CaseController {
         return new ModelAndView("redirect:/");
     }
 
-    /**
-     * TODO Javadoc.
-     *
-     * @param article Descriptions
-     * @param result Descriptions
-     * @param model Descriptions
-     * @param image Descriptions
-     * @param principal Descriptions
-     * @return Descriptions
-     */
     @PutMapping("/saveEditedArticle")
     public ModelAndView saveEditedCaseAndArticle(@ModelAttribute @Valid Article article,
-            BindingResult result, Model model,
             @RequestParam("image") MultipartFile image, Principal principal) {
 
         article.setImage(imageService.store(image, null));
@@ -148,7 +104,7 @@ public class CaseController {
         User currentUser = userService.findUserByPrincipal(principal);
 
         ModelAndView mav = new ModelAndView("/shop/item");
-        mav.addObject("article", article);
+        mav.addObject(ARTICLE_STRING, article);
         mav.addObject("user", currentUser);
         return mav;
     }
@@ -160,7 +116,7 @@ public class CaseController {
     }
 
     @RequestMapping("/deleteArticle")
-    public String deleteArticle(@RequestParam Long id) throws Exception {
+    public String deleteArticle(@RequestParam Long id) {
         if (articleService.deactivateArticle(id)) {
             return "redirect:/myOverview?articles&deletedarticle";
         } else {
@@ -168,28 +124,18 @@ public class CaseController {
         }
     }
 
-
-    //NEED FOR JS DEVE PLS DO NOT DELETE
+    //NEED FOR JS DEVE PLS DO NOT DELETE TODO: WHY IS THIS NEEDED?
     @RequestMapping("/api/events")
     @ResponseBody
-    public List<LocalDate> test() throws Exception {
-       return caseService.findAllReservedDaysbyArticle((long) 3);
+    public List<LocalDate> test() {
+        return caseService.findAllReservedDaysByArticle((long) 3);
     }
 
-    /**
-     * TODO JavaDoc.
-     *
-     * @param id Description
-     * @param startDate Description
-     * @param endDate Description
-     * @param principal Description
-     * @return Description
-     * @throws Exception Description
-     */
     @PostMapping("/bookArticle")
     public String bookArticle(@RequestParam Long id, String startDate, String endDate,
-            Principal principal) throws Exception {
+            Principal principal) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
         try {
             caseService.requestArticle(
                     id,
@@ -197,9 +143,10 @@ public class CaseController {
                     simpleDateFormat.parse(endDate).getTime(),
                     principal.getName());
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("Could not book article {}.", id, e);
         }
-        //TODO: Show the user, whether die request was successful or not
+
+        // TODO: Show the user, whether the request was successful or not.
         return "redirect:/article?id=" + id;
     }
 
@@ -225,17 +172,18 @@ public class CaseController {
     }
 
     /**
-     * Liefert einen Methode für Springboot um das Feld Article.category korrekt zu empfangen und zu
-     * verknüpfen.
+     * TODO: Englisch? Neuschrieben! Liefert einen Methode für Springboot um das Feld
+     * Article.category korrekt zu empfangen und zu verknüpfen.
      */
     @InitBinder
     public void initBinder(final WebDataBinder webDataBinder) {
         webDataBinder.registerCustomEditor(Category.class, new CategoryConverter());
     }
 
-    private class CategoryConverter extends PropertyEditorSupport {
+    private static class CategoryConverter extends PropertyEditorSupport {
 
-        public void setAsText(final String text) throws IllegalArgumentException {
+        @Override
+        public void setAsText(final String text) {
             setValue(Category.fromValue(text));
         }
     }

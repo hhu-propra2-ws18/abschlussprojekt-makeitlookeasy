@@ -4,10 +4,8 @@ import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
@@ -19,16 +17,7 @@ public class EmailSender {
     private JavaMailSenderImpl mailSender;
     private SimpleMailMessage message;
     private UserService userService;
-    Logger logger = LoggerFactory.getLogger(EmailSender.class);
 
-    /**
-     * TODO JavaDoc.
-     *
-     * @param config Description
-     * @param mailSender Description
-     * @param message Description
-     * @param userService Description
-     */
     @Autowired
     public EmailSender(EmailConfig config, JavaMailSenderImpl mailSender,
             SimpleMailMessage message, UserService userService) {
@@ -38,16 +27,8 @@ public class EmailSender {
         this.userService = userService;
     }
 
-    /**
-     * TODO JavaDoc.
-     * @param conflict Description
-     * @throws Exception Description
-     */
-    public void sendConflictEmail(Conflict conflict) throws Exception {
-        mailSender.setHost(config.getHost());
-        mailSender.setPort(config.getPort());
-        mailSender.setUsername(config.getUsername());
-        mailSender.setPassword(config.getPassword());
+    public void sendConflictEmail(Conflict conflict) {
+        configureMailSender();
 
         User user = userService.findUserByUsername(conflict.getConflictReporterUsername());
 
@@ -59,17 +40,25 @@ public class EmailSender {
         mailSender.send(message);
     }
 
-    public void sendRemindingEmail(Case c) throws MailException {
+    void sendRemindingEmail(Case c) {
+        configureMailSender();
+
+        message.setFrom("Clearing@Service.com");
+        message.setTo(c.getReceiver().getEmail());
+        message.setSubject(
+                "Reminder: Article: " + c.getArticle().getName() + " has to be returned tomorrow!");
+        message.setText("Please do not forget to return the article on time!");
+
+        mailSender.send(message);
+    }
+
+    private void configureMailSender() {
+        Properties properties = new Properties();
+        properties.putAll(config.getProperties());
         mailSender.setHost(config.getHost());
         mailSender.setPort(config.getPort());
         mailSender.setUsername(config.getUsername());
         mailSender.setPassword(config.getPassword());
-
-        message.setFrom("Clearing@Service.com");
-        message.setTo(c.getReceiver().getEmail());
-        message.setSubject("Reminder: Article: "+ c.getArticle().getName()+" has to be returned tomorrow!");
-        message.setText("Please do not forget to return the article on time!");
-
-        mailSender.send(message);
+        mailSender.setJavaMailProperties(properties);
     }
 }

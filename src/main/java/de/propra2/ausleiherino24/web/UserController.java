@@ -11,8 +11,9 @@ import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,23 +27,16 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class UserController {
 
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final AccountHandler accountHandler;
     private final ArticleService articleService;
     private final CaseService caseService;
     private final UserService userService;
 
+    private static final String CATEGORIES = "categories";
     private final List<Category> allCategories = Category.getAllCategories();
 
-    /**
-     * UserController manages all requests that are exclusively available to logged-in users of the
-     * platform, except article/case handling. This includes profile management. TODO:
-     * Javadoc-Descriptions
-     *
-     * @param userService Descriptions
-     * @param articleService Descriptions
-     * @param accountHandler Descriptions
-     * @param caseService Descriptions
-     */
     @Autowired
     public UserController(UserService userService, ArticleService articleService,
             AccountHandler accountHandler, CaseService caseService) {
@@ -52,20 +46,8 @@ public class UserController {
         this.userService = userService;
     }
 
-
-    /** TODO: Javadoc-HTML-Syntax: Change this to HTML-Syntax (<li></li>)
-     * Show any user profile to logged-in users. 1.If visitor is not logged-in and tries to access
-     * profile, redirect to login. 2. Else, display profile. 2.1 If requested profile of user, is
-     * own profile, allow editing via 'self' flag. 2.2 Else, do not allow editing.
-     *
-     * @param username Name of requested user, whose profile is requested
-     * @param principal Current Principal
-     * @return 1. Redirect to view "login" (if not logged-in) 2. Display "/user/profile" view
-     * @throws Exception Thrown, if username cannot be found in UserRepository
-     */
     @GetMapping("/profile/{username}")
-    public ModelAndView getUserProfile(@PathVariable String username, Principal principal,
-            HttpServletRequest request) throws Exception {
+    public ModelAndView getUserProfile(@PathVariable String username, Principal principal) {
 
         User visitedUser = userService.findUserByUsername(username);
         User currentUser = userService.findUserByPrincipal(principal);
@@ -81,22 +63,10 @@ public class UserController {
         mav.addObject("myArticles", articleService.findAllActiveByUser(visitedUser));
         mav.addObject("visitedUser", visitedUser);
         mav.addObject("user", currentUser);
-        mav.addObject("categories", allCategories);
+        mav.addObject(CATEGORIES, allCategories);
         return mav;
-        //  mav.addObject("ppAccount",
-        //         accountHandler
-        //                  .getAccountData(userService.findUserByPrincipal(principal).getUsername()));
     }
 
-    /**
-     * Receives HTML form input as @Valid User and Person objects and tries to save those objects to
-     * the database.
-     *
-     * @param user User object that is updated in database.
-     * @param person Person object that is updated in database.
-     * @param principal Current principal.
-     * @return View "/user/profile". Displays principal's profile.
-     */
     @PutMapping("/editProfile")
     public ModelAndView editUserProfile(@ModelAttribute @Valid User user,
             @ModelAttribute @Valid Person person, Principal principal) {
@@ -107,31 +77,30 @@ public class UserController {
             userService.saveUserWithProfile(user, person, "Updated");
 
             ModelAndView mav = new ModelAndView("/user/profile");
-            mav.addObject("propayacc", accountHandler.checkFunds(currentPrincipalName));
+            mav.addObject("proPayAcc", accountHandler.checkFunds(currentPrincipalName));
             mav.addObject("user", user);
             return mav;
         } else {
+            logger.warn("Unauthorized access to 'editProfile' for user {} by user {}.", username,
+                    currentPrincipalName);
+            logger.info("Logging out user {}.", currentPrincipalName);
             return new ModelAndView("redirect:/logout");
         }
     }
 
-    /**
-     * TODO Javadoc.
-     * @param principal Description
-     * @return Description
-     */
     @RequestMapping("/myOverview")
     public ModelAndView getMyArticlePage(Principal principal) {
         User currentUser = userService.findUserByPrincipal(principal);
         List<Article> myArticles = articleService.findAllActiveByUser(currentUser);
         List<Case> borrowedArticles = caseService
                 .getLendCasesFromPersonReceiver(currentUser.getPerson().getId());
-        List<Case> requestedArticles = caseService.findAllRequestedCasesbyUserId(currentUser.getId());
-        List<Case> returnedArticles = caseService.findAllExpiredCasesbyUserId(currentUser.getId());
+        List<Case> requestedArticles = caseService
+                .findAllRequestedCasesByUserId(currentUser.getId());
+        List<Case> returnedArticles = caseService.findAllExpiredCasesByUserId(currentUser.getId());
 
         ModelAndView mav = new ModelAndView("/user/myOverview");
         mav.addObject("user", currentUser);
-        mav.addObject("categories", allCategories);
+        mav.addObject(CATEGORIES, allCategories);
         mav.addObject("myArticles", myArticles);
         mav.addObject("borrowed", borrowedArticles);
         mav.addObject("returned", returnedArticles);
@@ -139,63 +108,39 @@ public class UserController {
         return mav;
     }
 
-    // TODO: USED ???
-
-    /**
-     * TODO: Javadoc.
-     * @param principal Description
-     * @return Description
-     */
     @GetMapping("/newItem")
     public ModelAndView getNewItemPage(Principal principal) {
         User currentUser = userService.findUserByPrincipal(principal);
 
         ModelAndView mav = new ModelAndView("/shop/newItem");
-        mav.addObject("categories", allCategories);
+        mav.addObject(CATEGORIES, allCategories);
         mav.addObject("user", currentUser);
         mav.addObject("allArticles", articleService);
         return mav;
     }
 
-    /**
-     * TODO Javadoc.
-     * @param principal Description
-     * @return Description
-     */
     @GetMapping("/bankAccount")
     public ModelAndView getBankAccountPage(Principal principal) {
         ModelAndView mav = new ModelAndView("/user/bankAccount");
-        mav.addObject("categories", Category.getAllCategories());
+        mav.addObject(CATEGORIES, Category.getAllCategories());
+        mav.addObject("transactions", caseService.getAllTransactionsFromPersonReceiver(
+                userService.findUserByPrincipal(principal).getId()));
         mav.addObject("pp", accountHandler.checkFunds(principal.getName()));
-        try {
-            mav.addObject("user", userService.findUserByPrincipal(principal));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mav.addObject("user", userService.findUserByPrincipal(principal));
         mav.addObject("allArticles", articleService);
         return mav;
     }
 
-    /**
-     *  Saves new data if possible and redirects to same page with according param.
-     *  TODO: JavaDoc-Descriptions
-     * @param principal Descriptions
-     * @param user Descriptions
-     * @param person Descriptions
-     * @param password Descriptions
-     * @param confirmpass Descriptions
-     * @return Descriptions
-     */
     @PostMapping("accessed/user/saveProfile")
     public String saveEditedUserProfile(Principal principal, User user, Person person,
-            String password, String confirmpass) {
+            String password, String confirmPass) {
         String url = "redirect:/profile/" + principal.getName();
         switch (userService.saveUserIfPasswordsAreEqual(principal.getName(), user, person, password,
-                confirmpass)) {
+                confirmPass)) {
             case "PasswordNotEqual":
-                return url + "?pwdonotmatch";
+                return url + "?pwdDoNotMatch";
             case "UserNotFound":
-                return url + "?usernotfound";
+                return url + "?userNotFound";
             case "Success":
                 return url + "?success";
             default:

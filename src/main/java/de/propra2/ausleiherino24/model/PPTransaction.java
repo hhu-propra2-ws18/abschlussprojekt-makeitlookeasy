@@ -30,11 +30,6 @@ public class PPTransaction {
 
     Long reservationId;
 
-    /**
-     * TODO JavaDoc.
-     *
-     * @return Description
-     */
     public Double getTotalPayment() {
         if (cautionPaid) {
             return lendingCost + aCase.getDeposit();

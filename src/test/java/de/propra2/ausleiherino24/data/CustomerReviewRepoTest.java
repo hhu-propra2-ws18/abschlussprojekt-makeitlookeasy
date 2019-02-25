@@ -23,8 +23,6 @@ public class CustomerReviewRepoTest {
     @Autowired
     private CustomerReviewRepository customerReviews;
 
-    private Case case1;
-    private Case case2;
     private List<CustomerReview> customerReviewList;
 
     @Before

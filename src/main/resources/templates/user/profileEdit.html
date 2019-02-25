@@ -36,10 +36,10 @@
           <div class="alert alert-success absolue center" th:if="${param.success}">
             Profile saved with success
           </div>
-          <div class="alert alert-danger absolue center" th:if="${param.usernotfound}">
+          <div class="alert alert-danger absolue center" th:if="${param.userNotFound}">
             User not found
           </div>
-          <div class="alert alert-danger absolue center" th:if="${param.pwdonotmatch}">
+          <div class="alert alert-danger absolue center" th:if="${param.pwdDoNotMatch}">
             Passwords do not match
           </div>
         </div>
@@ -53,13 +53,15 @@
             <div class="form-row">
               <div class="col-sm-12 col-md-6">
                 <div class="form-group"><label>First Name </label>
-                  <input class="form-control" name="firstName" required th:value="${user.person.firstName}"
+                  <input class="form-control" name="firstName" required
+                         th:value="${user.person.firstName}"
                          type="text">
                 </div>
               </div>
               <div class="col-sm-12 col-md-6">
                 <div class="form-group"><label>Last Name </label>
-                  <input class="form-control" name="lastName" required th:value="${user.person.lastName}"
+                  <input class="form-control" name="lastName" required
+                         th:value="${user.person.lastName}"
                          type="text">
                 </div>
               </div>

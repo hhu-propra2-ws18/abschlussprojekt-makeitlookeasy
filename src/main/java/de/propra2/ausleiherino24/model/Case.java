@@ -23,8 +23,8 @@ import lombok.NoArgsConstructor;
 public class Case {
 
     /**
-     * Bitte die Werte nicht ändern. Diese dienen zur Sortierung
-     * und müssen gegebenefalls in myOverview.html mit angepasst werden
+     * Bitte die Werte nicht ändern. Diese dienen zur Sortierung und müssen gegebenefalls in
+     * myOverview.html mit angepasst werden
      */
 
     public static final int REQUESTED = 1;

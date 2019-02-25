@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+// TODO: Extract duplicate code. Fix!
+
 /**
  * MainController manages all actions that are available to every visitor of the platform. This
- * includes basic browsing, and signup/login.
+ * includes basic browsing, and sign-up/login.
  */
 @Controller
 public class MainController {
@@ -27,6 +29,9 @@ public class MainController {
     private final ArticleService articleService;
     private final UserService userService;
 
+    private static final String INDEX_STRING = "index";
+    private static final String CATEGORIES_STRING = "categories";
+    private static final String CATEGORY_STRING = "category";
     private final List<Category> allCategories = Category.getAllCategories();
 
     @Autowired
@@ -35,59 +40,38 @@ public class MainController {
         this.articleService = articleService;
     }
 
-    /**
-     * TODO Javadoc.
-     * @param principal Description
-     * @return Description
-     */
-    @SuppressWarnings("Duplicates") // TODO Duplicate code
     @GetMapping(value = {"/", "/index"})
     public ModelAndView getIndex(Principal principal) {
         List<Article> allArticles = articleService.getAllActiveAndForRentalArticles();
         User currentUser = userService.findUserByPrincipal(principal);
 
-        ModelAndView mav = new ModelAndView("index");
+        ModelAndView mav = new ModelAndView(INDEX_STRING);
         mav.addObject("all", allArticles);
         mav.addObject("user", currentUser);
-        mav.addObject("categories", allCategories);
-        mav.addObject("category", "all");
+        mav.addObject(CATEGORIES_STRING, allCategories);
+        mav.addObject(CATEGORY_STRING, "all");
         return mav;
     }
 
-    /**
-     * TODO Javadoc.
-     * @param category Description
-     * @param principal Description
-     * @return Description
-     */
-    @SuppressWarnings("Duplicates") // TODO Duplicate code
     @GetMapping("/categories")
     public ModelAndView getIndexByCategory(@RequestParam String category, Principal principal) {
         List<Article> allArticlesInCategory = articleService
                 .getAllArticlesByCategory(Category.valueOf(category.toUpperCase()));
         User currentUser = userService.findUserByPrincipal(principal);
 
-        ModelAndView mav = new ModelAndView("index");
+        ModelAndView mav = new ModelAndView(INDEX_STRING);
         mav.addObject("all", allArticlesInCategory);
         mav.addObject("user", currentUser);
-        mav.addObject("categories", allCategories);
-        mav.addObject("category", category);
+        mav.addObject(CATEGORIES_STRING, allCategories);
+        mav.addObject(CATEGORY_STRING, category);
         return mav;
     }
 
-    /**
-     * TODO Javadoc.
-     * @return Description
-     */
     @GetMapping("/login")
     public ModelAndView getLogin() {
         return new ModelAndView("login");
     }
 
-    /**
-     * TODO Javadoc.
-     * @return Description
-     */
     @GetMapping("/signup")
     public ModelAndView getRegistration() {
         User user = new User();
@@ -100,24 +84,20 @@ public class MainController {
     }
 
     @GetMapping("/search")
-    public ModelAndView getIndexBySearchString(@RequestParam String searchstr, Principal principal) {
-        List<Article> allArticlesWithNameLikeSearchStr = articleService.getAllArticlesByName(searchstr);
+    public ModelAndView getIndexBySearchString(@RequestParam String searchstr,
+            Principal principal) {
+        List<Article> allArticlesWithNameLikeSearchStr = articleService
+                .getAllArticlesByName(searchstr);
         User currentUser = userService.findUserByPrincipal(principal);
 
-        ModelAndView mav = new ModelAndView("index");
+        ModelAndView mav = new ModelAndView(INDEX_STRING);
         mav.addObject("all", allArticlesWithNameLikeSearchStr);
         mav.addObject("user", currentUser);
-        mav.addObject("categories", allCategories);
-        mav.addObject("category", "");
+        mav.addObject(CATEGORIES_STRING, allCategories);
+        mav.addObject(CATEGORY_STRING, "");
         return mav;
     }
 
-    /**
-     * TODO Javadoc.
-     * @param user Description
-     * @param person Description
-     * @return
-     */
     @PostMapping("/registerNewUser")
     public ModelAndView registerNewUser(@ModelAttribute @Valid User user,
             @ModelAttribute @Valid Person person) {

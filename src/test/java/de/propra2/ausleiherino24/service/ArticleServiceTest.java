@@ -203,7 +203,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void updateArticle(){
+    public void updateArticle() {
         Article article = new Article();
         article.setForRental(true);
         article.setDeposit(0D);
