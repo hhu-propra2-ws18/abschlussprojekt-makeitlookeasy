@@ -66,7 +66,8 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 test {
 //    useJUnitPlatform() TODO Fix JUnitPlatform
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
-}
+    outputs.upToDateWhen { false }  // this forces to always rerun all tests, even if task status was 
+}                                   // already successful (and cached) in the past.
 
 test.finalizedBy jacocoTestReport
 check.dependsOn jacocoTestCoverageVerification

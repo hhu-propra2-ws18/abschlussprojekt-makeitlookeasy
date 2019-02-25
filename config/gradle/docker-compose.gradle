@@ -1,6 +1,8 @@
 dockerCompose.isRequiredBy(bootRun)
 //dockerCompose.isRequiredBy(tasks.sonarqube)
 //dockerCompose.isRequiredBy(tasks.check)
+//dockerCompose.isRequiredBy(tasks.test)
+
 dockerCompose {
     useComposeFiles = ['docker-compose.yml']
     startedServices = ['propay','db']
