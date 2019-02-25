@@ -166,7 +166,7 @@ public class CaseController {
         }
     }
 
-    @RequestMapping("/test")
+    @RequestMapping("/api/events")
     @ResponseBody
     public List<LocalDate> test() throws Exception {
        return caseService.findAllReservedDaysbyArticle((long) 3);
