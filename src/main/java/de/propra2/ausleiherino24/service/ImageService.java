@@ -88,7 +88,7 @@ public class ImageService {
         return file.exists() ? file : null;
     }
 
-    private String generateFilePath(String prefix, String fileEnding) {
+    public String generateFilePath(String prefix, String fileEnding) {
         String uniqueFilepath = buildPath(buildFilename(fileEnding), prefix);
 
         while (fileExists(uniqueFilepath)) {
@@ -108,11 +108,11 @@ public class ImageService {
         return f.exists() && !f.isDirectory();
     }
 
-    private String buildPath(String fileName, String prefix) {
+    public String buildPath(String fileName, String prefix) {
         return Paths.get(getUploadDirectoryPath(), prefix, fileName).toString();
     }
 
-    private String getUploadDirectoryPath() {
+    public String getUploadDirectoryPath() {
         String rootPath = Paths.get(".").toAbsolutePath().normalize().toString();
         return Paths.get(rootPath, this.uploadDirectoryPath).toString();
     }
