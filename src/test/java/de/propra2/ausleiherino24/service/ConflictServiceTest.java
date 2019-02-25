@@ -14,8 +14,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.dao.DataAccessException;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
@@ -130,7 +132,7 @@ public class ConflictServiceTest {
 	}
 
 	@Test
-	public void getAllConflictsByUserShouldReturnListOfAllCurrentConflictsByUser() throws Exception {
+	public void getAllConflictsByUserShouldReturnListOfAllCurrentConflictsByUser() {
 		Article art2 = new Article();
 		art2.setOwner(new User());
 		Case ca2 = new Case();
@@ -213,5 +215,42 @@ public class ConflictServiceTest {
 		Mockito.verify(caseService).conflictOpened(1L);
 		Mockito.verify(conflictService).saveConflict(c1, user);
 		Mockito.verify(conflictService).sendConflictEmail(c1);
+	}
+
+	@Test(expected = Exception.class)
+	public void solveConflictShouldThrowExceptionIfUserNotAdmin() throws Exception {
+		User user = new User();
+		user.setRole("");
+
+		conflictService.solveConflict(null, user, null);
+	}
+
+	@Test
+	public void solveConflictShouldPunishReservation() throws Exception {
+		User depoReceiver = new User();
+		User admin = new User();
+		admin.setRole("admin");
+		Conflict conflict = Mockito.mock(Conflict.class);
+		Mockito.when(conflict.getOwner()).thenReturn(depoReceiver);
+
+		conflictService.solveConflict(conflict, admin, depoReceiver);
+
+		Mockito.verify(reservationHandler).punishReservation(null);
+		Mockito.verify(reservationHandler, Mockito.times(0)).releaseReservation(null);
+	}
+
+	@Test
+	public void solveConflictShouldReleaseReservation() throws Exception {
+		User depoReceiver = new User();
+		depoReceiver.setUsername("Hans");
+		User admin = new User();
+		admin.setRole("admin");
+		Conflict conflict = Mockito.mock(Conflict.class);
+		Mockito.when(conflict.getOwner()).thenReturn(new User());
+
+		conflictService.solveConflict(conflict, admin, depoReceiver);
+
+		Mockito.verify(reservationHandler, Mockito.times(0)).punishReservation(null);
+		Mockito.verify(reservationHandler).releaseReservation(null);
 	}
 }
