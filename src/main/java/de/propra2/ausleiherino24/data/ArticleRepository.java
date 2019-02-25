@@ -14,13 +14,6 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
     @NonNull
     ArrayList<Article> findAll();
 
-    /**
-     * Returns a list of all articles, that are currently being offered (active == true) by the
-     * user, regardless of reservation status.
-     *
-     * @param user User object, whose articles are being returned.
-     * @return ArrayList of Article objects
-     */
     @Query("SELECT a FROM Article a WHERE a.owner = :user and a.active = true")
     ArrayList<Article> findAllActiveByUser(@Param("user") User user);
 
