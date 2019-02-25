@@ -123,6 +123,8 @@ public class UserController {
     public ModelAndView getBankAccountPage(Principal principal) {
         ModelAndView mav = new ModelAndView("/user/bankAccount");
         mav.addObject(CATEGORIES, Category.getAllCategories());
+        mav.addObject("transactions", caseService.getAllTransactionsFromPersonReceiver(
+                userService.findUserByPrincipal(principal).getId()));
         mav.addObject("pp", accountHandler.checkFunds(principal.getName()));
         mav.addObject("user", userService.findUserByPrincipal(principal));
         mav.addObject("allArticles", articleService);

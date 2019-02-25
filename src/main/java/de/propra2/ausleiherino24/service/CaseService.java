@@ -85,6 +85,15 @@ public class CaseService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    public List<PPTransaction> getAllTransactionsFromPersonReceiver(Long personId) {
+        List<PPTransaction> ppTransactions = new ArrayList<>();
+        List<Case> cases = getLendCasesFromPersonReceiver(personId);
+        for (Case c : cases) {
+            ppTransactions.add(c.getPpTransaction());
+        }
+        return ppTransactions;
+    }
+
     /**
      * Gibt alle Cases zurück, wo die Person der Verleihende ist und der Artikel momentan nicht
      * verliehen ist.
