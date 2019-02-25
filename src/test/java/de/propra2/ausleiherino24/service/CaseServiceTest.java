@@ -1,7 +1,9 @@
 package de.propra2.ausleiherino24.service;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -9,47 +11,47 @@ import static org.mockito.Mockito.when;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
-import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Person;
-import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.model.*;
+import de.propra2.ausleiherino24.propayhandler.AccountHandler;
+import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-
-import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 public class CaseServiceTest {
 
     private CaseRepository caseRepositoryMock;
     private PersonRepository personRepositoryMock;
     private ArticleService articleServiceMock;
-    private AccountHandler accountHandlerMock;
     private UserService userServiceMock;
     private CaseService caseService;
+    private AccountHandler accountHandlerMock;
+    private ReservationHandler reservationHandlerMock;
     private ArrayList<Case> cases;
 
     @Before
     public void setUp() {
+        accountHandlerMock = mock(AccountHandler.class);
+        reservationHandlerMock = mock(ReservationHandler.class);
         caseRepositoryMock = mock(CaseRepository.class);
         personRepositoryMock = mock(PersonRepository.class);
         articleServiceMock = mock(ArticleService.class);
         userServiceMock = mock(UserService.class);
-        accountHandlerMock = mock(AccountHandler.class);
         caseService = new CaseService(caseRepositoryMock, personRepositoryMock, articleServiceMock,
-                userServiceMock, accountHandlerMock);
+                userServiceMock, accountHandlerMock, reservationHandlerMock);
         cases = new ArrayList<>();
     }
 
     @Test
     public void OwnerWithThreeCases() {
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
 
         when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
         Optional<Person> o = Optional.of(new Person());
@@ -60,10 +62,10 @@ public class CaseServiceTest {
 
     @Test
     public void OwnerWithThreeCases2() {
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null));
-        cases.add(new Case(null, 1L, null, null, 0, 0, 0, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
+        cases.add(new Case(null, 1L, null, null, 0D, 0D, 0, null, null, null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
 
         when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
         Optional<Person> o = Optional.of(new Person());
@@ -75,10 +77,10 @@ public class CaseServiceTest {
 
     @Test
     public void OwnerWithTwoLendCases() {
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, new User(), null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, new User(), null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null));
         when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
         Optional<Person> o = Optional.of(new Person());
         when(personRepositoryMock.findById(0L)).thenReturn(o);
@@ -90,9 +92,9 @@ public class CaseServiceTest {
 
     @Test
     public void OwnerWithNoLendCases() {
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
 
         when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
         Optional<Person> o = Optional.of(new Person());
@@ -103,10 +105,10 @@ public class CaseServiceTest {
 
     @Test
     public void OwnerWithTwoFreeCases() {
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, new User(), null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, new User(), null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null));
         when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
         Optional<Person> o = Optional.of(new Person());
         when(personRepositoryMock.findById(0L)).thenReturn(o);
@@ -118,9 +120,9 @@ public class CaseServiceTest {
 
     @Test
     public void OwnerWithNoFreeCases() {
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, new User(), null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, new User(), null, null));
-        cases.add(new Case(null, 0L, null, null, 0, 0, 0, null, new User(), null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null));
+        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null));
 
         when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
         Optional<Person> o = Optional.of(new Person());
@@ -134,10 +136,10 @@ public class CaseServiceTest {
         Article article = new Article();
         Case c = new Case();
         c.setArticle(article);
-        c.setPrice(0);
-        c.setDeposit(10);
+        c.setPrice(0D);
+        c.setDeposit(10D);
 
-        caseService.addCaseForNewArticle(article, 0, 10);
+        caseService.addCaseForNewArticle(article, 0D, 10D);
 
         verify(caseRepositoryMock).save(c);
     }
@@ -147,11 +149,11 @@ public class CaseServiceTest {
         Long articleId = 0L, st = 5L, et = 10L;
         String username = "";
         Article article = new Article();
-        article.setDeposit(100);
-        article.setCostPerDay(50);
+        article.setDeposit(100D);
+        article.setCostPerDay(50D);
         when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
         when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
-        when(accountHandlerMock.checkFunds(any())).thenReturn(1000.0);
+        when(accountHandlerMock.hasValidFunds(eq(""), Mockito.anyDouble())).thenReturn(true);
         ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         caseService.requestArticle(articleId, st, et, username);
@@ -161,8 +163,8 @@ public class CaseServiceTest {
         assertEquals(et, argument.getValue().getEndTime());
         assertEquals(article, argument.getValue().getArticle());
         assertEquals(new User(), argument.getValue().getReceiver());
-        assertEquals(100, argument.getValue().getDeposit());
-        assertEquals(50, argument.getValue().getPrice());
+        assertEquals(100D, argument.getValue().getDeposit(), 1);
+        assertEquals(50D, argument.getValue().getPrice(), 1);
     }
 
     @Test
@@ -170,11 +172,11 @@ public class CaseServiceTest {
         Long articleId = 0L, st = 5L, et = 10L;
         String username = "";
         Article article = new Article();
-        article.setDeposit(100);
-        article.setCostPerDay(50);
+        article.setDeposit(100D);
+        article.setCostPerDay(50D);
         when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
         when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
-        when(accountHandlerMock.checkFunds(any())).thenReturn(99.0);
+        when(accountHandlerMock.hasValidFunds(any(), anyDouble())).thenReturn(false);
 
         caseService.requestArticle(articleId, st, et, username);
 
@@ -284,6 +286,7 @@ public class CaseServiceTest {
         c2.setArticle(article);
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
+        when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
         ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         assertTrue(caseService.acceptArticleRequest(0L));
@@ -306,6 +309,7 @@ public class CaseServiceTest {
         c2.setArticle(article);
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
+        when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
         ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         assertFalse(caseService.acceptArticleRequest(0L));
@@ -329,6 +333,8 @@ public class CaseServiceTest {
 
         verify(caseRepositoryMock).save(argument.capture());
         assertEquals(Case.REQUEST_DECLINED, argument.getValue().getRequestStatus());
+        verify(reservationHandlerMock).releaseReservation(argument.getValue());
+        assertEquals(new PPTransaction(), argument.getValue().getPpTransaction());
     }
 
     @Test

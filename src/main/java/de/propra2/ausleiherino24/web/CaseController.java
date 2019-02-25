@@ -119,7 +119,6 @@ public class CaseController {
         article.setImage(imageService.store(image, null));
         article.setForRental(true);
         article.setActive(true);
-
         articleService.saveArticle(article, "Created");
 
         return new ModelAndView("redirect:/");

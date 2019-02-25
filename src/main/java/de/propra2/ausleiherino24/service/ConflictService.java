@@ -82,7 +82,10 @@ public class ConflictService {
             };
         }
         isConflictReporterOrAdmin(conflictToDeactivate.get(), user);
-        conflicts.delete(conflictToDeactivate.get());
+        Conflict theConflictToDeactivate = conflictToDeactivate.get();
+        theConflictToDeactivate.setConflictDescription("ConflictDeactivated by :" + user.getUsername());
+        sendConflictEmail(theConflictToDeactivate);
+        conflicts.delete(theConflictToDeactivate);
     }
 
     /**
@@ -125,7 +128,7 @@ public class ConflictService {
         if (user == null) {
             throw new Exception("No such user");
         }
-        return user.equals(conflict.getConflictedCase().getOwner());
+        return user.equals(conflict.getOwner());
     }
 
     /**

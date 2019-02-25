@@ -5,9 +5,6 @@ import de.propra2.ausleiherino24.data.PPTransactionRepository;
 import de.propra2.ausleiherino24.model.Case;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -49,25 +46,24 @@ public class AccountHandler {
     public double checkFunds(String accountName) {
         PPAccount account = restTemplate
                 .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
-        if (account != null) {
-            return account.getAmount();
-        }
-        return 0;
+        return account.getAmount() - account.reservationAmount();
     }
 
 
     public boolean hasValidFunds(Case aCase) {
-        return hasValidFunds(aCase.getReceiver().getUsername(), aCase.getPrice());
+        return hasValidFunds(aCase.getReceiver().getUsername(),
+                aCase.getPpTransaction().getTotalPayment());
     }
 
-    boolean hasValidFunds(String accountName, double requestedFunds) {
-        double reserved = 0;
-        PPAccount account = restTemplate
-                .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
-        for (Reservation r : account.getReservations()) {
-            reserved += r.number;
-        }
-        return account.getAmount() - reserved >= requestedFunds;
+    public boolean hasValidFunds(String accountName, double requestedFunds) {
+        //    PPAccount account = restTemplate
+        //            .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
+//
+        //    double reserved = 0;
+        //    for (Reservation r : account.getReservations()) {
+        //        reserved += r.number;
+        //    }
+        return checkFunds(accountName) >= requestedFunds;
     }
 
     /**
@@ -76,38 +72,24 @@ public class AccountHandler {
      * @param amount Description
      * @return
      */
-    public double addFunds(String username, double amount) {
+    public void addFunds(String username, Double amount) {
 
-        HttpEntity<Double> request = new HttpEntity<>(amount);
-        ResponseEntity<Double> responseEntity = restTemplate
-                .exchange(ACCOUNT_URL + ACCOUNT_DEFAULT, HttpMethod.POST, request, Double.class,
-                        username);
-        if (responseEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
-            return responseEntity.getBody();
-        }
-        return 0.0;
+        HttpEntity<Double> request = new HttpEntity<>(amount); //TODO: weg?
+        restTemplate.postForLocation(ACCOUNT_URL + ACCOUNT_DEFAULT + "?amount=" + amount.toString(),
+                request, username);
     }
 
-    public double transferFunds(Case aCase) {
-        return transferFunds(aCase.getReceiver().getUsername(), aCase.getOwner().getUsername(),
-                aCase.getPrice());
+    public void transferFunds(Case aCase) {
+        transferFunds(aCase.getReceiver().getUsername(), aCase.getOwner().getUsername(),
+                aCase.getPpTransaction().getLendingCost());
     }
 
-    double transferFunds(String sourceUser, String targetUser, double amount) {
+    void transferFunds(String sourceUser, String targetUser, Double amount) {
 
-        if (hasValidFunds(sourceUser, amount)) {
-            HttpEntity<Double> request = new HttpEntity<>(amount);
-
-            ResponseEntity<Double> responseEntity = restTemplate
-                    .exchange(ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}",
-                            HttpMethod.POST,
-                            request, Double.class, sourceUser, targetUser);
-
-            if (responseEntity.getStatusCode().equals(HttpStatus.ACCEPTED)) {
-                return responseEntity.getBody();
-            }
-        }
-        return 0.0;
+        HttpEntity<Double> request = new HttpEntity<>(amount); //TODO: weg?
+        restTemplate.postForLocation(
+                ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}" + "?amount=" + amount
+                        .toString(), request, sourceUser, targetUser);
     }
 
 }

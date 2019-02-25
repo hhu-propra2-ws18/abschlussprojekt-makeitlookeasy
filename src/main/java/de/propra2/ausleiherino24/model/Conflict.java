@@ -38,7 +38,7 @@ public class Conflict {
         return conflictedCase.getReceiver();
     }
 
-    public int getDeposit() {
+    public Double getDeposit() {
         return conflictedCase.getDeposit();
     }
 
