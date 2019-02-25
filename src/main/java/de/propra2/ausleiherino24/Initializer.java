@@ -10,9 +10,12 @@ import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.ImageService;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -23,6 +26,7 @@ import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,6 +36,7 @@ public class Initializer implements ServletContextInitializer {
     private final ArticleRepository articleRepository;
     private final PersonRepository personRepository;
     private final CaseRepository caseRepository;
+    private final ImageService imageService;
 
     private final Faker faker = new Faker(Locale.GERMAN);
 
@@ -44,11 +49,13 @@ public class Initializer implements ServletContextInitializer {
      */
     @Autowired
     public Initializer(UserRepository userRepository, ArticleRepository articleRepository,
-            PersonRepository personRepository, CaseRepository caseRepository) {
+            PersonRepository personRepository, CaseRepository caseRepository,
+            ImageService imageService) {
         this.userRepository = userRepository;
         this.articleRepository = articleRepository;
         this.personRepository = personRepository;
         this.caseRepository = caseRepository;
+        this.imageService = imageService;
     }
 
     @Override
@@ -59,6 +66,10 @@ public class Initializer implements ServletContextInitializer {
         addtoDatabases(persons);
     }
 
+    /**
+     * Adds a list of persons and their corresponding users and all their articles and all their
+     * cases to the fitting databases
+     */
     private void addtoDatabases(List<Person> persons) {
         personRepository.saveAll(persons);
         persons.forEach(person -> {
@@ -75,6 +86,9 @@ public class Initializer implements ServletContextInitializer {
         });
     }
 
+    /**
+     * Deletes all data from databases
+     */
     private void deleteAll() {
         articleRepository.deleteAll();
         personRepository.deleteAll();
@@ -82,6 +96,9 @@ public class Initializer implements ServletContextInitializer {
         userRepository.deleteAll();
     }
 
+    /**
+     * Creates 15 random users. Each with 1 to 7 articles.
+     */
     private List<Person> initTestArticleWithinUsers() {
         return IntStream.range(0, 15).mapToObj(value -> {
             Person person = createPerson(
@@ -106,39 +123,19 @@ public class Initializer implements ServletContextInitializer {
                                 user,
                                 faker.random().nextInt(5, 500),
                                 faker.random().nextInt(100, 2000),
-                                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
-                                        + id + ".png");
+                                storePokemonPic(id)
+                        );
                         user.addArticle(article);
                     });
 
             return person;
         }).collect(Collectors.toCollection(ArrayList::new));
-
-        //Fügt Cases hinzu
-        /*
-        persons.forEach(person -> {
-            person.getUser().getArticleList().forEach(article -> {
-                IntStream.range(0, faker.random().nextInt(0, 2)).forEach(a -> {
-                    Case c = createCase(
-                            article,
-                            persons.get(randNumbExcept(0, persons.size()-1, persons.indexOf(person))).getUser(),
-                            convertDateAsLong(
-                                    faker.random().nextInt(1, 31),
-                                    faker.random().nextInt(1, 12),
-                                    2018),
-                            convertDateAsLong(
-                                    faker.random().nextInt(1, 31),
-                                    faker.random().nextInt(1, 12),
-                                    2019),
-                            1
-                    );
-                    article.addCase(c);
-                });
-            });
-        });
-        */
     }
 
+    /**
+     * Creates 3 accounts for testing (hans, user, admin) and adds couple of articles and cases to
+     * hans
+     */
     private List<Person> initTestAccounts(List<Person> persons) {
         List<Person> testPersons = new ArrayList<>();
         testPersons.add(createUser(
@@ -181,8 +178,7 @@ public class Initializer implements ServletContextInitializer {
                             hans,
                             faker.random().nextInt(5, 500),
                             faker.random().nextInt(100, 2000),
-                            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
-                                    + id + ".png");
+                            storePokemonPic(id));
                     hans.addArticle(article);
                 });
 
@@ -229,6 +225,9 @@ public class Initializer implements ServletContextInitializer {
         return testPersons;
     }
 
+    /**
+     * Creates a person from parameters
+     */
     private Person createPerson(String address, String firstname, String lastname) {
         Person person = new Person();
         person.setAddress(address);
@@ -237,6 +236,9 @@ public class Initializer implements ServletContextInitializer {
         return person;
     }
 
+    /**
+     * Creates an user from parameters
+     */
     private User createUser(String email, String username, String password, Person person) {
         User user = new User();
         user.setEmail(email);
@@ -247,6 +249,9 @@ public class Initializer implements ServletContextInitializer {
         return user;
     }
 
+    /**
+     * Creates an article from parameters
+     */
     private Article createArticle(String name, String description, Category category, User owner,
             int costPerDay, int deposit, String image) {
         Article article = new Article();
@@ -262,6 +267,9 @@ public class Initializer implements ServletContextInitializer {
         return article;
     }
 
+    /**
+     * Creates a case from parameters
+     */
     private Case createCase(Article article, User receiver, Long starttime, Long endtime,
             int requestStatus) {
         Case c = new Case();
@@ -275,6 +283,9 @@ public class Initializer implements ServletContextInitializer {
         return c;
     }
 
+    /**
+     * Reads a pokemon corresponding to given id from stored files
+     */
     private String readPokemonName(int id) {
         try {
             File resource = new ClassPathResource(
@@ -289,6 +300,31 @@ public class Initializer implements ServletContextInitializer {
         }
     }
 
+    /**
+     * Stores a pokemon pic corresponding to given id using ImageService
+     */
+    private String storePokemonPic(int id) {
+        Path path = Paths.get("/Users/mickpotzkai/Documents/GitHub/abschlussprojekt-makeitlookeasy/uploads/c2a80768-086b-4a74-bcad-74b42276f637.jpg");
+        byte[] pic = null;
+        try {
+            pic = Files.readAllBytes(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return imageService.store(
+                new MockMultipartFile(
+                        id + ".jpg",
+                        id + ".jpg",
+                        "image/jpg",
+                        pic
+                ),
+                null
+        );
+    }
+
+    /**
+     * Converts a Date to Long
+     */
     private Long convertDateAsLong(int day, int month, int year) {
         return new GregorianCalendar(year, month, day).getTimeInMillis();
     }
