@@ -64,7 +64,7 @@ public class PersonRepoTest {
         persons.saveAll(Arrays.asList(person1, person2));
 
         List<Person> us = persons.findAll();
-        Assertions.assertThat(persons.count()).isEqualTo(2);
+        Assertions.assertThat(us.size()).isEqualTo(2);
     }
 
 

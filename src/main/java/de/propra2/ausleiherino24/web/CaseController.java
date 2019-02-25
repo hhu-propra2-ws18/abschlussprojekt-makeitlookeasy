@@ -12,13 +12,10 @@ import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -40,6 +37,7 @@ public class CaseController {
     private final UserService userService;
     private final CaseService caseService;
 
+    private static final String ARTICLE_STRING = "article";
     private final List<Category> allCategories = Category.getAllCategories();
 
     /**
@@ -78,7 +76,7 @@ public class CaseController {
         User currentUser = userService.findUserByPrincipal(principal);
 
         ModelAndView mav = new ModelAndView("/shop/item");
-        mav.addObject("article", article);
+        mav.addObject(ARTICLE_STRING, article);
         mav.addObject("user", currentUser);
         mav.addObject("categories", allCategories);
         return mav;
@@ -96,7 +94,7 @@ public class CaseController {
         User currentUser = userService.findUserByPrincipal(principal);
 
         ModelAndView mav = new ModelAndView("/shop/newItem");
-        mav.addObject("article", article);
+        mav.addObject(ARTICLE_STRING, article);
         mav.addObject("user", currentUser);
         mav.addObject("categories", allCategories);
         return mav;
@@ -106,15 +104,12 @@ public class CaseController {
      * TODO Javadoc.
      *
      * @param article Descriptions
-     * @param result Descriptions
-     * @param model Descriptions
      * @param image Descriptions
      * @param principal Descriptions
      * @return Descriptions
      */
     @PostMapping("/saveNewArticle")
     public ModelAndView saveNewCaseAndArticle(@ModelAttribute @Valid Article article,
-            BindingResult result, Model model,
             @RequestParam("image") MultipartFile image, Principal principal) {
         User user = userService.findUserByPrincipal(principal);
         article.setActive(true);
@@ -131,15 +126,12 @@ public class CaseController {
      * TODO Javadoc.
      *
      * @param article Descriptions
-     * @param result Descriptions
-     * @param model Descriptions
      * @param image Descriptions
      * @param principal Descriptions
      * @return Descriptions
      */
     @PutMapping("/saveEditedArticle")
     public ModelAndView saveEditedCaseAndArticle(@ModelAttribute @Valid Article article,
-            BindingResult result, Model model,
             @RequestParam("image") MultipartFile image, Principal principal) {
 
         article.setImage(imageService.store(image, null));
@@ -148,7 +140,7 @@ public class CaseController {
         User currentUser = userService.findUserByPrincipal(principal);
 
         ModelAndView mav = new ModelAndView("/shop/item");
-        mav.addObject("article", article);
+        mav.addObject(ARTICLE_STRING, article);
         mav.addObject("user", currentUser);
         return mav;
     }
@@ -160,7 +152,7 @@ public class CaseController {
     }
 
     @RequestMapping("/deleteArticle")
-    public String deleteArticle(@RequestParam Long id) throws Exception {
+    public String deleteArticle(@RequestParam Long id) {
         if (articleService.deactivateArticle(id)) {
             return "redirect:/myOverview?articles&deletedarticle";
         } else {
@@ -233,9 +225,10 @@ public class CaseController {
         webDataBinder.registerCustomEditor(Category.class, new CategoryConverter());
     }
 
-    private class CategoryConverter extends PropertyEditorSupport {
+    private static class CategoryConverter extends PropertyEditorSupport {
 
-        public void setAsText(final String text) throws IllegalArgumentException {
+        @Override
+        public void setAsText(final String text) {
             setValue(Category.fromValue(text));
         }
     }

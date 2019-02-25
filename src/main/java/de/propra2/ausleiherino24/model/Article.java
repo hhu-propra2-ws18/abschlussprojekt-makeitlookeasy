@@ -16,7 +16,6 @@ import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.bind.annotation.InitBinder;
 
 @Data
 @Entity
@@ -120,6 +119,6 @@ public class Article {
         } else {
             activeCases = new ArrayList<>();
         }
-        return activeCases.isEmpty() ? true : false;
+        return activeCases.isEmpty();
     }
 }
