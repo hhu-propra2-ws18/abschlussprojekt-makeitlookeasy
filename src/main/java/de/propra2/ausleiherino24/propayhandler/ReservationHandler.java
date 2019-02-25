@@ -68,6 +68,7 @@ public class ReservationHandler {
         if (aCase.getPpTransaction().getReservationId() != -1) {
             releaseReservation(aCase.getReceiver().getUsername(),
                     aCase.getPpTransaction().getReservationId());
+            aCase.getPpTransaction().setReservationId(-1L);
         }
     }
 
@@ -83,12 +84,12 @@ public class ReservationHandler {
      * @return Description
      */
 
-    void punishReservation(Case aCase) {
+    public void punishReservation(Case aCase) {
         punishReservation(aCase.getReceiver().getUsername(),
                 aCase.getPpTransaction().getReservationId());
     }
 
-    public boolean punishReservation(String account,
+    boolean punishReservation(String account,
             Long reservationId) { //TODO: anpassen entsprechend den anderen
         HttpEntity<Long> request = new HttpEntity<>(reservationId);
 
