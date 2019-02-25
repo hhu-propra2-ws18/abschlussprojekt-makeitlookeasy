@@ -27,7 +27,6 @@ import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -317,15 +316,7 @@ public class Initializer implements ServletContextInitializer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return imageService.store(
-                new MockMultipartFile(
-                        id + ".jpg",
-                        id + ".jpg",
-                        "image/jpg",
-                        pic
-                ),
-                null
-        );
+        return "";
     }
 
     /**
