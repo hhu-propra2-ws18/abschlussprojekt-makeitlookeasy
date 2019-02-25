@@ -31,10 +31,10 @@ public class ImageService {
             return null;
         }
 
-        String prefix = ensureBinning(binningId);
+        final String prefix = ensureBinning(binningId);
 
-        String extension = getFileExtension(file.getOriginalFilename());
-        File dest = new File(generateFilePath(prefix, extension));
+        final String extension = getFileExtension(file.getOriginalFilename());
+        final File dest = new File(generateFilePath(prefix, extension));
 
         try {
             file.transferTo(dest);
@@ -51,20 +51,21 @@ public class ImageService {
             return null;
         }
 
-        String prefix = ensureBinning(binningId);
+        final String prefix = ensureBinning(binningId);
 
-        String extension = getFileExtension(inputFile.getName());
-        File destinationFile = new File(generateFilePath(prefix, extension));
+        final String extension = getFileExtension(inputFile.getName());
+        final File destinationFile = new File(generateFilePath(prefix, extension));
 
         try (FileOutputStream outputStream = new FileOutputStream(destinationFile)) {
             try (FileInputStream inputStream = new FileInputStream(inputFile)) {
 
-                byte[] buffer = new byte[1024];
+                final byte[] buffer = new byte[1024];
 
-                int length;
+                int length = inputStream.read(buffer);
 
-                while ((length = inputStream.read(buffer)) > 0) {
+                while (length > 0) {
                     outputStream.write(buffer, 0, length);
+                    length = inputStream.read(buffer);
                 }
             }
         } catch (Exception e) {
@@ -75,14 +76,14 @@ public class ImageService {
     }
 
     public File getFile(String fileName, Long binningId) {
-        String binName = binningId == null ? "" : resolveBin(binningId).toString();
+        final String binName = binningId == null ? "" : resolveBin(binningId).toString();
 
-        File file = new File(buildPath(fileName, binName));
+        final File file = new File(buildPath(fileName, binName));
 
         return file.exists() ? file : null;
     }
 
-    public String generateFilePath(String prefix, String fileEnding) {
+    String generateFilePath(String prefix, String fileEnding) {
         String uniqueFilepath = buildPath(buildFilename(fileEnding), prefix);
 
         while (fileExists(uniqueFilepath)) {
@@ -93,21 +94,21 @@ public class ImageService {
     }
 
     boolean fileExists(String path) {
-        File f = new File(path);
+        final File f = new File(path);
         return f.exists() && !f.isDirectory();
     }
 
-    public String buildPath(String fileName, String prefix) {
+    String buildPath(String fileName, String prefix) {
         return Paths.get(getUploadDirectoryPath(), prefix, fileName).toString();
     }
 
-    public String getUploadDirectoryPath() {
-        String rootPath = Paths.get(".").toAbsolutePath().normalize().toString();
+    String getUploadDirectoryPath() {
+        final String rootPath = Paths.get(".").toAbsolutePath().normalize().toString();
         return Paths.get(rootPath, this.uploadDirectoryPath).toString();
     }
 
     private String buildFilename(String fileEnding) {
-        return (UUID.randomUUID() + "." + fileEnding);
+        return UUID.randomUUID() + "." + fileEnding;
     }
 
     String ensureBinning(Long binningId) {
@@ -115,7 +116,7 @@ public class ImageService {
             return "";
         }
 
-        String binningDirName = resolveBin(binningId).toString();
+        final String binningDirName = resolveBin(binningId).toString();
         createBinningDirectory(binningDirName);
 
         return binningDirName;
@@ -126,9 +127,9 @@ public class ImageService {
     }
 
     void createBinningDirectory(String name) {
-        String binPath = Paths.get(getUploadDirectoryPath(), name).toString();
+        final String binPath = Paths.get(getUploadDirectoryPath(), name).toString();
 
-        File binningDir = new File(binPath);
+        final File binningDir = new File(binPath);
 
         if (!binningDir.exists()) {
             binningDir.mkdir();
@@ -136,7 +137,7 @@ public class ImageService {
     }
 
     void createUploadDirectoryIfNotExists() {
-        File uploadDir = new File(getUploadDirectoryPath());
+        final File uploadDir = new File(getUploadDirectoryPath());
 
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
@@ -148,7 +149,7 @@ public class ImageService {
             return "";
         }
 
-        int i = fileName.lastIndexOf('.');
+        final int i = fileName.lastIndexOf('.');
 
         return i > 0 ? fileName.substring(i + 1) : "";
     }

@@ -41,7 +41,7 @@ public class ImageController {
     @GetMapping("/images/{fileName}")
     public void getImage(@PathVariable String fileName, HttpServletResponse response)
             throws IOException {
-        File requestedFile = imageStorageService.getFile(fileName, null);
+        final File requestedFile = imageStorageService.getFile(fileName, null);
 
         if (requestedFile == null) {
             response.setStatus(404);

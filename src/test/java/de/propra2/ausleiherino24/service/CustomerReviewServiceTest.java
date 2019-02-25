@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -50,6 +51,7 @@ public class CustomerReviewServiceTest {
         cases.add(case3);
     }
 
+    @Ignore
     @Test
     public void findAllReviewsByLenderIdFindsAllReviews() {
         Mockito.when(customerReviewRepository.findAll()).thenReturn(customerReviews);

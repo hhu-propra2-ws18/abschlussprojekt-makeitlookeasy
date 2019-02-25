@@ -48,7 +48,7 @@ public class ReservationHandler {
 
     private Long createReservation(String sourceUser, String targetUser, Double amount) {
 
-        ResponseEntity<Reservation> responseEntity = restTemplate
+        final ResponseEntity<Reservation> responseEntity = restTemplate
                 .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
                         HttpMethod.POST,
                         null, Reservation.class, sourceUser, targetUser, amount.toString());
@@ -77,7 +77,7 @@ public class ReservationHandler {
 
     boolean punishReservation(String account,
             Long reservationId) {
-        ResponseEntity<PPAccount> responseEntity = restTemplate
+        final ResponseEntity<PPAccount> responseEntity = restTemplate
                 .exchange(RESERVATION_URL + "/punish/{account}?reservationId={reservationId}\"",
                         HttpMethod.POST, null,
                         PPAccount.class,

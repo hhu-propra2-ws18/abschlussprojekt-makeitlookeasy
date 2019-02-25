@@ -30,7 +30,7 @@ public class ChatController {
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage, Principal principal) {
-        User user = userService.findUserByPrincipal(principal);
+        final User user = userService.findUserByPrincipal(principal);
         chatMessage.setSender(user.getUsername());
         return chatMessage;
     }
@@ -41,7 +41,7 @@ public class ChatController {
             SimpMessageHeaderAccessor headerAccessor,
             Principal principal) {
         // Add username in web socket session
-        User user = userService.findUserByPrincipal(principal);
+        final User user = userService.findUserByPrincipal(principal);
 
         headerAccessor.getSessionAttributes().put("username", user.getUsername());
         chatMessage.setSender(user.getUsername());
@@ -50,7 +50,7 @@ public class ChatController {
 
     @GetMapping("/chatBoard")
     public ModelAndView chatBoard(@Header("simpSessionId") String sessionId) {
-        ModelAndView mav = new ModelAndView("/chatBoard");
+        final ModelAndView mav = new ModelAndView("/chatBoard");
         mav.addObject("sessionId", sessionId);
         return mav;
     }
@@ -58,7 +58,7 @@ public class ChatController {
     /* user chat */
     @MessageMapping("/chat.privateMessage")
     public void sendSpecific(@Payload ChatMessage msg, Principal principal) {
-        User user = userService.findUserByPrincipal(principal);
+        final User user = userService.findUserByPrincipal(principal);
         msg.setSender(user.getUsername());
 
         simpMessagingTemplate.convertAndSendToUser(

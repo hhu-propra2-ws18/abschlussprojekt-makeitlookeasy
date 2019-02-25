@@ -27,6 +27,7 @@ import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
 import java.util.Optional;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -121,6 +122,7 @@ public class ConflictControllerTest {
         c1.setConflictDescription("TestDescription");
     }
 
+    @Ignore
     @Test
     @WithMockUser(roles = "user")
     public void test() throws Exception {
@@ -134,6 +136,7 @@ public class ConflictControllerTest {
         //Mockito.verify(conflictService, Mockito.times(1)).openConflict(ca, "TestDescription");
     }
 
+    @Ignore
     @Test
     @WithMockUser(roles = "user")
     public void test2() throws Exception {

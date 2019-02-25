@@ -1,18 +1,20 @@
 package de.propra2.ausleiherino24.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.web.multipart.MultipartFile;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 public class ImageServiceTest {
 
@@ -128,7 +130,7 @@ public class ImageServiceTest {
     }
 
     @Test
-    public void buildPath(){
+    public void buildPath() {
         when(imageService.getUploadDirectoryPath()).thenReturn("/");
 
         assertEquals("/test/abc.txt", imageService.buildPath("abc.txt", "test"));
@@ -154,7 +156,7 @@ public class ImageServiceTest {
     }
 
     @Test
-    public void findNotExistingFile(){
+    public void findNotExistingFile() {
         assertNull(imageService.getFile("test.txt", null));
     }
 

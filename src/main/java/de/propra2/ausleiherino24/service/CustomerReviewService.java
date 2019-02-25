@@ -25,7 +25,7 @@ public class CustomerReviewService {
     }
 
     List<CustomerReview> findAllReviewsByLenderId(Long id) {
-        List<CustomerReview> reviews = customerReviewRepository.findAll();
+        final List<CustomerReview> reviews = customerReviewRepository.findAll();
         return reviews.stream()
                 .filter(customerReview -> caseService.getAllCasesFromPersonOwner(id)
                         .contains(customerReview.getACase()))

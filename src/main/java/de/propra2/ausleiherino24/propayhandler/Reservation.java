@@ -16,8 +16,8 @@ class Reservation {
         this.amount = 0D;
     }
 
-    Reservation(Long id, Double number) {
-        this.id = id;
+    Reservation(Long reservationId, Double number) {
+        this.id = reservationId;
         this.amount = number;
     }
 

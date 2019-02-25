@@ -40,7 +40,7 @@ public class ConflictService {
     }
 
     public void openConflict(Case conflictedCase, String conflictDescription) throws Exception {
-        Conflict conflict = new Conflict();
+        final Conflict conflict = new Conflict();
         conflict.setConflictDescription(conflictDescription);
         conflict.setConflictedCase(conflictedCase);
         conflict.setConflictReporterUsername(conflictedCase.getOwner().getUsername());
@@ -54,13 +54,13 @@ public class ConflictService {
     }
 
     public void deactivateConflict(Long id, User user) throws Exception {
-        Optional<Conflict> conflictToDeactivate = conflicts.findById(id);
+        final Optional<Conflict> conflictToDeactivate = conflicts.findById(id);
         if (!conflictToDeactivate.isPresent()) {
             throw new DataAccessException("No such conflict.") {
             };
         }
         isConflictReporterOrAdmin(conflictToDeactivate.get(), user);
-        Conflict theConflictToDeactivate = conflictToDeactivate.get();
+        final Conflict theConflictToDeactivate = conflictToDeactivate.get();
         theConflictToDeactivate
                 .setConflictDescription("ConflictDeactivated by :" + user.getUsername());
         sendConflictEmail(theConflictToDeactivate);
@@ -68,7 +68,7 @@ public class ConflictService {
     }
 
     public List<Conflict> getAllConflictsByUser(User user) {
-        List<Conflict> allConflicts = new ArrayList<>();
+        final List<Conflict> allConflicts = new ArrayList<>();
         allConflicts.addAll(conflicts.findAllByReceiver(user));
         allConflicts.addAll(conflicts.findAllByArticleOwner(user));
 
@@ -76,7 +76,7 @@ public class ConflictService {
     }
 
     public Conflict getConflict(Long id, User user) throws Exception {
-        Optional<Conflict> conflict = conflicts.findById(id);
+        final Optional<Conflict> conflict = conflicts.findById(id);
         if (!conflict.isPresent()) {
             throw new Exception("No such conflict");
         }

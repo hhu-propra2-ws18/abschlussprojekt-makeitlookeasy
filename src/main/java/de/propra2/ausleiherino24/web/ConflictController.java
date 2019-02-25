@@ -27,6 +27,7 @@ public class ConflictController {
     private final CaseRepository caseRepository;
 
     private static final String SOMEVIEW_STRING = "someView";
+    private static final String USER_STRING = "user";
 
     @Autowired
     public ConflictController(ConflictService conflictService, UserService userService,
@@ -48,7 +49,7 @@ public class ConflictController {
      */
     @PostMapping("/openconflict")
     public String sendConflict(@RequestParam Long id, String conflictDescription) throws Exception {
-        Optional<Case> optionalCase = caseRepository.findById(id);
+        final Optional<Case> optionalCase = caseRepository.findById(id);
         if (!optionalCase.isPresent()) {
             return "redirect:/myOverview?returned&conflictfailed";
         }
@@ -57,18 +58,10 @@ public class ConflictController {
         return "redirect:/myOverview?returned&openedconflict";
     }
 
-    /**
-     * TODO Javadoc.
-     *
-     * @param id Description
-     * @param principal Description
-     * @param model Description
-     * @throws Exception Description
-     */
     @DeleteMapping("/deactivateconflict")
-    public String deactivateConflict(@RequestParam Long id, Principal principal, Model model)
+    public String deactivateConflict(@RequestParam Long id, Principal principal)
             throws Exception {
-        User user = userService.findUserByPrincipal(principal);
+        final User user = userService.findUserByPrincipal(principal);
         conflictService.deactivateConflict(id, user);
 
         return "redirect:/myOverview?returned&deactivatedconflict";
@@ -77,11 +70,11 @@ public class ConflictController {
     @GetMapping("/conflict")
     public String displayConflict(@RequestParam("id") Long id, Principal principal, Model model)
             throws Exception {
-        User user = userService.findUserByPrincipal(principal);
-        Conflict conflictToDisplay = conflictService.getConflict(id, user);
+        final User user = userService.findUserByPrincipal(principal);
+        final Conflict conflictToDisplay = conflictService.getConflict(id, user);
 
         model.addAttribute("conflict", conflictToDisplay);
-        model.addAttribute("user", user);
+        model.addAttribute(USER_STRING, user);
         if (conflictService.isConflictedArticleOwner(conflictToDisplay, user)) {
             // view with delete-conflict-button
         }
@@ -91,22 +84,22 @@ public class ConflictController {
 
     @GetMapping("/conflicts")
     public String displayAllConflicts(Principal principal, Model model) {
-        User user = userService.findUserByPrincipal(principal);
-        List<Conflict> conflicts = conflictService.getAllConflictsByUser(user);
+        final User user = userService.findUserByPrincipal(principal);
+        final List<Conflict> conflicts = conflictService.getAllConflictsByUser(user);
 
         model.addAttribute("conflicts", conflicts);
-        model.addAttribute("user", user);
+        model.addAttribute(USER_STRING, user);
         return SOMEVIEW_STRING;
     }
 
     @GetMapping("/solveConflictView")
     public String solveConflictView(@RequestParam("id") Long id, Principal principal, Model model)
             throws Exception {
-        User user = userService.findUserByPrincipal(principal);
-        Conflict conflictToDisplay = conflictService.getConflict(id, user);
+        final User user = userService.findUserByPrincipal(principal);
+        final Conflict conflictToDisplay = conflictService.getConflict(id, user);
 
         model.addAttribute("conflict", conflictToDisplay);
-        model.addAttribute("user", user);
+        model.addAttribute(USER_STRING, user);
         model.addAttribute("participants",
                 conflictService.getConflictParticipants(conflictToDisplay));
         return SOMEVIEW_STRING;
@@ -115,16 +108,16 @@ public class ConflictController {
     @PostMapping("/solveConflict")
     public String solveConflict(@RequestBody ResolveConflict resolveConflict, Principal principal,
             Model model) throws Exception {
-        User user = userService.findUserByPrincipal(principal);
-        Conflict conflictToSolve = conflictService
+        final User user = userService.findUserByPrincipal(principal);
+        final Conflict conflictToSolve = conflictService
                 .getConflict(resolveConflict.getConflictId(), user);
 
         conflictService.solveConflict(conflictToSolve, user, resolveConflict.getDepositReceiver());
         conflictService.deactivateConflict(resolveConflict.getConflictId(), user);
-        List<Conflict> conflicts = conflictService.getAllConflictsByUser(user);
+        final List<Conflict> conflicts = conflictService.getAllConflictsByUser(user);
 
         model.addAttribute("conflicts", conflicts);
-        model.addAttribute("user", user);
+        model.addAttribute(USER_STRING, user);
         return SOMEVIEW_STRING;
     }
 }

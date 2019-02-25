@@ -55,12 +55,12 @@ public class UserService {
             return "PasswordNotEqual";
         }
 
-        Optional<User> optionalUser = userRepository.findByUsername(username);
+        final Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return "UserNotFound";
         } else {
-            User dbUser = optionalUser.get();
-            Person dbPerson = dbUser.getPerson();
+            final User dbUser = optionalUser.get();
+            final Person dbPerson = dbUser.getPerson();
             dbPerson.setFirstName(person.getFirstName());
             dbPerson.setLastName(person.getLastName());
             dbPerson.setAddress(person.getAddress());
@@ -75,7 +75,7 @@ public class UserService {
     }
 
     public User findUserByUsername(String username) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
+        final Optional<User> optionalUser = userRepository.findByUsername(username);
 
         if (!optionalUser.isPresent()) {
             LOGGER.warn("Couldn't find user {} in UserRepository.", username);

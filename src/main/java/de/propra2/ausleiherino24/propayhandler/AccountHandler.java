@@ -13,45 +13,46 @@ public class AccountHandler {
     private RestTemplate restTemplate;
 
     @Autowired
-    public AccountHandler(RestTemplate restTemplate) {
+    public AccountHandler(final RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
 
-    PPAccount getAccountData(String accountName) {
+    PPAccount getAccountData(final String accountName) {
         return restTemplate
                 .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
     }
 
-    public double checkFunds(String accountName) {
-        PPAccount account = getAccountData(accountName);
+    public double checkFunds(final String accountName) {
+        final PPAccount account = getAccountData(accountName);
         return account.getAmount() - account.reservationAmount();
     }
 
 
-    public boolean hasValidFunds(Case aCase) {
+    public boolean hasValidFunds(final Case aCase) {
         return hasValidFunds(aCase.getReceiver().getUsername(),
                 aCase.getPpTransaction().getTotalPayment());
     }
 
-    public boolean hasValidFunds(String accountName, double requestedFunds) {
+    public boolean hasValidFunds(final String accountName, final double requestedFunds) {
         return checkFunds(accountName) >= requestedFunds;
     }
 
     //TODO: Used? Fix!
-    public void addFunds(String username, Double amount) {
+    public void addFunds(final String username, final Double amount) {
 
         restTemplate.postForLocation(ACCOUNT_URL + ACCOUNT_DEFAULT + "?amount=" + amount.toString(),
                 null, username);
     }
 
     //TODO: Method extraction necessary? Discuss!
-    void transferFunds(Case aCase) {
+    void transferFunds(final Case aCase) {
         transferFunds(aCase.getReceiver().getUsername(), aCase.getOwner().getUsername(),
                 aCase.getPpTransaction().getLendingCost());
     }
 
-    private void transferFunds(String sourceUser, String targetUser, Double amount) {
+    private void transferFunds(final String sourceUser, final String targetUser,
+            final Double amount) {
 
         restTemplate.postForLocation(
                 ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}" + "?amount=" + amount

@@ -30,11 +30,11 @@ public class ArticleService {
         LOGGER.info("{} article '{}' {}.", msg, article.getName(), article.getId());
     }
 
-    public Article findArticleById(Long id) {
-        Optional<Article> article = articleRepository.findById(id);
+    public Article findArticleById(Long articleId) {
+        final Optional<Article> article = articleRepository.findById(articleId);
 
         if (!article.isPresent()) {
-            LOGGER.warn("Couldn't find article {} in UserRepository.", id);
+            LOGGER.warn("Couldn't find article {} in UserRepository.", articleId);
             throw new NullPointerException("Couldn't find article in ArticleRepository.");
         }
 
@@ -74,39 +74,39 @@ public class ArticleService {
      * reserved (a.k.a bound to running case) and free to book, deactivate article. Else, throw
      * Exception.
      *
-     * @param id ID of article to be "deleted".
+     * @param articleId ID of article to be "deleted".
      * @return boolean True, if succeeded. False, if encountered error while processing request.
      */
-    public boolean deactivateArticle(Long id) {
-        Optional<Article> optionalArticle = articleRepository.findById(id);
+    public boolean deactivateArticle(Long articleId) {
+        final Optional<Article> optionalArticle = articleRepository.findById(articleId);
 
         if (!optionalArticle.isPresent()) {
-            LOGGER.warn("Couldn't find article {} in ArticleRepository.", id);
+            LOGGER.warn("Couldn't find article {} in ArticleRepository.", articleId);
             throw new NullPointerException("Couldn't find requested article in ArticleRepository.");
         }
 
-        Article article = optionalArticle.get();
+        final Article article = optionalArticle.get();
 
         //only able to deactive if article has only cases where the requeststatus is REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED
         if (!article.allCasesClosed()) {
-            LOGGER.warn("Article {} is still reserved, lent or has an open conflict.", id);
+            LOGGER.warn("Article {} is still reserved, lent or has an open conflict.", articleId);
             return false;
         }
 
         article.setActive(false);
         articleRepository.save(article);
-        LOGGER.info("Deactivated article {} [ID={}]", article.getName(), article.getId());
+        LOGGER.info("Deactivated article {} [ID={}]", article.getName(), articleId);
         return true;
     }
 
-    public void updateArticle(Long id, Article article) {
-        Optional<Article> optionalArticle = articleRepository.findById(id);
+    public void updateArticle(Long articleId, Article article) {
+        final Optional<Article> optionalArticle = articleRepository.findById(articleId);
 
         if (!optionalArticle.isPresent()) {
             return;
         }
 
-        Article oldArticle = optionalArticle.get();
+        final Article oldArticle = optionalArticle.get();
         oldArticle.setForRental(article.isForRental());
         oldArticle.setDeposit(article.getDeposit());
         oldArticle.setCostPerDay(article.getCostPerDay());

@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +40,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class CaseController {
 
-    private final Logger logger = LoggerFactory.getLogger(CaseController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
 
     private final ArticleService articleService;
     private final ImageService imageService;
@@ -53,16 +52,6 @@ public class CaseController {
     private static final String ARTICLE_STRING = "article";
     private final List<Category> allCategories = Category.getAllCategories();
 
-    /**
-     * Manages all requests regarding creating/editing/deleting articles/cases and after-sales.
-     * Possible features: transaction rating (karma/voting), chatting. TODO JavaDoc-Descriptions.
-     * @param articleService Descriptions
-     * @param userService Descriptions
-     * @param imageService Descriptions
-     * @param caseService Descriptions
-     * @param customerReviewRepository
-     * @param caseRepository
-     */
     @Autowired
     public CaseController(ArticleService articleService,
             UserService userService,
@@ -80,10 +69,10 @@ public class CaseController {
 
     @GetMapping("/article")
     public ModelAndView displayArticle(@RequestParam("id") Long id, Principal principal) {
-        Article article = articleService.findArticleById(id);
-        User currentUser = userService.findUserByPrincipal(principal);
+        final Article article = articleService.findArticleById(id);
+        final User currentUser = userService.findUserByPrincipal(principal);
 
-        ModelAndView mav = new ModelAndView("/shop/item");
+        final ModelAndView mav = new ModelAndView("/shop/item");
         mav.addObject(ARTICLE_STRING, article);
         mav.addObject("user", currentUser);
         mav.addObject("categories", allCategories);
@@ -92,10 +81,10 @@ public class CaseController {
 
     @GetMapping("/newArticle")
     public ModelAndView createNewCaseAndArticle(Principal principal) {
-        Article article = new Article();
-        User currentUser = userService.findUserByPrincipal(principal);
+        final Article article = new Article();
+        final User currentUser = userService.findUserByPrincipal(principal);
 
-        ModelAndView mav = new ModelAndView("/shop/newItem");
+        final ModelAndView mav = new ModelAndView("/shop/newItem");
         mav.addObject(ARTICLE_STRING, article);
         mav.addObject("user", currentUser);
         mav.addObject("categories", allCategories);
@@ -105,7 +94,7 @@ public class CaseController {
     @PostMapping("/saveNewArticle")
     public ModelAndView saveNewCaseAndArticle(@ModelAttribute @Valid Article article,
             @RequestParam("image") MultipartFile image, Principal principal) {
-        User user = userService.findUserByPrincipal(principal);
+        final User user = userService.findUserByPrincipal(principal);
         article.setActive(true);
         article.setOwner(user);
         article.setImage(imageService.store(image, null));
@@ -117,26 +106,29 @@ public class CaseController {
     }
 
     @PutMapping("/saveEditedArticle")
-    public ModelAndView saveEditedCaseAndArticle(@ModelAttribute @Valid Article article,
+    public ModelAndView saveEditedArticle(@ModelAttribute @Valid Article article,
             @RequestParam("image") MultipartFile image, Principal principal) {
 
         article.setImage(imageService.store(image, null));
         articleService.saveArticle(article, "Updated");
 
-        User currentUser = userService.findUserByPrincipal(principal);
+        final User currentUser = userService.findUserByPrincipal(principal);
 
-        ModelAndView mav = new ModelAndView("/shop/item");
+        final ModelAndView mav = new ModelAndView("/shop/item");
         mav.addObject(ARTICLE_STRING, article);
         mav.addObject("user", currentUser);
         return mav;
     }
 
+    // TODO: Warum wurde hierfür eine neue ArticleService-Methode geschrieben? Außerdem, GetMapping?
+    // TODO: Warum wurde die Methode 'saveEditedArticle' nicht verwendet und angepasst?
     @RequestMapping("/updateArticle")
     public String updateArticle(@RequestParam Long id, Article article) {
         articleService.updateArticle(id, article);
         return "redirect:/myOverview?articles&updatedarticle";
     }
 
+    // TODO: Warum GetMapping? RequestMapping defaulted zu GetMapping.
     @RequestMapping("/deleteArticle")
     public String deleteArticle(@RequestParam Long id) {
         if (articleService.deactivateArticle(id)) {
@@ -156,20 +148,20 @@ public class CaseController {
     @PostMapping("/bookArticle")
     public String bookArticle(@RequestParam Long id, String startDate, String endDate,
             Principal principal) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         try {
-            if(caseService.requestArticle(
+            if (caseService.requestArticle(
                     id,
                     simpleDateFormat.parse(startDate).getTime(),
                     simpleDateFormat.parse(endDate).getTime(),
-                    principal.getName())){
-                return "redirect:/article?id=" + id+ "&success";
+                    principal.getName())) {
+                return "redirect:/article?id=" + id + "&success";
             } else {
-                return "redirect:/article?id=" + id+ "&failed";
+                return "redirect:/article?id=" + id + "&failed";
             }
         } catch (ParseException e) {
-            logger.error("Could not book article {}.", id, e);
+            LOGGER.error("Could not book article {}.", id, e);
         }
 
         // TODO: Show the user, whether the request was successful or not.
@@ -178,7 +170,7 @@ public class CaseController {
 
     @PostMapping("/acceptCase")
     public String acceptCase(@RequestParam Long id) {
-        switch(caseService.acceptArticleRequest(id)) {
+        switch (caseService.acceptArticleRequest(id)) {
             case 1:
                 return "redirect:/myOverview?requests";
             case 2:
@@ -186,7 +178,7 @@ public class CaseController {
             case 3:
                 return "redirect:/myOverview?requests&receiveroutofmoney";
             default:
-                return  "redirect:/myOverview?requests&error";
+                return "redirect:/myOverview?requests&error";
         }
     }
 
@@ -202,14 +194,10 @@ public class CaseController {
         return "redirect:/myOverview?returned&successfullyreturned";
     }
 
-
-    /**
-     * Gets called, when someone creates a review
-     */
     @PostMapping("/writeReview")
     public String writeReview(@RequestParam Long id, CustomerReview review) {
         review.setTimestamp(new Date().getTime());
-        Case opt = caseService.findCaseById(id);
+        final Case opt = caseService.findCaseById(id);
         review.setACase(opt);
         customerReviewRepository.save(review);
         caseRepository.save(review.getACase());
@@ -219,9 +207,8 @@ public class CaseController {
     }
 
     /**
-    /** TODO: Englisch? Neuschrieben!
-     * Liefert einen Methode für Springboot um das Feld Article.category korrekt zu empfangen und zu
-     * verknüpfen.
+     * /** TODO: Englisch? Neuschrieben! Liefert einen Methode für Springboot um das Feld
+     * Article.category korrekt zu empfangen und zu verknüpfen.
      */
     @InitBinder
     public void initBinder(final WebDataBinder webDataBinder) {

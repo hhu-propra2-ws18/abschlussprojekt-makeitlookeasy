@@ -67,13 +67,13 @@ public class Article {
      * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
      */
 
-    public void addCase(Case aCase) {
+    public void addCase(final Case aCase) {
         addCase(aCase, false);
     }
 
     @SuppressWarnings("Duplicates")
         // TODO: Extract duplicate code. Fix!
-    void addCase(Case aCase, boolean repetition) {
+    void addCase(final Case aCase, final boolean repetition) {
         if (aCase == null) {
             return;
         }
@@ -91,16 +91,16 @@ public class Article {
     }
 
     // TODO: Method is never used. Delete?
-    public void removeCase(Case aCase) {
+    public void removeCase(final Case aCase) {
         cases.remove(aCase);
         aCase.setArticle(null);
     }
 
-    public void setOwner(User user) {
+    public void setOwner(final User user) {
         setOwner(user, false);
     }
 
-    void setOwner(User user, boolean repetition) {
+    void setOwner(final User user, final boolean repetition) {
         this.owner = user;
         if (user != null && !repetition) {
             user.addArticle(this, true);
@@ -112,15 +112,15 @@ public class Article {
      * RENTAL_NOT_POSSIBLE or FINISHED, otherwise returns false
      */
     public boolean allCasesClosed() {
-        List<Case> activeCases;
+        List<Case> activeCases = new ArrayList<>();
+
         if (getCases() != null) {
             activeCases = getCases().stream()
                     .filter(c -> c.getRequestStatus() != 12 && c.getRequestStatus() != 4
                             && c.getRequestStatus() != 14)
                     .collect(Collectors.toList());
-        } else {
-            activeCases = new ArrayList<>();
         }
+
         return activeCases.isEmpty();
     }
 }

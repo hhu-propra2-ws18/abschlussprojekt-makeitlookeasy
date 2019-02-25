@@ -32,7 +32,7 @@ public class PersonService {
     }
 
     Person findPersonById(Long id) {
-        Optional<Person> optionalPerson = personRepository.findById(id);
+        final Optional<Person> optionalPerson = personRepository.findById(id);
 
         if (!optionalPerson.isPresent()) {
             LOGGER.warn("Couldn't find person {} in database.", id);

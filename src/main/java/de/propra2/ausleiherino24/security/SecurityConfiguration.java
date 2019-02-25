@@ -31,6 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public SecurityConfiguration(SearchUserService userDetailsService) {
+        super();
         this.userDetailsService = userDetailsService;
     }
 

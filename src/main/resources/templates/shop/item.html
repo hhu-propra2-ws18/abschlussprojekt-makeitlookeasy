@@ -124,15 +124,15 @@
     <div class="col-lg-9">
       <!-- Warning -->
       <div style="margin-top: 50px;">
-      <div class="alert alert-success absolue center" th:if="${param.success}">
-        Article was succesfully booked!
-      </div>
+        <div class="alert alert-success absolue center" th:if="${param.success}">
+          Article was succesfully booked!
+        </div>
 
-      <a th:href="@{~/test}" style="text-decoration: none">
-      <div class="alert alert-warning absolue center" th:if="${param.failed}">
-        Could not book the item! You probably got not enough money. Click to get more money.
-      </div>
-      </a>
+        <a th:href="@{~/test}" style="text-decoration: none">
+          <div class="alert alert-warning absolue center" th:if="${param.failed}">
+            Could not book the item! You probably got not enough money. Click to get more money.
+          </div>
+        </a>
       </div>
       <div class="card mt-4">
         <div style="height: 300px; width=900px">
@@ -150,7 +150,8 @@
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
-                  <img alt="" class="card-img-top img-fluid" th:src="@{/images/{id}(id=${article.image})}">
+                  <img alt="" class="card-img-top img-fluid"
+                       th:src="@{/images/{id}(id=${article.image})}">
                 </div>
               </div>
             </div>

@@ -16,7 +16,7 @@ public interface ConflictRepository extends CrudRepository<Conflict, Long> {
     List<Conflict> findAll();
 
     @NonNull
-    Optional<Conflict> findById(@NonNull Long id);
+    Optional<Conflict> findById(@NonNull Long conflictId);
 
     @Query("SELECT c FROM Conflict c WHERE c.conflictedCase.receiver = :user")
     List<Conflict> findAllByReceiver(@Param("user") User user);
