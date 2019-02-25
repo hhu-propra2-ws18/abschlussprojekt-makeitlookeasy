@@ -48,7 +48,7 @@ public class EmailSenderTest {
         expectedMessage.setTo("Clearing@Service.com");
         expectedMessage.setSubject("Conflicting Case id: 0");
 
-        emailSender.sendEmail(conflict);
+        emailSender.sendConflictEmail(conflict);
 
         verify(javaMailSenderMock).send(expectedMessage);
     }
@@ -75,7 +75,7 @@ public class EmailSenderTest {
         expectedMessage.setSubject("Conflicting Case id: 1");
         expectedMessage.setText("Dies hier ist ein einfacher Test");
 
-        emailSender.sendEmail(conflict);
+        emailSender.sendConflictEmail(conflict);
 
         verify(javaMailSenderMock).send(expectedMessage);
     }
@@ -106,7 +106,7 @@ public class EmailSenderTest {
         expectedMessage.setSubject("Conflicting Case id: 1");
         expectedMessage.setText("Dies hier ist ein einfacher Test");
 
-        emailSender.sendEmail(conflict);
+        emailSender.sendConflictEmail(conflict);
         verify(javaMailSenderMock).setHost("TestHost");
         verify(javaMailSenderMock).setPort(4321);
         verify(javaMailSenderMock).setUsername("TestUsername");
