@@ -35,9 +35,9 @@ public class Article {
 
     private String image;
 
-    private int deposit;
+    private Double deposit;
 
-    private int costPerDay;
+    private Double costPerDay;
 
     private String location;
 

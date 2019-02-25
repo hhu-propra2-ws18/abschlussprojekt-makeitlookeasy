@@ -8,15 +8,15 @@ import lombok.Data;
 @Data
 class Reservation {
 
-    Integer id;
+    Long id;
     Double number;
 
     public Reservation() {
-        this.id = 0;
+        this.id = 0L;
         this.number = 0D;
     }
 
-    public Reservation(Integer id, Double number) {
+    public Reservation(Long id, Double number) {
         this.id = id;
         this.number = number;
     }
