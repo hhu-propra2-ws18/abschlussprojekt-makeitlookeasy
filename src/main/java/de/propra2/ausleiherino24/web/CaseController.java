@@ -11,6 +11,8 @@ import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -114,9 +117,10 @@ public class CaseController {
             BindingResult result, Model model,
             @RequestParam("image") MultipartFile image, Principal principal) {
         User user = userService.findUserByPrincipal(principal);
-
+        article.setActive(true);
         article.setOwner(user);
         article.setImage(imageService.store(image, null));
+        article.setForRental(true);
         article.setActive(true);
         articleService.saveArticle(article, "Created");
 
@@ -157,8 +161,19 @@ public class CaseController {
 
     @RequestMapping("/deleteArticle")
     public String deleteArticle(@RequestParam Long id) throws Exception {
-        articleService.deactivateArticle(id);
-        return "redirect:/myOverview?articles&deletedarticle";
+        if (articleService.deactivateArticle(id)) {
+            return "redirect:/myOverview?articles&deletedarticle";
+        } else {
+            return "redirect:/myOverview?articles&deletionfailed";
+        }
+    }
+
+
+    //NEED FOR JS DEVE PLS DO NOT DELETE
+    @RequestMapping("/api/events")
+    @ResponseBody
+    public List<LocalDate> test() throws Exception {
+       return caseService.findAllReservedDaysbyArticle((long) 3);
     }
 
     /**
@@ -190,10 +205,11 @@ public class CaseController {
 
     @PostMapping("/accessed/user/acceptCase")
     public String acceptCase(@RequestParam Long id) {
-        if(caseService.acceptArticleRequest(id))
+        if (caseService.acceptArticleRequest(id)) {
             return "redirect:/myOverview?requests";
-        else
+        } else {
             return "redirect:/myOverview?requests&declined";
+        }
     }
 
     @PostMapping("/accessed/user/declineCase")
@@ -205,13 +221,12 @@ public class CaseController {
     @PostMapping("/accessed/user/acceptCaseReturn")
     public String acceptCaseReturn(@RequestParam Long id) {
         caseService.acceptCaseReturn(id);
-        return "redirect:/myOverview?returned&successfulreturned";
+        return "redirect:/myOverview?returned&successfullyreturned";
     }
 
     /**
-     * Liefert einen Methode für Springboot um das Feld Article.category korrekt zu empfangen und
-     * zu verknüpfen.
-     * @param webDataBinder
+     * Liefert einen Methode für Springboot um das Feld Article.category korrekt zu empfangen und zu
+     * verknüpfen.
      */
     @InitBinder
     public void initBinder(final WebDataBinder webDataBinder) {
@@ -219,6 +234,7 @@ public class CaseController {
     }
 
     private class CategoryConverter extends PropertyEditorSupport {
+
         public void setAsText(final String text) throws IllegalArgumentException {
             setValue(Category.fromValue(text));
         }

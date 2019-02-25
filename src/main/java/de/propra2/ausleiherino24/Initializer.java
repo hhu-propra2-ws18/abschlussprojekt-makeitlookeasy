@@ -11,9 +11,12 @@ import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.PPTransaction;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.ImageService;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -33,23 +36,26 @@ public class Initializer implements ServletContextInitializer {
     private final ArticleRepository articleRepository;
     private final PersonRepository personRepository;
     private final CaseRepository caseRepository;
+    private final ImageService imageService;
 
     private final Faker faker = new Faker(Locale.GERMAN);
 
     /**
      * TODO Javadoc.
-     *  @param userRepository Descriptions
+     *
+     * @param userRepository Descriptions
      * @param articleRepository Descriptions
      * @param personRepository Descriptions
-     * @param caseRepository
      */
     @Autowired
     public Initializer(UserRepository userRepository, ArticleRepository articleRepository,
-            PersonRepository personRepository, CaseRepository caseRepository) {
+            PersonRepository personRepository, CaseRepository caseRepository,
+            ImageService imageService) {
         this.userRepository = userRepository;
         this.articleRepository = articleRepository;
         this.personRepository = personRepository;
         this.caseRepository = caseRepository;
+        this.imageService = imageService;
     }
 
     @Override
@@ -60,21 +66,29 @@ public class Initializer implements ServletContextInitializer {
         addtoDatabases(persons);
     }
 
+    /**
+     * Adds a list of persons and their corresponding users and all their articles and all their
+     * cases to the fitting databases
+     */
     private void addtoDatabases(List<Person> persons) {
         personRepository.saveAll(persons);
         persons.forEach(person -> {
             User user = person.getUser();
             userRepository.save(user);
-            if(user.getArticleList() != null) {
+            if (user.getArticleList() != null) {
                 user.getArticleList().forEach(article -> {
                     articleRepository.save(article);
-                    if (article.getCases() != null)
+                    if (article.getCases() != null) {
                         article.getCases().forEach(caseRepository::save);
+                    }
                 });
             }
         });
     }
 
+    /**
+     * Deletes all data from databases
+     */
     private void deleteAll() {
         articleRepository.deleteAll();
         personRepository.deleteAll();
@@ -82,6 +96,9 @@ public class Initializer implements ServletContextInitializer {
         userRepository.deleteAll();
     }
 
+    /**
+     * Creates 15 random users. Each with 1 to 7 articles.
+     */
     private List<Person> initTestArticleWithinUsers() {
         return IntStream.range(0, 15).mapToObj(value -> {
             Person person = createPerson(
@@ -104,42 +121,22 @@ public class Initializer implements ServletContextInitializer {
                                 Category.getAllCategories().get(faker.random()
                                         .nextInt(0, Category.getAllCategories().size() - 1)),
                                 user,
-                                new Double(faker.random().nextInt(5, 500)),
-                                new Double(faker.random().nextInt(100, 2000)),
-                                "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
-                                        + id + ".png");
+                                (double) faker.random().nextInt(5, 500),
+                                (double) faker.random().nextInt(100, 2000),
+                                storePokemonPic(id),
+                                faker.address().fullAddress()
+                        );
                         user.addArticle(article);
                     });
 
             return person;
         }).collect(Collectors.toCollection(ArrayList::new));
-
-
-        //Fügt Cases hinzu
-        /*
-        persons.forEach(person -> {
-            person.getUser().getArticleList().forEach(article -> {
-                IntStream.range(0, faker.random().nextInt(0, 2)).forEach(a -> {
-                    Case c = createCase(
-                            article,
-                            persons.get(randNumbExcept(0, persons.size()-1, persons.indexOf(person))).getUser(),
-                            convertDateAsLong(
-                                    faker.random().nextInt(1, 31),
-                                    faker.random().nextInt(1, 12),
-                                    2018),
-                            convertDateAsLong(
-                                    faker.random().nextInt(1, 31),
-                                    faker.random().nextInt(1, 12),
-                                    2019),
-                            1
-                    );
-                    article.addCase(c);
-                });
-            });
-        });
-        */
     }
 
+    /**
+     * Creates 3 accounts for testing (hans, user, admin) and adds couple of articles and cases to
+     * hans
+     */
     private List<Person> initTestAccounts(List<Person> persons) {
         List<Person> testPersons = new ArrayList<>();
         testPersons.add(createUser(
@@ -180,30 +177,31 @@ public class Initializer implements ServletContextInitializer {
                             Category.getAllCategories().get(faker.random()
                                     .nextInt(0, Category.getAllCategories().size() - 1)),
                             hans,
-                            new Double(faker.random().nextInt(5, 500)),
-                            new Double(faker.random().nextInt(100, 2000)),
-                            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
-                                    + id + ".png");
+                            (double) faker.random().nextInt(5, 500),
+                            (double) faker.random().nextInt(100, 2000),
+                            storePokemonPic(id),
+                            faker.address().fullAddress()
+                    );
                     hans.addArticle(article);
                 });
 
         hans.getArticleList().forEach(article ->
-            IntStream.range(0, 2).forEach(a -> {
-                Case c = createCase(
-                        article,
-                        persons.get(faker.random().nextInt(0, persons.size() - 1)).getUser(),
-                        convertDateAsLong(
-                                faker.random().nextInt(0, 31),
-                                faker.random().nextInt(0, 11),
-                                2018),
-                        convertDateAsLong(
-                                faker.random().nextInt(0, 31),
-                                faker.random().nextInt(0, 11),
-                                2019),
-                        Case.REQUESTED
-                );
-                article.addCase(c);
-            })
+                IntStream.range(0, 2).forEach(a -> {
+                    Case c = createCase(
+                            article,
+                            persons.get(faker.random().nextInt(0, persons.size() - 1)).getUser(),
+                            convertDateAsLong(
+                                    faker.random().nextInt(0, 31),
+                                    faker.random().nextInt(0, 11),
+                                    2018),
+                            convertDateAsLong(
+                                    faker.random().nextInt(0, 31),
+                                    faker.random().nextInt(0, 11),
+                                    2019),
+                            Case.REQUESTED
+                    );
+                    article.addCase(c);
+                })
         );
         hans.getArticleList().forEach(article ->
                 IntStream.range(0, 1).forEach(a -> {
@@ -217,7 +215,7 @@ public class Initializer implements ServletContextInitializer {
                                     startMonth,
                                     2018),
                             convertDateAsLong(
-                                    startDay+faker.random().nextInt(2, 100),
+                                    startDay + faker.random().nextInt(2, 100),
                                     startMonth,
                                     2018),
                             Case.RUNNING
@@ -230,6 +228,9 @@ public class Initializer implements ServletContextInitializer {
         return testPersons;
     }
 
+    /**
+     * Creates a person from parameters
+     */
     private Person createPerson(String address, String firstname, String lastname) {
         Person person = new Person();
         person.setAddress(address);
@@ -238,6 +239,9 @@ public class Initializer implements ServletContextInitializer {
         return person;
     }
 
+    /**
+     * Creates an user from parameters
+     */
     private User createUser(String email, String username, String password, Person person) {
         User user = new User();
         user.setEmail(email);
@@ -248,8 +252,11 @@ public class Initializer implements ServletContextInitializer {
         return user;
     }
 
+    /**
+     * Creates an article from parameters
+     */
     private Article createArticle(String name, String description, Category category, User owner,
-            Double costPerDay, Double deposit, String image) {
+            Double costPerDay, Double deposit, String image,String location) {
         Article article = new Article();
         article.setActive(true);
         article.setName(name);
@@ -260,9 +267,13 @@ public class Initializer implements ServletContextInitializer {
         article.setDeposit(deposit);
         article.setImage(image);
         article.setForRental(true);
+        article.setLocation(location);
         return article;
     }
 
+    /**
+     * Creates a case from parameters
+     */
     private Case createCase(Article article, User receiver, Long starttime, Long endtime,
             int requestStatus) {
         Case c = new Case();
@@ -280,26 +291,40 @@ public class Initializer implements ServletContextInitializer {
         return c;
     }
 
-    private String readPokemonName(int id){
+    /**
+     * Reads a pokemon corresponding to given id from stored files
+     */
+    private String readPokemonName(int id) {
         try {
             File resource = new ClassPathResource(
-                    "static/Pokemon/names/"+id+".txt").getFile();
+                    "static/Pokemon/names/" + id + ".txt").getFile();
             String name = new String(Files
                     .readAllBytes(resource.toPath()))
                     .trim();
-            return name.substring(0, 1).toUpperCase() + name.substring(1, name.length()-1);
-        } catch (IOException e){
+            return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+        } catch (IOException e) {
             e.printStackTrace();
             return "";
         }
     }
 
-    private int randNumbExcept(int a, int b, int z){
-        int x = new Faker().random().nextInt(a, b-1);
-        if(x >= z) return x+1;
-        else return x;
+    /**
+     * Stores a pokemon pic corresponding to given id using ImageService
+     */
+    private String storePokemonPic(int id) {
+        Path path = Paths.get("/Users/mickpotzkai/Documents/GitHub/abschlussprojekt-makeitlookeasy/uploads/c2a80768-086b-4a74-bcad-74b42276f637.jpg");
+        byte[] pic = null;
+        try {
+            pic = Files.readAllBytes(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
+    /**
+     * Converts a Date to Long
+     */
     private Long convertDateAsLong(int day, int month, int year) {
         return new GregorianCalendar(year, month, day).getTimeInMillis();
     }

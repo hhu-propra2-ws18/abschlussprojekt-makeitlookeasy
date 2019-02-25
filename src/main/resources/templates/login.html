@@ -23,21 +23,21 @@
   <!-- Custom styles for this template -->
   <link rel="stylesheet" th:href="@{~/css/loginstyles.min.css}">
 </head>
-
+<!-- Logo -->
 <body class="text-center" style="background-color: rgb(255,255,255);"><a href="/"><img
     src="img/mainpage/logo.jpg"
     style="width: 250px;height: 250px;margin-top: 40px;"></a>
 <div class="login-card" style="font-family:Roboto, sans-serif;">
-  <!-- Offenes Schloss -->
+  <!-- Open lock-->
   <p class="profile-name-card" th:if="${param.logout}"><i class="fa fa-unlock-alt d-inline"
                                                           style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i>
   </p>
-  <!-- Geschlossenes Schloss -->
+  <!-- Locked lock -->
   <!--/*@thymesVar id="param" type=""*/-->
   <p class="profile-name-card" th:unless="${param.logout}"><i class="fa fa-lock d-inline"
                                                               style="width:0;height:0;font-size:56px;color:rgb(104,145,162);"></i>
   </p>
-
+  <!-- Sing in Form -->
   <form class="form-signin" method="post" th:action="@{/login}">
     <span class="reauth-email" style="margin:11px;"></span>
     <div class="alert alert-danger" th:if="${param.error}">Invalid username or password.</div>
@@ -60,8 +60,9 @@
   </form>
   <p class="text-center" style="color:rgb(73,80,87);font-size:11px;">Restricted Area</p>
 </div>
+<!-- Footer -->
 <div name="footer" th:replace="/../fragments/footer ::footer"></div>
-
+<!-- JS import -->
 <script th:href="@{~/vendor/jquer/js/jquery.min.js}"></script>
 <script th:href="@{~/vendor/bootstrap/js/bootstrap.min.js}"></script>
 </body>
