@@ -84,7 +84,7 @@ public class ReservationHandler {
      * @return Description
      */
 
-    void punishReservation(Case aCase) {
+    public void punishReservation(Case aCase) {
         punishReservation(aCase.getReceiver().getUsername(),
                 aCase.getPpTransaction().getReservationId());
     }
