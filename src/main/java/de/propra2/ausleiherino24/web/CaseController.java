@@ -191,11 +191,15 @@ public class CaseController {
             Principal principal) throws Exception {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         try {
-            caseService.requestArticle(
+            if(caseService.requestArticle(
                     id,
                     simpleDateFormat.parse(startDate).getTime(),
                     simpleDateFormat.parse(endDate).getTime(),
-                    principal.getName());
+                    principal.getName())){
+                return "redirect:/article?id=" + id+ "&success";
+            } else {
+                return "redirect:/article?id=" + id+ "&failed";
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

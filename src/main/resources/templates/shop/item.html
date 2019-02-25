@@ -122,6 +122,16 @@
 
     <!-- Item  -->
     <div class="col-lg-9">
+      <!-- Warning -->
+      <div style="margin-top: 50px;">
+      <div class="alert alert-success absolue center" th:if="${param.success}">
+        Article was succesfully booked!
+      </div>
+
+      <div class="alert alert-warning absolue center" th:if="${param.failed}">
+        You probably got not enaugh money on your account!
+      </div>
+      </div>
       <div class="card mt-4">
         <div style="height: 300px; width=900px">
           <a href="#showImageModal" data-target="#showImageModal" data-toggle="modal">
