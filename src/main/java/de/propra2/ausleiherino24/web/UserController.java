@@ -145,4 +145,10 @@ public class UserController {
                 return url;
         }
     }
+
+    @PostMapping("/addMoney")
+    public String addMoneyToUserAccount(Principal principal,double money){
+        accountHandler.addFunds(principal.getName(),money);
+        return "redirect:/bankAccount?success";
+    }
 }

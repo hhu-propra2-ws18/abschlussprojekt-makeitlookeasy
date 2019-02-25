@@ -128,9 +128,11 @@
         Article was succesfully booked!
       </div>
 
+      <a th:href="@{~/test}" style="text-decoration: none">
       <div class="alert alert-warning absolue center" th:if="${param.failed}">
-        You probably got not enaugh money on your account!
+        Could not book the item! You probably got not enough money. Click to get more money.
       </div>
+      </a>
       </div>
       <div class="card mt-4">
         <div style="height: 300px; width=900px">
