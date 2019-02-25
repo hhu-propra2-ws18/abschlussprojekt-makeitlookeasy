@@ -30,8 +30,8 @@ public class ConflictController {
     private static final String USER_STRING = "user";
 
     @Autowired
-    public ConflictController(ConflictService conflictService, UserService userService,
-            CaseRepository caseRepository) {
+    public ConflictController(final ConflictService conflictService, final UserService userService,
+            final CaseRepository caseRepository) {
         this.conflictService = conflictService;
         this.userService = userService;
         this.caseRepository = caseRepository;
@@ -48,7 +48,8 @@ public class ConflictController {
      * @throws Exception Wirft tatsächlich nie eine exception
      */
     @PostMapping("/openconflict")
-    public String sendConflict(@RequestParam Long id, String conflictDescription) throws Exception {
+    public String sendConflict(final @RequestParam Long id, final String conflictDescription)
+            throws Exception {
         final Optional<Case> optionalCase = caseRepository.findById(id);
         if (!optionalCase.isPresent()) {
             return "redirect:/myOverview?returned&conflictfailed";
@@ -59,7 +60,7 @@ public class ConflictController {
     }
 
     @DeleteMapping("/deactivateconflict")
-    public String deactivateConflict(@RequestParam Long id, Principal principal)
+    public String deactivateConflict(final @RequestParam Long id, final Principal principal)
             throws Exception {
         final User user = userService.findUserByPrincipal(principal);
         conflictService.deactivateConflict(id, user);
@@ -68,7 +69,8 @@ public class ConflictController {
     }
 
     @GetMapping("/conflict")
-    public String displayConflict(@RequestParam("id") Long id, Principal principal, Model model)
+    public String displayConflict(final @RequestParam("id") Long id, final Principal principal,
+            final Model model)
             throws Exception {
         final User user = userService.findUserByPrincipal(principal);
         final Conflict conflictToDisplay = conflictService.getConflict(id, user);
@@ -83,7 +85,7 @@ public class ConflictController {
     }
 
     @GetMapping("/conflicts")
-    public String displayAllConflicts(Principal principal, Model model) {
+    public String displayAllConflicts(final Principal principal, final Model model) {
         final User user = userService.findUserByPrincipal(principal);
         final List<Conflict> conflicts = conflictService.getAllConflictsByUser(user);
 
@@ -93,7 +95,8 @@ public class ConflictController {
     }
 
     @GetMapping("/solveConflictView")
-    public String solveConflictView(@RequestParam("id") Long id, Principal principal, Model model)
+    public String solveConflictView(final @RequestParam("id") Long id, final Principal principal,
+            final Model model)
             throws Exception {
         final User user = userService.findUserByPrincipal(principal);
         final Conflict conflictToDisplay = conflictService.getConflict(id, user);
@@ -106,8 +109,9 @@ public class ConflictController {
     }
 
     @PostMapping("/solveConflict")
-    public String solveConflict(@RequestBody ResolveConflict resolveConflict, Principal principal,
-            Model model) throws Exception {
+    public String solveConflict(final @RequestBody ResolveConflict resolveConflict,
+            final Principal principal,
+            final Model model) throws Exception {
         final User user = userService.findUserByPrincipal(principal);
         final Conflict conflictToSolve = conflictService
                 .getConflict(resolveConflict.getConflictId(), user);

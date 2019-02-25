@@ -158,7 +158,7 @@ public class CaseControllerTest {
     @Test
     @WithMockUser(roles = "user")
     public void saveNewArticleStatusTest() throws Exception {
-        MultipartFile file = mock(MultipartFile.class);
+        final MultipartFile file = mock(MultipartFile.class);
 
         Mockito.when(userService.findUserByPrincipal(any(Principal.class))).thenReturn(user);
         Mockito.when(imageService.store(any(MultipartFile.class), eq(null))).thenReturn("");
@@ -202,7 +202,7 @@ public class CaseControllerTest {
     @Ignore
     @Test
     public void saveEditedCaseAndArticleModelTest() throws Exception {
-        Article article = new Article();
+        final Article article = new Article();
         article.setId(1L);
 
         mvc.perform(MockMvcRequestBuilders.put("/saveEditedArticle").flashAttr("article", article))
@@ -230,19 +230,19 @@ public class CaseControllerTest {
     @Ignore
     @Test
     public void deactivateArticleModelTest() throws Exception {
-        Article article = new Article();
+        final Article article = new Article();
         article.setId(1L);
-        Article article2 = new Article();
+        final Article article2 = new Article();
         article2.setId(2L);
-        Article article3 = new Article();
+        final Article article3 = new Article();
         article3.setId(3L);
-        Case c1 = new Case();
+        final Case c1 = new Case();
         c1.setArticle(article);
-        Case c2 = new Case();
+        final Case c2 = new Case();
         c2.setArticle(article2);
-        Case c3 = new Case();
+        final Case c3 = new Case();
         c3.setArticle(article3);
-        ArrayList<Case> cas = new ArrayList<>();
+        final ArrayList<Case> cas = new ArrayList<>();
         cas.add(c1);
         cas.add(c2);
         cas.add(c3);

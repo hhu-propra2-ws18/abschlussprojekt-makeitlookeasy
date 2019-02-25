@@ -7,7 +7,7 @@ public final class RoleService {
     private RoleService() {
     }
 
-    static String getUserRole(HttpServletRequest request) {
+    static String getUserRole(final HttpServletRequest request) {
         if (request.isUserInRole("user")) {
             return "user";
         } else if (request.isUserInRole("admin")) {

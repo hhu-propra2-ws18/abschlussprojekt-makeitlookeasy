@@ -19,12 +19,12 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(PersonService personService, UserRepository userRepository) {
+    public UserService(final PersonService personService, final UserRepository userRepository) {
         this.personService = personService;
         this.userRepository = userRepository;
     }
 
-    private void saveUser(User user, String msg) {
+    private void saveUser(final User user, final String msg) {
         userRepository.save(user);
         LOGGER.info("{} user profile {} [ID={}]", msg, user.getUsername(), user.getId());
     }
@@ -36,7 +36,7 @@ public class UserService {
      * @param person Person object to be saved to database.
      * @param msg String to be displayed in the Logger.
      */
-    public void saveUserWithProfile(User user, Person person, String msg) {
+    public void saveUserWithProfile(final User user, final Person person, final String msg) {
         user.setRole("user");
         saveUser(user, msg);
 
@@ -49,8 +49,9 @@ public class UserService {
      *
      * @return status
      */
-    public String saveUserIfPasswordsAreEqual(String username, User user, Person person, String pw1,
-            String pw2) {
+    public String saveUserIfPasswordsAreEqual(final String username, final User user,
+            final Person person, final String pw1,
+            final String pw2) {
         if (!pw1.equals(pw2)) {
             return "PasswordNotEqual";
         }
@@ -74,7 +75,7 @@ public class UserService {
 
     }
 
-    public User findUserByUsername(String username) {
+    public User findUserByUsername(final String username) {
         final Optional<User> optionalUser = userRepository.findByUsername(username);
 
         if (!optionalUser.isPresent()) {
@@ -85,7 +86,7 @@ public class UserService {
         return optionalUser.get();
     }
 
-    public User findUserByPrincipal(Principal principal) {
+    public User findUserByPrincipal(final Principal principal) {
         User user;
 
         try {
@@ -99,11 +100,11 @@ public class UserService {
         return user;
     }
 
-    User findUserById(Long userId) {
+    User findUserById(final Long userId) {
         return userRepository.findById(userId).orElse(null);
     }
 
-    public boolean isCurrentUser(String username, String currentPrincipalName) {
+    public boolean isCurrentUser(final String username, final String currentPrincipalName) {
         return username.equals(currentPrincipalName);
     }
 

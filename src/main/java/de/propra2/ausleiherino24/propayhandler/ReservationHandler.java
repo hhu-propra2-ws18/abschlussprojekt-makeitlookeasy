@@ -17,13 +17,14 @@ public class ReservationHandler {
 
     private CaseRepository caseRepository;
 
-    public ReservationHandler(CaseRepository caseRepository, RestTemplate restTemplate) {
+    public ReservationHandler(final CaseRepository caseRepository,
+            final RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.caseRepository = caseRepository;
         accountHandler = new AccountHandler(restTemplate);
     }
 
-    public void handleReservedMoney(Case aCase) {
+    public void handleReservedMoney(final Case aCase) {
         Long reservationId = -1L;
 
         if (aCase.getRequestStatus() == Case.REQUESTED) {
@@ -46,7 +47,8 @@ public class ReservationHandler {
         caseRepository.save(aCase);
     }
 
-    private Long createReservation(String sourceUser, String targetUser, Double amount) {
+    private Long createReservation(final String sourceUser, final String targetUser,
+            final Double amount) {
 
         final ResponseEntity<Reservation> responseEntity = restTemplate
                 .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
@@ -56,7 +58,7 @@ public class ReservationHandler {
         return responseEntity.getBody().getId();
     }
 
-    public void releaseReservation(Case aCase) {
+    public void releaseReservation(final Case aCase) {
         if (aCase.getPpTransaction().getReservationId() != -1) {
             releaseReservation(aCase.getReceiver().getUsername(),
                     aCase.getPpTransaction().getReservationId());
@@ -64,19 +66,19 @@ public class ReservationHandler {
         }
     }
 
-    private void releaseReservation(String account, Long reservationId) {
+    private void releaseReservation(final String account, final Long reservationId) {
         restTemplate.exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
                 HttpMethod.POST, null,
                 PPAccount.class, account, reservationId.toString());
     }
 
-    public void punishReservation(Case aCase) {
+    public void punishReservation(final Case aCase) {
         punishReservation(aCase.getReceiver().getUsername(),
                 aCase.getPpTransaction().getReservationId());
     }
 
-    boolean punishReservation(String account,
-            Long reservationId) {
+    boolean punishReservation(final String account,
+            final Long reservationId) {
         final ResponseEntity<PPAccount> responseEntity = restTemplate
                 .exchange(RESERVATION_URL + "/punish/{account}?reservationId={reservationId}\"",
                         HttpMethod.POST, null,

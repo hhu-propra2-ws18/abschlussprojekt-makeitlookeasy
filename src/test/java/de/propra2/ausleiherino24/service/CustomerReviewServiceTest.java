@@ -29,14 +29,14 @@ public class CustomerReviewServiceTest {
         customerReviewService = new CustomerReviewService(customerReviewRepository, caseService);
 
         cases = new ArrayList<>();
-        Case case1 = new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null);
-        Case case2 = new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null);
-        Case case3 = new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null);
+        final Case case1 = new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null);
+        final Case case2 = new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null);
+        final Case case3 = new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null);
 
         customerReviews = new ArrayList<>();
-        CustomerReview customerReview1 = new CustomerReview();
-        CustomerReview customerReview2 = new CustomerReview();
-        CustomerReview customerReview3 = new CustomerReview();
+        final CustomerReview customerReview1 = new CustomerReview();
+        final CustomerReview customerReview2 = new CustomerReview();
+        final CustomerReview customerReview3 = new CustomerReview();
 
         customerReview1.setACase(case1);
         customerReview2.setACase(case2);
@@ -57,7 +57,7 @@ public class CustomerReviewServiceTest {
         Mockito.when(customerReviewRepository.findAll()).thenReturn(customerReviews);
         Mockito.when(caseService.getAllCasesFromPersonOwner(1L)).thenReturn(cases);
 
-        List<CustomerReview> crvws = customerReviewService.findAllReviewsByLenderId(1L);
+        final List<CustomerReview> crvws = customerReviewService.findAllReviewsByLenderId(1L);
         Assertions.assertThat(crvws.size()).isEqualTo(3);
         Assertions.assertThat(crvws.get(0)).isEqualTo(customerReviews.get(0));
     }
@@ -66,7 +66,7 @@ public class CustomerReviewServiceTest {
     public void findAllReviewsByLenderIdFindsZeroReviews() {
         Mockito.when(customerReviewRepository.findAll()).thenReturn(new ArrayList<>());
 
-        List<CustomerReview> crvws = customerReviewService.findAllReviewsByLenderId(1L);
+        final List<CustomerReview> crvws = customerReviewService.findAllReviewsByLenderId(1L);
         Assertions.assertThat(crvws.size()).isEqualTo(0);
     }
 

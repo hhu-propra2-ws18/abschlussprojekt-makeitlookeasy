@@ -104,7 +104,7 @@ public class MainControllerTest {
     public void getIndex() throws Exception {
         principal = mock(Principal.class);
         userService = mock(UserService.class);
-        User user = new User();//mock(User.class);
+        final User user = new User();//mock(User.class);
         user.setRole("user");
         Mockito.when(principal.getName()).thenReturn("tom");
         Mockito.when(userService.findUserByUsername("tom")).thenReturn(user);
@@ -172,9 +172,9 @@ public class MainControllerTest {
     @Ignore
     @Test
     public void registerNewUserModelTest() throws Exception {
-        Person person = new Person();
-        User user = new User();
-        Map<String, Object> map = new HashMap<>();
+        final Person person = new Person();
+        final User user = new User();
+        final Map<String, Object> map = new HashMap<>();
 
         person.setId(1L);
         user.setId(1L);

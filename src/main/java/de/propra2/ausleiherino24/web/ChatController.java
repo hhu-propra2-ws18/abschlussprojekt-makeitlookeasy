@@ -22,14 +22,16 @@ public class ChatController {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
-    public ChatController(UserService userService, SimpMessagingTemplate simpMessagingTemplate) {
+    public ChatController(final UserService userService,
+            final SimpMessagingTemplate simpMessagingTemplate) {
         this.userService = userService;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage, Principal principal) {
+    public ChatMessage sendMessage(final @Payload ChatMessage chatMessage,
+            final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
         chatMessage.setSender(user.getUsername());
         return chatMessage;
@@ -37,9 +39,9 @@ public class ChatController {
 
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")
-    public ChatMessage addUser(@Payload ChatMessage chatMessage,
-            SimpMessageHeaderAccessor headerAccessor,
-            Principal principal) {
+    public ChatMessage addUser(final @Payload ChatMessage chatMessage,
+            final SimpMessageHeaderAccessor headerAccessor,
+            final Principal principal) {
         // Add username in web socket session
         final User user = userService.findUserByPrincipal(principal);
 
@@ -49,7 +51,7 @@ public class ChatController {
     }
 
     @GetMapping("/chatBoard")
-    public ModelAndView chatBoard(@Header("simpSessionId") String sessionId) {
+    public ModelAndView chatBoard(final @Header("simpSessionId") String sessionId) {
         final ModelAndView mav = new ModelAndView("/chatBoard");
         mav.addObject("sessionId", sessionId);
         return mav;
@@ -57,7 +59,7 @@ public class ChatController {
 
     /* user chat */
     @MessageMapping("/chat.privateMessage")
-    public void sendSpecific(@Payload ChatMessage msg, Principal principal) {
+    public void sendSpecific(final @Payload ChatMessage msg, final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
         msg.setSender(user.getUsername());
 

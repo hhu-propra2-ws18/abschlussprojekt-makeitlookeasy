@@ -38,13 +38,13 @@ public class MainController {
     private final List<Category> allCategories = Category.getAllCategories();
 
     @Autowired
-    public MainController(UserService userService, ArticleService articleService) {
+    public MainController(final UserService userService, final ArticleService articleService) {
         this.userService = userService;
         this.articleService = articleService;
     }
 
     @GetMapping(value = {"/", "/index"})
-    public ModelAndView getIndex(Principal principal) {
+    public ModelAndView getIndex(final Principal principal) {
         final List<Article> allArticles = articleService.getAllActiveAndForRentalArticles();
         final User currentUser = userService.findUserByPrincipal(principal);
 
@@ -57,7 +57,8 @@ public class MainController {
     }
 
     @GetMapping("/categories")
-    public ModelAndView getIndexByCategory(@RequestParam String category, Principal principal) {
+    public ModelAndView getIndexByCategory(final @RequestParam String category,
+            final Principal principal) {
         final List<Article> allArticlesInCategory = articleService
                 .getAllArticlesByCategory(Category.valueOf(category.toUpperCase(Locale.ENGLISH)));
         final User currentUser = userService.findUserByPrincipal(principal);
@@ -87,8 +88,8 @@ public class MainController {
     }
 
     @GetMapping("/search")
-    public ModelAndView getIndexBySearchString(@RequestParam String searchString,
-            Principal principal) {
+    public ModelAndView getIndexBySearchString(final @RequestParam String searchString,
+            final Principal principal) {
         final List<Article> allArticlesWithNameLikeSearchStr = articleService
                 .getAllArticlesByName(searchString);
         final User currentUser = userService.findUserByPrincipal(principal);
@@ -102,8 +103,8 @@ public class MainController {
     }
 
     @PostMapping("/registerNewUser")
-    public ModelAndView registerNewUser(@ModelAttribute @Valid User user,
-            @ModelAttribute @Valid Person person) {
+    public ModelAndView registerNewUser(final @ModelAttribute @Valid User user,
+            final @ModelAttribute @Valid Person person) {
         userService.saveUserWithProfile(user, person, "Created");
 
         return new ModelAndView("redirect:/login");

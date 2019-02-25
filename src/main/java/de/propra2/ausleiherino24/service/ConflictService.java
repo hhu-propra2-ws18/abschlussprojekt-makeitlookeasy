@@ -23,15 +23,15 @@ public class ConflictService {
     private final ReservationHandler reservationHandler;
 
     @Autowired
-    public ConflictService(ConflictRepository conflicts, EmailSender emailSender,
-            ReservationHandler reservationHandler, CaseService caseService) {
+    public ConflictService(final ConflictRepository conflicts, final EmailSender emailSender,
+            final ReservationHandler reservationHandler, final CaseService caseService) {
         this.conflicts = conflicts;
         this.emailSender = emailSender;
         this.reservationHandler = reservationHandler;
         this.caseService = caseService;
     }
 
-    void saveConflict(Conflict conflict, User user) throws Exception {
+    void saveConflict(final Conflict conflict, final User user) throws Exception {
         isCorrectUser(conflict, user);
         conflict.setConflictedCaseConflict(conflict);
         conflicts.save(conflict);
@@ -39,7 +39,8 @@ public class ConflictService {
         sendConflictEmail(conflict);
     }
 
-    public void openConflict(Case conflictedCase, String conflictDescription) throws Exception {
+    public void openConflict(final Case conflictedCase, final String conflictDescription)
+            throws Exception {
         final Conflict conflict = new Conflict();
         conflict.setConflictDescription(conflictDescription);
         conflict.setConflictedCase(conflictedCase);
@@ -49,11 +50,11 @@ public class ConflictService {
         saveConflict(conflict, conflictedCase.getOwner());
     }
 
-    void sendConflictEmail(Conflict conflict) {
+    void sendConflictEmail(final Conflict conflict) {
         emailSender.sendConflictEmail(conflict);
     }
 
-    public void deactivateConflict(Long id, User user) throws Exception {
+    public void deactivateConflict(final Long id, final User user) throws Exception {
         final Optional<Conflict> conflictToDeactivate = conflicts.findById(id);
         if (!conflictToDeactivate.isPresent()) {
             throw new DataAccessException("No such conflict.") {
@@ -67,7 +68,7 @@ public class ConflictService {
         conflicts.delete(theConflictToDeactivate);
     }
 
-    public List<Conflict> getAllConflictsByUser(User user) {
+    public List<Conflict> getAllConflictsByUser(final User user) {
         final List<Conflict> allConflicts = new ArrayList<>();
         allConflicts.addAll(conflicts.findAllByReceiver(user));
         allConflicts.addAll(conflicts.findAllByArticleOwner(user));
@@ -75,7 +76,7 @@ public class ConflictService {
         return allConflicts;
     }
 
-    public Conflict getConflict(Long id, User user) throws Exception {
+    public Conflict getConflict(final Long id, final User user) throws Exception {
         final Optional<Conflict> conflict = conflicts.findById(id);
         if (!conflict.isPresent()) {
             throw new Exception("No such conflict");
@@ -84,21 +85,22 @@ public class ConflictService {
         return conflict.get();
     }
 
-    public boolean isConflictedArticleOwner(Conflict conflict, User user) throws Exception {
+    public boolean isConflictedArticleOwner(final Conflict conflict, final User user)
+            throws Exception {
         if (user == null) {
             throw new Exception("No such user");
         }
         return user.equals(conflict.getOwner());
     }
 
-    public List<User> getConflictParticipants(Conflict conflict) throws Exception {
+    public List<User> getConflictParticipants(final Conflict conflict) throws Exception {
         if (conflict == null) {
             throw new Exception("No such conflict!");
         }
         return Arrays.asList(conflict.getOwner(), conflict.getReceiver());
     }
 
-    private boolean isCorrectUser(Conflict conflict, User user) throws Exception {
+    private boolean isCorrectUser(final Conflict conflict, final User user) throws Exception {
         if (!(user.equals(conflict.getOwner()) || user.equals(conflict.getReceiver()))
                 && !isUserAdmin(
                 user)) {
@@ -107,7 +109,8 @@ public class ConflictService {
         return true;
     }
 
-    private boolean isConflictReporterOrAdmin(Conflict conflict, User user) throws Exception {
+    private boolean isConflictReporterOrAdmin(final Conflict conflict, final User user)
+            throws Exception {
         if (!(conflict.getConflictReporterUsername().equals(user.getUsername()) || isUserAdmin(
                 user))) {
             throw new Exception("Access denied!");
@@ -115,11 +118,12 @@ public class ConflictService {
         return true;
     }
 
-    private boolean isUserAdmin(User user) {
+    private boolean isUserAdmin(final User user) {
         return "admin".equals(user.getRole());
     }
 
-    public void solveConflict(Conflict conflictToSolve, User user, User depositReceiver)
+    public void solveConflict(final Conflict conflictToSolve, final User user,
+            final User depositReceiver)
             throws Exception {
         if (!isUserAdmin(user)) {
             throw new Exception("No permission!");

@@ -16,7 +16,7 @@ class Reservation {
         this.amount = 0D;
     }
 
-    Reservation(Long reservationId, Double number) {
+    Reservation(final Long reservationId, final Double number) {
         this.id = reservationId;
         this.amount = number;
     }

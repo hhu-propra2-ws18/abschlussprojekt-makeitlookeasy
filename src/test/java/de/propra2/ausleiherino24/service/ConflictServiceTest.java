@@ -62,10 +62,9 @@ public class ConflictServiceTest {
 
     @Test(expected = Exception.class)
     public void isConflictedArticleOwnerShouldThrowExceptionIfUserIsNull() throws Exception {
-        user = null;
         c1 = new Conflict();
 
-        conflictService.isConflictedArticleOwner(c1, user);
+        conflictService.isConflictedArticleOwner(c1, null);
     }
 
     @Test
@@ -111,7 +110,7 @@ public class ConflictServiceTest {
     @Test()
     public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithAdmin()
             throws Exception {
-        User admin = new User();
+        final User admin = new User();
         admin.setRole("admin");
         Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
@@ -131,7 +130,7 @@ public class ConflictServiceTest {
 
     @Test
     public void getConflictParticipantsShouldReturnAllConflictParticipants() throws Exception {
-        List<User> conflictParticipants = conflictService.getConflictParticipants(c1);
+        final List<User> conflictParticipants = conflictService.getConflictParticipants(c1);
 
         Assertions.assertThat(conflictParticipants.size()).isEqualTo(2);
         Assertions.assertThat(conflictParticipants).containsAll(Arrays.asList(user2, user));
@@ -139,18 +138,18 @@ public class ConflictServiceTest {
 
     @Test
     public void getAllConflictsByUserShouldReturnListOfAllCurrentConflictsByUser() {
-        Article art2 = new Article();
+        final Article art2 = new Article();
         art2.setOwner(new User());
-        Case ca2 = new Case();
+        final Case ca2 = new Case();
         ca2.setArticle(art2);
         ca2.setReceiver(user2);
-        Conflict c2 = new Conflict();
+        final Conflict c2 = new Conflict();
         c2.setConflictedCase(ca2);
 
         Mockito.when(conflictRepository.findAllByArticleOwner(user2)).thenReturn(Arrays.asList(c1));
         Mockito.when(conflictRepository.findAllByReceiver(user2)).thenReturn(Arrays.asList(c2));
 
-        List<Conflict> allConflictsByUser = conflictService.getAllConflictsByUser(user2);
+        final List<Conflict> allConflictsByUser = conflictService.getAllConflictsByUser(user2);
 
         Assertions.assertThat(allConflictsByUser).containsAll(Arrays.asList(c2, c1));
     }
@@ -210,7 +209,7 @@ public class ConflictServiceTest {
 
     @Test(expected = DataAccessException.class)
     public void deactivateConflictShouldThrowExceptionIfConflictNotFound() throws Exception {
-        User user = new User();
+        final User user = new User();
 
         Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -227,7 +226,7 @@ public class ConflictServiceTest {
 
     @Test(expected = Exception.class)
     public void solveConflictShouldThrowExceptionIfUserNotAdmin() throws Exception {
-        User user = new User();
+        final User user = new User();
         user.setRole("");
 
         conflictService.solveConflict(null, user, null);
@@ -235,10 +234,10 @@ public class ConflictServiceTest {
 
     @Test
     public void solveConflictShouldPunishReservation() throws Exception {
-        User depoReceiver = new User();
-        User admin = new User();
+        final User depoReceiver = new User();
+        final User admin = new User();
         admin.setRole("admin");
-        Conflict conflict = Mockito.mock(Conflict.class);
+        final Conflict conflict = Mockito.mock(Conflict.class);
         Mockito.when(conflict.getOwner()).thenReturn(depoReceiver);
 
         conflictService.solveConflict(conflict, admin, depoReceiver);
@@ -249,11 +248,11 @@ public class ConflictServiceTest {
 
     @Test
     public void solveConflictShouldReleaseReservation() throws Exception {
-        User depoReceiver = new User();
+        final User depoReceiver = new User();
         depoReceiver.setUsername("Hans");
-        User admin = new User();
+        final User admin = new User();
         admin.setRole("admin");
-        Conflict conflict = Mockito.mock(Conflict.class);
+        final Conflict conflict = Mockito.mock(Conflict.class);
         Mockito.when(conflict.getOwner()).thenReturn(new User());
 
         conflictService.solveConflict(conflict, admin, depoReceiver);

@@ -21,16 +21,16 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
 
     @Autowired
-    public ArticleService(ArticleRepository articleRepository) {
+    public ArticleService(final ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }
 
-    public void saveArticle(Article article, String msg) {
+    public void saveArticle(final Article article, final String msg) {
         articleRepository.save(article);
         LOGGER.info("{} article '{}' {}.", msg, article.getName(), article.getId());
     }
 
-    public Article findArticleById(Long articleId) {
+    public Article findArticleById(final Long articleId) {
         final Optional<Article> article = articleRepository.findById(articleId);
 
         if (!article.isPresent()) {
@@ -41,7 +41,7 @@ public class ArticleService {
         return article.get();
     }
 
-    public List<Article> findAllActiveByUser(User user) {
+    public List<Article> findAllActiveByUser(final User user) {
         return articleRepository.findAllActiveByUser(user);
     }
 
@@ -50,7 +50,7 @@ public class ArticleService {
      *
      * @return all Articles, which are not reserved and are of given category
      */
-    public List<Article> getAllArticlesByCategory(Category category) {
+    public List<Article> getAllArticlesByCategory(final Category category) {
         return getAllActiveAndForRentalArticles().stream()
                 .filter(article -> article.getCategory() == category)
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -77,7 +77,7 @@ public class ArticleService {
      * @param articleId ID of article to be "deleted".
      * @return boolean True, if succeeded. False, if encountered error while processing request.
      */
-    public boolean deactivateArticle(Long articleId) {
+    public boolean deactivateArticle(final Long articleId) {
         final Optional<Article> optionalArticle = articleRepository.findById(articleId);
 
         if (!optionalArticle.isPresent()) {
@@ -99,7 +99,7 @@ public class ArticleService {
         return true;
     }
 
-    public void updateArticle(Long articleId, Article article) {
+    public void updateArticle(final Long articleId, final Article article) {
         final Optional<Article> optionalArticle = articleRepository.findById(articleId);
 
         if (!optionalArticle.isPresent()) {
@@ -116,7 +116,7 @@ public class ArticleService {
         articleRepository.save(oldArticle);
     }
 
-    public List<Article> getAllArticlesByName(String searchString) {
+    public List<Article> getAllArticlesByName(final String searchString) {
         return articleRepository.findByNameContainsIgnoreCase(searchString);
     }
 }

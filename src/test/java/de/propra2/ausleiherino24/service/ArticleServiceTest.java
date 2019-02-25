@@ -71,7 +71,7 @@ public class ArticleServiceTest {
 
     @Test
     public void twoArticlesForRental() {
-        Case c = new Case();
+        final Case c = new Case();
         c.setRequestStatus(7);  //requestStatus = RUNNING
         article03.setCases(Arrays.asList(c));
 
@@ -145,11 +145,11 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactivateArticle() throws Exception {
-        Optional<Article> op = Optional.of(article01);
+    public void deactivateArticle() {
+        final Optional<Article> op = Optional.of(article01);
         when(articleRepositoryMock.findById(0L)).thenReturn(op);
 
-        ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
+        final ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
 
         assertTrue(articleService.deactivateArticle(0L));
         verify(articleRepositoryMock).save(argument.capture());
@@ -157,11 +157,11 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactivateLendArticle() throws Exception {
-        Case c = new Case();
+    public void deactivateLendArticle() {
+        final Case c = new Case();
         c.setRequestStatus(7);  //requestStatus = RUNNING
         article01.setCases(Arrays.asList(c));
-        Optional<Article> op = Optional.of(article01);
+        final Optional<Article> op = Optional.of(article01);
         when(articleRepositoryMock.findById(0L)).thenReturn(op);
 
         assertFalse(articleService.deactivateArticle(0L));
@@ -169,11 +169,11 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactivateArticleWithConflict() throws Exception {
-        Case c = new Case();
+    public void deactivateArticleWithConflict() {
+        final Case c = new Case();
         c.setRequestStatus(10);  //requestStatus = OPEN_CONFLICT
         article01.setCases(Arrays.asList(c));
-        Optional<Article> op = Optional.of(article01);
+        final Optional<Article> op = Optional.of(article01);
         when(articleRepositoryMock.findById(0L)).thenReturn(op);
 
         assertFalse(articleService.deactivateArticle(0L));
@@ -181,14 +181,14 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactivateFinishedArticle() throws Exception {
-        Case c = new Case();
+    public void deactivateFinishedArticle() {
+        final Case c = new Case();
         c.setRequestStatus(14);  //requestStatus = FINISHED
         article01.setCases(Arrays.asList(c));
-        Optional<Article> op = Optional.of(article01);
+        final Optional<Article> op = Optional.of(article01);
         when(articleRepositoryMock.findById(0L)).thenReturn(op);
 
-        ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
+        final ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
 
         assertTrue(articleService.deactivateArticle(0L));
         verify(articleRepositoryMock).save(argument.capture());
@@ -196,7 +196,7 @@ public class ArticleServiceTest {
     }
 
     @Test(expected = Exception.class)
-    public void deactivateNotExistingArticle() throws Exception {
+    public void deactivateNotExistingArticle() {
         when(articleRepositoryMock.findById(0L)).thenReturn(Optional.empty());
 
         articleService.deactivateArticle(0L);
@@ -204,7 +204,7 @@ public class ArticleServiceTest {
 
     @Test
     public void updateArticle() {
-        Article article = new Article();
+        final Article article = new Article();
         article.setForRental(true);
         article.setDeposit(0D);
         article.setCostPerDay(0D);
@@ -212,7 +212,7 @@ public class ArticleServiceTest {
         article.setDescription("");
         article.setName("");
         when(articleRepositoryMock.findById(0L)).thenReturn(Optional.of(article));
-        ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
+        final ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
 
         articleService.updateArticle(0L, article);
 

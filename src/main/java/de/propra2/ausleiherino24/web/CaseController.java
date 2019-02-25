@@ -53,12 +53,12 @@ public class CaseController {
     private final List<Category> allCategories = Category.getAllCategories();
 
     @Autowired
-    public CaseController(ArticleService articleService,
-            UserService userService,
-            ImageService imageService,
-            CaseService caseService,
-            CustomerReviewRepository customerReviewRepository,
-            CaseRepository caseRepository) {
+    public CaseController(final ArticleService articleService,
+            final UserService userService,
+            final ImageService imageService,
+            final CaseService caseService,
+            final CustomerReviewRepository customerReviewRepository,
+            final CaseRepository caseRepository) {
         this.articleService = articleService;
         this.userService = userService;
         this.imageService = imageService;
@@ -68,7 +68,8 @@ public class CaseController {
     }
 
     @GetMapping("/article")
-    public ModelAndView displayArticle(@RequestParam("id") Long id, Principal principal) {
+    public ModelAndView displayArticle(final @RequestParam("id") Long id,
+            final Principal principal) {
         final Article article = articleService.findArticleById(id);
         final User currentUser = userService.findUserByPrincipal(principal);
 
@@ -80,7 +81,7 @@ public class CaseController {
     }
 
     @GetMapping("/newArticle")
-    public ModelAndView createNewCaseAndArticle(Principal principal) {
+    public ModelAndView createNewCaseAndArticle(final Principal principal) {
         final Article article = new Article();
         final User currentUser = userService.findUserByPrincipal(principal);
 
@@ -92,8 +93,8 @@ public class CaseController {
     }
 
     @PostMapping("/saveNewArticle")
-    public ModelAndView saveNewCaseAndArticle(@ModelAttribute @Valid Article article,
-            @RequestParam("image") MultipartFile image, Principal principal) {
+    public ModelAndView saveNewCaseAndArticle(final @ModelAttribute @Valid Article article,
+            final @RequestParam("image") MultipartFile image, final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
         article.setActive(true);
         article.setOwner(user);
@@ -106,8 +107,8 @@ public class CaseController {
     }
 
     @PutMapping("/saveEditedArticle")
-    public ModelAndView saveEditedArticle(@ModelAttribute @Valid Article article,
-            @RequestParam("image") MultipartFile image, Principal principal) {
+    public ModelAndView saveEditedArticle(final @ModelAttribute @Valid Article article,
+            final @RequestParam("image") MultipartFile image, final Principal principal) {
 
         article.setImage(imageService.store(image, null));
         articleService.saveArticle(article, "Updated");
@@ -123,14 +124,14 @@ public class CaseController {
     // TODO: Warum wurde hierfür eine neue ArticleService-Methode geschrieben? Außerdem, GetMapping?
     // TODO: Warum wurde die Methode 'saveEditedArticle' nicht verwendet und angepasst?
     @RequestMapping("/updateArticle")
-    public String updateArticle(@RequestParam Long id, Article article) {
+    public String updateArticle(final @RequestParam Long id, final Article article) {
         articleService.updateArticle(id, article);
         return "redirect:/myOverview?articles&updatedarticle";
     }
 
     // TODO: Warum GetMapping? RequestMapping defaulted zu GetMapping.
     @RequestMapping("/deleteArticle")
-    public String deleteArticle(@RequestParam Long id) {
+    public String deleteArticle(final @RequestParam Long id) {
         if (articleService.deactivateArticle(id)) {
             return "redirect:/myOverview?articles&deletedarticle";
         } else {
@@ -146,8 +147,9 @@ public class CaseController {
     }
 
     @PostMapping("/bookArticle")
-    public String bookArticle(@RequestParam Long id, String startDate, String endDate,
-            Principal principal) {
+    public String bookArticle(final @RequestParam Long id, final String startDate,
+            final String endDate,
+            final Principal principal) {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         try {
@@ -169,7 +171,7 @@ public class CaseController {
     }
 
     @PostMapping("/acceptCase")
-    public String acceptCase(@RequestParam Long id) {
+    public String acceptCase(final @RequestParam Long id) {
         switch (caseService.acceptArticleRequest(id)) {
             case 1:
                 return "redirect:/myOverview?requests";
@@ -183,19 +185,19 @@ public class CaseController {
     }
 
     @PostMapping("/declineCase")
-    public String declineCase(@RequestParam Long id) {
+    public String declineCase(final @RequestParam Long id) {
         caseService.declineArticleRequest(id);
         return "redirect:/myOverview?requests&declined";
     }
 
     @PostMapping("/acceptCaseReturn")
-    public String acceptCaseReturn(@RequestParam Long id) {
+    public String acceptCaseReturn(final @RequestParam Long id) {
         caseService.acceptCaseReturn(id);
         return "redirect:/myOverview?returned&successfullyreturned";
     }
 
     @PostMapping("/writeReview")
-    public String writeReview(@RequestParam Long id, CustomerReview review) {
+    public String writeReview(final @RequestParam Long id, final CustomerReview review) {
         review.setTimestamp(new Date().getTime());
         final Case opt = caseService.findCaseById(id);
         review.setACase(opt);

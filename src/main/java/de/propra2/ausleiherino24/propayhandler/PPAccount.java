@@ -14,7 +14,7 @@ class PPAccount {
     double amount;
     List<Reservation> reservations;
 
-    PPAccount(String account, Double amount) {
+    PPAccount(final String account, final Double amount) {
         this.account = account;
         this.amount = amount;
     }
@@ -27,7 +27,7 @@ class PPAccount {
         return reserved;
     }
 
-    public void addReservation(Double amount) {
+    void addReservation(final Double amount) {
         this.reservations.add(new Reservation(this.reservations.size() + 1L, amount));
     }
 }

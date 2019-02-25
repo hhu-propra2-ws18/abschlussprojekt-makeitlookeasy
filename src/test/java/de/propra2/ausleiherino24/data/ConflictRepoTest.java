@@ -41,7 +41,7 @@ public class ConflictRepoTest {
         user1 = new User();
         user1.setUsername("user1");
 
-        Article case1Art = new Article();
+        final Article case1Art = new Article();
         case1Art.setOwner(user2);
         case1 = new Case();
         case1.setReceiver(user1);
@@ -51,7 +51,7 @@ public class ConflictRepoTest {
         case1.setStartTime(12022019L);
         case1.setEndTime(19022019L);
 
-        Article case2Art = new Article();
+        final Article case2Art = new Article();
         case2Art.setOwner(user1);
         case2 = new Case();
         case2.setReceiver(user2);
@@ -78,14 +78,14 @@ public class ConflictRepoTest {
 
     @Test
     public void customQueryFindAllByReceiverShouldReturnConflictWithCorrespondingCaseReceiver() {
-        List<Conflict> expectedConflict = conflicts.findAllByReceiver(user1);
+        final List<Conflict> expectedConflict = conflicts.findAllByReceiver(user1);
         Assertions.assertThat(expectedConflict.size()).isOne();
         Assertions.assertThat(expectedConflict.get(0)).isEqualTo(c1);
     }
 
     @Test
-    public void customQueryfindAllByArticleOwnerShouldReturnConflictWithCorrespondingCaseArticleOwner() {
-        List<Conflict> expectedConflict = conflicts.findAllByArticleOwner(user2);
+    public void customQueryFindAllByArticleOwnerShouldReturnConflictWithCorrespondingCaseArticleOwner() {
+        final List<Conflict> expectedConflict = conflicts.findAllByArticleOwner(user2);
         Assertions.assertThat(expectedConflict.size()).isOne();
         Assertions.assertThat(expectedConflict.get(0)).isEqualTo(c1);
     }

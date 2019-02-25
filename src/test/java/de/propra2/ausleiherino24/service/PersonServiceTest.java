@@ -23,7 +23,7 @@ public class PersonServiceTest {
 
     @Test
     public void savePersonShouldSavePerson() throws Exception {
-        Person person = new Person();
+        final Person person = new Person();
         person.setId(1L);
 
         persons = Mockito.mock(PersonRepository.class);

@@ -39,8 +39,8 @@ public class UserController {
     private final List<Category> allCategories = Category.getAllCategories();
 
     @Autowired
-    public UserController(UserService userService, ArticleService articleService,
-            AccountHandler accountHandler, CaseService caseService) {
+    public UserController(final UserService userService, final ArticleService articleService,
+            final AccountHandler accountHandler, final CaseService caseService) {
         this.accountHandler = accountHandler;
         this.articleService = articleService;
         this.caseService = caseService;
@@ -48,7 +48,8 @@ public class UserController {
     }
 
     @GetMapping("/profile/{username}")
-    public ModelAndView getUserProfile(@PathVariable String username, Principal principal) {
+    public ModelAndView getUserProfile(final @PathVariable String username,
+            final Principal principal) {
 
         final User visitedUser = userService.findUserByUsername(username);
         final User currentUser = userService.findUserByPrincipal(principal);
@@ -69,8 +70,8 @@ public class UserController {
     }
 
     @PutMapping("/editProfile")
-    public ModelAndView editUserProfile(@ModelAttribute @Valid User user,
-            @ModelAttribute @Valid Person person, Principal principal) {
+    public ModelAndView editUserProfile(final @ModelAttribute @Valid User user,
+            final @ModelAttribute @Valid Person person, final Principal principal) {
         final String username = user.getUsername();
         final String currentPrincipalName = principal.getName();
 
@@ -90,7 +91,7 @@ public class UserController {
     }
 
     @RequestMapping("/myOverview")
-    public ModelAndView getMyArticlePage(Principal principal) {
+    public ModelAndView getMyArticlePage(final Principal principal) {
         final User currentUser = userService.findUserByPrincipal(principal);
         final List<Article> myArticles = articleService.findAllActiveByUser(currentUser);
         final List<Case> borrowedArticles = caseService
@@ -111,7 +112,7 @@ public class UserController {
     }
 
     @GetMapping("/newItem")
-    public ModelAndView getNewItemPage(Principal principal) {
+    public ModelAndView getNewItemPage(final Principal principal) {
         final User currentUser = userService.findUserByPrincipal(principal);
 
         final ModelAndView mav = new ModelAndView("/shop/newItem");
@@ -122,7 +123,7 @@ public class UserController {
     }
 
     @GetMapping("/bankAccount")
-    public ModelAndView getBankAccountPage(Principal principal) {
+    public ModelAndView getBankAccountPage(final Principal principal) {
         final ModelAndView mav = new ModelAndView("/user/bankAccount");
         mav.addObject(CATEGORIES, Category.getAllCategories());
         mav.addObject("transactions", caseService.getAllTransactionsFromPersonReceiver(
@@ -134,8 +135,9 @@ public class UserController {
     }
 
     @PostMapping("accessed/user/saveProfile")
-    public String saveEditedUserProfile(Principal principal, User user, Person person,
-            String password, String confirmPass) {
+    public String saveEditedUserProfile(final Principal principal, final User user,
+            final Person person,
+            final String password, final String confirmPass) {
         final String url = "redirect:/profile/" + principal.getName();
         switch (userService.saveUserIfPasswordsAreEqual(principal.getName(), user, person, password,
                 confirmPass)) {
@@ -151,7 +153,7 @@ public class UserController {
     }
 
     @PostMapping("/addMoney")
-    public String addMoneyToUserAccount(Principal principal, double money) {
+    public String addMoneyToUserAccount(final Principal principal, final double money) {
         accountHandler.addFunds(principal.getName(), money);
         return "redirect:/bankAccount?success";
     }

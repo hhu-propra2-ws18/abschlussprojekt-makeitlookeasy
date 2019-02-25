@@ -25,7 +25,7 @@ public class CaseEndTimeReminderTest {
     public void init() {
         formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         es = Mockito.mock(EmailSender.class);
-        CaseRepository caseRepository = Mockito.mock(CaseRepository.class);
+        final CaseRepository caseRepository = Mockito.mock(CaseRepository.class);
         a = Mockito.mock(Case.class);
         Mockito.when(a.getRequestStatus()).thenReturn(Case.RUNNING);
         Mockito.when(caseRepository.findAll()).thenReturn(Arrays.asList(a));
@@ -35,8 +35,8 @@ public class CaseEndTimeReminderTest {
 
     @Test
     public void sendRemindingEmailShouldSendEmailIfCaseEndTimeIsTomorrow() {
-        LocalDateTime tomorrow = today.plusDays(1L);
-        String s = tomorrow.format(formatter);
+        final LocalDateTime tomorrow = today.plusDays(1L);
+        final String s = tomorrow.format(formatter);
         Mockito.when(a.getFormattedEndTime()).thenReturn(s);
         r.sendRemindingEmail();
 
@@ -45,7 +45,7 @@ public class CaseEndTimeReminderTest {
 
     @Test
     public void sendRemindingEmailShouldNotSendEmailIfCaseEndTimeIsToday() {
-        String s = today.format(formatter);
+        final String s = today.format(formatter);
         Mockito.when(a.getFormattedEndTime()).thenReturn(s);
         r.sendRemindingEmail();
 
@@ -54,8 +54,8 @@ public class CaseEndTimeReminderTest {
 
     @Test
     public void sendRemindingEmailShouldNOtSendEmailIfCaseEndTimeWasYesterday() {
-        LocalDateTime yesterday = today.minusDays(1L);
-        String s = yesterday.format(formatter);
+        final LocalDateTime yesterday = today.minusDays(1L);
+        final String s = yesterday.format(formatter);
         Mockito.when(a.getFormattedEndTime()).thenReturn(s);
         r.sendRemindingEmail();
 

@@ -110,7 +110,7 @@ public class ImageServiceTest {
 
     @Test
     public void fileExists() throws IOException {
-        File file = new File(path + "/x.txt");
+        final File file = new File(path + "/x.txt");
         file.createNewFile();
 
         assertTrue(imageService.fileExists(path + "/x.txt"));
@@ -123,7 +123,7 @@ public class ImageServiceTest {
 
     @Test
     public void onlyDirectoryExists() {
-        File file = new File(path + "/x");
+        final File file = new File(path + "/x");
         file.mkdir();
 
         assertFalse(imageService.fileExists(path + "/x"));
@@ -139,7 +139,7 @@ public class ImageServiceTest {
     @Test
     public void findFile() throws IOException {
         new File(path + "/0").mkdir();
-        File file = new File(path + "/0/test.txt");
+        final File file = new File(path + "/0/test.txt");
         file.createNewFile();
         when(imageService.getUploadDirectoryPath()).thenReturn(path);
 
@@ -148,7 +148,7 @@ public class ImageServiceTest {
 
     @Test
     public void findFileWithoutBinningId() throws IOException {
-        File file = new File(path + "/test.txt");
+        final File file = new File(path + "/test.txt");
         file.createNewFile();
         when(imageService.getUploadDirectoryPath()).thenReturn(path);
 
@@ -162,7 +162,7 @@ public class ImageServiceTest {
 
     @Test
     public void storeMultipartFile() throws IOException {
-        MultipartFile file = mock(MultipartFile.class);
+        final MultipartFile file = mock(MultipartFile.class);
         when(file.getOriginalFilename()).thenReturn("test.txt");
         when(imageService.generateFilePath("0", "txt")).thenReturn(path + "/0/test.txt");
 
@@ -172,14 +172,14 @@ public class ImageServiceTest {
 
 
     //Deletes the given directory and all included directories and files
-    private void cleanDir(File dir) {
+    private void cleanDir(final File dir) {
         if (!dir.isDirectory()) {
             dir.delete();
             return;
         }
 
-        File[] files = dir.listFiles();
-        for (File file : files) {
+        final File[] files = dir.listFiles();
+        for (final File file : files) {
             if (!file.delete()) {
                 cleanDir(file);
             }

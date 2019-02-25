@@ -14,17 +14,17 @@ public class CustomerReviewService {
     private CaseService caseService;
 
     @Autowired
-    public CustomerReviewService(CustomerReviewRepository customerReviewRepository,
-            CaseService caseService) {
+    public CustomerReviewService(final CustomerReviewRepository customerReviewRepository,
+            final CaseService caseService) {
         this.customerReviewRepository = customerReviewRepository;
         this.caseService = caseService;
     }
 
-    void addCustomerReview(CustomerReview customerReview) {
+    void addCustomerReview(final CustomerReview customerReview) {
         customerReviewRepository.save(customerReview);
     }
 
-    List<CustomerReview> findAllReviewsByLenderId(Long id) {
+    List<CustomerReview> findAllReviewsByLenderId(final Long id) {
         final List<CustomerReview> reviews = customerReviewRepository.findAll();
         return reviews.stream()
                 .filter(customerReview -> caseService.getAllCasesFromPersonOwner(id)

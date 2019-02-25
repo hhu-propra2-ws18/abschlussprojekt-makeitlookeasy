@@ -17,7 +17,7 @@ public class SearchUserService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
-    public SearchUserService(UserRepository userRepository) {
+    public SearchUserService(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -25,7 +25,7 @@ public class SearchUserService implements UserDetailsService {
      * Service for login, when user is not found throws exception.
      */
     @Override
-    public UserDetails loadUserByUsername(String username) {
+    public UserDetails loadUserByUsername(final String username) {
         final Optional<User> optionalUser = userRepository.findByUsername(username);
 
         optionalUser

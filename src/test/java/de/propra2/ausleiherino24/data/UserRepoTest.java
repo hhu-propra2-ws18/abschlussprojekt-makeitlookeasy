@@ -42,7 +42,7 @@ public class UserRepoTest {
     public void databaseShouldSaveEntities() {
         users.saveAll(Arrays.asList(user1, user2));
 
-        List<User> us = users.findAll();
+        final List<User> us = users.findAll();
         Assertions.assertThat(us.size()).isEqualTo(2);
         Assertions.assertThat(us.get(0)).isEqualTo(user1);
         Assertions.assertThat(us.get(1)).isEqualTo(user2);
@@ -54,7 +54,7 @@ public class UserRepoTest {
 
         users.delete(user1);
 
-        List<User> us = users.findAll();
+        final List<User> us = users.findAll();
         Assertions.assertThat(us.size()).isOne();
         Assertions.assertThat(us.get(0)).isEqualTo(user2);
     }
@@ -63,7 +63,7 @@ public class UserRepoTest {
     public void databaseShouldReturnCountOfTwoIfDatabaseHasTwoEntries() {
         users.saveAll(Arrays.asList(user1, user2));
 
-        List<User> us = users.findAll();
+        final List<User> us = users.findAll();
         Assertions.assertThat(users.count()).isEqualTo(2);
         Assertions.assertThat(us.size()).isEqualTo(2);
     }
@@ -72,7 +72,7 @@ public class UserRepoTest {
     public void queryGetByIdShouldReturnUserWithCorrespondingId() {
         users.saveAll(Arrays.asList(user1, user2));
 
-        User expectedUser = users.getById(user1.getId()).get();
+        final User expectedUser = users.getById(user1.getId()).get();
 
         Assertions.assertThat(expectedUser).isEqualTo(user1);
     }
@@ -81,7 +81,7 @@ public class UserRepoTest {
     public void queryGetByIdShouldReturnEmptyOptional() {
         users.saveAll(Arrays.asList(user1, user2));
 
-        boolean userExists = users.getById(0L).isPresent();
+        final boolean userExists = users.getById(0L).isPresent();
 
         Assertions.assertThat(userExists).isEqualTo(false);
     }
@@ -90,16 +90,16 @@ public class UserRepoTest {
     public void queryFindByUsernameShouldReturnUserWithCorrespondingUsername() {
         users.saveAll(Arrays.asList(user1, user2));
 
-        User expectedUser = users.findByUsername(user2.getUsername()).get();
+        final User expectedUser = users.findByUsername(user2.getUsername()).get();
 
         Assertions.assertThat(expectedUser).isEqualTo(user2);
     }
 
     @Test
-    public void queryFindByUsernameSouldReturnEmptyOptional() {
+    public void queryFindByUsernameShouldReturnEmptyOptional() {
         users.saveAll(Arrays.asList(user1, user2));
 
-        boolean userExists = users.findByUsername("affe").isPresent();
+        final boolean userExists = users.findByUsername("affe").isPresent();
 
         Assertions.assertThat(userExists).isEqualTo(false);
     }

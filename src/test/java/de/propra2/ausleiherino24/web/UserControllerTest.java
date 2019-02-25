@@ -113,7 +113,7 @@ public class UserControllerTest {
     @Ignore //TODO: fix test
     @Test
     public void displayUserProfileModelTest() throws Exception {
-        User user = User.builder()
+        final User user = User.builder()
                 .id(1L)
                 .email("user@mail.com")
                 .password("password")

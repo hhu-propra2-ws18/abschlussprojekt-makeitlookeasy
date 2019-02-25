@@ -36,9 +36,9 @@ public class CaseService {
     private final ReservationHandler reservationHandler;
 
     @Autowired
-    public CaseService(CaseRepository caseRepository, ArticleService articleService,
-            PersonService personService, UserService userService,
-            AccountHandler accountHandler, ReservationHandler reservationHandler) {
+    public CaseService(final CaseRepository caseRepository, final ArticleService articleService,
+            final PersonService personService, final UserService userService,
+            final AccountHandler accountHandler, final ReservationHandler reservationHandler) {
         this.caseRepository = caseRepository;
         this.articleService = articleService;
         this.personService = personService;
@@ -48,7 +48,7 @@ public class CaseService {
     }
 
     // TODO: Only implemented in tests. Necessary?
-    void addCaseForNewArticle(Article article, Double price, Double deposit) {
+    void addCaseForNewArticle(final Article article, final Double price, final Double deposit) {
         final Case aCase = new Case();
         aCase.setArticle(article);
         aCase.setDeposit(deposit);
@@ -57,24 +57,24 @@ public class CaseService {
         caseRepository.save(aCase);
     }
 
-    List<Case> getAllCasesFromPersonOwner(Long personId) {
+    List<Case> getAllCasesFromPersonOwner(final Long personId) {
         return caseRepository
                 .findAllByArticleOwner(personService.findPersonById(personId).getUser());
     }
 
-    private List<Case> findAllCasesByUserId(Long userId) {
+    private List<Case> findAllCasesByUserId(final Long userId) {
         return caseRepository.findAllByArticleOwnerId(userId);
     }
 
     // TODO: Only implemented in tests. Necessary?
-    List<Case> getLendCasesFromPersonOwner(Long personId) {
+    List<Case> getLendCasesFromPersonOwner(final Long personId) {
         final List<Case> cases = getAllCasesFromPersonOwner(personId);
         return cases.stream()
                 .filter(c -> c.getReceiver() != null)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<PPTransaction> getAllTransactionsFromPersonReceiver(Long personId) {
+    public List<PPTransaction> getAllTransactionsFromPersonReceiver(final Long personId) {
         final List<PPTransaction> ppTransactions = new ArrayList<>();
         final List<Case> cases = getLendCasesFromPersonReceiver(personId);
         for (final Case c : cases) {
@@ -84,19 +84,19 @@ public class CaseService {
     }
 
     // TODO: Only implemented in tests. Necessary?
-    List<Case> getFreeCasesFromPersonOwner(Long personId) {
+    List<Case> getFreeCasesFromPersonOwner(final Long personId) {
         final List<Case> cases = getAllCasesFromPersonOwner(personId);
         return cases.stream()
                 .filter(c -> c.getReceiver() == null)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<Case> getLendCasesFromPersonReceiver(Long personId) {
+    public List<Case> getLendCasesFromPersonReceiver(final Long personId) {
         return caseRepository.findAllByReceiver(personService.findPersonById(personId).getUser());
     }
 
     // TODO: Method is never used. Delete?
-    public List<Case> getAllRequestedCasesbyUser(Long userId) {
+    public List<Case> getAllRequestedCasesbyUser(final Long userId) {
         return caseRepository
                 .findAllByArticleOwner(userService.findUserById(userId))
                 .stream()
@@ -105,7 +105,8 @@ public class CaseService {
     }
 
     // TODO: Return value is never used. Update implementing methods or void?
-    public boolean requestArticle(Long articleId, Long startTime, Long endTime, String username) {
+    public boolean requestArticle(final Long articleId, final Long startTime, final Long endTime,
+            final String username) {
         final Double totalCost = getCostForAllDays(articleId, startTime, endTime);
 
         if (accountHandler.hasValidFunds(username,
@@ -134,7 +135,8 @@ public class CaseService {
         return false;
     }
 
-    private Double getCostForAllDays(Long articleId, Long startTime, Long endTime) {
+    private Double getCostForAllDays(final Long articleId, final Long startTime,
+            final Long endTime) {
 
         final Double dailyCost = articleService.findArticleById(articleId).getCostPerDay();
         final Date startDate = new Date(startTime);
@@ -152,7 +154,7 @@ public class CaseService {
      * on ProPay
      */
     // TODO: Why is this called acceptArticleRequest, when it handles cases only??
-    public int acceptArticleRequest(Long id) {
+    public int acceptArticleRequest(final Long id) {
         final Optional<Case> optCase = caseRepository.findById(id);
         if (!optCase.isPresent()) {
             return 0;
@@ -177,7 +179,7 @@ public class CaseService {
         }
     }
 
-    boolean articleNotRented(Long id) {
+    boolean articleNotRented(final Long id) {
         final Optional<Case> c = caseRepository.findById(id);
         if (!c.isPresent()) {
             return false;
@@ -198,7 +200,8 @@ public class CaseService {
         return true;
     }
 
-    boolean articleNotRented(Article article, Long startTime, Long endTime, Case c) {
+    boolean articleNotRented(final Article article, final Long startTime, final Long endTime,
+            final Case c) {
         final List<Case> cases = article.getCases().stream()
                 .filter(ca -> ca.getRequestStatus() == Case.REQUEST_ACCEPTED)
                 .collect(Collectors.toList());
@@ -211,7 +214,7 @@ public class CaseService {
         return true;
     }
 
-    public Case findCaseById(Long id) {
+    public Case findCaseById(final Long id) {
         final Optional<Case> optionalCase = caseRepository.findById(id);
 
         if (!optionalCase.isPresent()) {
@@ -222,7 +225,7 @@ public class CaseService {
         return optionalCase.get();
     }
 
-    public void declineArticleRequest(Long id) {
+    public void declineArticleRequest(final Long id) {
         final Optional<Case> optCase = caseRepository.findById(id);
         if (!optCase.isPresent()) {
             return;
@@ -235,7 +238,7 @@ public class CaseService {
     }
 
 
-    public List<Case> findAllExpiredCasesByUserId(Long id) {
+    public List<Case> findAllExpiredCasesByUserId(final Long id) {
         return findAllCasesByUserId(id)
                 .stream()
                 .filter(c -> c.getEndTime() < new Date().getTime())
@@ -245,7 +248,7 @@ public class CaseService {
                 .collect(Collectors.toList());
     }
 
-    void conflictOpened(Long id) {
+    void conflictOpened(final Long id) {
         final Optional<Case> opt = caseRepository.findById(id);
         if (opt.isPresent()) {
             final Case c = opt.get();
@@ -254,7 +257,7 @@ public class CaseService {
         }
     }
 
-    public void acceptCaseReturn(Long id) {
+    public void acceptCaseReturn(final Long id) {
         final Optional<Case> opt = caseRepository.findById(id);
         if (opt.isPresent()) {
             final Case c = opt.get();
@@ -263,7 +266,7 @@ public class CaseService {
         }
     }
 
-    public List<Case> findAllRequestedCasesByUserId(Long id) {
+    public List<Case> findAllRequestedCasesByUserId(final Long id) {
         return findAllCasesByUserId(id)
                 .stream()
                 .filter(c -> c.getRequestStatus() == Case.REQUESTED
@@ -273,7 +276,7 @@ public class CaseService {
                 .collect(Collectors.toList());
     }
 
-    public List<LocalDate> findAllReservedDaysByArticle(Long id) {
+    public List<LocalDate> findAllReservedDaysByArticle(final Long id) {
         return caseRepository
                 .findAllByArticleAndRequestStatus(articleService.findArticleById(id), 2)
                 .stream()

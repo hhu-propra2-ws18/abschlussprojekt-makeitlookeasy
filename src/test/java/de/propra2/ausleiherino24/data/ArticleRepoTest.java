@@ -48,7 +48,7 @@ public class ArticleRepoTest {
 
     @Test
     public void databaseShouldSaveEntities() {
-        List<Article> us = articles.findAll();
+        final List<Article> us = articles.findAll();
         assertThat(us.size()).isEqualTo(2);
         assertThat(us.get(0)).isEqualTo(article1);
         assertThat(us.get(1)).isEqualTo(article2);
@@ -58,7 +58,7 @@ public class ArticleRepoTest {
     public void databaseShouldRemoveCorrectEntity() {
         articles.delete(article1);
 
-        List<Article> us = articles.findAll();
+        final List<Article> us = articles.findAll();
         assertThat(us.size()).isOne();
         assertThat(us.get(0)).isEqualTo(article2);
     }
@@ -70,25 +70,25 @@ public class ArticleRepoTest {
 
     @Test
     public void customQueryFindAllActiveByUserShouldReturnActiveArticleWithCorrespondingOwner() {
-        List<Article> us = articles.findAllActiveByUser(article1.getOwner());
+        final List<Article> us = articles.findAllActiveByUser(article1.getOwner());
         assertThat(us.size()).isEqualTo(1);
         assertThat(us.get(0)).isEqualTo(article1);
     }
 
     @Test
     public void customQueryFindAllActiveByUserShouldReturnEmptyList() {
-        List<Article> us = articles.findAllActiveByUser(article2.getOwner());
+        final List<Article> us = articles.findAllActiveByUser(article2.getOwner());
         assertThat(us.isEmpty());
 
     }
 
     @Test
     public void customQueryFindAllActiveByUserShouldReturnAllActiveArticleWithCorrespondingOwner() {
-        Article article3 = new Article();
+        final Article article3 = new Article();
         article3.setOwner(article1.getOwner());
         article3.setActive(true);
 
-        List<Article> us = articles.findAllActiveByUser(article1.getOwner());
+        final List<Article> us = articles.findAllActiveByUser(article1.getOwner());
         assertThat(us.size()).isEqualTo(2);
         assertThat(us.get(0)).isEqualTo(article1);
         assertThat(us.get(1)).isEqualTo(article3);
@@ -96,27 +96,27 @@ public class ArticleRepoTest {
 
     @Test
     public void customQueryFindAllActiveByUserShouldReturnNoArticle() {
-        List<Article> us = articles.findAllActiveByUser(article2.getOwner());
+        final List<Article> us = articles.findAllActiveByUser(article2.getOwner());
         assertThat(us.size()).isEqualTo(0);
     }
 
     @Test
     public void customQueryFindAllActiveShouldReturnFirstArticle() {
-        List<Article> us = articles.findAllActive();
+        final List<Article> us = articles.findAllActive();
         assertThat(us.size()).isEqualTo(1);
         assertThat(us.get(0)).isEqualTo(article1);
     }
 
     @Test
     public void queryShouldFindArticleContainingString() {
-        List<Article> us = articles.findByNameContainsIgnoreCase("saw");
+        final List<Article> us = articles.findByNameContainsIgnoreCase("saw");
         assertThat(us.size()).isEqualTo(1);
         assertThat(us.get(0)).isEqualTo(article2);
     }
 
     @Test
     public void queryShouldFindArticleContainingStringIgnoringCase() {
-        List<Article> us = articles.findByNameContainsIgnoreCase("mOUNTAIN");
+        final List<Article> us = articles.findByNameContainsIgnoreCase("mOUNTAIN");
         assertThat(us.size()).isEqualTo(1);
         assertThat(us.get(0)).isEqualTo(article1);
     }

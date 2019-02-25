@@ -5,7 +5,7 @@ dockerCompose.isRequiredBy(bootRun)
 
 dockerCompose {
     useComposeFiles = ['docker-compose.yml']
-    startedServices = ['propay','db']
+    startedServices = ['propay', 'db']
 //  forceRecreate = false
 //  buildAdditionalArgs = ['--force-rm']
     waitForTcpPorts = true

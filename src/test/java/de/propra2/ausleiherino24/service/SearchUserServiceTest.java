@@ -33,7 +33,7 @@ public class SearchUserServiceTest {
     @Test
     public void test() {
         Mockito.when(users.findByUsername("user1")).thenReturn(Optional.of(user1));
-        CustomUserDetails expected = new CustomUserDetails(user1);
+        final CustomUserDetails expected = new CustomUserDetails(user1);
         Assertions.assertThat(searchUserService.loadUserByUsername("user1")).isEqualTo(expected);
     }
 

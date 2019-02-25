@@ -23,7 +23,7 @@ public class ImageController {
     private static final String URL = "/imageupload";
 
     @Autowired
-    public ImageController(ImageService imageStorageService) {
+    public ImageController(final ImageService imageStorageService) {
         this.imageStorageService = imageStorageService;
     }
 
@@ -33,13 +33,13 @@ public class ImageController {
     }
 
     @PostMapping(URL)
-    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
+    public String handleFileUpload(final @RequestParam("file") MultipartFile file) {
         imageStorageService.store(file, null);
         return "redirect:" + URL;
     }
 
     @GetMapping("/images/{fileName}")
-    public void getImage(@PathVariable String fileName, HttpServletResponse response)
+    public void getImage(final @PathVariable String fileName, final HttpServletResponse response)
             throws IOException {
         final File requestedFile = imageStorageService.getFile(fileName, null);
 
