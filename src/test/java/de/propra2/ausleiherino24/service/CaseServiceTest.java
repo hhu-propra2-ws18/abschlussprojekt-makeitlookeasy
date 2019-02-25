@@ -3,7 +3,7 @@ package de.propra2.ausleiherino24.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -11,10 +11,7 @@ import static org.mockito.Mockito.when;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
-import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Person;
-import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.model.*;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 import java.util.ArrayList;
@@ -24,6 +21,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 public class CaseServiceTest {
 
@@ -32,20 +30,20 @@ public class CaseServiceTest {
     private ArticleService articleServiceMock;
     private UserService userServiceMock;
     private CaseService caseService;
-    private AccountHandler accountHandler;
-    private ReservationHandler reservationHandler;
+    private AccountHandler accountHandlerMock;
+    private ReservationHandler reservationHandlerMock;
     private ArrayList<Case> cases;
 
     @Before
     public void setUp() {
-        accountHandler = mock(AccountHandler.class);
-        reservationHandler = mock(ReservationHandler.class);
+        accountHandlerMock = mock(AccountHandler.class);
+        reservationHandlerMock = mock(ReservationHandler.class);
         caseRepositoryMock = mock(CaseRepository.class);
         personRepositoryMock = mock(PersonRepository.class);
         articleServiceMock = mock(ArticleService.class);
         userServiceMock = mock(UserService.class);
         caseService = new CaseService(caseRepositoryMock, personRepositoryMock, articleServiceMock,
-                userServiceMock, accountHandler, reservationHandler);
+                userServiceMock, accountHandlerMock, reservationHandlerMock);
         cases = new ArrayList<>();
     }
 
@@ -146,7 +144,6 @@ public class CaseServiceTest {
         verify(caseRepositoryMock).save(c);
     }
 
-    @Ignore
     @Test
     public void requestArticle() throws Exception {
         Long articleId = 0L, st = 5L, et = 10L;
@@ -156,6 +153,7 @@ public class CaseServiceTest {
         article.setCostPerDay(50D);
         when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
         when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
+        when(accountHandlerMock.hasValidFunds(eq(""), Mockito.anyDouble())).thenReturn(true);
         ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         caseService.requestArticle(articleId, st, et, username);
@@ -178,7 +176,7 @@ public class CaseServiceTest {
         article.setCostPerDay(50D);
         when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
         when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
-        when(accountHandler.checkFunds(any())).thenReturn(99.0);
+        when(accountHandlerMock.hasValidFunds(any(), anyDouble())).thenReturn(false);
 
         caseService.requestArticle(articleId, st, et, username);
 
@@ -273,7 +271,6 @@ public class CaseServiceTest {
         assertTrue(caseService.requestIsOk(0L));
     }
 
-    @Ignore
     @Test
     public void acceptingRequestPossible(){
         Article article = new Article();
@@ -289,14 +286,14 @@ public class CaseServiceTest {
         c2.setArticle(article);
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
+        when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
         ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
-//        assertTrue(caseService.acceptArticleRequest(0L));
+        assertTrue(caseService.acceptArticleRequest(0L));
         verify(caseRepositoryMock).save(argument.capture());
         assertEquals(Case.REQUEST_ACCEPTED, argument.getValue().getRequestStatus());
     }
 
-    @Ignore
     @Test
     public void acceptingRequestNotPossible(){
         Article article = new Article();
@@ -312,6 +309,7 @@ public class CaseServiceTest {
         c2.setArticle(article);
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
+        when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
         ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         assertFalse(caseService.acceptArticleRequest(0L));
@@ -335,6 +333,8 @@ public class CaseServiceTest {
 
         verify(caseRepositoryMock).save(argument.capture());
         assertEquals(Case.REQUEST_DECLINED, argument.getValue().getRequestStatus());
+        verify(reservationHandlerMock).releaseReservation(argument.getValue());
+        assertEquals(new PPTransaction(), argument.getValue().getPpTransaction());
     }
 
     @Test
