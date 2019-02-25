@@ -64,24 +64,18 @@ public class ReservationHandler {
         return responseEntity.getBody().getId();
     }
 
-    public boolean releaseReservation(Case aCase) {
+    public void releaseReservation(Case aCase) {
         if (aCase.getPpTransaction().getReservationId() != -1) {
-            return releaseReservation(aCase.getReceiver().getUsername(),
+            releaseReservation(aCase.getReceiver().getUsername(),
                     aCase.getPpTransaction().getReservationId());
         }
-        return false;
     }
 
-    boolean releaseReservation(String account, Long reservationId) {
+    void releaseReservation(String account, Long reservationId) {
 
-        ResponseEntity<PPAccount> responseEntity = restTemplate
-                .exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
+        restTemplate.exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
                         HttpMethod.POST, null,
                         PPAccount.class, account, reservationId.toString());
-
-        return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity
-                .getStatusCode()
-                .equals(HttpStatus.CREATED);
     }
 
     /**
