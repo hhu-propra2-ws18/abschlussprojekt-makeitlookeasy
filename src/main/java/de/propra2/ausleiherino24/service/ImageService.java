@@ -59,7 +59,7 @@ public class ImageService {
 
             int length;
 
-            while ((length = inputStream.read(buffer)) > 0){
+            while ((length = inputStream.read(buffer)) > 0) {
                 outputStream.write(buffer, 0, length);
             }
 
