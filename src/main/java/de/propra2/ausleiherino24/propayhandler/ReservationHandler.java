@@ -58,7 +58,7 @@ public class ReservationHandler {
 
         ResponseEntity<Reservation> responseEntity = restTemplate
                 .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
-                            HttpMethod.POST,
+                        HttpMethod.POST,
                         null, Reservation.class, sourceUser, targetUser, amount.toString());
 
         return responseEntity.getBody().getId();
@@ -75,8 +75,8 @@ public class ReservationHandler {
     void releaseReservation(String account, Long reservationId) {
 
         restTemplate.exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
-                        HttpMethod.POST, null,
-                        PPAccount.class, account, reservationId.toString());
+                HttpMethod.POST, null,
+                PPAccount.class, account, reservationId.toString());
     }
 
     /**

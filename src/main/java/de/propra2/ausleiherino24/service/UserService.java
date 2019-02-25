@@ -10,14 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class UserService {
 
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     private final PersonService personService;
     private final UserRepository userRepository;
-
-    private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     public UserService(PersonService personService, UserRepository userRepository) {
@@ -27,9 +26,8 @@ public class UserService {
 
     private void saveUser(User user, String msg) {
         userRepository.save(user);
-        LOGGER.info("%s user profile %s [ID=%L]", msg, user.getUsername(), user.getId());
+        logger.info("%s user profile %s [ID=%L]", msg, user.getUsername(), user.getId());
     }
-
 
     /**
      * Saves newly created/updated user and person data to database.
@@ -76,31 +74,17 @@ public class UserService {
 
     }
 
-
-    /**
-     * Searches database for user by username. If user cannot be found, throw an exception. Else,
-     * return user.
-     * @param username String by which database gets searched.
-     * @return User object from database.
-     * @throws Exception Thrown, if no user can be found with user.username == username.
-     */
-    public User findUserByUsername(String username) throws Exception {
+    public User findUserByUsername(String username) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
 
         if (!optionalUser.isPresent()) {
-            LOGGER.warn("Couldn't find user %s in UserRepository.", username);
-            throw new Exception("Couldn't find current principal in UserRepository.");
+            logger.warn("Couldn't find user {} in UserRepository.", username);
+            throw new NullPointerException("Couldn't find current principal in UserRepository.");
         }
 
         return optionalUser.get();
     }
 
-    /**
-     * TODO Javadoc.
-     *
-     * @param principal Descriptions
-     * @return Descriptions
-     */
     public User findUserByPrincipal(Principal principal) {
         User user;
 
@@ -115,24 +99,12 @@ public class UserService {
         return user;
     }
 
-    public User findUserById(Long userId) {
+    User findUserById(Long userId) {
         return userRepository.findById(userId).orElse(null);
     }
 
-    /**
-     * TODO Javadoc.
-     * @param username Descriptions
-     * @param currentPrincipalName Descriptions
-     * @return Descriptions
-     */
     public boolean isCurrentUser(String username, String currentPrincipalName) {
-        if (username.equals(currentPrincipalName)) {
-            return true;
-        } else {
-            LOGGER.warn("Unauthorized access to 'editProfile' for user %s by user %s", username,
-                    currentPrincipalName);
-            LOGGER.info("Logging out user %s", currentPrincipalName);
-            return false;
-        }
+        return username.equals(currentPrincipalName);
     }
+
 }

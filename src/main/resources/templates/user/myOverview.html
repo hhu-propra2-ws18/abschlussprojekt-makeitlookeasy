@@ -125,8 +125,8 @@
         Article successfully deleted.
       </div>
       <div class="alert alert-danger absolue center" th:if="${param.deletionfailed}">
-      This article has open cases. You cannot delete it right now.
-    </div>
+        This article has open cases. You cannot delete it right now.
+      </div>
 
       <!-- Frame for articles from User-->
       <div id="mainFrameOne"
@@ -156,12 +156,12 @@
             <td>
               <th:block th:if="${article.forRental==true}">
                 <svg height="20" width="20">
-                  <circle cx="10" cy="10" r="8" fill="green"> </circle>
+                  <circle cx="10" cy="10" r="8" fill="green"></circle>
                 </svg>
               </th:block>
               <th:block th:unless="${article.forRental==true}">
                 <svg height="20" width="20">
-                  <circle cx="10" cy="10" r="8" fill="red"> </circle>
+                  <circle cx="10" cy="10" r="8" fill="red"></circle>
                 </svg>
               </th:block>
             </td>
@@ -231,7 +231,7 @@
                               Day:</label>
                             </div>
                             <div class="col-sm-6 input-column">
-                              <input class="form-control" id="price" name="costPerDay" required
+                              <input class="form-control" id="price" step="0.01" name="costPerDay" required
                                      type="number" th:value="${article.costPerDay}">
                             </div>
                           </div>
@@ -241,7 +241,7 @@
                             </div>
                             <div class="col-sm-6 input-column">
                               <input class="form-control" id="deposit" name="deposit" required
-                                     type="number" th:value="${article.deposit}">
+                                     type="number" step="0.01" th:value="${article.deposit}">
                             </div>
                           </div>
                           <div class="form-row form-group">
@@ -288,7 +288,7 @@
                           <button class="btn btn-secondary" data-dismiss="modal" type="button">
                             Close
                           </button>
-                          <button class="btn btn-primary" type="submit">Save</button>
+                          <button class="btn btn-primary" onclick="checkPrice(),checkDeposit()" type="submit">Save</button>
                         </div>
                       </div>
                     </form>
@@ -566,6 +566,35 @@
   </div>
 </div>
 
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reviewModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Review</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <textarea>
+
+        </textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Footer -->
 <div name="footer" th:replace="/../fragments/footer ::footer"></div>
 
@@ -590,5 +619,22 @@
     crossorigin="anonymous"
     integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU="
     src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script>
+  function checkPrice() {
+    var arr = document.getElementById("price").value.split('.');
+    var length = arr[1].length
+    if (length < 2 || length > 2) {
+      alert("Invalid value at field price")
+    }
+  }
+
+  function checkDeposit() {
+    var arr = document.getElementById("deposit").value.split('.');
+    var length = arr[1].length
+    if (length < 2 || length > 2) {
+      alert("Invalid value at field deposit")
+    }
+  }
+</script>
 </body>
 </html>
