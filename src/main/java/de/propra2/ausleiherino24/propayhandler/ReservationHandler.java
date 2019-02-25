@@ -2,7 +2,6 @@ package de.propra2.ausleiherino24.propayhandler;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Case;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,13 +89,13 @@ public class ReservationHandler {
     }
 
     boolean punishReservation(String account,
-            Long reservationId) { //TODO: anpassen entsprechend den anderen
-        HttpEntity<Long> request = new HttpEntity<>(reservationId);
+            Long reservationId) {
 
         ResponseEntity<PPAccount> responseEntity = restTemplate
-                .exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST, request,
+                .exchange(RESERVATION_URL + "/punish/{account}?reservationId={reservationId}\"",
+                        HttpMethod.POST, null,
                         PPAccount.class,
-                        account);
+                        account, reservationId.toString());
 
         return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity
                 .getStatusCode()
