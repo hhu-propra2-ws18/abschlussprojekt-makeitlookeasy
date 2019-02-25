@@ -166,7 +166,7 @@ public class ConflictServiceTest {
 	public void sendConflictEmailShouldSendConflictEmail() throws Exception {
 		conflictService.sendConflictEmail(c1);
 
-		Mockito.verify(emailSender, Mockito.times(1)).sendEmail(c1);
+		Mockito.verify(emailSender, Mockito.times(1)).sendConflictEmail(c1);
 	}
 
 	@Test

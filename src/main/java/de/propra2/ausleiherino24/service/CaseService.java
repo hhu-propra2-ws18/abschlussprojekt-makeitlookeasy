@@ -175,13 +175,13 @@ public class CaseService {
 
 
     /**
-     * return true, falls Erfolg
-     * return false, falls Misserfolg
+     * return true, falls Erfolg return false, falls Misserfolg
      */
     public boolean acceptArticleRequest(Long id) {
         Optional<Case> optCase = caseRepository.findById(id);
-        if (!optCase.isPresent())
+        if (!optCase.isPresent()) {
             return false;
+        }
         Case c = optCase.get();
 
         //Check whether the article is not reserved in this period of time
@@ -215,8 +215,9 @@ public class CaseService {
 
     public void declineArticleRequest(Long id) {
         Optional<Case> optCase = caseRepository.findById(id);
-        if(!optCase.isPresent())
+        if (!optCase.isPresent()) {
             return;
+        }
         Case c = optCase.get();
         c.setRequestStatus(Case.REQUEST_DECLINED);
         reservationHandler.releaseReservation(c);
@@ -266,8 +267,6 @@ public class CaseService {
     /**
      * Findet alle Cases mit Status in {REQUESTED, REQUEST_ACCEPTED, REQUEST_DECLINED,
      * RENTAL_NOT_POSSIBLE}
-     * @param id
-     * @return
      */
     public List<Case> findAllRequestedCasesbyUserId(Long id) {
         return findAllCasesbyUserId(id)
@@ -284,13 +283,13 @@ public class CaseService {
                 .findAllByArticleAndRequestStatus(articleService.findArticleById(id), 2)
                 .stream()
                 .map(c -> {
-                    LocalDate start = LocalDate.ofInstant(Instant.ofEpochMilli(c.getStartTime()),
-                            ZoneId.systemDefault());
-                    LocalDate end = LocalDate.ofInstant(Instant.ofEpochMilli(c.getEndTime()),
-                            ZoneId.systemDefault());
+                    LocalDate start = Instant.ofEpochMilli(c.getStartTime())
+                            .atZone(ZoneId.systemDefault()).toLocalDate();
+                    LocalDate end = Instant.ofEpochMilli(c.getEndTime())
+                            .atZone(ZoneId.systemDefault()).toLocalDate();
                     int daysInBetween = Period.between(start, end).getDays();
                     return IntStream
-                            .range(0, daysInBetween+1)
+                            .range(0, daysInBetween + 1)
                             .mapToObj(start::plusDays);
                 })
                 .flatMap(Function.identity())

@@ -7,12 +7,11 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.NonNull;
 
 public interface ArticleRepository extends CrudRepository<Article, Long> {
 
-    /** TODO Heading.
-     * @return ArrayList of all Article objects in database.
-     */
+    @NonNull
     ArrayList<Article> findAll();
 
     /**
@@ -28,5 +27,5 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
     @Query("SELECT a FROM Article a WHERE a.active = true")
     ArrayList<Article> findAllActive();
 
-    List<Article> findByNameContainsIgnoreCase(String searchstr);
+    List<Article> findByNameContainsIgnoreCase(String searchString);
 }
