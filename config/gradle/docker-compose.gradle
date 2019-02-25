@@ -5,7 +5,7 @@ dockerCompose {
     useComposeFiles = ['docker-compose.yml']
     startedServices = ['propay','db']
 //  forceRecreate = false
-  buildAdditionalArgs = ['--force-rm']
+//  buildAdditionalArgs = ['--force-rm']
     waitForTcpPorts = true
     tcpPortsToIgnoreWhenWaiting = []
     captureContainersOutput = false // one log to rule them all switch

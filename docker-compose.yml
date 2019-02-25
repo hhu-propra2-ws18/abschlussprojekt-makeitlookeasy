@@ -1,16 +1,6 @@
 version: '3.5'
 services:
-  # (production)
-  #  propay:
-  #    container_name: propay
-  #    image: propra/propay:latest
-  #    restart: always
-  #    ports:
-  #      - 8888:8888
-  #    volumes:
-  #      - ./PPdata:/code/data
-
-  # (final)
+  # (dev)
   propay:
     container_name: propay
     image: propra/propay:latest
@@ -20,7 +10,17 @@ services:
     volumes:
       - ./PPdata:/code/data
 
-  # (dev)
+  # (prod)
+  #  propay:
+  #    container_name: propay
+  #    image: propra/propay:latest
+  #    restart: always
+  #    ports:
+  #      - 8888:8888
+  #    volumes:
+  #      - ./PPdata:/code/data
+
+  # (dev) (alternativ: bootRun direkt ausfuehren, docker-compose ist ingetriert)
   ausleiherino24:
     container_name: ausleiherino24
     build:
@@ -29,23 +29,19 @@ services:
     volumes:
       - .:/app
     working_dir: /app
-    #     user: appuser
+    user: appuser
     ports:
       - 8080:8080
     env_file:
       - ./.env
-    command: java -jar app.jar
-    depends_on:
-      - db
-      - propay
+    command: dockerize -wait tcp://db:5432 -timeout 60s -wait tcp://propay:8888 -timeout 60s java -jar app.jar
 
-
-  #   (production)
+  #   (prod)
   #    ausleiherino24:
   #      container_name: ausleiherino24
   #      build:
   #        context: ./
-  #        dockerfile: ausleiherinoProdDockerfile
+  #        dockerfile: ausleiherinoDevDockerfile
   #      volumes:
   #        - .:/app
   #      working_dir: /app
@@ -54,25 +50,9 @@ services:
   #        - 8080:8080
   #      env_file:
   #        - ./.env
-  #      command: dockerize -wait tcp://db:5432 -timeout 600s java -jar app.jar
+  #      command: dockerize -wait tcp://db:5432 -timeout 60s -wait tcp://propay:8888 -timeout 60s java -jar app.jar
 
-  #  (development)
-  #  db:
-  #    container_name: pgsql-01
-  #    build:
-  #      context: ./
-  #      dockerfile: PGSQLDockerfile
-  #    restart: always
-  #    user: "${PUID}:${PGID}"
-  #    ports:
-  #      - 5432:5432
-  #    env_file:
-  #      - ./.env
-  #    volumes:
-  #      - ./pgsql-01/data:/var/lib/postgresql/data
-  #      - ./pgsql-01/conf:/config
-
-  # (production)
+  #  (dev)
   db:
     container_name: pgsql-01
     build:
@@ -87,6 +67,22 @@ services:
     volumes:
       - ./pgsql-01/data:/var/lib/postgresql/data
       - ./pgsql-01/conf:/config
+
+  # (prod)
+#  db:
+#    container_name: pgsql-01
+#    build:
+#      context: ./
+#      dockerfile: PGSQLDockerfile
+#    restart: always
+#    user: "${PUID}:${PGID}"
+#    ports:
+#      - 5432:5432
+#    env_file:
+#      - ./.env
+#    volumes:
+#      - ./pgsql-01/data:/var/lib/postgresql/data
+#      - ./pgsql-01/conf:/config
 
 #  jenkins:
 #    container_name: jenkins
