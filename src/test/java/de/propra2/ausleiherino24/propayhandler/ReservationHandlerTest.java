@@ -45,9 +45,9 @@ public class ReservationHandlerTest {
 
         resList = new ArrayList<>();
         res1 = new Reservation();
-        res1.setNumber(10.0);
+        res1.setAmount(10.0);
         res2 = new Reservation();
-        res2.setNumber(10.0);
+        res2.setAmount(10.0);
         resList.add(res1);
         resList.add(res2);
 

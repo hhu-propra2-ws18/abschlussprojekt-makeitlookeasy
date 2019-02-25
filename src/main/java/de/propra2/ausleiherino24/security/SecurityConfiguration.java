@@ -59,9 +59,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout");
     }
 
-    /**
-     * TODO Javadoc.
-     */
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new PasswordEncoder() {

@@ -56,13 +56,6 @@ public class ConflictController {
         return "redirect:/myOverview?returned&openedconflict";
     }
 
-    /**
-     * TODO Javadoc.
-     *
-     * @param id Description
-     * @param principal Description
-     * @throws Exception Description
-     */
     @DeleteMapping("/accessed/user/deactivateconflict")
     public String deactivateConflict(@RequestParam Long id, Principal principal)
             throws Exception {
@@ -72,14 +65,6 @@ public class ConflictController {
         return "redirect:/myOverview?returned&deactivatedconflict";
     }
 
-    /**
-     * Todo Javadoc.
-     * @param id Description
-     * @param principal Description
-     * @param model Description
-     * @return Description
-     * @throws Exception Description
-     */
     @GetMapping("/conflict")
     public String displayConflict(@RequestParam("id") Long id, Principal principal, Model model)
             throws Exception {
@@ -95,12 +80,6 @@ public class ConflictController {
         return SOMEVIEW_STRING; //view without delete button
     }
 
-    /**
-     * TODO Javadoc.
-     * @param principal Description
-     * @param model Description
-     * @return Description
-     */
     @GetMapping("/conflicts")
     public String displayAllConflicts(Principal principal, Model model) {
         User user = userService.findUserByPrincipal(principal);
@@ -111,14 +90,6 @@ public class ConflictController {
         return SOMEVIEW_STRING;
     }
 
-    /**
-     * TODO Javadoc.
-     * @param id Description
-     * @param principal Description
-     * @param model Description
-     * @return Description
-     * @throws Exception Description
-     */
     @GetMapping("/solveConflictView")
     public String solveConflictView(@RequestParam("id") Long id, Principal principal, Model model)
             throws Exception {
@@ -132,14 +103,6 @@ public class ConflictController {
         return SOMEVIEW_STRING;
     }
 
-    /**
-     * TODO Javadoc.
-     * @param resolveConflict Description
-     * @param principal Description
-     * @param model Description
-     * @return Description
-     * @throws Exception Description
-     */
     @PostMapping("/solveConflict")
     public String solveConflict(@RequestBody ResolveConflict resolveConflict, Principal principal,
             Model model) throws Exception {

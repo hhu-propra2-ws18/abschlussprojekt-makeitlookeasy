@@ -16,6 +16,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// TODO: Extract duplicate code.
+
 /**
  * User hat neben Person eine eigene ID, um diesen als Plattformbenutzer explizit separat ansteuern
  * zu können.
@@ -63,7 +65,6 @@ public class User {
     }
 
     @SuppressWarnings("Duplicates")
-        // TODO: Extract duplicate code.
     void addArticle(Article article, boolean repetition) {
         if (article == null) {
             return;

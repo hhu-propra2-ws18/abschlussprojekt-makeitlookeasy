@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+// TODO: Extract duplicate code. Fix!
+
 /**
  * MainController manages all actions that are available to every visitor of the platform. This
  * includes basic browsing, and sign-up/login.
@@ -38,7 +40,6 @@ public class MainController {
         this.articleService = articleService;
     }
 
-    @SuppressWarnings("Duplicates") // TODO Duplicate code
     @GetMapping(value = {"/", "/index"})
     public ModelAndView getIndex(Principal principal) {
         List<Article> allArticles = articleService.getAllActiveAndForRentalArticles();
@@ -52,7 +53,6 @@ public class MainController {
         return mav;
     }
 
-    @SuppressWarnings("Duplicates") // TODO Duplicate code
     @GetMapping("/categories")
     public ModelAndView getIndexByCategory(@RequestParam String category, Principal principal) {
         List<Article> allArticlesInCategory = articleService

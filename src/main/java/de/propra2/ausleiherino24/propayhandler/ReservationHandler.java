@@ -18,12 +18,6 @@ public class ReservationHandler {
 
     private CaseRepository caseRepository;
 
-    /**
-     * TODO Javadoc
-     *
-     * @param caseRepository Description
-     * @param restTemplate Description
-     */
     public ReservationHandler(CaseRepository caseRepository, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.caseRepository = caseRepository;
@@ -31,7 +25,6 @@ public class ReservationHandler {
     }
 
     public void handleReservedMoney(Case aCase) {
-
         Long reservationId = -1L;
 
         if (aCase.getRequestStatus() == Case.REQUESTED) {
@@ -54,7 +47,7 @@ public class ReservationHandler {
         caseRepository.save(aCase);
     }
 
-    Long createReservation(String sourceUser, String targetUser, Double amount) {
+    private Long createReservation(String sourceUser, String targetUser, Double amount) {
 
         ResponseEntity<Reservation> responseEntity = restTemplate
                 .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
@@ -72,25 +65,20 @@ public class ReservationHandler {
         }
     }
 
-    void releaseReservation(String account, Long reservationId) {
+    private void releaseReservation(String account, Long reservationId) {
 
         restTemplate.exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
                 HttpMethod.POST, null,
                 PPAccount.class, account, reservationId.toString());
     }
 
-    /**
-     * TODO Javadoc.
-     * @return Description
-     */
-
     public void punishReservation(Case aCase) {
         punishReservation(aCase.getReceiver().getUsername(),
                 aCase.getPpTransaction().getReservationId());
     }
 
-    boolean punishReservation(String account,
-            Long reservationId) { //TODO: anpassen entsprechend den anderen
+    // TODO: anpassen entsprechend den anderen (Was bedeutet das?)
+    boolean punishReservation(String account, Long reservationId) {
         HttpEntity<Long> request = new HttpEntity<>(reservationId);
 
         ResponseEntity<PPAccount> responseEntity = restTemplate

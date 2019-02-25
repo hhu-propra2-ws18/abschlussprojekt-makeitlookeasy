@@ -63,6 +63,7 @@ public class Article {
     private List<Case> cases;
 
     /**
+     * TODO : Welche Konstruktion? Englisch? Neuschreiben!
      * Die Konstruktion ist nötig, damit der Case stets mit geupdated wird. Analoges ist im Case
      * Siehe
      * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
@@ -73,7 +74,7 @@ public class Article {
     }
 
     @SuppressWarnings("Duplicates")
-        // TODO: Duplicate code
+        // TODO: Extract duplicate code. Fix!
     void addCase(Case aCase, boolean repetition) {
         if (aCase == null) {
             return;
@@ -91,6 +92,7 @@ public class Article {
         }
     }
 
+    // TODO: Method is never used. Delete?
     public void removeCase(Case aCase) {
         cases.remove(aCase);
         aCase.setArticle(null);

@@ -27,7 +27,7 @@ class PPAccount {
         return reserved;
     }
 
-    void addReservation(Double amount) {
+    public void addReservation(Double amount) {
         this.reservations.add(new Reservation(this.reservations.size() + 1L, amount));
     }
 }

@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+// TODO: Exatrct duplicate code. Fix!
+
 @Controller
 public class CaseController {
 
@@ -43,15 +45,6 @@ public class CaseController {
     private static final String ARTICLE_STRING = "article";
     private final List<Category> allCategories = Category.getAllCategories();
 
-    /** TODO JavaDoc-Descriptions.
-     * Manages all requests regarding creating/editing/deleting articles/cases and after-sales.
-     * Possible features: transaction rating (karma/voting), chatting.
-     *
-     * @param articleService Descriptions
-     * @param userService Descriptions
-     * @param imageService Descriptions
-     * @param caseService Descriptions
-     */
     @Autowired
     public CaseController(ArticleService articleService,
             UserService userService,
@@ -63,16 +56,7 @@ public class CaseController {
         this.caseService = caseService;
     }
 
-    /**
-     * TODO Javadoc.
-     *
-     * @param id Descriptions
-     * @param principal Descriptions
-     * @return Descriptions
-     * @throws Exception Descriptions
-     */
     @GetMapping("/article")
-    @SuppressWarnings("Duplicates") // TODO Duplicate code
     public ModelAndView displayArticle(@RequestParam("id") Long id, Principal principal) {
         Article article = articleService.findArticleById(id);
         User currentUser = userService.findUserByPrincipal(principal);
@@ -84,12 +68,6 @@ public class CaseController {
         return mav;
     }
 
-    /**
-     * TODO Javadoc.
-     *
-     * @param principal Descriptions
-     * @return Descriptions
-     */
     @GetMapping("/newArticle")
     public ModelAndView createNewCaseAndArticle(Principal principal) {
         Article article = new Article();
@@ -102,14 +80,6 @@ public class CaseController {
         return mav;
     }
 
-    /**
-     * TODO Javadoc.
-     *
-     * @param article Descriptions
-     * @param image Descriptions
-     * @param principal Descriptions
-     * @return Descriptions
-     */
     @PostMapping("/saveNewArticle")
     public ModelAndView saveNewCaseAndArticle(@ModelAttribute @Valid Article article,
             @RequestParam("image") MultipartFile image, Principal principal) {
@@ -124,14 +94,6 @@ public class CaseController {
         return new ModelAndView("redirect:/");
     }
 
-    /**
-     * TODO Javadoc.
-     *
-     * @param article Descriptions
-     * @param image Descriptions
-     * @param principal Descriptions
-     * @return Descriptions
-     */
     @PutMapping("/saveEditedArticle")
     public ModelAndView saveEditedCaseAndArticle(@ModelAttribute @Valid Article article,
             @RequestParam("image") MultipartFile image, Principal principal) {
@@ -162,8 +124,7 @@ public class CaseController {
         }
     }
 
-
-    //NEED FOR JS DEVE PLS DO NOT DELETE
+    //NEED FOR JS DEVE PLS DO NOT DELETE TODO: WHY IS THIS NEEDED?
     @RequestMapping("/api/events")
     @ResponseBody
     public List<LocalDate> test() {
@@ -210,7 +171,7 @@ public class CaseController {
         return "redirect:/myOverview?returned&successfullyreturned";
     }
 
-    /**
+    /** TODO: Englisch? Neuschrieben!
      * Liefert einen Methode für Springboot um das Feld Article.category korrekt zu empfangen und zu
      * verknüpfen.
      */

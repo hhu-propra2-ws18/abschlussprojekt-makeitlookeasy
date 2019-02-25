@@ -5,8 +5,6 @@ import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.UserService;
 import java.util.Properties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -19,16 +17,7 @@ public class EmailSender {
     private JavaMailSenderImpl mailSender;
     private SimpleMailMessage message;
     private UserService userService;
-    Logger logger = LoggerFactory.getLogger(EmailSender.class);
 
-    /**
-     * TODO JavaDoc.
-     *
-     * @param config Description
-     * @param mailSender Description
-     * @param message Description
-     * @param userService Description
-     */
     @Autowired
     public EmailSender(EmailConfig config, JavaMailSenderImpl mailSender,
             SimpleMailMessage message, UserService userService) {
@@ -38,11 +27,6 @@ public class EmailSender {
         this.userService = userService;
     }
 
-    /**
-     * TODO JavaDoc.
-     * @param conflict Description
-     * @throws Exception Description
-     */
     public void sendConflictEmail(Conflict conflict) {
         configureMailSender();
 

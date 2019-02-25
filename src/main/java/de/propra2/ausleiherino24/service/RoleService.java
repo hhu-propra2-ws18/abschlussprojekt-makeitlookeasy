@@ -7,13 +7,7 @@ public class RoleService {
     private RoleService() {
     }
 
-    /**
-     * TODO Javadoc.
-     *
-     * @param request Description
-     * @return Description
-     */
-    public static String getUserRole(HttpServletRequest request) {
+    static String getUserRole(HttpServletRequest request) {
         if (request.isUserInRole("user")) {
             return "user";
         } else if (request.isUserInRole("admin")) {
