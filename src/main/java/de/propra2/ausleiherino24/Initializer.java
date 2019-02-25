@@ -39,9 +39,8 @@ public class Initializer implements ServletContextInitializer {
     private final ImageService imageService;
 
     private final Faker faker = new Faker(Locale.GERMAN);
-    private final Logger logger = LoggerFactory.getLogger(Initializer.class);
-
     private static final String SECRET_STRING = "password";
+    private final Logger logger = LoggerFactory.getLogger(Initializer.class);
 
     @Autowired
     public Initializer(UserRepository userRepository, ArticleRepository articleRepository,
