@@ -168,6 +168,8 @@ public class CaseController {
         }
     }
 
+
+    //NEED FOR JS DEVE PLS DO NOT DELETE
     @RequestMapping("/api/events")
     @ResponseBody
     public List<LocalDate> test() throws Exception {
