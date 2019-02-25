@@ -1,17 +1,5 @@
 package de.propra2.ausleiherino24.service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import de.propra2.ausleiherino24.data.ConflictRepository;
 import de.propra2.ausleiherino24.email.EmailSender;
 import de.propra2.ausleiherino24.model.Article;
@@ -19,6 +7,16 @@ import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import org.assertj.core.api.Assertions;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.springframework.dao.DataAccessException;
+import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 public class ConflictServiceTest {
@@ -151,7 +149,6 @@ public class ConflictServiceTest {
 
 	@Test(expected=Exception.class)
 	public void saveConflictShouldThrowExceptionIfConflictIsNull() throws Exception {
-		User user = new User();
 		conflictService.saveConflict(null, user);
 	}
 

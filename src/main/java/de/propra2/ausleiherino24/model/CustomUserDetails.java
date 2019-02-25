@@ -13,9 +13,6 @@ public class CustomUserDetails extends User implements UserDetails {
         super(user);
     }
 
-    /**
-     * TODO Javadoc.
-     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<SimpleGrantedAuthority> collect = new ArrayList<>();

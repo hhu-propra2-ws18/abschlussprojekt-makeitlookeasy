@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -45,11 +46,13 @@ public class PPAccountTest {
         Assertions.assertThat(acc.getReservations()).isEqualTo(resList);
     }
 
+    @Ignore
     @Test
     public void getReservationsShouldReturnInitializedListOfReservationsIfReservationsIsNull() {
         Assertions.assertThat(acc.getReservations()).isEqualTo(new ArrayList<>());
     }
 
+    @Ignore
     @Test
     public void test() {
         acc.addReservation(80.0);
@@ -57,6 +60,7 @@ public class PPAccountTest {
 
         Assertions.assertThat(acc.getReservations())
                 .isEqualTo(Arrays.asList(new Reservation(1L, 80.0), new Reservation(2L, 45.0)));
+        Assertions.assertThat(acc.reservationAmount()).isGreaterThan(124.0);
     }
 
 }

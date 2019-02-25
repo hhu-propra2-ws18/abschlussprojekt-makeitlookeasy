@@ -2,6 +2,7 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.model.Person;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ public class PersonService {
 
     private final PersonRepository personRepository;
 
-    private final Logger LOGGER = LoggerFactory.getLogger(PersonService.class);
+    private final Logger logger = LoggerFactory.getLogger(PersonService.class);
 
     @Autowired
     public PersonService(PersonRepository personRepository) {
@@ -27,7 +28,17 @@ public class PersonService {
      */
     void savePerson(Person person, String msg) {
         personRepository.save(person);
-        LOGGER.info("%s person profile [ID=%L]", msg, person.getId());
+        logger.info("{} person profile [ID={}]", msg, person.getId());
     }
 
+    Person findPersonById(Long id) {
+        Optional<Person> optionalPerson = personRepository.findById(id);
+
+        if (!optionalPerson.isPresent()) {
+            logger.warn("Couldn't find person {} in database.", id);
+            throw new NullPointerException();
+        }
+
+        return optionalPerson.get();
+    }
 }

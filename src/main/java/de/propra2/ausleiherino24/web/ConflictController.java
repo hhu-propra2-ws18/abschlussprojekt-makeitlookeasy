@@ -5,7 +5,6 @@ import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.ResolveConflict;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ConflictService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
@@ -14,7 +13,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,15 +24,15 @@ public class ConflictController {
 
     private final ConflictService conflictService;
     private final UserService userService;
-    private final CaseService caseService;
     private final CaseRepository caseRepository;
+
+    private static final String SOMEVIEW_STRING = "someView";
 
     @Autowired
     public ConflictController(ConflictService conflictService, UserService userService,
-            CaseService caseService, CaseRepository caseRepository) {
+            CaseRepository caseRepository) {
         this.conflictService = conflictService;
         this.userService = userService;
-        this.caseService = caseService;
         this.caseRepository = caseRepository;
     }
 
@@ -75,14 +73,6 @@ public class ConflictController {
         return "redirect:/myOverview?returned&deactivatedconflict";
     }
 
-    /**
-     * Todo Javadoc.
-     * @param id Description
-     * @param principal Description
-     * @param model Description
-     * @return Description
-     * @throws Exception Description
-     */
     @GetMapping("/conflict")
     public String displayConflict(@RequestParam("id") Long id, Principal principal, Model model)
             throws Exception {
@@ -91,38 +81,23 @@ public class ConflictController {
 
         model.addAttribute("conflict", conflictToDisplay);
         model.addAttribute("user", user);
-        if(conflictService.isConflictedArticleOwner(conflictToDisplay, user)){
+        if (conflictService.isConflictedArticleOwner(conflictToDisplay, user)) {
             // view with delete-conflict-button
         }
 
-        return "someView"; //view without delete button
+        return SOMEVIEW_STRING; //view without delete button
     }
 
-    /**
-     * TODO Javadoc.
-     * @param principal Description
-     * @param model Description
-     * @return Description
-     * @throws Exception Description
-     */
     @GetMapping("/conflicts")
-    public String displayAllConflicts(Principal principal, Model model) throws Exception {
+    public String displayAllConflicts(Principal principal, Model model) {
         User user = userService.findUserByPrincipal(principal);
         List<Conflict> conflicts = conflictService.getAllConflictsByUser(user);
 
         model.addAttribute("conflicts", conflicts);
         model.addAttribute("user", user);
-        return "someView";
+        return SOMEVIEW_STRING;
     }
 
-    /**
-     * TODO Javadoc.
-     * @param id Description
-     * @param principal Description
-     * @param model Description
-     * @return Description
-     * @throws Exception Description
-     */
     @GetMapping("/solveConflictView")
     public String solveConflictView(@RequestParam("id") Long id, Principal principal, Model model)
             throws Exception {
@@ -133,17 +108,9 @@ public class ConflictController {
         model.addAttribute("user", user);
         model.addAttribute("participants",
                 conflictService.getConflictParticipants(conflictToDisplay));
-        return "someView";
+        return SOMEVIEW_STRING;
     }
 
-    /**
-     * TODO Javadoc.
-     * @param resolveConflict Description
-     * @param principal Description
-     * @param model Description
-     * @return Description
-     * @throws Exception Description
-     */
     @PostMapping("/solveConflict")
     public String solveConflict(@RequestBody ResolveConflict resolveConflict, Principal principal,
             Model model) throws Exception {
@@ -157,7 +124,7 @@ public class ConflictController {
 
         model.addAttribute("conflicts", conflicts);
         model.addAttribute("user", user);
-        return "someView";
+        return SOMEVIEW_STRING;
     }
 }
 

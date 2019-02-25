@@ -2,7 +2,6 @@ package de.propra2.ausleiherino24.email;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.User;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,8 +23,6 @@ public class CaseEndTimeReminderTest {
 
     @Before
     public void init(){
-        User u = new User();
-        u.setEmail("test@mail.de");
         formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         es = Mockito.mock(EmailSender.class);
         CaseRepository caseRepository = Mockito.mock(CaseRepository.class);
@@ -37,7 +34,7 @@ public class CaseEndTimeReminderTest {
     }
 
     @Test
-    public void sendRemindingEmailShouldSendEmailIfCaseEndTimeIsTomorrow() throws Exception {
+    public void sendRemindingEmailShouldSendEmailIfCaseEndTimeIsTomorrow() {
         LocalDateTime tomorrow = today.plusDays(1L);
         String s = tomorrow.format(formatter);
         Mockito.when(a.getFormattedEndTime()).thenReturn(s);
@@ -47,7 +44,7 @@ public class CaseEndTimeReminderTest {
     }
 
     @Test
-    public void sendRemindingEmailShouldNotSendEmailIfCaseEndTimeIsToday() throws Exception {
+    public void sendRemindingEmailShouldNotSendEmailIfCaseEndTimeIsToday() {
         String s = today.format(formatter);
         Mockito.when(a.getFormattedEndTime()).thenReturn(s);
         r.sendRemindingEmail();
@@ -56,7 +53,7 @@ public class CaseEndTimeReminderTest {
     }
 
     @Test
-    public void sendRemindingEmailShouldNOtSendEmailIfCaseEndTimeWasYesterday() throws Exception {
+    public void sendRemindingEmailShouldNOtSendEmailIfCaseEndTimeWasYesterday() {
         LocalDateTime yesterday = today.minusDays(1L);
         String s = yesterday.format(formatter);
         Mockito.when(a.getFormattedEndTime()).thenReturn(s);
