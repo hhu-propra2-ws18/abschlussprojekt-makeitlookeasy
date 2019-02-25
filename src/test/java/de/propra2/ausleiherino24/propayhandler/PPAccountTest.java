@@ -57,6 +57,7 @@ public class PPAccountTest {
 
         Assertions.assertThat(acc.getReservations())
                 .isEqualTo(Arrays.asList(new Reservation(1L, 80.0), new Reservation(2L, 45.0)));
+        Assertions.assertThat(acc.reservationAmount()).isGreaterThan(124.0);
     }
 
 }

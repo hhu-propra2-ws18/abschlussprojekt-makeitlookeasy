@@ -25,7 +25,8 @@ public class AccountHandler {
     }
 
     public double checkFunds(String accountName) {
-        PPAccount account = restTemplate
+        PPAccount account;
+        account = restTemplate
                 .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
         return account.getAmount() - account.reservationAmount();
     }
