@@ -1,6 +1,7 @@
 package de.propra2.ausleiherino24.propayhandler;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.PPTransactionRepository;
 import de.propra2.ausleiherino24.model.Case;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -16,6 +17,7 @@ public class ReservationHandler {
     private RestTemplate restTemplate;
     private AccountHandler accountHandler;
 
+    private PPTransactionRepository ppTransactionRepository;
     private CaseRepository caseRepository;
 
     /**
@@ -24,10 +26,12 @@ public class ReservationHandler {
      * @param caseRepository Description
      * @param restTemplate Description
      */
-    public ReservationHandler(CaseRepository caseRepository, RestTemplate restTemplate) {
+    public ReservationHandler(PPTransactionRepository ppTransactionRepository,
+            CaseRepository caseRepository, RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.caseRepository = caseRepository;
-        accountHandler = new AccountHandler(restTemplate);
+        this.ppTransactionRepository = ppTransactionRepository;
+        accountHandler = new AccountHandler(caseRepository, ppTransactionRepository, restTemplate);
     }
 
     public void handleReservedMoney(Case aCase) {
@@ -64,18 +68,24 @@ public class ReservationHandler {
         return responseEntity.getBody().getId();
     }
 
-    public void releaseReservation(Case aCase) {
+    public boolean releaseReservation(Case aCase) {
         if (aCase.getPpTransaction().getReservationId() != -1) {
-            releaseReservation(aCase.getReceiver().getUsername(),
+            return releaseReservation(aCase.getReceiver().getUsername(),
                     aCase.getPpTransaction().getReservationId());
         }
+        return false;
     }
 
-    void releaseReservation(String account, Long reservationId) {
+    boolean releaseReservation(String account, Long reservationId) {
 
-        restTemplate.exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
+        ResponseEntity<PPAccount> responseEntity = restTemplate
+                .exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
                         HttpMethod.POST, null,
                         PPAccount.class, account, reservationId.toString());
+
+        return responseEntity.getStatusCode().equals(HttpStatus.OK) || responseEntity
+                .getStatusCode()
+                .equals(HttpStatus.CREATED);
     }
 
     /**
@@ -83,8 +93,8 @@ public class ReservationHandler {
      * @return Description
      */
 
-    void punishReservation(Case aCase) {
-        punishReservation(aCase.getReceiver().getUsername(),
+    boolean punishReservation(Case aCase) {
+        return punishReservation(aCase.getReceiver().getUsername(),
                 aCase.getPpTransaction().getReservationId());
     }
 
