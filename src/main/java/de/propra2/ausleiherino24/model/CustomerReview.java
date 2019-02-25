@@ -1,6 +1,7 @@
 package de.propra2.ausleiherino24.model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -26,9 +27,31 @@ public class CustomerReview {
     @NotNull
     Case aCase;
 
-    Long stars;
+    double stars;
 
-    String description;
+    String title;
+
+    @Column(length = 10485760)
+    String text;
 
     Long timestamp;
+
+    public void setACase(Case aCase) {
+        setACase(aCase, false);
+    }
+
+    public void setACase(Case aCase, boolean repetition) {
+        this.aCase = aCase;
+        if (aCase != null && !repetition) {
+            aCase.setReview(this, true);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Stars: " + stars + "\n"
+                + "Title: " + title + "\n"
+                + "Text: " + text + "\n"
+                + "timestamp: " + timestamp;
+    }
 }

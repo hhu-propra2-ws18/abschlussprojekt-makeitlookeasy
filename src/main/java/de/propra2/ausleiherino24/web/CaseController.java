@@ -1,7 +1,11 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.CustomerReviewRepository;
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
+import de.propra2.ausleiherino24.model.CustomerReview;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.CaseService;
@@ -14,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,27 +44,34 @@ public class CaseController {
     private final ImageService imageService;
     private final UserService userService;
     private final CaseService caseService;
+    private final CustomerReviewRepository customerReviewRepository;
+    private final CaseRepository caseRepository;
 
     private final List<Category> allCategories = Category.getAllCategories();
 
     /**
      * Manages all requests regarding creating/editing/deleting articles/cases and after-sales.
      * Possible features: transaction rating (karma/voting), chatting. TODO JavaDoc-Descriptions.
-     *
      * @param articleService Descriptions
      * @param userService Descriptions
      * @param imageService Descriptions
      * @param caseService Descriptions
+     * @param customerReviewRepository
+     * @param caseRepository
      */
     @Autowired
     public CaseController(ArticleService articleService,
             UserService userService,
             ImageService imageService,
-            CaseService caseService) {
+            CaseService caseService,
+            CustomerReviewRepository customerReviewRepository,
+            CaseRepository caseRepository) {
         this.articleService = articleService;
         this.userService = userService;
         this.imageService = imageService;
         this.caseService = caseService;
+        this.customerReviewRepository = customerReviewRepository;
+        this.caseRepository = caseRepository;
     }
 
     /**
@@ -231,6 +243,23 @@ public class CaseController {
     public String acceptCaseReturn(@RequestParam Long id) {
         caseService.acceptCaseReturn(id);
         return "redirect:/myOverview?returned&successfullyreturned";
+    }
+
+
+    /**
+     * Gets called, when someone creates a review
+     */
+    @PostMapping("/writeReview")
+    public String writeReview(@RequestParam Long id, CustomerReview review) {
+        review.setTimestamp(new Date().getTime());
+        Optional<Case> opt = caseService.findCaseById(id);
+        if (opt.isPresent()) {
+            review.setACase(opt.get());
+            customerReviewRepository.save(review);
+            caseRepository.save(review.getACase());
+        }
+        System.out.println(review);
+        return "redirect:/myOverview?borrowed";
     }
 
     /**

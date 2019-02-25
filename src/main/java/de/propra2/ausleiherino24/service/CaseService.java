@@ -19,7 +19,6 @@ import java.util.function.Function;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import javax.swing.text.html.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -323,5 +322,9 @@ public class CaseService {
                 .collect(Collectors.toList());
 
 
+    }
+
+    public Optional<Case> findCaseById(Long id) {
+        return caseRepository.findById(id);
     }
 }

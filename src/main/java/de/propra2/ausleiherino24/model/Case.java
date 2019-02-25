@@ -23,8 +23,8 @@ import lombok.NoArgsConstructor;
 public class Case {
 
     /**
-     * Bitte die Werte nicht ändern. Diese dienen zur Sortierung
-     * und müssen gegebenefalls in myOverview.html mit angepasst werden
+     * Bitte die Werte nicht ändern. Diese dienen zur Sortierung und müssen gegebenefalls in
+     * myOverview.html mit angepasst werden
      */
 
     public static final int REQUESTED = 1;
@@ -56,6 +56,8 @@ public class Case {
     private Article article;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Conflict conflict;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private CustomerReview review;
 
     /**
      * Die Konstruktion ist nötig, damit der Case stets mit geupdatet wird. Analoges ist im Case
@@ -71,6 +73,17 @@ public class Case {
         this.article = article;
         if (article != null && !repetition) {
             article.addCase(this, true);
+        }
+    }
+
+    public void setReview(CustomerReview review) {
+        setReview(review, false);
+    }
+
+    void setReview(CustomerReview review, boolean repetition) {
+        this.review = review;
+        if (review != null && !repetition) {
+            review.setACase(this, true);
         }
     }
 
