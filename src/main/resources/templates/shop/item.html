@@ -76,35 +76,35 @@
       }
     }
 
-   /* var getJSON = function (url, callback) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.responseType = 'json';
-      xhr.onload = function () {
-        var status = xhr.status;
-        if (status === 200) {
-          console.log(xhr.response);
-        } else {
-          callback(status, xhr.response);
-        }
-      };
-      xhr.send();
-    }; */
+    /* var getJSON = function (url, callback) {
+       var xhr = new XMLHttpRequest();
+       xhr.open('GET', url, true);
+       xhr.responseType = 'json';
+       xhr.onload = function () {
+         var status = xhr.status;
+         if (status === 200) {
+           console.log(xhr.response);
+         } else {
+           callback(status, xhr.response);
+         }
+       };
+       xhr.send();
+     }; */
 
-    function JsonpCallback(json)  {
+    function JsonpCallback(json) {
       console.log(json.result);
     }
 
-    function CallURL()  {
+    function CallURL() {
       $.ajax({
         url: '/api/events',
         type: "GET",
         dataType: "json",
         async: false,
-        success: function(msg)  {
+        success: function (msg) {
           JsonpCallback(msg);
         },
-        error: function()  {
+        error: function () {
           alert("There was an error, fetching events");
         }
       });

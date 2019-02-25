@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ChatController {
+
     private final UserService userService;
     private SimpMessagingTemplate simpMessagingTemplate;
 
@@ -37,8 +38,8 @@ public class ChatController {
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")
     public ChatMessage addUser(@Payload ChatMessage chatMessage,
-                               SimpMessageHeaderAccessor headerAccessor,
-                                Principal principal) {
+            SimpMessageHeaderAccessor headerAccessor,
+            Principal principal) {
         // Add username in web socket session
         User user = userService.findUserByPrincipal(principal);
 

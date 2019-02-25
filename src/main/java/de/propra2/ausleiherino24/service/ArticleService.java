@@ -102,8 +102,9 @@ public class ArticleService {
     public void updateArticle(Long id, Article article) {
         Optional<Article> optionalArticle = articleRepository.findById(id);
 
-        if(!optionalArticle.isPresent())
+        if (!optionalArticle.isPresent()) {
             return;
+        }
 
         Article oldArticle = optionalArticle.get();
         oldArticle.setForRental(article.isForRental());

@@ -75,7 +75,7 @@
         <div class="col-lg-4 col-md-6 mb-4" th:each="article: ${all}">
           <div class="card h-100">
             <a th:href="@{/article(id=${article.getId()})}"><img alt="" class="card-img-top"
-                             th:src="@{/images/{id}(id=${article.image})}"></a>
+                                                                 th:src="@{/images/{id}(id=${article.image})}"></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a th:href="@{/article(id=${article.getId()})}"

@@ -1,55 +1,55 @@
 .messageArea {
-    padding: 0;
+  padding: 0;
 }
 
 .message {
-    position: relative;
-    list-style: none;
+  position: relative;
+  list-style: none;
 }
 
 .message.event {
-    border-top: 1px solid #ddd;
-    text-align: center;
-    font-weight: bold;
+  border-top: 1px solid #ddd;
+  text-align: center;
+  font-weight: bold;
 }
 
 .message.divided {
-    border-top: 1px solid #ddd;
+  border-top: 1px solid #ddd;
 }
 
 .message-title {
-    position: absolute;
-    top: -10px;
-    left: 10px;
-    padding: 0 10px;
-    background-color: white;
-    color: #aaa
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  padding: 0 10px;
+  background-color: white;
+  color: #aaa
 }
 
-.chat-form  {
-    display: flex;
-    border: 1px solid #ddd;
+.chat-form {
+  display: flex;
+  border: 1px solid #ddd;
 }
 
 .chat-input {
-    flex: 1;
-    border: none;
-    resize: none;
-    padding: 5px;
+  flex: 1;
+  border: none;
+  resize: none;
+  padding: 5px;
 }
 
 .chat-send {
-    margin: 10px;
+  margin: 10px;
 }
 
 .chat-hidden {
-    display: none;
+  display: none;
 }
 
 .chat-header {
-    display: flex;
+  display: flex;
 }
 
 .chat-header h2 {
-    margin: 5px 20px 5px 0;
+  margin: 5px 20px 5px 0;
 }

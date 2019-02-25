@@ -20,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 public class ConflictServiceTest {
+
 	private CaseService caseService;
 	private EmailSender emailSender;
 	private ConflictRepository conflictRepository;
@@ -38,7 +39,9 @@ public class ConflictServiceTest {
 		emailSender = Mockito.mock(EmailSender.class);
 		conflictRepository = Mockito.mock(ConflictRepository.class);
 		reservationHandler = Mockito.mock(ReservationHandler.class);
-		conflictService = Mockito.spy(new ConflictService(conflictRepository, emailSender, reservationHandler, caseService));
+		conflictService = Mockito
+				.spy(new ConflictService(conflictRepository, emailSender, reservationHandler,
+						caseService));
 
 		user = new User();
 		user2 = new User();
@@ -57,7 +60,7 @@ public class ConflictServiceTest {
 		c1.setConflictDescription("TestDescription");
 	}
 
-	@Test(expected=Exception.class)
+	@Test(expected = Exception.class)
 	public void isConflictedArticleOwnerShouldThrowExceptionIfUserIsNull() throws Exception {
 		user = null;
 		c1 = new Conflict();
@@ -66,20 +69,22 @@ public class ConflictServiceTest {
 	}
 
 	@Test
-	public void isConflictedArticleOwnerShouldReturnTrueIfUserIsOwnerOfConflictedArticle() throws Exception {
+	public void isConflictedArticleOwnerShouldReturnTrueIfUserIsOwnerOfConflictedArticle()
+			throws Exception {
 		art.setOwner(user);
 
 		Assertions.assertThat(conflictService.isConflictedArticleOwner(c1, user)).isTrue();
 	}
 
 	@Test
-	public void isConflictedArticleOwnerShouldReturnFalseIfUserIsOwnerOfConflictedArticle() throws Exception {
+	public void isConflictedArticleOwnerShouldReturnFalseIfUserIsOwnerOfConflictedArticle()
+			throws Exception {
 		art.setOwner(user);
 
 		Assertions.assertThat(conflictService.isConflictedArticleOwner(c1, user2)).isFalse();
 	}
 
-	@Test(expected=Exception.class)
+	@Test(expected = Exception.class)
 	public void getConflictShouldThrowExceptionIfCalledWithWrongUser() throws Exception {
 		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
@@ -88,21 +93,24 @@ public class ConflictServiceTest {
 
 
 	@Test()
-	public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithArticleReceiver() throws Exception {
+	public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithArticleReceiver()
+			throws Exception {
 		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
 		Assertions.assertThat(conflictService.getConflict(1L, user)).isEqualTo(c1);
 	}
 
 	@Test()
-	public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithArticleOwner() throws Exception {
+	public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithArticleOwner()
+			throws Exception {
 		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
 		Assertions.assertThat(conflictService.getConflict(1L, user2)).isEqualTo(c1);
 	}
 
 	@Test()
-	public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithAdmin() throws Exception {
+	public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithAdmin()
+			throws Exception {
 		User admin = new User();
 		admin.setRole("admin");
 		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
@@ -110,13 +118,13 @@ public class ConflictServiceTest {
 		Assertions.assertThat(conflictService.getConflict(1L, admin)).isEqualTo(c1);
 	}
 
-	@Test(expected=Exception.class)
+	@Test(expected = Exception.class)
 	public void getConflictShouldThrowExceptionIfConflictIdNotValid() throws Exception {
 		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.empty());
 		conflictService.getConflict(1L, user);
 	}
 
-	@Test(expected=Exception.class)
+	@Test(expected = Exception.class)
 	public void getConflictParticipantsShouldThrowExceptionIfCalledWithNull() throws Exception {
 		conflictService.getConflictParticipants(null);
 	}
@@ -130,7 +138,8 @@ public class ConflictServiceTest {
 	}
 
 	@Test
-	public void getAllConflictsByUserShouldReturnListOfAllCurrentConflictsByUser() throws Exception {
+	public void getAllConflictsByUserShouldReturnListOfAllCurrentConflictsByUser()
+			throws Exception {
 		Article art2 = new Article();
 		art2.setOwner(new User());
 		Case ca2 = new Case();
@@ -144,10 +153,10 @@ public class ConflictServiceTest {
 
 		List<Conflict> allConflictsByUser = conflictService.getAllConflictsByUser(user2);
 
-		Assertions.assertThat(allConflictsByUser).containsAll(Arrays.asList(c2,c1));
+		Assertions.assertThat(allConflictsByUser).containsAll(Arrays.asList(c2, c1));
 	}
 
-	@Test(expected=Exception.class)
+	@Test(expected = Exception.class)
 	public void saveConflictShouldThrowExceptionIfConflictIsNull() throws Exception {
 		conflictService.saveConflict(null, user);
 	}
@@ -167,7 +176,8 @@ public class ConflictServiceTest {
 	}
 
 	@Test
-	public void deactivateConflictShouldDeactivateConflictIfUserIsConflictReporter() throws Exception {
+	public void deactivateConflictShouldDeactivateConflictIfUserIsConflictReporter()
+			throws Exception {
 		c1.setId(1L);
 		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
@@ -176,8 +186,9 @@ public class ConflictServiceTest {
 		Mockito.verify(conflictRepository, Mockito.times(1)).delete(c1);
 	}
 
-	@Test(expected=Exception.class)
-	public void deactivateConflictShouldNotDeactivateConflictIfUserIsNotConflictReporter() throws Exception {
+	@Test(expected = Exception.class)
+	public void deactivateConflictShouldNotDeactivateConflictIfUserIsNotConflictReporter()
+			throws Exception {
 		c1.setId(1L);
 		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
@@ -198,7 +209,7 @@ public class ConflictServiceTest {
 		Mockito.verify(conflictRepository, Mockito.times(1)).delete(c1);
 	}
 
-	@Test(expected=DataAccessException.class)
+	@Test(expected = DataAccessException.class)
 	public void deactivateConflictShouldThrowExceptionIfConflictNotFound() throws Exception {
 		User user = new User();
 

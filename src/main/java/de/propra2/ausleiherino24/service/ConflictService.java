@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ConflictService {
+
     private final CaseService caseService;
     private final ConflictRepository conflicts;
     private final EmailSender emailSender;
@@ -60,7 +61,8 @@ public class ConflictService {
         }
         isConflictReporterOrAdmin(conflictToDeactivate.get(), user);
         Conflict theConflictToDeactivate = conflictToDeactivate.get();
-        theConflictToDeactivate.setConflictDescription("ConflictDeactivated by :" + user.getUsername());
+        theConflictToDeactivate
+                .setConflictDescription("ConflictDeactivated by :" + user.getUsername());
         sendConflictEmail(theConflictToDeactivate);
         conflicts.delete(theConflictToDeactivate);
     }
@@ -97,7 +99,8 @@ public class ConflictService {
     }
 
     private boolean isCorrectUser(Conflict conflict, User user) throws Exception {
-        if (!(user.equals(conflict.getOwner()) || user.equals(conflict.getReceiver())) && !isUserAdmin(
+        if (!(user.equals(conflict.getOwner()) || user.equals(conflict.getReceiver()))
+                && !isUserAdmin(
                 user)) {
             throw new Exception("Access denied!");
         }
@@ -105,7 +108,8 @@ public class ConflictService {
     }
 
     private boolean isConflictReporterOrAdmin(Conflict conflict, User user) throws Exception {
-        if(!(conflict.getConflictReporterUsername().equals(user.getUsername()) || isUserAdmin(user))){
+        if (!(conflict.getConflictReporterUsername().equals(user.getUsername()) || isUserAdmin(
+                user))) {
             throw new Exception("Access denied!");
         }
         return true;

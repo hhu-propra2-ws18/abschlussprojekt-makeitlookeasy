@@ -11,7 +11,6 @@ import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;

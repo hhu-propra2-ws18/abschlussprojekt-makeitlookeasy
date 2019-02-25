@@ -171,9 +171,9 @@ public class CaseController {
         return "redirect:/myOverview?returned&successfullyreturned";
     }
 
-    /** TODO: Englisch? Neuschrieben!
-     * Liefert einen Methode für Springboot um das Feld Article.category korrekt zu empfangen und zu
-     * verknüpfen.
+    /**
+     * TODO: Englisch? Neuschrieben! Liefert einen Methode für Springboot um das Feld
+     * Article.category korrekt zu empfangen und zu verknüpfen.
      */
     @InitBinder
     public void initBinder(final WebDataBinder webDataBinder) {

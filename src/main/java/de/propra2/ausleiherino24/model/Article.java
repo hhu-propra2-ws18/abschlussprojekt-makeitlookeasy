@@ -41,14 +41,13 @@ public class Article {
     private String location;
 
     /**
-     * true: Artikel existiert noch
-     * false: Artikel gelöscht
+     * true: Artikel existiert noch false: Artikel gelöscht
      */
     private boolean active;
 
     /**
-     * true: Artikel kann zur Zeit ausgeliehen werden
-     * false: Artikel ist zur Zeit nicht zum Ausleihen verfügbar
+     * true: Artikel kann zur Zeit ausgeliehen werden false: Artikel ist zur Zeit nicht zum
+     * Ausleihen verfügbar
      */
     //TODO must be changed if status changes
     private boolean forRental;
@@ -63,9 +62,8 @@ public class Article {
     private List<Case> cases;
 
     /**
-     * TODO : Welche Konstruktion? Englisch? Neuschreiben!
-     * Die Konstruktion ist nötig, damit der Case stets mit geupdated wird. Analoges ist im Case
-     * Siehe
+     * TODO : Welche Konstruktion? Englisch? Neuschreiben! Die Konstruktion ist nötig, damit der
+     * Case stets mit geupdated wird. Analoges ist im Case Siehe
      * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
      */
 
@@ -110,13 +108,15 @@ public class Article {
     }
 
     /**
-     * @return returns true if article has only cases where the requeststatus is REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED, otherwise returns false
+     * @return returns true if article has only cases where the requeststatus is REQUEST_DECLINED,
+     * RENTAL_NOT_POSSIBLE or FINISHED, otherwise returns false
      */
     public boolean allCasesClosed() {
         List<Case> activeCases;
-        if(getCases() != null) {
+        if (getCases() != null) {
             activeCases = getCases().stream()
-                    .filter(c -> c.getRequestStatus() != 12 && c.getRequestStatus() != 4 && c.getRequestStatus() != 14)
+                    .filter(c -> c.getRequestStatus() != 12 && c.getRequestStatus() != 4
+                            && c.getRequestStatus() != 14)
                     .collect(Collectors.toList());
         } else {
             activeCases = new ArrayList<>();

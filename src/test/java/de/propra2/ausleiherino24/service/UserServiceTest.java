@@ -5,16 +5,14 @@ import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import java.security.Principal;
 import java.util.Optional;
-
-import mockit.*;
+import mockit.Mocked;
 import mockit.Verifications;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.slf4j.Logger;
 
 
 public class UserServiceTest {
@@ -42,11 +40,12 @@ public class UserServiceTest {
         Assertions.assertThat(userService.findUserByUsername("user1")).isEqualTo(user);
     }
 
-	@Test(expected = Exception.class)
-	public void findUserByUsernameTest2() throws Exception {
-		userService.findUserByUsername("user2");
-		new Verifications(){{
-            logger.warn("Couldn't find user %s in UserRepository.", "user2"); times = 1;
+    @Test(expected = Exception.class)
+    public void findUserByUsernameTest2() throws Exception {
+        userService.findUserByUsername("user2");
+        new Verifications() {{
+            logger.warn("Couldn't find user %s in UserRepository.", "user2");
+            times = 1;
         }};
     }
 

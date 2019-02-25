@@ -84,8 +84,10 @@ public class MainController {
     }
 
     @GetMapping("/search")
-    public ModelAndView getIndexBySearchString(@RequestParam String searchstr, Principal principal) {
-        List<Article> allArticlesWithNameLikeSearchStr = articleService.getAllArticlesByName(searchstr);
+    public ModelAndView getIndexBySearchString(@RequestParam String searchstr,
+            Principal principal) {
+        List<Article> allArticlesWithNameLikeSearchStr = articleService
+                .getAllArticlesByName(searchstr);
         User currentUser = userService.findUserByPrincipal(principal);
 
         ModelAndView mav = new ModelAndView(INDEX_STRING);
