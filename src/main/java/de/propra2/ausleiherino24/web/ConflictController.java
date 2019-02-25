@@ -46,7 +46,7 @@ public class ConflictController {
      * @return redirect myOverview mit entsprechendem Parameter
      * @throws Exception Wirft tatsächlich nie eine exception
      */
-    @PostMapping("/accessed/user/openconflict")
+    @PostMapping("/openconflict")
     public String sendConflict(@RequestParam Long id, String conflictDescription) throws Exception {
         Optional<Case> optionalCase = caseRepository.findById(id);
         if (!optionalCase.isPresent()) {
@@ -57,8 +57,16 @@ public class ConflictController {
         return "redirect:/myOverview?returned&openedconflict";
     }
 
-    @DeleteMapping("/accessed/user/deactivateconflict")
-    public String deactivateConflict(@RequestParam Long id, Principal principal)
+    /**
+     * TODO Javadoc.
+     *
+     * @param id Description
+     * @param principal Description
+     * @param model Description
+     * @throws Exception Description
+     */
+    @DeleteMapping("/deactivateconflict")
+    public String deactivateConflict(@RequestParam Long id, Principal principal, Model model)
             throws Exception {
         User user = userService.findUserByPrincipal(principal);
         conflictService.deactivateConflict(id, user);

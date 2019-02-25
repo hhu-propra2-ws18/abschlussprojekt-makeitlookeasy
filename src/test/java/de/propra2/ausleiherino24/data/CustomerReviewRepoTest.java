@@ -30,13 +30,13 @@ public class CustomerReviewRepoTest {
         CustomerReview customerReview1 = new CustomerReview();
         CustomerReview customerReview2 = new CustomerReview();
         customerReviewList = new ArrayList<>();
-        customerReview1.setDescription("test1");
+        customerReview1.setText("test1");
         customerReview1.setTimestamp(10012019L);
-        customerReview1.setStars(3L);
+        customerReview1.setStars(3);
         customerReview1.setACase(new Case());
-        customerReview2.setDescription("test2");
+        customerReview2.setText("test2");
         customerReview2.setTimestamp(11012019L);
-        customerReview2.setStars(5L);
+        customerReview2.setStars(5);
         customerReview2.setACase(new Case());
         customerReviewList.add(customerReview1);
         customerReviewList.add(customerReview2);

@@ -1,7 +1,11 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.data.CustomerReviewRepository;
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
+import de.propra2.ausleiherino24.model.CustomerReview;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.CaseService;
@@ -12,7 +16,9 @@ import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,19 +47,35 @@ public class CaseController {
     private final ImageService imageService;
     private final UserService userService;
     private final CaseService caseService;
+    private final CustomerReviewRepository customerReviewRepository;
+    private final CaseRepository caseRepository;
 
     private static final String ARTICLE_STRING = "article";
     private final List<Category> allCategories = Category.getAllCategories();
 
+    /**
+     * Manages all requests regarding creating/editing/deleting articles/cases and after-sales.
+     * Possible features: transaction rating (karma/voting), chatting. TODO JavaDoc-Descriptions.
+     * @param articleService Descriptions
+     * @param userService Descriptions
+     * @param imageService Descriptions
+     * @param caseService Descriptions
+     * @param customerReviewRepository
+     * @param caseRepository
+     */
     @Autowired
     public CaseController(ArticleService articleService,
             UserService userService,
             ImageService imageService,
-            CaseService caseService) {
+            CaseService caseService,
+            CustomerReviewRepository customerReviewRepository,
+            CaseRepository caseRepository) {
         this.articleService = articleService;
         this.userService = userService;
         this.imageService = imageService;
         this.caseService = caseService;
+        this.customerReviewRepository = customerReviewRepository;
+        this.caseRepository = caseRepository;
     }
 
     @GetMapping("/article")
@@ -137,11 +159,15 @@ public class CaseController {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         try {
-            caseService.requestArticle(
+            if(caseService.requestArticle(
                     id,
                     simpleDateFormat.parse(startDate).getTime(),
                     simpleDateFormat.parse(endDate).getTime(),
-                    principal.getName());
+                    principal.getName())){
+                return "redirect:/article?id=" + id+ "&success";
+            } else {
+                return "redirect:/article?id=" + id+ "&failed";
+            }
         } catch (ParseException e) {
             logger.error("Could not book article {}.", id, e);
         }
@@ -150,30 +176,52 @@ public class CaseController {
         return "redirect:/article?id=" + id;
     }
 
-    @PostMapping("/accessed/user/acceptCase")
+    @PostMapping("/acceptCase")
     public String acceptCase(@RequestParam Long id) {
-        if (caseService.acceptArticleRequest(id)) {
-            return "redirect:/myOverview?requests";
-        } else {
-            return "redirect:/myOverview?requests&declined";
+        switch(caseService.acceptArticleRequest(id)) {
+            case 1:
+                return "redirect:/myOverview?requests";
+            case 2:
+                return "redirect:/myOverview?requests&alreadyrented";
+            case 3:
+                return "redirect:/myOverview?requests&receiveroutofmoney";
+            default:
+                return  "redirect:/myOverview?requests&error";
         }
     }
 
-    @PostMapping("/accessed/user/declineCase")
+    @PostMapping("/declineCase")
     public String declineCase(@RequestParam Long id) {
         caseService.declineArticleRequest(id);
-        return "redirect:/myOverview?requests";
+        return "redirect:/myOverview?requests&declined";
     }
 
-    @PostMapping("/accessed/user/acceptCaseReturn")
+    @PostMapping("/acceptCaseReturn")
     public String acceptCaseReturn(@RequestParam Long id) {
         caseService.acceptCaseReturn(id);
         return "redirect:/myOverview?returned&successfullyreturned";
     }
 
+
     /**
-     * TODO: Englisch? Neuschrieben! Liefert einen Methode für Springboot um das Feld
-     * Article.category korrekt zu empfangen und zu verknüpfen.
+     * Gets called, when someone creates a review
+     */
+    @PostMapping("/writeReview")
+    public String writeReview(@RequestParam Long id, CustomerReview review) {
+        review.setTimestamp(new Date().getTime());
+        Case opt = caseService.findCaseById(id);
+        review.setACase(opt);
+        customerReviewRepository.save(review);
+        caseRepository.save(review.getACase());
+
+        System.out.println(review);
+        return "redirect:/myOverview?borrowed";
+    }
+
+    /**
+    /** TODO: Englisch? Neuschrieben!
+     * Liefert einen Methode für Springboot um das Feld Article.category korrekt zu empfangen und zu
+     * verknüpfen.
      */
     @InitBinder
     public void initBinder(final WebDataBinder webDataBinder) {
