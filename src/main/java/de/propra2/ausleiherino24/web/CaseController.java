@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -28,9 +30,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-
 @Controller
 public class CaseController {
+
+    private final Logger logger = LoggerFactory.getLogger(CaseController.class);
 
     private final ArticleService articleService;
     private final ImageService imageService;
@@ -40,9 +43,9 @@ public class CaseController {
     private static final String ARTICLE_STRING = "article";
     private final List<Category> allCategories = Category.getAllCategories();
 
-    /**
+    /** TODO JavaDoc-Descriptions.
      * Manages all requests regarding creating/editing/deleting articles/cases and after-sales.
-     * Possible features: transaction rating (karma/voting), chatting. TODO JavaDoc-Descriptions.
+     * Possible features: transaction rating (karma/voting), chatting.
      *
      * @param articleService Descriptions
      * @param userService Descriptions
@@ -70,8 +73,7 @@ public class CaseController {
      */
     @GetMapping("/article")
     @SuppressWarnings("Duplicates") // TODO Duplicate code
-    public ModelAndView displayArticle(@RequestParam("id") Long id, Principal principal)
-            throws Exception {
+    public ModelAndView displayArticle(@RequestParam("id") Long id, Principal principal) {
         Article article = articleService.findArticleById(id);
         User currentUser = userService.findUserByPrincipal(principal);
 
@@ -164,24 +166,15 @@ public class CaseController {
     //NEED FOR JS DEVE PLS DO NOT DELETE
     @RequestMapping("/api/events")
     @ResponseBody
-    public List<LocalDate> test() throws Exception {
-       return caseService.findAllReservedDaysbyArticle((long) 3);
+    public List<LocalDate> test() {
+        return caseService.findAllReservedDaysByArticle((long) 3);
     }
 
-    /**
-     * TODO JavaDoc.
-     *
-     * @param id Description
-     * @param startDate Description
-     * @param endDate Description
-     * @param principal Description
-     * @return Description
-     * @throws Exception Description
-     */
     @PostMapping("/bookArticle")
     public String bookArticle(@RequestParam Long id, String startDate, String endDate,
-            Principal principal) throws Exception {
+            Principal principal) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
         try {
             caseService.requestArticle(
                     id,
@@ -189,9 +182,10 @@ public class CaseController {
                     simpleDateFormat.parse(endDate).getTime(),
                     principal.getName());
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("Could not book article {}.", id, e);
         }
-        //TODO: Show the user, whether die request was successful or not
+
+        // TODO: Show the user, whether the request was successful or not.
         return "redirect:/article?id=" + id;
     }
 
