@@ -7,18 +7,20 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.NonNull;
 
 
 public interface ConflictRepository extends CrudRepository<Conflict, Long> {
 
-    @Override
+    @NonNull
     List<Conflict> findAll();
 
-    Optional<Conflict> findById(Long id);
+    @NonNull
+    Optional<Conflict> findById(@NonNull Long id);
 
     @Query("SELECT c FROM Conflict c WHERE c.conflictedCase.receiver = :user")
     List<Conflict> findAllByReceiver(@Param("user") User user);
 
     @Query("SELECT c FROM #{#entityName} c WHERE c.conflictedCase.article.owner = :owner")
-    List<Conflict> findAllByArticleOwner(@Param("owner") User Owner);
+    List<Conflict> findAllByArticleOwner(@Param("owner") User owner);
 }
