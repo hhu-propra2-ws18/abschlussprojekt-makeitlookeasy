@@ -1,10 +1,11 @@
 package de.propra2.ausleiherino24.data;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.User;
 import java.util.Arrays;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,9 +49,9 @@ public class ArticleRepoTest {
     @Test
     public void databaseShouldSaveEntities() {
         List<Article> us = articles.findAll();
-        Assertions.assertThat(us.size()).isEqualTo(2);
-        Assertions.assertThat(us.get(0)).isEqualTo(article1);
-        Assertions.assertThat(us.get(1)).isEqualTo(article2);
+        assertThat(us.size()).isEqualTo(2);
+        assertThat(us.get(0)).isEqualTo(article1);
+        assertThat(us.get(1)).isEqualTo(article2);
     }
 
     @Test
@@ -58,26 +59,27 @@ public class ArticleRepoTest {
         articles.delete(article1);
 
         List<Article> us = articles.findAll();
-        Assertions.assertThat(us.size()).isOne();
-        Assertions.assertThat(us.get(0)).isEqualTo(article2);
+        assertThat(us.size()).isOne();
+        assertThat(us.get(0)).isEqualTo(article2);
     }
 
     @Test
     public void databaseShouldReturnCountOfTwoIfDatabaseHasTwoEntries() {
-        Assertions.assertThat(articles.count()).isEqualTo(2);
+        assertThat(articles.count()).isEqualTo(2);
     }
 
     @Test
     public void customQueryFindAllActiveByUserShouldReturnActiveArticleWithCorrespondingOwner() {
         List<Article> us = articles.findAllActiveByUser(article1.getOwner());
-        Assertions.assertThat(us.size()).isEqualTo(1);
-        Assertions.assertThat(us.get(0)).isEqualTo(article1);
+        assertThat(us.size()).isEqualTo(1);
+        assertThat(us.get(0)).isEqualTo(article1);
     }
 
     @Test
     public void customQueryFindAllActiveByUserShouldReturnEmptyList() {
         List<Article> us = articles.findAllActiveByUser(article2.getOwner());
-        Assertions.assertThat(us.isEmpty());
+        assertThat(us.isEmpty());
+
     }
 
     @Test
@@ -87,21 +89,21 @@ public class ArticleRepoTest {
         article3.setActive(true);
 
         List<Article> us = articles.findAllActiveByUser(article1.getOwner());
-        Assertions.assertThat(us.size()).isEqualTo(2);
-        Assertions.assertThat(us.get(0)).isEqualTo(article1);
-        Assertions.assertThat(us.get(1)).isEqualTo(article3);
+        assertThat(us.size()).isEqualTo(2);
+        assertThat(us.get(0)).isEqualTo(article1);
+        assertThat(us.get(1)).isEqualTo(article3);
     }
 
     @Test
     public void customQueryFindAllActiveByUserShouldReturnNoArticle() {
         List<Article> us = articles.findAllActiveByUser(article2.getOwner());
-        Assertions.assertThat(us.size()).isEqualTo(0);
+        assertThat(us.size()).isEqualTo(0);
     }
 
     @Test
-    public void customQueryFindAllActiveShouldRrturnFirstArticle() {
+    public void customQueryFindAllActiveShouldReturnFirstArticle() {
         List<Article> us = articles.findAllActive();
-        Assertions.assertThat(us.size()).isEqualTo(1);
-        Assertions.assertThat(us.get(0)).isEqualTo(article1);
+        assertThat(us.size()).isEqualTo(1);
+        assertThat(us.get(0)).isEqualTo(article1);
     }
 }
