@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     private final PersonService personService;
     private final UserRepository userRepository;
@@ -26,7 +26,7 @@ public class UserService {
 
     private void saveUser(User user, String msg) {
         userRepository.save(user);
-        logger.info("{} user profile {} [ID={}]", msg, user.getUsername(), user.getId());
+        LOGGER.info("{} user profile {} [ID={}]", msg, user.getUsername(), user.getId());
     }
 
     /**
@@ -78,7 +78,7 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findByUsername(username);
 
         if (!optionalUser.isPresent()) {
-            logger.warn("Couldn't find user {} in UserRepository.", username);
+            LOGGER.warn("Couldn't find user {} in UserRepository.", username);
             throw new NullPointerException("Couldn't find current principal in UserRepository.");
         }
 

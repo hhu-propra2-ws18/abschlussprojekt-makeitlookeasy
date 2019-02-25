@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ImageService {
 
-    private final Logger logger = LoggerFactory.getLogger(ImageService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageService.class);
 
     private static final int NR_OF_BINS = 100;
     private String uploadDirectoryPath;
@@ -39,7 +39,7 @@ public class ImageService {
         try {
             file.transferTo(dest);
         } catch (Exception e) {
-            logger.warn("Couldn't move file {} to desired destination '{}'.", file.getName(),
+            LOGGER.warn("Couldn't move file {} to desired destination '{}'.", file.getName(),
                     dest.getAbsolutePath());
         }
 
@@ -68,7 +68,7 @@ public class ImageService {
                 }
             }
         } catch (Exception e) {
-            logger.warn("Couldn't store uploaded file in database.", e);
+            LOGGER.warn("Couldn't store uploaded file in database.", e);
         }
 
         return destinationFile.getName();

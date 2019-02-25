@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArticleService {
 
-    private final ArticleRepository articleRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArticleService.class);
 
-    private final Logger logger = LoggerFactory.getLogger(ArticleService.class);
+    private final ArticleRepository articleRepository;
 
     @Autowired
     public ArticleService(ArticleRepository articleRepository) {
@@ -27,14 +27,14 @@ public class ArticleService {
 
     public void saveArticle(Article article, String msg) {
         articleRepository.save(article);
-        logger.info("{} article '{}' {}.", msg, article.getName(), article.getId());
+        LOGGER.info("{} article '{}' {}.", msg, article.getName(), article.getId());
     }
 
     public Article findArticleById(Long id) {
         Optional<Article> article = articleRepository.findById(id);
 
         if (!article.isPresent()) {
-            logger.warn("Couldn't find article {} in UserRepository.", id);
+            LOGGER.warn("Couldn't find article {} in UserRepository.", id);
             throw new NullPointerException("Couldn't find article in ArticleRepository.");
         }
 
@@ -81,7 +81,7 @@ public class ArticleService {
         Optional<Article> optionalArticle = articleRepository.findById(id);
 
         if (!optionalArticle.isPresent()) {
-            logger.warn("Couldn't find article {} in ArticleRepository.", id);
+            LOGGER.warn("Couldn't find article {} in ArticleRepository.", id);
             throw new NullPointerException("Couldn't find requested article in ArticleRepository.");
         }
 
@@ -89,13 +89,13 @@ public class ArticleService {
 
         //only able to deactive if article has only cases where the requeststatus is REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED
         if (!article.allCasesClosed()) {
-            logger.warn("Article {} is still reserved, lent or has an open conflict.", id);
+            LOGGER.warn("Article {} is still reserved, lent or has an open conflict.", id);
             return false;
         }
 
         article.setActive(false);
         articleRepository.save(article);
-        logger.info("Deactivated article {} [ID={}]", article.getName(), article.getId());
+        LOGGER.info("Deactivated article {} [ID={}]", article.getName(), article.getId());
         return true;
     }
 

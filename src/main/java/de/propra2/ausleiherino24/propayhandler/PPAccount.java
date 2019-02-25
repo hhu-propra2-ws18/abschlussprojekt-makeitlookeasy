@@ -21,8 +21,8 @@ class PPAccount {
 
     double reservationAmount() {
         double reserved = 0;
-        for (int i = 0; i < reservations.size(); i++) {
-            reserved += reservations.get(i).getAmount();
+        for (Reservation reservation : reservations) {
+            reserved += reservation.getAmount();
         }
         return reserved;
     }

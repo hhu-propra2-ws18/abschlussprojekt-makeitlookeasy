@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CaseEndTimeReminder {
 
-    private final Logger logger = LoggerFactory.getLogger(CaseEndTimeReminder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CaseEndTimeReminder.class);
 
     private CaseRepository cases;
     private EmailSender emailSender;
@@ -42,7 +42,7 @@ public class CaseEndTimeReminder {
             try {
                 emailSender.sendRemindingEmail(c);
             } catch (Exception e) {
-                logger.info("Could not send reminder email for case {}.", c.getId());
+                LOGGER.info("Could not send reminder email for case {}.", c.getId());
             }
         });
     }

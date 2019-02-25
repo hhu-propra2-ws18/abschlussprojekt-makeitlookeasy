@@ -32,6 +32,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Initializer implements ServletContextInitializer {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Initializer.class);
+
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
     private final PersonRepository personRepository;
@@ -40,11 +42,11 @@ public class Initializer implements ServletContextInitializer {
 
     private final Faker faker = new Faker(Locale.GERMAN);
     private static final String SECRET_STRING = "password";
-    private final Logger logger = LoggerFactory.getLogger(Initializer.class);
 
     @Autowired
-    public Initializer(UserRepository userRepository, ArticleRepository articleRepository,
-            PersonRepository personRepository, CaseRepository caseRepository,
+    public Initializer(final UserRepository userRepository,
+            final ArticleRepository articleRepository,
+            final PersonRepository personRepository, CaseRepository caseRepository,
             ImageService imageService) {
         this.userRepository = userRepository;
         this.articleRepository = articleRepository;
@@ -298,8 +300,8 @@ public class Initializer implements ServletContextInitializer {
                     .trim();
             return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
         } catch (IOException e) {
-            logger.warn("Couldn't parse name of Pokémon {}.", id, e);
-            logger.info("Returning empty String as 'name'.");
+            LOGGER.warn("Couldn't parse name of Pokémon {}.", id, e);
+            LOGGER.info("Returning empty String as 'name'.");
             return "";
         }
     }
@@ -314,7 +316,7 @@ public class Initializer implements ServletContextInitializer {
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             file = new File(classLoader.getResource(fileName).getFile());
         } catch (Exception e) {
-            logger.warn("Couldn't parse picture of Pokémon {}.", id, e);
+            LOGGER.warn("Couldn't parse picture of Pokémon {}.", id, e);
         }
         return imageService.storeFile(file, null);
     }

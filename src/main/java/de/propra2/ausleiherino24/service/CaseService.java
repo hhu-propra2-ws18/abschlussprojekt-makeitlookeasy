@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CaseService {
 
-    private final Logger logger = LoggerFactory.getLogger(CaseService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CaseService.class);
 
     private final CaseRepository caseRepository;
     private final ArticleService articleService;
@@ -185,7 +185,7 @@ public class CaseService {
         Optional<Case> optionalCase = caseRepository.findById(id);
 
         if (!optionalCase.isPresent()) {
-            logger.warn("Couldn't find case {} in database.", id);
+            LOGGER.warn("Couldn't find case {} in database.", id);
             throw new NullPointerException();
         }
 

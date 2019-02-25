@@ -1,6 +1,5 @@
 package de.propra2.ausleiherino24.email;
 
-import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -19,5 +18,5 @@ public class EmailConfig {
 
     private String password;
 
-    private Map<String, String> properties = new HashMap<>();
+    private Map<String, String> properties;
 }
