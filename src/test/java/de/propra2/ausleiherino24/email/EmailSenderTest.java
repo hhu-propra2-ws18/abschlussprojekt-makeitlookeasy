@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.email;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -10,6 +11,8 @@ import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -111,6 +114,29 @@ public class EmailSenderTest {
         verify(javaMailSenderMock).setPort(4321);
         verify(javaMailSenderMock).setUsername("TestUsername");
         verify(javaMailSenderMock).setPassword("password");
+    }
+
+    @Test(expected = MailSendException.class)
+    public void sendOneEmailThrow() throws Exception {
+        User conflictReporter = new User();
+        conflictReporter.setEmail("test@mail.de");
+        conflictReporter.setUsername("user1");
+        Case conflictCase = new Case();
+        conflictCase.setId(0L);
+        conflictCase.setReceiver(conflictReporter);
+        Conflict conflict = new Conflict();
+        conflict.setConflictReporterUsername("user1");
+        conflict.setConflictedCase(conflictCase);
+
+        when(userService.findUserByUsername("user1")).thenReturn(conflictReporter);
+
+        SimpleMailMessage expectedMessage = new SimpleMailMessage();
+        expectedMessage.setFrom("test@mail.de");
+        expectedMessage.setTo("Clearing@Service.com");
+        expectedMessage.setSubject("Conflicting Case id: 0");
+
+        doThrow(new MailSendException("")).when(javaMailSenderMock).send(expectedMessage);
+        emailSender.sendConflictEmail(conflict);
     }
 
 }

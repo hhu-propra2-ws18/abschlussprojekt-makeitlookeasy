@@ -99,6 +99,7 @@ dependencies {
     implementation 'org.springframework.session:spring-session-core'
     implementation 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.8.0'
     implementation('org.springframework.boot:spring-boot-starter-websocket')
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
     spotbugs configurations.spotbugsPlugins.dependencies
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'

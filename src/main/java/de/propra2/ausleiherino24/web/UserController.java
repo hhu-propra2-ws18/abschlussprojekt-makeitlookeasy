@@ -95,8 +95,8 @@ public class UserController {
         List<Case> borrowedArticles = caseService
                 .getLendCasesFromPersonReceiver(currentUser.getPerson().getId());
         List<Case> requestedArticles = caseService
-                .findAllRequestedCasesbyUserId(currentUser.getId());
-        List<Case> returnedArticles = caseService.findAllExpiredCasesbyUserId(currentUser.getId());
+                .findAllRequestedCasesByUserId(currentUser.getId());
+        List<Case> returnedArticles = caseService.findAllExpiredCasesByUserId(currentUser.getId());
 
         ModelAndView mav = new ModelAndView("/user/myOverview");
         mav.addObject("user", currentUser);

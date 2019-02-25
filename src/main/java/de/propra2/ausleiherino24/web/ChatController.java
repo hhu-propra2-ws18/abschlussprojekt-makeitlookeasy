@@ -3,6 +3,7 @@ package de.propra2.ausleiherino24.web;
 import de.propra2.ausleiherino24.model.ChatMessage;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.UserService;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -12,9 +13,6 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.security.Principal;
-import java.text.SimpleDateFormat;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
