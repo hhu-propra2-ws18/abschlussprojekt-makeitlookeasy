@@ -66,7 +66,8 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 test {
 //    useJUnitPlatform() TODO Fix JUnitPlatform
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
-}
+    outputs.upToDateWhen { false }  // this forces to always rerun all tests, even if task status was 
+}                                   // already successful (and cached) in the past.
 
 test.finalizedBy jacocoTestReport
 check.dependsOn jacocoTestCoverageVerification
@@ -106,10 +107,6 @@ dependencies {
     testCompile 'org.jmockit:jmockit:1.45'
     testCompile "org.mockito:mockito-core:2.+"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.4.0'
-//    testCompile'junit:junit:4.12'
-//    testCompile'org.junit.jupiter:junit-jupiter-api:5.4.0'
-//    testRuntime'org.junit.jupiter:junit-jupiter-engine:5.4.0'
-//    testRuntime'org.junit.vintage:junit-vintage-engine:5.4.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
