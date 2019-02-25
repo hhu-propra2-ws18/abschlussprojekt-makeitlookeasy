@@ -125,8 +125,8 @@
         Article successfully deleted.
       </div>
       <div class="alert alert-danger absolue center" th:if="${param.deletionfailed}">
-      This article has open cases. You cannot delete it right now.
-    </div>
+        This article has open cases. You cannot delete it right now.
+      </div>
 
       <!-- Frame for articles from User-->
       <div id="mainFrameOne"
@@ -135,10 +135,18 @@
           <tr>
             <div class="text-center">
               <div class="btn-group">
-                <button class="btn btn-dark " style="margin-bottom: 10px" onclick="oneFunction()">My articles</button>
-                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="twoFunction()"> Borrowed</button>
-                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="threeFunction()"> Returned</button>
-                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="fourFunction()"> Requests</button>
+                <button class="btn btn-dark " style="margin-bottom: 10px" onclick="oneFunction()">My
+                  articles
+                </button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px"
+                        onclick="twoFunction()"> Borrowed
+                </button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px"
+                        onclick="threeFunction()"> Returned
+                </button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px"
+                        onclick="fourFunction()"> Requests
+                </button>
               </div>
             </div>
           </tr>
@@ -156,12 +164,12 @@
             <td>
               <th:block th:if="${article.forRental==true}">
                 <svg height="20" width="20">
-                  <circle cx="10" cy="10" r="8" fill="green"> </circle>
+                  <circle cx="10" cy="10" r="8" fill="green"></circle>
                 </svg>
               </th:block>
               <th:block th:unless="${article.forRental==true}">
                 <svg height="20" width="20">
-                  <circle cx="10" cy="10" r="8" fill="red"> </circle>
+                  <circle cx="10" cy="10" r="8" fill="red"></circle>
                 </svg>
               </th:block>
             </td>
@@ -265,9 +273,8 @@
                             </div>
                             <div class="col-sm-6 input-column">
                               <textarea class="form-control" id="description" name="description"
-                                        required type="text" th:text="${article.description}"
-                                        style="height:150px">
-                              </textarea>
+                                        required type="text" style="height:150px"
+                                        th:inline="text">[[${article.description}]]</textarea>
                             </div>
                           </div>
                           <div class="form-row form-group">
@@ -309,10 +316,18 @@
           <tr>
             <div class="text-center">
               <div class="btn-group">
-                <button class="btn btn-outline-dark " style="margin-bottom: 10px" onclick="oneFunction()">My articles</button>
-                <button class="btn btn-dark" style="margin-bottom: 10px" onclick="twoFunction()"> Borrowed</button>
-                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="threeFunction()"> Returned</button>
-                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="fourFunction()"> Requests</button>
+                <button class="btn btn-outline-dark " style="margin-bottom: 10px"
+                        onclick="oneFunction()">My articles
+                </button>
+                <button class="btn btn-dark" style="margin-bottom: 10px" onclick="twoFunction()">
+                  Borrowed
+                </button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px"
+                        onclick="threeFunction()"> Returned
+                </button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px"
+                        onclick="fourFunction()"> Requests
+                </button>
               </div>
             </div>
           </tr>
@@ -339,27 +354,32 @@
             <td th:text="${((case.endTime-case.startTime)/(1000*3600*24)*case.price)+'€'}"></td>
             <td>
               <th:block th:if="${case.requestStatus==1}">
-                <button style="height:30px;width:80px" class="btn btn-outline-primary btn-sm disabled">
+                <button style="height:30px;width:80px"
+                        class="btn btn-outline-primary btn-sm disabled">
                   Pending
                 </button>
               </th:block>
               <th:block th:if="${case.requestStatus==2}">
-                <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm disabled">
+                <button style="height:30px;width:80px"
+                        class="btn btn-outline-success btn-sm disabled">
                   Accepted
                 </button>
               </th:block>
               <th:block th:if="${case.requestStatus==12 || case.requestStatus==4}">
-                <button style="height:30px;width:80px" class="btn btn-outline-danger btn-sm disabled">
+                <button style="height:30px;width:80px"
+                        class="btn btn-outline-danger btn-sm disabled">
                   Declined
                 </button>
               </th:block>
               <th:block th:if="${case.requestStatus==10}">
-                <button style="height:30px;width:80px" class="btn btn-outline-warning btn-sm disabled">Open
+                <button style="height:30px;width:80px"
+                        class="btn btn-outline-warning btn-sm disabled">Open
                   Conflict
                 </button>
               </th:block>
               <th:block th:if="${case.requestStatus==7}">
-                <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm disabled">
+                <button style="height:30px;width:80px"
+                        class="btn btn-outline-success btn-sm disabled">
                   Running
                 </button>
               </th:block>
@@ -381,10 +401,18 @@
           <tr>
             <div class="text-center">
               <div class="btn-group">
-                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="oneFunction()">My articles</button>
-                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="twoFunction()"> Borrowed</button>
-                <button class="btn btn-dark" style="margin-bottom: 10px" onclick="threeFunction()"> Returned</button>
-                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="fourFunction()"> Requests</button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px"
+                        onclick="oneFunction()">My articles
+                </button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px"
+                        onclick="twoFunction()"> Borrowed
+                </button>
+                <button class="btn btn-dark" style="margin-bottom: 10px" onclick="threeFunction()">
+                  Returned
+                </button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px"
+                        onclick="fourFunction()"> Requests
+                </button>
               </div>
             </div>
           </tr>
@@ -464,7 +492,8 @@
 
               <th:block th:if="${case.requestStatus==10}">
                 <div class="ml-auto flex-md-row">
-                  <button style="height:30px;width:120px" class="btn btn-outline-primary btn-sm disabled">
+                  <button style="height:30px;width:120px"
+                          class="btn btn-outline-primary btn-sm disabled">
                     Running Conlict
                   </button>
                 </div>
@@ -472,7 +501,8 @@
 
               <th:block th:if="${case.requestStatus==14}">
                 <div class="ml-auto flex-md-row">
-                  <button style="height:30px;width:80px" class="btn btn-outline-success btn-sm disabled">
+                  <button style="height:30px;width:80px"
+                          class="btn btn-outline-success btn-sm disabled">
                     Finished
                   </button>
                 </div>
@@ -490,10 +520,18 @@
           <tr>
             <div class="text-center">
               <div class="btn-group">
-                <button class="btn btn-outline-dark " style="margin-bottom: 10px" onclick="oneFunction()">My articles</button>
-                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="twoFunction()"> Borrowed</button>
-                <button class="btn btn-outline-dark" style="margin-bottom: 10px" onclick="threeFunction()"> Returned</button>
-                <button class="btn btn-dark" style="margin-bottom: 10px" onclick="fourFunction()"> Requests</button>
+                <button class="btn btn-outline-dark " style="margin-bottom: 10px"
+                        onclick="oneFunction()">My articles
+                </button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px"
+                        onclick="twoFunction()"> Borrowed
+                </button>
+                <button class="btn btn-outline-dark" style="margin-bottom: 10px"
+                        onclick="threeFunction()"> Returned
+                </button>
+                <button class="btn btn-dark" style="margin-bottom: 10px" onclick="fourFunction()">
+                  Requests
+                </button>
               </div>
             </div>
           </tr>
@@ -538,21 +576,24 @@
               </th:block>
               <th:block th:if="${case.requestStatus==2}">
                 <div class="ml-auto flex-md-row">
-                  <button class="btn btn-outline-success btn-sm disabled" style="height:30px;width:80px">
+                  <button class="btn btn-outline-success btn-sm disabled"
+                          style="height:30px;width:80px">
                     Accepted
                   </button>
                 </div>
               </th:block>
               <th:block th:if="${case.requestStatus==12}">
                 <div class="ml-auto flex-md-row">
-                  <button class="btn btn-outline-danger btn-sm disabled" style="height:30px;width:80px">
+                  <button class="btn btn-outline-danger btn-sm disabled"
+                          style="height:30px;width:80px">
                     Declined
                   </button>
                 </div>
               </th:block>
               <th:block th:if="${case.requestStatus==4}">
                 <div class="ml-auto flex-md-row">
-                  <button class="btn btn-outline-info btn-sm disabled" style="height:30px;width:120px">
+                  <button class="btn btn-outline-info btn-sm disabled"
+                          style="height:30px;width:120px">
                     Already rented
                   </button>
                 </div>
