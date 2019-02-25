@@ -13,7 +13,6 @@ import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ImageService;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -23,12 +22,12 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.servlet.ServletContext;
-import org.hibernate.boot.spi.InFlightMetadataCollector.EntityTableXref;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 
 @Component
 public class Initializer implements ServletContextInitializer {
@@ -40,14 +39,9 @@ public class Initializer implements ServletContextInitializer {
     private final ImageService imageService;
 
     private final Faker faker = new Faker(Locale.GERMAN);
+    private static final String SECRET_STRING = "password";
+    private final Logger logger = LoggerFactory.getLogger(Initializer.class);
 
-    /**
-     * TODO Javadoc.
-     *
-     * @param userRepository Descriptions
-     * @param articleRepository Descriptions
-     * @param personRepository Descriptions
-     */
     @Autowired
     public Initializer(UserRepository userRepository, ArticleRepository articleRepository,
             PersonRepository personRepository, CaseRepository caseRepository,
@@ -64,14 +58,14 @@ public class Initializer implements ServletContextInitializer {
         deleteAll();
         List<Person> persons = initTestArticleWithinUsers();
         persons.addAll(initTestAccounts(persons));
-        addtoDatabases(persons);
+        addToDatabases(persons);
     }
 
     /**
      * Adds a list of persons and their corresponding users and all their articles and all their
      * cases to the fitting databases
      */
-    private void addtoDatabases(List<Person> persons) {
+    private void addToDatabases(List<Person> persons) {
         personRepository.saveAll(persons);
         persons.forEach(person -> {
             User user = person.getUser();
@@ -110,7 +104,7 @@ public class Initializer implements ServletContextInitializer {
             User user = createUser(
                     person.getFirstName() + person.getLastName() + "@mail.de",
                     faker.name().fullName(),
-                    "password",
+                    SECRET_STRING,
                     person);
 
             IntStream.range(0, faker.random().nextInt(1, 7))
@@ -143,7 +137,7 @@ public class Initializer implements ServletContextInitializer {
         testPersons.add(createUser(
                 "user@mail.com",
                 "user",
-                "password",
+                SECRET_STRING,
                 createPerson(
                         "HHU",
                         "Max",
@@ -153,7 +147,7 @@ public class Initializer implements ServletContextInitializer {
         testPersons.add(createUser(
                 "useradmin@mail.com",
                 "admine",
-                "password",
+                SECRET_STRING,
                 createPerson(
                         "HHU",
                         "Maxi",
@@ -163,7 +157,7 @@ public class Initializer implements ServletContextInitializer {
         User hans = createUser(
                 "hans@mail.de",
                 "Hans",
-                "password",
+                SECRET_STRING,
                 createPerson(
                         "HHU",
                         "Hans",
@@ -304,7 +298,8 @@ public class Initializer implements ServletContextInitializer {
                     .trim();
             return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warn("Couldn't parse name of Pokémon {}.", id, e);
+            logger.info("Returning empty String as 'name'.");
             return "";
         }
     }
@@ -319,7 +314,7 @@ public class Initializer implements ServletContextInitializer {
             ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             file = new File(classLoader.getResource(fileName).getFile());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warn("Couldn't parse picture of Pokémon {}.", id, e);
         }
         return imageService.storeFile(file, null);
     }

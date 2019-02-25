@@ -8,7 +8,6 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
@@ -44,7 +43,7 @@ public class EmailSender {
      * @param conflict Description
      * @throws Exception Description
      */
-    public void sendConflictEmail(Conflict conflict) throws Exception {
+    public void sendConflictEmail(Conflict conflict) {
         configureMailSender();
 
         User user = userService.findUserByUsername(conflict.getConflictReporterUsername());
@@ -57,7 +56,7 @@ public class EmailSender {
         mailSender.send(message);
     }
 
-    public void sendRemindingEmail(Case c) throws MailException {
+    void sendRemindingEmail(Case c) {
         configureMailSender();
 
         message.setFrom("Clearing@Service.com");

@@ -3,7 +3,6 @@ package de.propra2.ausleiherino24.email;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 

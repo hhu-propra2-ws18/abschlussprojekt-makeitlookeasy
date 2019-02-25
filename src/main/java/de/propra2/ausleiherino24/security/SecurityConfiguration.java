@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 
 /**
@@ -40,10 +39,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(getPasswordEncoder());
     }
-
-    /*public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations("/", "classpath:/static/");
-    }*/
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -79,7 +74,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             public boolean matches(CharSequence rawPassword, String s) {
                 return rawPassword.toString().equals(s);
             }
-            //GGF BCRYPTPASSWORDENCODER
         };
     }
 }
