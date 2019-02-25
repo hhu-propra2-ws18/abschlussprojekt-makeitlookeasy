@@ -40,7 +40,7 @@ public class CaseEndTimeReminder {
             try {
                 emailSender.sendRemindingEmail(c);
             } catch (Exception e) {
-                logger.info("Could not send reminder email for case %L", c.getId());
+                logger.info("Could not send reminder email for case {}.", c.getId());
             }
         });
     }
