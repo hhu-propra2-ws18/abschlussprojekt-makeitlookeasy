@@ -1,14 +1,18 @@
 package de.propra2.ausleiherino24.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.web.multipart.MultipartFile;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class ImageServiceTest {
 
@@ -17,7 +21,7 @@ public class ImageServiceTest {
 
     @Before
     public void init() {
-        imageService = new ImageService(path);
+        imageService = spy(new ImageService(path));
     }
 
     @After
@@ -121,6 +125,47 @@ public class ImageServiceTest {
         file.mkdir();
 
         assertFalse(imageService.fileExists(path + "/x"));
+    }
+
+    @Test
+    public void buildPath(){
+        when(imageService.getUploadDirectoryPath()).thenReturn("/");
+
+        assertEquals("/test/abc.txt", imageService.buildPath("abc.txt", "test"));
+    }
+
+    @Test
+    public void findFile() throws IOException {
+        new File(path + "/0").mkdir();
+        File file = new File(path + "/0/test.txt");
+        file.createNewFile();
+        when(imageService.getUploadDirectoryPath()).thenReturn(path);
+
+        assertEquals(file, imageService.getFile("test.txt", 100L));
+    }
+
+    @Test
+    public void findFileWithoutBinningId() throws IOException {
+        File file = new File(path + "/test.txt");
+        file.createNewFile();
+        when(imageService.getUploadDirectoryPath()).thenReturn(path);
+
+        assertEquals(file, imageService.getFile("test.txt", null));
+    }
+
+    @Test
+    public void findNotExistingFile(){
+        assertNull(imageService.getFile("test.txt", null));
+    }
+
+    @Test
+    public void storeMultipartFile() throws IOException {
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getOriginalFilename()).thenReturn("test.txt");
+        when(imageService.generateFilePath("0", "txt")).thenReturn(path + "/0/test.txt");
+
+        assertEquals("test.txt", imageService.store(file, 100L));
+        verify(file).transferTo(new File(path + "/0/test.txt"));
     }
 
 
