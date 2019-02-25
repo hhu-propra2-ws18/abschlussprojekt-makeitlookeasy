@@ -125,7 +125,7 @@ public class ImageServiceTest {
 
 
     //Deletes the given directory and all included directories and files
-    public void cleanDir(File dir) {
+    private void cleanDir(File dir) {
         if (!dir.isDirectory()) {
             dir.delete();
             return;

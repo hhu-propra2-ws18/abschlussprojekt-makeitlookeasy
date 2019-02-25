@@ -44,10 +44,7 @@ public class EmailSender {
      * @throws Exception Description
      */
     public void sendConflictEmail(Conflict conflict) throws Exception {
-        mailSender.setHost(config.getHost());
-        mailSender.setPort(config.getPort());
-        mailSender.setUsername(config.getUsername());
-        mailSender.setPassword(config.getPassword());
+        configureMailSender();
 
         User user = userService.findUserByUsername(conflict.getConflictReporterUsername());
 
@@ -60,10 +57,7 @@ public class EmailSender {
     }
 
     public void sendRemindingEmail(Case c) throws MailException {
-        mailSender.setHost(config.getHost());
-        mailSender.setPort(config.getPort());
-        mailSender.setUsername(config.getUsername());
-        mailSender.setPassword(config.getPassword());
+        configureMailSender();
 
         message.setFrom("Clearing@Service.com");
         message.setTo(c.getReceiver().getEmail());
@@ -71,5 +65,12 @@ public class EmailSender {
         message.setText("Please do not forget to return the article on time!");
 
         mailSender.send(message);
+    }
+
+    private void configureMailSender(){
+        mailSender.setHost(config.getHost());
+        mailSender.setPort(config.getPort());
+        mailSender.setUsername(config.getUsername());
+        mailSender.setPassword(config.getPassword());
     }
 }

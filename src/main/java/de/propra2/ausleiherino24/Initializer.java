@@ -13,10 +13,9 @@ import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ImageService;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -24,10 +23,12 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.servlet.ServletContext;
+import org.hibernate.boot.spi.InFlightMetadataCollector.EntityTableXref;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
 @Component
 public class Initializer implements ServletContextInitializer {
@@ -256,7 +257,7 @@ public class Initializer implements ServletContextInitializer {
      * Creates an article from parameters
      */
     private Article createArticle(String name, String description, Category category, User owner,
-            Double costPerDay, Double deposit, String image,String location) {
+            Double costPerDay, Double deposit, String image, String location) {
         Article article = new Article();
         article.setActive(true);
         article.setName(name);
@@ -312,14 +313,15 @@ public class Initializer implements ServletContextInitializer {
      * Stores a pokemon pic corresponding to given id using ImageService
      */
     private String storePokemonPic(int id) {
-        Path path = Paths.get("/Users/mickpotzkai/Documents/GitHub/abschlussprojekt-makeitlookeasy/uploads/c2a80768-086b-4a74-bcad-74b42276f637.jpg");
-        byte[] pic = null;
+        File file = null;
         try {
-            pic = Files.readAllBytes(path);
-        } catch (IOException e) {
+            String fileName = "static/Pokemon/images/" + id + ".jpg";
+            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+            file = new File(classLoader.getResource(fileName).getFile());
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return imageService.storeFile(file, null);
     }
 
     /**

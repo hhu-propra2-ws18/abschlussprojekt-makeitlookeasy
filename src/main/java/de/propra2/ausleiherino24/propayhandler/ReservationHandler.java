@@ -58,7 +58,7 @@ public class ReservationHandler {
 
         ResponseEntity<Reservation> responseEntity = restTemplate
                 .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
-                            HttpMethod.POST,
+                        HttpMethod.POST,
                         null, Reservation.class, sourceUser, targetUser, amount.toString());
 
         return responseEntity.getBody().getId();
@@ -68,14 +68,15 @@ public class ReservationHandler {
         if (aCase.getPpTransaction().getReservationId() != -1) {
             releaseReservation(aCase.getReceiver().getUsername(),
                     aCase.getPpTransaction().getReservationId());
+            aCase.getPpTransaction().setReservationId(-1L);
         }
     }
 
     void releaseReservation(String account, Long reservationId) {
 
         restTemplate.exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
-                        HttpMethod.POST, null,
-                        PPAccount.class, account, reservationId.toString());
+                HttpMethod.POST, null,
+                PPAccount.class, account, reservationId.toString());
     }
 
     /**
@@ -83,12 +84,12 @@ public class ReservationHandler {
      * @return Description
      */
 
-    void punishReservation(Case aCase) {
+    public void punishReservation(Case aCase) {
         punishReservation(aCase.getReceiver().getUsername(),
                 aCase.getPpTransaction().getReservationId());
     }
 
-    public boolean punishReservation(String account,
+    boolean punishReservation(String account,
             Long reservationId) { //TODO: anpassen entsprechend den anderen
         HttpEntity<Long> request = new HttpEntity<>(reservationId);
 

@@ -1,6 +1,8 @@
 package de.propra2.ausleiherino24.service;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.nio.file.Paths;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,38 @@ public class ImageService {
         }
 
         return dest.getName();
+    }
+
+    public String storeFile(File inputFile, Long binningId) {
+        if (inputFile == null) {
+            return null;
+        }
+
+        String prefix = ensureBinning(binningId);
+
+        String extension = getFileExtension(inputFile.getName());
+        File destinationFile = new File(generateFilePath(prefix, extension));
+
+        try {
+            FileInputStream inputStream = new FileInputStream(inputFile);
+            FileOutputStream outputStream = new FileOutputStream(destinationFile);
+
+            byte[] buffer = new byte[1024];
+
+            int length;
+
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            inputStream.close();
+            outputStream.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return destinationFile.getName();
     }
 
     /**

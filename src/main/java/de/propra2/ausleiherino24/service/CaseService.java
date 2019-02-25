@@ -4,25 +4,21 @@ import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.ZoneId;
 import de.propra2.ausleiherino24.model.PPTransaction;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -170,7 +166,8 @@ public class CaseService {
 
         long diffInMillies = Math.abs(enddate.getTime() - startdate.getTime());
 
-        return new Double(TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS)) * dailyCost;
+        return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS) * dailyCost;
+        //return new Double(TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS)) * dailyCost;
     }
 
 

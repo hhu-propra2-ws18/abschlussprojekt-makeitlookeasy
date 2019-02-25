@@ -21,8 +21,8 @@ import org.springframework.web.client.RestTemplate;
 @RunWith(SpringRunner.class)
 public class ReservationHandlerTest {
 
-    private final String ACCOUNT_URL = "http://localhost:8888/account";
-    private final String RESERVATION_URL = "http://localhost:8888/reservation";
+    private static final String ACCOUNT_URL = "http://localhost:8888/account";
+    private static final String RESERVATION_URL = "http://localhost:8888/reservation";
     private Reservation res1 = new Reservation();
     private Reservation res2 = new Reservation();
     private RestTemplate restTemplate;

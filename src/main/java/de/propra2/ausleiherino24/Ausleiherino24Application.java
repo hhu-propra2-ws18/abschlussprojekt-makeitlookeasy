@@ -20,7 +20,7 @@ public class Ausleiherino24Application {
     }
 
     @Bean
-    public SimpleMailMessage getSimpleMailMesssage() {
+    public SimpleMailMessage getSimpleMailMessage() {
         return new SimpleMailMessage();
     }
 
