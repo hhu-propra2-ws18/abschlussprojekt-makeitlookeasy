@@ -123,7 +123,8 @@ public class Initializer implements ServletContextInitializer {
                                 user,
                                 (double) faker.random().nextInt(5, 500),
                                 (double) faker.random().nextInt(100, 2000),
-                                storePokemonPic(id)
+                                storePokemonPic(id),
+                                faker.address().fullAddress()
                         );
                         user.addArticle(article);
                     });
@@ -178,7 +179,8 @@ public class Initializer implements ServletContextInitializer {
                             hans,
                             (double) faker.random().nextInt(5, 500),
                             (double) faker.random().nextInt(100, 2000),
-                            storePokemonPic(id)
+                            storePokemonPic(id),
+                            faker.address().fullAddress()
                     );
                     hans.addArticle(article);
                 });
@@ -254,7 +256,7 @@ public class Initializer implements ServletContextInitializer {
      * Creates an article from parameters
      */
     private Article createArticle(String name, String description, Category category, User owner,
-            Double costPerDay, Double deposit, String image) {
+            Double costPerDay, Double deposit, String image,String location) {
         Article article = new Article();
         article.setActive(true);
         article.setName(name);
@@ -265,6 +267,7 @@ public class Initializer implements ServletContextInitializer {
         article.setDeposit(deposit);
         article.setImage(image);
         article.setForRental(true);
+        article.setLocation(location);
         return article;
     }
 
