@@ -51,6 +51,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.js"></script>
   <!-- Calculate cost script and Calendar init-->
   <script>
+
+
     function GetDays() {
       var dropdt = new Date(
           (document.getElementById("startDateInput").value).replace(/(\d{2})-(\d{2})-(\d{4})/,
@@ -64,6 +66,7 @@
 
     function cal() {
       if (document.getElementById("endDateInput")) {
+        CallURL();
         var pricePerDay = [[${article.getCostPerDay()}]];
         var deposit = [[${article.deposit}]];
         console.log(GetDays());
@@ -73,15 +76,39 @@
       }
     }
 
-    $(document).ready(function () {
-      $('#calendar1').fullCalendar({
-        header: {
-          left: 'prev,next,today',
-          center: 'title',
-          right: '',
+   /* var getJSON = function (url, callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'json';
+      xhr.onload = function () {
+        var status = xhr.status;
+        if (status === 200) {
+          console.log(xhr.response);
+        } else {
+          callback(status, xhr.response);
+        }
+      };
+      xhr.send();
+    }; */
+
+    function JsonpCallback(json)  {
+      console.log(json.result);
+    }
+
+    function CallURL()  {
+      $.ajax({
+        url: '/api/events',
+        type: "GET",
+        dataType: "json",
+        async: false,
+        success: function(msg)  {
+          JsonpCallback(msg);
+        },
+        error: function()  {
+          alert("There was an error, fetching events");
         }
       });
-    });
+    }
   </script>
 </head>
 <body>
@@ -96,7 +123,8 @@
     <!-- Item  -->
     <div class="col-lg-9">
       <div class="card mt-4">
-        <img alt="" class="card-img-top img-fluid" src="http://placehold.it/900x400"  th:src="${article.getImage()}" style="height: 400px;width: 900;">
+        <img alt="" class="card-img-top img-fluid" src="http://placehold.it/900x400"
+             th:src="${article.getImage()}" style="height: 400px;width: 900;">
         <div class="card-body">
           <h3 class="card-title" th:text="|${article.getName()}|">Product Name</h3>
           <h4 th:text="|${article.getCostPerDay()}€ per day|">24.99€ pro Tag</h4>
@@ -204,10 +232,9 @@
   </div>
 </div>
 </div>
-<!-- Solange der Kalendar nicht geht ist er auskommentiert 
 <div class="container" style="width: 300px;height:500px">
   <div id='calendar1'></div>
-</div> -->
+</div>
 <!-- Footer -->
 <div name="footer" th:replace="/../fragments/footer ::footer"></div>
 
@@ -223,10 +250,11 @@
     date.setDate(date.getDate() + 1)
     jQuery('#endDate').datepicker("setStartDate", e.date);
   });
+
   var d = new Date();
   var now = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  $('#startDate').datepicker('update', now);
 
+  $('#startDate').datepicker('update', now);
   jQuery('#endDate').datepicker({
     format: 'dd-mm-yyyy',
     autoclose: true,
