@@ -6,7 +6,6 @@ import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import de.propra2.ausleiherino24.model.PPTransaction;
@@ -17,12 +16,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
+import javax.swing.text.html.Option;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -188,7 +185,8 @@ public class CaseService {
         Case c = optCase.get();
 
         //Check whether the article is not reserved in this period of time
-        if (requestIsOk(id) && accountHandler.hasValidFunds(c)) {
+        boolean articleRented = articleNotRented(id);
+        if (articleRented && accountHandler.hasValidFunds(c)) {
             c.setRequestStatus(Case.REQUEST_ACCEPTED);
             reservationHandler.handleReservedMoney(c);
             caseRepository.save(c);
@@ -196,29 +194,46 @@ public class CaseService {
         } else {
             c.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
             caseRepository.save(c);
-            if (!requestIsOk(id)) {
-                return 2;
-            } else {
+            if (articleRented) {
                 return 3;
+            } else {
+                return 2;
             }
         }
     }
 
     /**
      * checks whether the article is not rented in the given time
-     * @param id
+     * @param id CaseId
      * @return
      */
-    boolean requestIsOk(Long id) {
-        Case c = caseRepository.findById(id).get();
-        Article article = c.getArticle();
+    boolean articleNotRented(Long id) {
+        Optional<Case> c = caseRepository.findById(id);
+        if (!c.isPresent()) {
+            return false;
+        }
+
+        Article article = c.get().getArticle();
         List<Case> cases = article.getCases().stream()
                 .filter(ca -> ca.getRequestStatus() == Case.REQUEST_ACCEPTED)
                 .collect(Collectors.toList());
-        cases.remove(c); //Makes sure, that c is not an element in cases
+        cases.remove(c.get());
 
         for (Case ca : cases) {
-            if (!(ca.getStartTime() > c.getEndTime() || ca.getEndTime() < c.getStartTime())) {
+            if (!(ca.getStartTime() > c.get().getEndTime() || ca.getEndTime() < c.get().getStartTime())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    boolean articleNotRented(Article article, Long startTime, Long endTime, Case c) {
+        List<Case> cases = article.getCases().stream()
+                .filter(ca -> ca.getRequestStatus() == Case.REQUEST_ACCEPTED)
+                .collect(Collectors.toList());
+
+        for (Case ca : cases) {
+            if (!(ca.getStartTime() > endTime || ca.getEndTime() < startTime)) {
                 return false;
             }
         }

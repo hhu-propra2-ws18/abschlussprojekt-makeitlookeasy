@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -211,7 +210,7 @@ public class CaseServiceTest {
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
 
-        assertFalse(caseService.requestIsOk(0L));
+        assertFalse(caseService.articleNotRented(0L));
     }
 
     @Test
@@ -230,7 +229,7 @@ public class CaseServiceTest {
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c2));
 
-        assertFalse(caseService.requestIsOk(0L));
+        assertFalse(caseService.articleNotRented(0L));
     }
 
     @Test
@@ -249,7 +248,7 @@ public class CaseServiceTest {
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
 
-        assertFalse(caseService.requestIsOk(0L));
+        assertFalse(caseService.articleNotRented(0L));
     }
 
     @Test
@@ -268,7 +267,7 @@ public class CaseServiceTest {
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
 
-        assertTrue(caseService.requestIsOk(0L));
+        assertTrue(caseService.articleNotRented(0L));
     }
 
     @Test
