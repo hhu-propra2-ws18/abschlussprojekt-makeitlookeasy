@@ -28,6 +28,11 @@
 
     <div class="col-lg 9 text-center" style="margin-top: 50px">
       <h1 style="margin-bottom: 20px" th:text="|Your bank amount is : ${pp} €|"></h1>
+      <form th:action="@{~/addMoney}" method="post">
+      <label>Money :</label>
+      <input type="number" step="0.01" name="money" required>
+      <button class="btn btn-success" type="submit">Get money</button>
+      </form>
       <table class="table table-striped">
         <tr>
           <div class="text-center"><h1>Transactions</h1></div>
