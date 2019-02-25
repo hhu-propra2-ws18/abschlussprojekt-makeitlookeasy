@@ -9,44 +9,23 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.NonNull;
 
 public interface CaseRepository extends CrudRepository<Case, Long> {
 
-    /** TODO: Heading.
-     * @return ArrayList of all Case objects in database.
-     */
+    @NonNull
     List<Case> findAll();
 
-
-    @Query("SELECT c FROM Case c WHERE c.receiver.id = :user")
-    ArrayList<Case> findByReceiver(@Param("user") User user);
-
-    /** TODO: Heading.
-     * @param user Ausleihender
-     * @return alle dem User zugehöhrigen Cases
-     */
     @Query("SELECT c FROM Case c WHERE c.receiver = :user")
     ArrayList<Case> findAllByReceiver(@Param("user") User user);
 
-    /** TODO: Heading.
-     * @param Owner Verleiher
-     * @return alle dem Owner zugehöhrigen Cases
-     */
     @Query("SELECT c FROM #{#entityName} c WHERE c.article.owner = :owner")
-    ArrayList<Case> findAllByArticleOwner(@Param("owner") User Owner);
+    ArrayList<Case> findAllByArticleOwner(@Param("owner") User owner);
 
-    /** TODO: Heading.
-     * @param ownerId VerleiherId
-     * @return alle dem Owner zugehöhrigen Cases
-     */
     @Query("SELECT c FROM #{#entityName} c WHERE c.article.owner.id = :id ORDER BY c.requestStatus ASC")
     ArrayList<Case> findAllByArticleOwnerId(@Param("id") Long ownerId);
 
     Optional<Case> findByArticle(Article article);
-
-    //Optional<Case> findByArticleOwnerId(Long id);
-
-    //Optional<Case> findByReceiverId(Long id);
 
     ArrayList<Case> findAllByArticleAndRequestStatus(Article article,int status);
 }
