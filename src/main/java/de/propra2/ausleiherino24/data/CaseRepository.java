@@ -4,6 +4,7 @@ import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.User;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,7 +15,7 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
     /** TODO: Heading.
      * @return ArrayList of all Case objects in database.
      */
-    ArrayList<Case> findAll();
+    List<Case> findAll();
 
 
     @Query("SELECT c FROM Case c WHERE c.receiver.id = :user")
@@ -46,4 +47,6 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
     //Optional<Case> findByArticleOwnerId(Long id);
 
     //Optional<Case> findByReceiverId(Long id);
+
+    ArrayList<Case> findAllByArticleAndRequestStatus(Article article,int status);
 }
