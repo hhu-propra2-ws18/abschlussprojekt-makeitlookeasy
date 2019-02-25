@@ -4,6 +4,7 @@ import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.UserService;
+import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,9 +69,12 @@ public class EmailSender {
     }
 
     private void configureMailSender(){
+        Properties properties = new Properties();
+        properties.putAll(config.getProperties());
         mailSender.setHost(config.getHost());
         mailSender.setPort(config.getPort());
         mailSender.setUsername(config.getUsername());
         mailSender.setPassword(config.getPassword());
+        mailSender.setJavaMailProperties(properties);
     }
 }
