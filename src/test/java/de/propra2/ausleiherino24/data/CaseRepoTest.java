@@ -23,6 +23,9 @@ public class CaseRepoTest {
     @Autowired
     private CaseRepository cases;
 
+    @Autowired
+    private UserRepository users;
+
     private Case case1;
     private Case case2;
 
@@ -51,8 +54,7 @@ public class CaseRepoTest {
     public void databaseShouldSaveEntities() {
         final List<Case> us = cases.findAll();
         Assertions.assertThat(us.size()).isEqualTo(2);
-        Assertions.assertThat(us.get(0)).isEqualTo(case1);
-        Assertions.assertThat(us.get(1)).isEqualTo(case2);
+        Assertions.assertThat(us).containsExactlyInAnyOrder(case1, case2);
     }
 
     @Test
@@ -73,6 +75,21 @@ public class CaseRepoTest {
     public void queryFindByArticleShouldReturnCaseWithCorrespondingArticle() {
         final Case expectedCase = cases.findByArticle(case2.getArticle()).get();
         Assertions.assertThat(expectedCase).isEqualTo(case2);
+    }
+
+    @Test
+    public void queryFindByArticleAndRequestStatusShouldReturnCaseWithCorrespondingArticleIfStatusIsMatching() {
+        case2.setRequestStatus(Case.RUNNING);
+        final List<Case> expectedCases = cases.findAllByArticleAndRequestStatus(case2.getArticle(), Case.RUNNING);
+        Assertions.assertThat(expectedCases.size()).isOne();
+        Assertions.assertThat(expectedCases.get(0)).isEqualTo(case2);
+    }
+
+    @Test
+    public void queryFindByArticleAndRequestStatusShouldReturnNoCaseWithCorrespondingArticleIfStatusIsNotMatching() {
+        case2.setRequestStatus(Case.RUNNING);
+        final List<Case> expectedCases = cases.findAllByArticleAndRequestStatus(case2.getArticle(), Case.REQUEST_ACCEPTED);
+        Assertions.assertThat(expectedCases.size()).isZero();
     }
 
     @Test
@@ -100,8 +117,37 @@ public class CaseRepoTest {
 
         final List<Case> expectedCase = cases.findAllByArticleOwner(case2.getOwner());
         Assertions.assertThat(expectedCase.size()).isEqualTo(2);
-        Assertions.assertThat(expectedCase.get(0)).isEqualTo(case1);
-        Assertions.assertThat(expectedCase.get(1)).isEqualTo(case2);
+        Assertions.assertThat(expectedCase).containsExactlyInAnyOrder(case1,case2);
+    }
+
+
+    @Test
+    public void customQueryFindAllByArticleOwnerIdShouldReturnCaseWithCorrespondingArticleOwner() {
+        final User owner1 = new User();
+        final User owner2 = new User();
+        users.saveAll(Arrays.asList(owner1, owner2));
+
+        case2.getArticle().setOwner(owner2);
+        case1.getArticle().setOwner(owner1);
+
+        final List<Case> expectedCase = cases.findAllByArticleOwnerId(case2.getOwner().getId());
+        Assertions.assertThat(expectedCase.size()).isOne();
+        Assertions.assertThat(expectedCase.get(0)).isEqualTo(case2);
+    }
+
+    @Test
+    public void customQueryFindAllByArticleOwnerIdShouldReturnTwoCaseWithCorrespondingArticleOwnerOrderedByRequestStatusAsc() {
+        case1.setRequestStatus(Case.RUNNING);
+        case2.setRequestStatus(Case.RUNNING_EMAILSENT);
+        final User user = new User();
+        users.save(user);
+
+        case2.getArticle().setOwner(user);
+        case1.getArticle().setOwner(user);
+
+        final List<Case> expectedCase = cases.findAllByArticleOwnerId(case2.getOwner().getId());
+        Assertions.assertThat(expectedCase.size()).isEqualTo(2);
+        Assertions.assertThat(expectedCase).containsExactly(case1, case2);
     }
 
 }
