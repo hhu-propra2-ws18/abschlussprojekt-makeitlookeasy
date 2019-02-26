@@ -70,8 +70,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             }
 
             @Override
-            public boolean matches(final CharSequence rawPassword, final String s) {
-                return rawPassword.toString().equals(s);
+            public boolean matches(final CharSequence rawPassword, final String string) {
+                return rawPassword.toString().equals(string);
             }
         };
     }
