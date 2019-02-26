@@ -37,9 +37,9 @@ public class CustomerReviewServiceTest {
         CustomerReview customerReview2 = new CustomerReview();
         CustomerReview customerReview3 = new CustomerReview();
 
-        customerReview1.setACase(case1);
-        customerReview2.setACase(case2);
-        customerReview3.setACase(case3);
+        customerReview1.setAcase(case1);
+        customerReview2.setAcase(case2);
+        customerReview3.setAcase(case3);
 
         customerReviews.add(customerReview1);
         customerReviews.add(customerReview2);

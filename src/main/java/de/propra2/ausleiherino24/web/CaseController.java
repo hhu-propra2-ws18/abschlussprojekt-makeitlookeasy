@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,6 +83,7 @@ public class CaseController {
         User currentUser = userService.findUserByPrincipal(principal);
 
         ModelAndView mav = new ModelAndView("/shop/item");
+        mav.addObject("review",customerReviewRepository.findAll());
         mav.addObject(ARTICLE_STRING, article);
         mav.addObject("user", currentUser);
         mav.addObject("categories", allCategories);
@@ -210,9 +210,9 @@ public class CaseController {
     public String writeReview(@RequestParam Long id, CustomerReview review) {
         review.setTimestamp(new Date().getTime());
         Case opt = caseService.findCaseById(id);
-        review.setACase(opt);
+        review.setAcase(opt);
         customerReviewRepository.save(review);
-        caseRepository.save(review.getACase());
+        caseRepository.save(review.getAcase());
 
         System.out.println(review);
         return "redirect:/myOverview?borrowed";

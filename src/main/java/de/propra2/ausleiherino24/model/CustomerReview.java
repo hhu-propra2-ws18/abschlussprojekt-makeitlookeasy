@@ -25,7 +25,7 @@ public class CustomerReview {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @NotNull
-    Case aCase;
+    Case acase;
 
     double stars;
 
@@ -36,12 +36,12 @@ public class CustomerReview {
 
     Long timestamp;
 
-    public void setACase(Case aCase) {
-        setACase(aCase, false);
+    public void setAcase(Case aCase) {
+        setAcase(aCase, false);
     }
 
-    public void setACase(Case aCase, boolean repetition) {
-        this.aCase = aCase;
+    public void setAcase(Case aCase, boolean repetition) {
+        this.acase = aCase;
         if (aCase != null && !repetition) {
             aCase.setReview(this, true);
         }
