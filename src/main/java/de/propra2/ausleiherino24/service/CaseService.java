@@ -78,7 +78,10 @@ public class CaseService {
         final List<PPTransaction> ppTransactions = new ArrayList<>();
         final List<Case> cases = getLendCasesFromPersonReceiver(personId);
         for (final Case c : cases) {
-            ppTransactions.add(c.getPpTransaction());
+            if (c.getRequestStatus() != Case.REQUEST_DECLINED
+                    && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE) {
+                ppTransactions.add(c.getPpTransaction());
+            }
         }
         return ppTransactions;
     }
