@@ -41,7 +41,7 @@ public class CaseServiceTest {
     private CaseService caseService;
     private AccountHandler accountHandlerMock;
     private ReservationHandler reservationHandlerMock;
-    private ArrayList<Case> cases;
+    private List<Case> cases;
 
     @Before
     public void setUp() {
