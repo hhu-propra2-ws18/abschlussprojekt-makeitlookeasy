@@ -3,6 +3,8 @@ package de.propra2.ausleiherino24.web;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.CustomerReview;
+import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
 import java.beans.PropertyEditorSupport;
@@ -56,6 +58,7 @@ public class CaseController {
 
     /**
      * Books an article. Calls caseService.requestArticle
+     *
      * @return redirect: /article?id
      */
     @PostMapping("/bookArticle")
@@ -82,21 +85,24 @@ public class CaseController {
         return url;
     }
 
+
     /**
-     * Mapping for buy an article
-     * @param id
-     * @param principal
+     * Principal buys an article
+     * @param articleId article that is sold
+     * @param principal customer that buys article
      * @return
      */
     @PostMapping("/buyArticle")
-    public String buyArticle(final @RequestParam Long id) {
-
-        // TODO: Set Article to false so other user cant buy, and do Transaction.
-        return "redirect:/article?id=" + id;
+    public String buyArticle(final @RequestParam Long articleId,
+            final Principal principal) {
+        caseService.sellArticle(articleId, principal);
+        // TODO: Show the user, whether the request was successful or not.
+        return "redirect:/article?id=" + articleId;
     }
 
     /**
      * Mapping for user to accept an request.
+     *
      * @param id caseId
      * @return Redirects to myOverview with fitting warning.
      */
@@ -130,6 +136,7 @@ public class CaseController {
 
     /**
      * Mapping for creating an review.
+     *
      * @param id caseId
      * @param review object
      * @return redirect: /myOverview with fitting param

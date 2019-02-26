@@ -37,16 +37,15 @@ public class Article {
     private Double deposit;
 
     /**
-     * If forSale is true, this field will be used as price.
-     * If forSale is false, this field will be used as cost per day for rental.
+     * If forSale is true, this field will be used as price. If forSale is false, this field will be
+     * used as cost per day for rental.
      */
     private Double costPerDay;
 
     private String location;
 
     /**
-     * true: Article will be sold
-     * false: Article is aviable for rental
+     * true: Article will be sold false: Article is aviable for rental
      */
     private boolean forSale;
 
@@ -56,8 +55,7 @@ public class Article {
     private boolean active;
 
     /**
-     * true: Other users may rent the article.
-     * false: Currently, the article is not to borrow.
+     * true: Other users may rent the article. false: Currently, the article is not to borrow.
      */
     private boolean forRental;
 
@@ -110,8 +108,7 @@ public class Article {
 
     /**
      * true: if article has only cases where the requeststatus is REQUEST_DECLINED,
-     * RENTAL_NOT_POSSIBLE or FINISHED.
-     * false: otherwise
+     * RENTAL_NOT_POSSIBLE or FINISHED. false: otherwise
      */
     public boolean allCasesClosed() {
         List<Case> activeCases;

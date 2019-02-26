@@ -46,7 +46,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="transaction : ${transactions}" th:class="${user.id==transaction.aCase.receiver.id }? 'bg-danger' :  'bg-success'">
+        <tr th:each="transaction : ${transactions}"
+            th:class="${user.id==transaction.aCase.receiver.id }? 'bg-danger' :  'bg-success'">
           <th scope="col" th:text="${transaction.aCase.article.name}"></th>
           <th scope="col" th:text="${transaction.getFormattedDate()}"></th>
           <th scope="col" th:text="${transaction.lendingCost}"></th>

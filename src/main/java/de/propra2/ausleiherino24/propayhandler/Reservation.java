@@ -12,7 +12,7 @@ class Reservation {
     Double amount;
 
     /**
-     * base constructor
+     * base constructor.
      */
     Reservation() {
         this.id = 0L;

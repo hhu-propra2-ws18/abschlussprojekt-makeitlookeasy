@@ -254,7 +254,7 @@
             <div class="ml-auto">
               <!-- Button to buy article -->
               <form method="post" th:action="@{~/buyArticle}">
-                <input type="hidden" name="id" th:value="${article.id}">
+                <input type="hidden" name="articleId" th:value="${article.id}">
                 <button type="submit" class="btn btn-success"
                 >Buy now
                 </button>
@@ -327,4 +327,3 @@
 <script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script> -->
 </body>
 </html>
-

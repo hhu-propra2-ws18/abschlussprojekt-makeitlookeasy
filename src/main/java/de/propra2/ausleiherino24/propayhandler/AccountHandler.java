@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 /**
- * gets Propay account Data, adds and transfers Funds except for reservation punishments
+ * gets Propay account Data, adds and transfers Funds except for reservation punishments.
  */
 @Service
 public class AccountHandler {
@@ -27,6 +27,7 @@ public class AccountHandler {
 
     /**
      * get Propay Account
+     *
      * @param accountName name of account to get
      * @return returns all data of PropayAccount
      */
@@ -36,7 +37,6 @@ public class AccountHandler {
     }
 
     /**
-     *
      * @param accountName account for which funds are to be checked
      * @return returns amount of unreserved Funds
      */
@@ -47,7 +47,8 @@ public class AccountHandler {
 
 
     /**
-     *  checks if lender has enough money to proceed with case
+     * checks if lender has enough money to proceed with case
+     *
      * @param aCase contains necessary Data
      * @return has enough funds to proceed with Case?
      */
@@ -57,7 +58,6 @@ public class AccountHandler {
     }
 
     /**
-     *
      * @param accountName name of user to be checked
      * @param requestedFunds amount of requested Funds to be compared with actual free Funds
      * @return has requested Funds?
@@ -68,6 +68,7 @@ public class AccountHandler {
 
     /**
      * adds funds to user account
+     *
      * @param username user to get funds
      * @param amount amount to be added
      */
@@ -79,9 +80,10 @@ public class AccountHandler {
 
     /**
      * calls transfer for lending cost of case with necessary Data
+     *
      * @param c case containing all necessary Data
      */
-    void transferFundsByCase(final Case c) {
+    public void transferFundsByCase(final Case c) {
         transferFunds(c.getReceiver().getUsername(), c.getOwner().getUsername(),
                 c.getPpTransaction().getLendingCost());
     }
@@ -89,6 +91,7 @@ public class AccountHandler {
 
     /**
      * transfers funds from source to target
+     *
      * @param sourceUser user to give Funds
      * @param targetUser user to receive Funds
      * @param amount amount to be transfered

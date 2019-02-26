@@ -21,6 +21,7 @@ public class PPAccountTest {
         reservations = new ArrayList<>();
         testAcc1.setReservations(reservations);
     }
+
     @Test
     public void reservationAmountShouldBeZeroWithNoReservations() {
 

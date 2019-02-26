@@ -130,7 +130,8 @@ public class ArticleService {
 
     /**
      * Updates an article given by the id with the information from given article.
-     *  @param articleId id for article, that is about to be updated
+     *
+     * @param articleId id for article, that is about to be updated
      * @param article new article
      */
     public void updateArticle(final Long articleId, final Article article,
@@ -156,5 +157,23 @@ public class ArticleService {
 
     public List<Article> findAllArticlesByName(final String searchString) {
         return articleRepository.findByNameContainsIgnoreCase(searchString);
+    }
+
+    /**
+     * Sets forSale-flag in article and saves in database
+     * @param articleId article that is modified
+     * @param status value to set
+     */
+    void setSellStatusFromArticle(final Long articleId, boolean status) {
+        final Optional<Article> articleOp = articleRepository.findById(articleId);
+
+        if (!articleOp.isPresent()) {
+            LOGGER.warn("Couldn't find article {} in UserRepository.", articleId);
+            throw new NullPointerException("Couldn't find article in ArticleRepository.");
+        }
+
+        Article article = articleOp.get();
+        article.setForSale(status);
+        articleRepository.save(article);
     }
 }

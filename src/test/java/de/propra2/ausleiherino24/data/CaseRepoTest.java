@@ -80,7 +80,8 @@ public class CaseRepoTest {
     @Test
     public void queryFindByArticleAndRequestStatusShouldReturnCaseWithCorrespondingArticleIfStatusIsMatching() {
         case2.setRequestStatus(Case.RUNNING);
-        final List<Case> expectedCases = cases.findAllByArticleAndRequestStatus(case2.getArticle(), Case.RUNNING);
+        final List<Case> expectedCases = cases
+                .findAllByArticleAndRequestStatus(case2.getArticle(), Case.RUNNING);
         Assertions.assertThat(expectedCases.size()).isOne();
         Assertions.assertThat(expectedCases.get(0)).isEqualTo(case2);
     }
@@ -88,7 +89,8 @@ public class CaseRepoTest {
     @Test
     public void queryFindByArticleAndRequestStatusShouldReturnNoCaseWithCorrespondingArticleIfStatusIsNotMatching() {
         case2.setRequestStatus(Case.RUNNING);
-        final List<Case> expectedCases = cases.findAllByArticleAndRequestStatus(case2.getArticle(), Case.REQUEST_ACCEPTED);
+        final List<Case> expectedCases = cases
+                .findAllByArticleAndRequestStatus(case2.getArticle(), Case.REQUEST_ACCEPTED);
         Assertions.assertThat(expectedCases.size()).isZero();
     }
 
@@ -117,7 +119,7 @@ public class CaseRepoTest {
 
         final List<Case> expectedCase = cases.findAllByArticleOwner(case2.getOwner());
         Assertions.assertThat(expectedCase.size()).isEqualTo(2);
-        Assertions.assertThat(expectedCase).containsExactlyInAnyOrder(case1,case2);
+        Assertions.assertThat(expectedCase).containsExactlyInAnyOrder(case1, case2);
     }
 
 
