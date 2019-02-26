@@ -107,30 +107,30 @@
 
       <!-- Warnings -->
       <div class="alert alert-warning absolue center" th:if="${param.error}">
-        An unknown error occured.
+        An unknown error occurred.
       </div>
-      <div class="alert alert-warning absolue center" th:if="${param.alreadyrented}">
+      <div class="alert alert-warning absolue center" th:if="${param.alreadyRented}">
         Could not accept article, because its already rented in the requested time.
       </div>
-      <div class="alert alert-warning absolue center" th:if="${param.receiveroutofmoney}">
+      <div class="alert alert-warning absolue center" th:if="${param.receiverOutOfMoney}">
         The borrower unfortunately has too little money on Propay. We are sorry about that.
       </div>
-      <div class="alert alert-success absolue center" th:if="${param.successfullyreturned}">
+      <div class="alert alert-success absolue center" th:if="${param.successfullyReturned}">
         The case will be closed. The deposit will be returned.
       </div>
-      <div class="alert alert-success absolue center" th:if="${param.openedconflict}">
+      <div class="alert alert-success absolue center" th:if="${param.openedConflict}">
         A conflict is now open for given case. You will be informed by our employees.
       </div>
-      <div class="alert alert-danger absolue center" th:if="${param.conflictfailed}">
+      <div class="alert alert-danger absolue center" th:if="${param.conflictFailed}">
         Failed to open a conflict.
       </div>
-      <div class="alert alert-success absolue center" th:if="${param.updatedarticle}">
+      <div class="alert alert-success absolue center" th:if="${param.updatedArticle}">
         Article successfully updated.
       </div>
-      <div class="alert alert-warning absolue center" th:if="${param.deletedarticle}">
+      <div class="alert alert-warning absolue center" th:if="${param.deletedArticle}">
         Article successfully deleted.
       </div>
-      <div class="alert alert-danger absolue center" th:if="${param.deletionfailed}">
+      <div class="alert alert-danger absolue center" th:if="${param.deletionFailed}">
         This article has open cases. You cannot delete it right now.
       </div>
       <div class="alert alert-warning absolue center" th:if="${param.declined}">
@@ -234,7 +234,8 @@
                         <div class="modal-body">
                           <div class="form-row form-group">
                             <div class="col-sm-4 label-column"><label class="col-form-label"
-                                                                      for="name">Articlename:</label>
+                                                                      for="name">Article
+                              name:</label>
                             </div>
                             <div class="col-sm-6 input-column">
                               <input class="form-control" id="name" name="name" required

@@ -1,15 +1,14 @@
 package de.propra2.ausleiherino24.web;
 
-import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.ResolveConflict;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ConflictService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,19 +21,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ConflictController {
 
+    private final CaseService caseService;
     private final ConflictService conflictService;
     private final UserService userService;
-    private final CaseRepository caseRepository;
 
     private static final String SOMEVIEW_STRING = "someView";
     private static final String USER_STRING = "user";
 
     @Autowired
-    public ConflictController(final ConflictService conflictService, final UserService userService,
-            final CaseRepository caseRepository) {
+    public ConflictController(final CaseService caseService, final ConflictService conflictService,
+            final UserService userService) {
+        this.caseService = caseService;
         this.conflictService = conflictService;
         this.userService = userService;
-        this.caseRepository = caseRepository;
     }
 
     /**
@@ -50,13 +49,13 @@ public class ConflictController {
     @PostMapping("/openconflict")
     public String sendConflict(final @RequestParam Long id, final String conflictDescription)
             throws Exception {
-        final Optional<Case> optionalCase = caseRepository.findById(id);
-        if (!optionalCase.isPresent()) {
-            return "redirect:/myOverview?returned&conflictfailed";
+        if (caseService.isValidCase(id)) {
+            return "redirect:/myOverview?returned&conflictFailed";
         }
-        conflictService.openConflict(optionalCase.get(), conflictDescription);
 
-        return "redirect:/myOverview?returned&openedconflict";
+        final Case aCase = caseService.findCaseById(id);
+        conflictService.openConflict(aCase, conflictDescription);
+        return "redirect:/myOverview?returned&openedConflict";
     }
 
     @DeleteMapping("/deactivateconflict")
@@ -65,7 +64,7 @@ public class ConflictController {
         final User user = userService.findUserByPrincipal(principal);
         conflictService.deactivateConflict(id, user);
 
-        return "redirect:/myOverview?returned&deactivatedconflict";
+        return "redirect:/myOverview?returned&deactivatedConflict";
     }
 
     @GetMapping("/conflict")

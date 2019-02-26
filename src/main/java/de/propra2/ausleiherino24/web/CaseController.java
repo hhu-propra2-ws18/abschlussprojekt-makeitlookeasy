@@ -1,7 +1,5 @@
 package de.propra2.ausleiherino24.web;
 
-import de.propra2.ausleiherino24.data.CaseRepository;
-import de.propra2.ausleiherino24.data.CustomerReviewRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
@@ -9,6 +7,7 @@ import de.propra2.ausleiherino24.model.CustomerReview;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.CaseService;
+import de.propra2.ausleiherino24.service.CustomerReviewService;
 import de.propra2.ausleiherino24.service.ImageService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.beans.PropertyEditorSupport;
@@ -35,7 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-// TODO: Exatrct duplicate code. Fix!
+// TODO: Extract duplicate code. Fix!
 
 @Controller
 public class CaseController {
@@ -46,8 +45,7 @@ public class CaseController {
     private final ImageService imageService;
     private final UserService userService;
     private final CaseService caseService;
-    private final CustomerReviewRepository customerReviewRepository;
-    private final CaseRepository caseRepository;
+    private final CustomerReviewService customerReviewService;
 
     private static final String ARTICLE_STRING = "article";
     private final List<Category> allCategories = Category.getAllCategories();
@@ -60,14 +58,12 @@ public class CaseController {
             final UserService userService,
             final ImageService imageService,
             final CaseService caseService,
-            final CustomerReviewRepository customerReviewRepository,
-            final CaseRepository caseRepository) {
+            final CustomerReviewService customerReviewService) {
         this.articleService = articleService;
         this.userService = userService;
         this.imageService = imageService;
         this.caseService = caseService;
-        this.customerReviewRepository = customerReviewRepository;
-        this.caseRepository = caseRepository;
+        this.customerReviewService = customerReviewService;
     }
 
     /**
@@ -80,8 +76,10 @@ public class CaseController {
             final Principal principal) {
         final Article article = articleService.findArticleById(id);
         final User currentUser = userService.findUserByPrincipal(principal);
+        final List<CustomerReview> allReviews = customerReviewService.findAllReviews();
+
         final ModelAndView mav = new ModelAndView("/shop/item");
-        mav.addObject("review", customerReviewRepository.findAll());
+        mav.addObject("review", allReviews);
         mav.addObject(ARTICLE_STRING, article);
         mav.addObject("user", currentUser);
         mav.addObject("categories", allCategories);
@@ -92,7 +90,7 @@ public class CaseController {
      * Mapping for creating a new article.
      */
     @GetMapping("/newArticle")
-    public ModelAndView createNewCaseAndArticle(final Principal principal) {
+    public ModelAndView createNewArticle(final Principal principal) {
         final Article article = new Article();
         final User currentUser = userService.findUserByPrincipal(principal);
 
@@ -113,7 +111,7 @@ public class CaseController {
      *     create an article without a picture
      */
     @PostMapping("/saveNewArticle")
-    public ModelAndView saveNewCaseAndArticle(final @ModelAttribute @Valid Article article,
+    public ModelAndView saveNewArticle(final @ModelAttribute @Valid Article article,
             BindingResult result, final @RequestParam("image") MultipartFile image,
             final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
@@ -131,6 +129,11 @@ public class CaseController {
 
     /**
      * Updates an article.
+     *
+     * @param article article to save
+     * @param image image of the article
+     * @param result must not be deleted, even though there is no obvious use. Otherwise you cannot
+     *     create an article without a picture
      * @return redirect: /myOverview
      */
     @PostMapping("/updateArticle")
@@ -150,9 +153,9 @@ public class CaseController {
     @PostMapping("/deleteArticle")
     public String deleteArticle(final @RequestParam Long id) {
         if (articleService.deactivateArticle(id)) {
-            return "redirect:/myOverview?articles&deletedarticle";
+            return "redirect:/myOverview?articles&deletedArticle";
         } else {
-            return "redirect:/myOverview?articles&deletionfailed";
+            return "redirect:/myOverview?articles&deletionFailed";
         }
     }
 
@@ -205,9 +208,9 @@ public class CaseController {
             case 1:
                 return "redirect:/myOverview?requests";
             case 2:
-                return "redirect:/myOverview?requests&alreadyrented";
+                return "redirect:/myOverview?requests&alreadyRented";
             case 3:
-                return "redirect:/myOverview?requests&receiveroutofmoney";
+                return "redirect:/myOverview?requests&receiverOutOfMoney";
             default:
                 return "redirect:/myOverview?requests&error";
         }
@@ -222,7 +225,7 @@ public class CaseController {
     @PostMapping("/acceptCaseReturn")
     public String acceptCaseReturn(final @RequestParam Long id) {
         caseService.acceptCaseReturn(id);
-        return "redirect:/myOverview?returned&successfullyreturned";
+        return "redirect:/myOverview?returned&successfullyReturned";
     }
 
     /**
@@ -236,8 +239,8 @@ public class CaseController {
         review.setTimestamp(new Date().getTime());
         Case opt = caseService.findCaseById(id);
         review.setAcase(opt);
-        customerReviewRepository.save(review);
-        caseRepository.save(review.getAcase());
+        customerReviewService.saveReview(review);
+        caseService.saveCase(review.getAcase());
         return "redirect:/myOverview?borrowed";
     }
 

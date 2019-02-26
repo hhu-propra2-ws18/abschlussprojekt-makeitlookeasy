@@ -31,4 +31,12 @@ public class CustomerReviewService {
                         .contains(customerReview.getAcase()))
                 .collect(Collectors.toList());
     }
+
+    public void saveReview(CustomerReview review) {
+        customerReviewRepository.save(review);
+    }
+
+    public List<CustomerReview> findAllReviews() {
+        return customerReviewRepository.findAll();
+    }
 }

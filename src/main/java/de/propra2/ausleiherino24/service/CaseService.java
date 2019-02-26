@@ -47,6 +47,25 @@ public class CaseService {
         this.reservationHandler = reservationHandler;
     }
 
+    public void saveCase(Case aCase) {
+        caseRepository.save(aCase);
+    }
+
+    public Case findCaseById(final Long id) {
+        final Optional<Case> optionalCase = caseRepository.findById(id);
+
+        if (!optionalCase.isPresent()) {
+            LOGGER.warn("Couldn't find case {} in database.", id);
+            throw new NullPointerException();
+        }
+
+        return optionalCase.get();
+    }
+
+    public boolean isValidCase(Long id) {
+        return caseRepository.existsById(id);
+    }
+
     // TODO: Only implemented in tests. Necessary?
     void addCaseForNewArticle(final Article article, final Double price, final Double deposit) {
         final Case aCase = new Case();
@@ -78,7 +97,10 @@ public class CaseService {
         final List<PPTransaction> ppTransactions = new ArrayList<>();
         final List<Case> cases = getLendCasesFromPersonReceiver(personId);
         for (final Case c : cases) {
-            ppTransactions.add(c.getPpTransaction());
+            if (c.getRequestStatus() != Case.REQUEST_DECLINED
+                    && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE) {
+                ppTransactions.add(c.getPpTransaction());
+            }
         }
         return ppTransactions;
     }
@@ -172,6 +194,7 @@ public class CaseService {
             return 1;
         } else {
             c.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
+            reservationHandler.releaseReservation(c);
             caseRepository.save(c);
             if (articleRented) {
                 return 3;
@@ -214,17 +237,6 @@ public class CaseService {
             }
         }
         return true;
-    }
-
-    public Case findCaseById(final Long id) {
-        final Optional<Case> optionalCase = caseRepository.findById(id);
-
-        if (!optionalCase.isPresent()) {
-            LOGGER.warn("Couldn't find case {} in database.", id);
-            throw new NullPointerException();
-        }
-
-        return optionalCase.get();
     }
 
     public void declineArticleRequest(final Long id) {
