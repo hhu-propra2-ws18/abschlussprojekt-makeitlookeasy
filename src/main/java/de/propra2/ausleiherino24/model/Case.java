@@ -30,15 +30,13 @@ public class Case {
     public static final int REQUESTED = 1;
     public static final int REQUEST_ACCEPTED = 2;
     public static final int REQUEST_DECLINED = 12;
-    //Falls der Artikel zu gegebenem Zeitraum bereits verliehen ist
-    public static final int RENTAL_NOT_POSSIBLE = 4;
+    public static final int RENTAL_NOT_POSSIBLE = 4; //Falls der Artikel zu gegebenem Zeitraum bereits verliehen ist
 
-    //Verleih läuft aktuell
-    public static final int RUNNING = 7;
-    //Es gibt noch einen offenen Konflikt
-    public static final int OPEN_CONFLICT = 10;
-    //Verleih ist beendet
-    public static final int FINISHED = 14;
+    public static final int RUNNING = 7; //Verleih läuft aktuell
+    // TODO: Update views to support RUNNING_EMAILSENT as RUNNING.
+    public static final int RUNNING_EMAILSENT = 8;
+    public static final int OPEN_CONFLICT = 10; //Es gibt noch einen offenen Konflikt
+    public static final int FINISHED = 14; //Verleih ist beendet
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     PPTransaction ppTransaction;
