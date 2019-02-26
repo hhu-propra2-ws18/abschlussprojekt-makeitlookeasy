@@ -112,13 +112,15 @@ public class Article {
      * RENTAL_NOT_POSSIBLE or FINISHED, otherwise returns false
      */
     public boolean allCasesClosed() {
-        List<Case> activeCases = new ArrayList<>();
+        List<Case> activeCases;
 
         if (getCases() != null) {
             activeCases = getCases().stream()
                     .filter(c -> c.getRequestStatus() != 12 && c.getRequestStatus() != 4
                             && c.getRequestStatus() != 14)
                     .collect(Collectors.toList());
+        } else {
+            activeCases = new ArrayList<>();
         }
 
         return activeCases.isEmpty();
