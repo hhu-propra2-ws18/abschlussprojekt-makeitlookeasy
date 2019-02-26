@@ -88,7 +88,6 @@ public class AccountHandlerTest {
 
     @Test
     public void hasValidFundsWorksWithReservationsIfValid() {
-        testAcc1.addReservation(90.0);
 
         Assertions.assertThat(accountHandler.hasValidFunds("Acc1", 9.0)).isTrue();
         Mockito.verify(restTemplate, Mockito.times(1))
@@ -97,8 +96,6 @@ public class AccountHandlerTest {
 
     @Test
     public void hasValidFundsFailsWithReservationsIfFundsNotValid() {
-        testAcc1.addReservation(90.0);
-        testAcc1.addReservation(9.0);
 
         Assertions.assertThat(accountHandler.hasValidFunds("Acc1", 2.0)).isFalse();
         Mockito.verify(restTemplate, Mockito.times(1))
