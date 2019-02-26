@@ -40,7 +40,7 @@ public class ReservationHandlerTest {
         responseEntityMockDouble = Mockito.mock(ResponseEntity.class);
         reservationHandler = new ReservationHandler(caseRepository,
                 restTemplate);
-        acc1 = new PPAccount("acc1", 100.0);
+        acc1 = new PPAccount("acc1", 100.0, new ArrayList<>());
 
         resList = new ArrayList<>();
         res1 = new Reservation();

@@ -127,10 +127,10 @@
       <div class="alert alert-success absolue center" th:if="${param.updatedArticle}">
         Article successfully updated.
       </div>
-      <div class="alert alert-warning absolue center" th:if="${param.deletedArticle}">
+      <div class="alert alert-warning absolue center" th:if="${param.deactivatedArticle}">
         Article successfully deleted.
       </div>
-      <div class="alert alert-danger absolue center" th:if="${param.deletionFailed}">
+      <div class="alert alert-danger absolue center" th:if="${param.deactivationFailed}">
         This article has open cases. You cannot delete it right now.
       </div>
       <div class="alert alert-warning absolue center" th:if="${param.declined}">
@@ -205,7 +205,8 @@
                 <div aria-hidden="true" aria-labelledby="deleteModalLabel" class="modal fade"
                      th:id="${article.id+'delete'}" role="dialog" tabindex="-1">
                   <div class="modal-dialog" role="document">
-                    <form method="post" th:action="@{/deleteArticle(id=${article.id})}">
+                    <form th:method="put"
+                          th:action="@{/article/deactivate(id=${article.id})}">
                       <div class="modal-content">
                         <div class="modal-body">
                           <label>Are you sure you want to delete <span
@@ -224,8 +225,8 @@
                 <div aria-hidden="true" aria-labelledby="updateModalLabel" class="modal fade"
                      th:id="${article.id+'article'}" role="dialog" tabindex="-1">
                   <div class="modal-dialog" role="document">
-                    <form enctype="multipart/form-data" method="post" th:object="${article}"
-                          th:action="@{/updateArticle(id=${article.id})}">
+                    <form enctype="multipart/form-data" th:method="put"
+                          th:action="@{/article/saveUpdated}">
                       <div class="modal-content">
                         <div class="modal-header">
                           <h5 class="modal-title" id="updateArticleModalLabel">Update Article</h5>
