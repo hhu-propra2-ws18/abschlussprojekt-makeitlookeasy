@@ -34,9 +34,11 @@
 
   <!-- Controversial rule, we decided to not use it
        https://github.com/pmd/pmd/issues/387 -->
+  <!-- This rule also conflicts with assignments from streams -->
+  <!-- This rule also conflicts with the usage of lambda functions -->
   <rule ref="category/java/errorprone.xml/DataflowAnomalyAnalysis">
     <properties>
-      <property name="violationSuppressRegex" value="^Found 'UR'-anomaly.*"/>
+      <property name="violationSuppressRegex" value="^Found 'DD'.*|^Found 'UR'.*|^Found 'DU'.*"/>
     </properties>
   </rule>
 
