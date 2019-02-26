@@ -425,13 +425,13 @@ public class CaseServiceTest {
 
     @Test
     public void twoPPTransactionsFromReceiver() {
-        Case c1 = new Case();
+        final Case c1 = new Case();
         c1.setPpTransaction(new PPTransaction());
-        Case c2 = new Case();
+        final Case c2 = new Case();
         c2.setPpTransaction(new PPTransaction());
         cases.addAll(Arrays.asList(c1, c2));
         doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
-        List<PPTransaction> transactions = new ArrayList<>(
+        final List<PPTransaction> transactions = new ArrayList<>(
                 Arrays.asList(new PPTransaction(), new PPTransaction()));
 
         assertEquals(transactions, caseService.findAllTransactionsFromPersonReceiver(0L));
@@ -439,15 +439,15 @@ public class CaseServiceTest {
 
     @Test
     public void twoUnavaibleCases() {
-        Case c1 = new Case();
+        final Case c1 = new Case();
         c1.setPpTransaction(new PPTransaction());
         c1.setRequestStatus(Case.REQUEST_DECLINED);
-        Case c2 = new Case();
+        final Case c2 = new Case();
         c2.setPpTransaction(new PPTransaction());
         c2.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
         cases.addAll(Arrays.asList(c1, c2));
         doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
-        List<PPTransaction> transactions = new ArrayList<>(
+        final List<PPTransaction> transactions = new ArrayList<>(
                 Arrays.asList(new PPTransaction(), new PPTransaction()));
 
         assertTrue(caseService.findAllTransactionsFromPersonReceiver(0L).isEmpty());
@@ -455,7 +455,7 @@ public class CaseServiceTest {
 
     @Test
     public void sellArticle(){
-        Article article= new Article();
+        final Article article= new Article();
         article.setCostPerDay(10d);
         when(articleServiceMock.findArticleById(0L)).thenReturn(article);
         when(userServiceMock.findUserByPrincipal(any())).thenReturn(new User());
@@ -464,14 +464,14 @@ public class CaseServiceTest {
         transaction.setLendingCost(10d);
         transaction.setDate(new Date().getTime());
         transaction.setCautionPaid(false);
-        Case c = new Case();
+        final Case c = new Case();
         c.setPpTransaction(transaction);
         c.setArticle(article);
         c.setRequestStatus(Case.FINISHED);
         c.setDeposit(0d);
         c.setPrice(10d);
         c.setReceiver(new User());
-        ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+        final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         caseService.sellArticle(0L ,null);
 
