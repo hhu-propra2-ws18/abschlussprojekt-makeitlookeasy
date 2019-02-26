@@ -119,10 +119,10 @@ public class ArticleController {
      * Mapping for save a new Article which will be sold. If you want to you can try to make on
      * mapping out of this and saveNewArticle
      */
-    @PostMapping("/saveNewSellArticle")
+    @PostMapping("/saveNewToSell")
     public ModelAndView saveNewCaseAndSellArticle(final @ModelAttribute @Valid Article article,
-            BindingResult result, Model model,
-            final @RequestParam("image") MultipartFile image, final Principal principal) {
+            BindingResult result, Model model, final @RequestParam("image") MultipartFile image,
+            final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
 
         article.setActive(true);
