@@ -6,7 +6,12 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
@@ -133,19 +138,6 @@ public class CaseServiceTest {
         when(personServiceMock.findPersonById(0L)).thenReturn(o);
 
         assertTrue(caseService.getFreeCasesFromPersonOwner(0L).isEmpty());
-    }
-
-    @Test
-    public void saveNewArticleCase() {
-        final Article article = new Article();
-        final Case c = new Case();
-        c.setArticle(article);
-        c.setPrice(0D);
-        c.setDeposit(10D);
-
-        caseService.addCaseForNewArticle(article, 0D, 10D);
-
-        verify(caseRepositoryMock).save(c);
     }
 
     @Test
@@ -296,7 +288,7 @@ public class CaseServiceTest {
         c2.setArticle(article);
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
-        when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
+        when(accountHandlerMock.hasValidFundsByCase(any())).thenReturn(true);
         final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         assertEquals(1, caseService.acceptArticleRequest(0L));
@@ -319,7 +311,7 @@ public class CaseServiceTest {
         c2.setArticle(article);
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
-        when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
+        when(accountHandlerMock.hasValidFundsByCase(any())).thenReturn(true);
         final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         assertEquals(2, caseService.acceptArticleRequest(0L));
@@ -343,7 +335,7 @@ public class CaseServiceTest {
 
         verify(caseRepositoryMock).save(argument.capture());
         assertEquals(Case.REQUEST_DECLINED, argument.getValue().getRequestStatus());
-        verify(reservationHandlerMock).releaseReservation(argument.getValue());
+        verify(reservationHandlerMock).releaseReservationByCase(argument.getValue());
         assertEquals(new PPTransaction(), argument.getValue().getPpTransaction());
     }
 
@@ -438,7 +430,7 @@ public class CaseServiceTest {
         doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
         List<PPTransaction> transactions = new ArrayList<>(Arrays.asList(new PPTransaction(), new PPTransaction()));
 
-        assertEquals(transactions, caseService.getAllTransactionsFromPersonReceiver(0L));
+        assertEquals(transactions, caseService.findAllTransactionsFromPersonReceiver(0L));
     }
 
     @Test
@@ -452,6 +444,6 @@ public class CaseServiceTest {
         cases.addAll(Arrays.asList(c1, c2));
         doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
 
-        assertTrue(caseService.getAllTransactionsFromPersonReceiver(0L).isEmpty());
+        assertTrue(caseService.findAllTransactionsFromPersonReceiver(0L).isEmpty());
     }
 }

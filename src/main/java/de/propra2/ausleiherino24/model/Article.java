@@ -36,9 +36,19 @@ public class Article {
 
     private Double deposit;
 
+    /**
+     * If forSale is true, this field will be used as price.
+     * If forSale is false, this field will be used as cost per day for rental.
+     */
     private Double costPerDay;
 
     private String location;
+
+    /**
+     * true: Article will be sold
+     * false: Article is aviable for rental
+     */
+    private boolean forSale;
 
     /**
      * true: Artikel existiert noch false: Artikel gelöscht.

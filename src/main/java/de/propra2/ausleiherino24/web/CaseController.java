@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -115,15 +116,45 @@ public class CaseController {
             BindingResult result, final @RequestParam("image") MultipartFile image,
             final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
+
         article.setActive(true);
+        article.setForRental(true);
+        article.setForSale(false);
         article.setOwner(user);
+
         if (image != null) {
             article.setImage(imageService.store(image, null));
         }
-        article.setForRental(true);
-        article.setActive(true);
         articleService.saveArticle(article, "Created");
+        return new ModelAndView("redirect:/");
+    }
 
+    /**
+     * Mapping for save a new Article which will be sold.
+     * If you want to you can try to make on mapping out of this and saveNewArticle
+     * @param article
+     * @param result
+     * @param model
+     * @param image
+     * @param principal
+     * @return
+     */
+    @PostMapping("/saveNewSellArticle")
+    public ModelAndView saveNewCaseAndSellArticle(final @ModelAttribute @Valid Article article,
+            BindingResult result, Model model,
+            final @RequestParam("image") MultipartFile image, final Principal principal) {
+        final User user = userService.findUserByPrincipal(principal);
+
+        article.setActive(true);
+        article.setOwner(user);
+        article.setForRental(true);
+
+        if (image != null) {
+            article.setImage(imageService.store(image, null));
+        }
+        article.setForSale(true);
+
+        articleService.saveArticle(article, "Created");
         return new ModelAndView("redirect:/");
     }
 
@@ -196,6 +227,16 @@ public class CaseController {
         // TODO: Show the user, whether the request was successful or not.
         return url;
     }
+
+
+    @PostMapping("/buyArticle")
+    public String buyArticle(final @RequestParam Long id,
+            final Principal principal) {
+
+        // TODO: Show the user, whether the request was successful or not.
+        return "redirect:/article?id=" + id;
+    }
+
 
     /**
      * Mapping for user to accept an request.

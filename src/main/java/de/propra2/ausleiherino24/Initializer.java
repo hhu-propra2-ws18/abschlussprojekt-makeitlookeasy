@@ -42,6 +42,8 @@ public class Initializer implements ServletContextInitializer {
 
     private final Faker faker = new Faker(Locale.GERMAN);
     private static final String SECRET_STRING = "password";
+    private static final String USER = "user";
+    private static final String ADMIN = "admin";
 
     @Autowired
     public Initializer(final UserRepository userRepository,
@@ -107,7 +109,7 @@ public class Initializer implements ServletContextInitializer {
                     person.getFirstName() + person.getLastName() + "@mail.de",
                     faker.name().fullName(),
                     SECRET_STRING,
-                    person);
+                    person, USER);
 
             IntStream.range(0, faker.random().nextInt(1, 7))
                     .forEach(value1 -> {
@@ -143,7 +145,7 @@ public class Initializer implements ServletContextInitializer {
                 createPerson(
                         "HHU",
                         "Max",
-                        "Mustermann"))
+                        "Mustermann"), USER)
                 .getPerson());
 
         testPersons.add(createUser(
@@ -153,7 +155,7 @@ public class Initializer implements ServletContextInitializer {
                 createPerson(
                         "HHU",
                         "Maxi",
-                        "Mustermann"))
+                        "Mustermann"), ADMIN)
                 .getPerson());
 
         final User hans = createUser(
@@ -163,7 +165,7 @@ public class Initializer implements ServletContextInitializer {
                 createPerson(
                         "HHU",
                         "Hans",
-                        "Peter"));
+                        "Peter"), USER);
 
         IntStream.range(0, 7)
                 .forEach(value1 -> {
@@ -241,12 +243,12 @@ public class Initializer implements ServletContextInitializer {
      * Creates an user from parameters.
      */
     private User createUser(final String email, final String username, final String password,
-            final Person person) {
+            final Person person, String role) {
         final User user = new User();
         user.setEmail(email);
         user.setUsername(username);
         user.setPassword(password);
-        user.setRole("user");
+        user.setRole(role);
         user.setPerson(person);
         return user;
     }
