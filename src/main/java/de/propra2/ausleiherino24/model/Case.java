@@ -30,7 +30,9 @@ public class Case {
     public static final int REQUESTED = 1;
     public static final int REQUEST_ACCEPTED = 2;
     public static final int REQUEST_DECLINED = 12;
-    public static final int RENTAL_NOT_POSSIBLE = 4; //Falls der Artikel zu gegebenem Zeitraum bereits verliehen ist
+
+    //Falls der Artikel zu gegebenem Zeitraum bereits verliehen ist
+    public static final int RENTAL_NOT_POSSIBLE = 4;
 
     public static final int RUNNING = 7; //Verleih läuft aktuell
     // TODO: Update views to support RUNNING_EMAILSENT as RUNNING.

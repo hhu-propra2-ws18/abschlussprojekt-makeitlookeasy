@@ -35,6 +35,9 @@ public class CaseService {
     private final AccountHandler accountHandler;
     private final ReservationHandler reservationHandler;
 
+    /**
+     * Autowired constructor.
+     */
     @Autowired
     public CaseService(final CaseRepository caseRepository, final ArticleService articleService,
             final PersonService personService, final UserService userService,
@@ -47,14 +50,26 @@ public class CaseService {
         this.reservationHandler = reservationHandler;
     }
 
-    // TODO: Only implemented in tests. Necessary?
-    void addCaseForNewArticle(final Article article, final Double price, final Double deposit) {
-        final Case aCase = new Case();
-        aCase.setArticle(article);
-        aCase.setDeposit(deposit);
-        aCase.setPrice(price);
+    public void saveCase(Case acase) {
+        caseRepository.save(acase);
+    }
 
-        caseRepository.save(aCase);
+    /**
+     * Finds Case by its id.
+     */
+    public Case findCaseById(final Long id) {
+        final Optional<Case> optionalCase = caseRepository.findById(id);
+
+        if (!optionalCase.isPresent()) {
+            LOGGER.warn("Couldn't find case {} in database.", id);
+            throw new NullPointerException();
+        }
+
+        return optionalCase.get();
+    }
+
+    public boolean isValidCase(Long id) {
+        return caseRepository.existsById(id);
     }
 
     List<Case> getAllCasesFromPersonOwner(final Long personId) {
@@ -74,11 +89,17 @@ public class CaseService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<PPTransaction> getAllTransactionsFromPersonReceiver(final Long personId) {
+    /**
+     * Finds all Transactions from receiver by its personId.
+     */
+    public List<PPTransaction> findAllTransactionsFromPersonReceiver(final Long personId) {
         final List<PPTransaction> ppTransactions = new ArrayList<>();
         final List<Case> cases = getLendCasesFromPersonReceiver(personId);
         for (final Case c : cases) {
-            ppTransactions.add(c.getPpTransaction());
+            if (c.getRequestStatus() != Case.REQUEST_DECLINED
+                    && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE) {
+                ppTransactions.add(c.getPpTransaction());
+            }
         }
         return ppTransactions;
     }
@@ -95,16 +116,10 @@ public class CaseService {
         return caseRepository.findAllByReceiver(personService.findPersonById(personId).getUser());
     }
 
-    // TODO: Method is never used. Delete?
-    public List<Case> getAllRequestedCasesbyUser(final Long userId) {
-        return caseRepository
-                .findAllByArticleOwner(userService.findUserById(userId))
-                .stream()
-                .filter(c -> c.getRequestStatus() == Case.REQUESTED)
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    // TODO: Return value is never used. Update implementing methods or void?
+    /**
+     * Creates ppTransaction and Case for request.
+     * @return true, if param username has valid funds. else, otherwise.
+     */
     public boolean requestArticle(final Long articleId, final Long startTime, final Long endTime,
             final String username) {
         final Double totalCost = getCostForAllDays(articleId, startTime, endTime);
@@ -150,11 +165,13 @@ public class CaseService {
 
 
     /**
-     * // TODO: JavaDoc ... return 0: case could not be found return 1: everything alright return 2:
-     * the article is already rented in the given time return 3: receiver does not have enough money
-     * on ProPay
+     * // TODO: JavaDoc ...
+     * Checks, if article request is ok.
+     * @return 0: case could not be found
+     *     1: everything alright
+     *     2: the article is already rented in the given time
+     *     3: receiver does not have enough money on ProPay
      */
-    // TODO: Why is this called acceptArticleRequest, when it handles cases only??
     public int acceptArticleRequest(final Long id) {
         final Optional<Case> optCase = caseRepository.findById(id);
         if (!optCase.isPresent()) {
@@ -172,6 +189,7 @@ public class CaseService {
             return 1;
         } else {
             c.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
+            reservationHandler.releaseReservation(c);
             caseRepository.save(c);
             if (articleRented) {
                 return 3;
@@ -202,6 +220,9 @@ public class CaseService {
         return true;
     }
 
+    /**
+     * Overloaded method for views.
+     */
     boolean articleNotRented(final Article article, final Long startTime, final Long endTime,
             final Case c) {
         final List<Case> cases = article.getCases().stream()
@@ -216,17 +237,9 @@ public class CaseService {
         return true;
     }
 
-    public Case findCaseById(final Long id) {
-        final Optional<Case> optionalCase = caseRepository.findById(id);
-
-        if (!optionalCase.isPresent()) {
-            LOGGER.warn("Couldn't find case {} in database.", id);
-            throw new NullPointerException();
-        }
-
-        return optionalCase.get();
-    }
-
+    /**
+     * Declines an article request.
+     */
     public void declineArticleRequest(final Long id) {
         final Optional<Case> optCase = caseRepository.findById(id);
         if (!optCase.isPresent()) {
@@ -239,14 +252,16 @@ public class CaseService {
         caseRepository.save(c);
     }
 
-
+    /**
+     * Finds all expired cases, where requestStatus in {RUNNING, FINISHED, OPEN_CONFLICT}.
+     */
     public List<Case> findAllExpiredCasesByUserId(final Long id) {
         return findAllCasesByUserId(id)
                 .stream()
                 .filter(c -> c.getEndTime() < new Date().getTime())
-                .filter(c -> c.getRequestStatus() == Case.RUNNING ||
-                        c.getRequestStatus() == Case.FINISHED ||
-                        c.getRequestStatus() == Case.OPEN_CONFLICT)
+                .filter(c -> c.getRequestStatus() == Case.RUNNING
+                        || c.getRequestStatus() == Case.FINISHED
+                        || c.getRequestStatus() == Case.OPEN_CONFLICT)
                 .collect(Collectors.toList());
     }
 
@@ -259,6 +274,10 @@ public class CaseService {
         }
     }
 
+    /**
+     * Accepts the return of an Article.
+     * @param id CaseId
+     */
     public void acceptCaseReturn(final Long id) {
         final Optional<Case> opt = caseRepository.findById(id);
         if (opt.isPresent()) {
@@ -268,6 +287,9 @@ public class CaseService {
         }
     }
 
+    /**
+     * Finds all requested cases from one user by its id.
+     */
     public List<Case> findAllRequestedCasesByUserId(final Long id) {
         return findAllCasesByUserId(id)
                 .stream()
@@ -278,6 +300,9 @@ public class CaseService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Finds all days where an article is reserved.
+     */
     public List<LocalDate> findAllReservedDaysByArticle(final Long id) {
         return caseRepository
                 .findAllByArticleAndRequestStatus(articleService.findArticleById(id), 2)

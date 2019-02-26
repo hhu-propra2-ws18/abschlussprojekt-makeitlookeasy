@@ -28,6 +28,9 @@ public enum Category {
         return name;
     }
 
+    /**
+     * Finds Category matching given value.
+     */
     public static Category fromValue(final String value) {
         for (final Category category : values()) {
             if (category.name.equalsIgnoreCase(value)) {

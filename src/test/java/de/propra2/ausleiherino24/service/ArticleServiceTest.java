@@ -32,7 +32,7 @@ public class ArticleServiceTest {
     @Before
     public void setUp() {
         articleRepositoryMock = mock(ArticleRepository.class);
-        articleService = new ArticleService(articleRepositoryMock);
+        articleService = new ArticleService(articleRepositoryMock, mock(ImageService.class));
 
         articles = new ArrayList<>();
         article01 = new Article(0L, "", "", "", 0D, 0D, "",
@@ -214,7 +214,7 @@ public class ArticleServiceTest {
         when(articleRepositoryMock.findById(0L)).thenReturn(Optional.of(article));
         final ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
 
-        articleService.updateArticle(0L, article);
+        articleService.updateArticle(0L, article, null);
 
         verify(articleRepositoryMock).save(argument.capture());
         assertEquals(article, argument.getValue());

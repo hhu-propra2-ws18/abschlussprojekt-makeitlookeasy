@@ -19,12 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class ImageController {
 
-    private ImageService imageStorageService;
+    private ImageService imageService;
     private static final String URL = "/imageupload";
 
     @Autowired
-    public ImageController(final ImageService imageStorageService) {
-        this.imageStorageService = imageStorageService;
+    public ImageController(final ImageService imageService) {
+        this.imageService = imageService;
     }
 
     @GetMapping(URL)
@@ -34,14 +34,14 @@ public class ImageController {
 
     @PostMapping(URL)
     public String handleFileUpload(final @RequestParam("file") MultipartFile file) {
-        imageStorageService.store(file, null);
+        imageService.store(file, null);
         return "redirect:" + URL;
     }
 
     @GetMapping("/images/{fileName}")
     public void getImage(final @PathVariable String fileName, final HttpServletResponse response)
             throws IOException {
-        final File requestedFile = imageStorageService.getFile(fileName, null);
+        final File requestedFile = imageService.getFile(fileName, null);
 
         if (requestedFile == null) {
             response.setStatus(404);

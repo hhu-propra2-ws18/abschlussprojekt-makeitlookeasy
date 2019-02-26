@@ -107,30 +107,30 @@
 
       <!-- Warnings -->
       <div class="alert alert-warning absolue center" th:if="${param.error}">
-        An unknown error occured.
+        An unknown error occurred.
       </div>
-      <div class="alert alert-warning absolue center" th:if="${param.alreadyrented}">
+      <div class="alert alert-warning absolue center" th:if="${param.alreadyRented}">
         Could not accept article, because its already rented in the requested time.
       </div>
-      <div class="alert alert-warning absolue center" th:if="${param.receiveroutofmoney}">
+      <div class="alert alert-warning absolue center" th:if="${param.receiverOutOfMoney}">
         The borrower unfortunately has too little money on Propay. We are sorry about that.
       </div>
-      <div class="alert alert-success absolue center" th:if="${param.successfullyreturned}">
+      <div class="alert alert-success absolue center" th:if="${param.successfullyReturned}">
         The case will be closed. The deposit will be returned.
       </div>
-      <div class="alert alert-success absolue center" th:if="${param.openedconflict}">
+      <div class="alert alert-success absolue center" th:if="${param.openedConflict}">
         A conflict is now open for given case. You will be informed by our employees.
       </div>
-      <div class="alert alert-danger absolue center" th:if="${param.conflictfailed}">
+      <div class="alert alert-danger absolue center" th:if="${param.conflictFailed}">
         Failed to open a conflict.
       </div>
-      <div class="alert alert-success absolue center" th:if="${param.updatedarticle}">
+      <div class="alert alert-success absolue center" th:if="${param.updatedArticle}">
         Article successfully updated.
       </div>
-      <div class="alert alert-warning absolue center" th:if="${param.deletedarticle}">
+      <div class="alert alert-warning absolue center" th:if="${param.deletedArticle}">
         Article successfully deleted.
       </div>
-      <div class="alert alert-danger absolue center" th:if="${param.deletionfailed}">
+      <div class="alert alert-danger absolue center" th:if="${param.deletionFailed}">
         This article has open cases. You cannot delete it right now.
       </div>
       <div class="alert alert-warning absolue center" th:if="${param.declined}">
@@ -202,8 +202,7 @@
                 <div aria-hidden="true" aria-labelledby="deleteModalLabel" class="modal fade"
                      th:id="${article.id+'delete'}" role="dialog" tabindex="-1">
                   <div class="modal-dialog" role="document">
-                    <form method="post"
-                          th:action="@{/deleteArticle(id=${article.id})}">
+                    <form method="post" th:action="@{/deleteArticle(id=${article.id})}">
                       <div class="modal-content">
                         <div class="modal-body">
                           <label>Are you sure you want to delete <span
@@ -222,7 +221,7 @@
                 <div aria-hidden="true" aria-labelledby="updateModalLabel" class="modal fade"
                      th:id="${article.id+'article'}" role="dialog" tabindex="-1">
                   <div class="modal-dialog" role="document">
-                    <form method="post"
+                    <form enctype="multipart/form-data" method="post" th:object="${article}"
                           th:action="@{/updateArticle(id=${article.id})}">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -235,7 +234,8 @@
                         <div class="modal-body">
                           <div class="form-row form-group">
                             <div class="col-sm-4 label-column"><label class="col-form-label"
-                                                                      for="name">Articlename:</label>
+                                                                      for="name">Article
+                              name:</label>
                             </div>
                             <div class="col-sm-6 input-column">
                               <input class="form-control" id="name" name="name" required
@@ -289,6 +289,15 @@
                           </div>
                           <div class="form-row form-group">
                             <div class="col-sm-4 label-column"><label class="col-form-label"
+                                                                      for="image">Bild: </label>
+                            </div>
+                            <div class="col-sm-6 input-column">
+                              <input accept="image/jpg,image/png,image/jpeg" id="image" name="image"
+                                     type="file">
+                            </div>
+                          </div>
+                          <div class="form-row form-group">
+                            <div class="col-sm-4 label-column"><label class="col-form-label"
                                                                       for="forRental">Article for
                               Rental:</label>
                             </div>
@@ -305,9 +314,7 @@
                           <button class="btn btn-secondary" data-dismiss="modal" type="button">
                             Close
                           </button>
-                          <button class="btn btn-primary" onclick="checkPrice(),checkDeposit()"
-                                  type="submit">Save
-                          </button>
+                          <button class="btn btn-primary" type="submit">Save</button>
                         </div>
                       </div>
                     </form>
@@ -744,21 +751,6 @@
     integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU="
     src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <script>
-  function checkPrice() {
-    var arr = document.getElementById("price").value.split('.');
-    var length = arr[1].length
-    if (length < 2 || length > 2) {
-      alert("Invalid value at field price")
-    }
-  }
-
-  function checkDeposit() {
-    var arr = document.getElementById("deposit").value.split('.');
-    var length = arr[1].length
-    if (length < 2 || length > 2) {
-      alert("Invalid value at field deposit")
-    }
-  }
 
   var $star_rating = $('.star-rating .fa');
 
