@@ -72,13 +72,8 @@ public class CaseController {
             final Principal principal) {
         final Article article = articleService.findArticleById(id);
         final User currentUser = userService.findUserByPrincipal(principal);
-
-<<<<<<< HEAD
-        ModelAndView mav = new ModelAndView("/shop/item");
-        mav.addObject("review",customerReviewRepository.findAll());
-=======
         final ModelAndView mav = new ModelAndView("/shop/item");
->>>>>>> bdc669cf8c3bb7593c954a627eb0384bcd7a4c2b
+        mav.addObject("review",customerReviewRepository.findAll());
         mav.addObject(ARTICLE_STRING, article);
         mav.addObject("user", currentUser);
         mav.addObject("categories", allCategories);
@@ -204,13 +199,8 @@ public class CaseController {
     @PostMapping("/writeReview")
     public String writeReview(final @RequestParam Long id, final CustomerReview review) {
         review.setTimestamp(new Date().getTime());
-<<<<<<< HEAD
         Case opt = caseService.findCaseById(id);
         review.setAcase(opt);
-=======
-        final Case opt = caseService.findCaseById(id);
-        review.setACase(opt);
->>>>>>> bdc669cf8c3bb7593c954a627eb0384bcd7a4c2b
         customerReviewRepository.save(review);
         caseRepository.save(review.getAcase());
 
