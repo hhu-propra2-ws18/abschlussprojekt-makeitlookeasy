@@ -38,14 +38,12 @@ public class AccountHandler {
         return checkFunds(accountName) >= requestedFunds;
     }
 
-    //TODO: Used? Fix!
     public void addFunds(final String username, final Double amount) {
 
         restTemplate.postForLocation(ACCOUNT_URL + ACCOUNT_DEFAULT + "?amount=" + amount.toString(),
                 null, username);
     }
-
-    //TODO: Method extraction necessary? Discuss!
+    
     void transferFunds(final Case c) {
         transferFunds(c.getReceiver().getUsername(), c.getOwner().getUsername(),
                 c.getPpTransaction().getLendingCost());

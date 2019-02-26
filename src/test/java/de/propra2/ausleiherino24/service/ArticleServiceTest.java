@@ -11,12 +11,16 @@ import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.web.multipart.MultipartFile;
 
 public class ArticleServiceTest {
 
@@ -36,13 +40,13 @@ public class ArticleServiceTest {
 
         articles = new ArrayList<>();
         article01 = new Article(0L, "", "", "", 0D, 0D, "",
-                true, true, null, Category.TOYS, null);
+                false, true,true, null, Category.TOYS, null);
         article02 = new Article(1L, "", "", "", 0D, 0D,
-                "", true, true, null, Category.TOYS, null);
+                "",false, true, true, null, Category.TOYS, null);
         article03 = new Article(2L, "", "", "", 0D, 0D,
-                "", true, true, null, Category.TOYS, null);
+                "",false, true, true, null, Category.TOYS, null);
         article04 = new Article(3L, "", "", "", 0D, 0D,
-                "", true, true, null, Category.TOYS, null);
+                "",false, true, true, null, Category.TOYS, null);
     }
 
     @Test
@@ -214,7 +218,47 @@ public class ArticleServiceTest {
         when(articleRepositoryMock.findById(0L)).thenReturn(Optional.of(article));
         final ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
 
-        articleService.updateArticle(0L, article, null);
+        articleService.updateArticle(0L, article, new MultipartFile() {
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @Override
+            public String getOriginalFilename() {
+                return null;
+            }
+
+            @Override
+            public String getContentType() {
+                return null;
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
+
+            @Override
+            public long getSize() {
+                return 0;
+            }
+
+            @Override
+            public byte[] getBytes() throws IOException {
+                return new byte[0];
+            }
+
+            @Override
+            public InputStream getInputStream() throws IOException {
+                return null;
+            }
+
+            @Override
+            public void transferTo(File dest) throws IOException, IllegalStateException {
+
+            }
+        });
 
         verify(articleRepositoryMock).save(argument.capture());
         assertEquals(article, argument.getValue());

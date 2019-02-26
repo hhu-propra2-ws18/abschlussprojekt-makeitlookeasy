@@ -136,19 +136,6 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void saveNewArticleCase() {
-        final Article article = new Article();
-        final Case c = new Case();
-        c.setArticle(article);
-        c.setPrice(0D);
-        c.setDeposit(10D);
-
-        caseService.addCaseForNewArticle(article, 0D, 10D);
-
-        verify(caseRepositoryMock).save(c);
-    }
-
-    @Test
     public void requestArticle() {
         final Long articleId = 0L;
         final Long st = 5L;
@@ -343,7 +330,7 @@ public class CaseServiceTest {
 
         verify(caseRepositoryMock).save(argument.capture());
         assertEquals(Case.REQUEST_DECLINED, argument.getValue().getRequestStatus());
-        verify(reservationHandlerMock).releaseReservation(argument.getValue());
+        verify(reservationHandlerMock).releaseReservationByCase(argument.getValue());
         assertEquals(new PPTransaction(), argument.getValue().getPpTransaction());
     }
 

@@ -129,9 +129,9 @@ public class ConflictService {
             throw new Exception("No permission!");
         }
         if (depositReceiver.equals(conflictToSolve.getOwner())) {
-            reservationHandler.punishReservation(conflictToSolve.getConflictedCase());
+            reservationHandler.punishReservationByCase(conflictToSolve.getConflictedCase());
             return;
         }
-        reservationHandler.releaseReservation(conflictToSolve.getConflictedCase());
+        reservationHandler.releaseReservationByCase(conflictToSolve.getConflictedCase());
     }
 }

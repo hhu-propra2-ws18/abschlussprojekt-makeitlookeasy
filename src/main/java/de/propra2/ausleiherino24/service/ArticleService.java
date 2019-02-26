@@ -114,7 +114,6 @@ public class ArticleService {
      * Updates an article given by the id with the information from given article.
      *  @param articleId id for article, that is about to be updated
      * @param article new article
-     * @param image
      */
     public void updateArticle(final Long articleId, final Article article,
             MultipartFile image) {
