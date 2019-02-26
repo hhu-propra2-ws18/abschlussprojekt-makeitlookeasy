@@ -143,7 +143,7 @@ public class CaseController {
      */
     @PostMapping("/writeReview")
     public String writeReview(final @RequestParam Long id, final CustomerReview review) {
-        Case opt = caseService.findCaseById(id);
+        final Case opt = caseService.findCaseById(id);
 
         review.setTimestamp(new Date().getTime());
         review.setAcase(opt);
