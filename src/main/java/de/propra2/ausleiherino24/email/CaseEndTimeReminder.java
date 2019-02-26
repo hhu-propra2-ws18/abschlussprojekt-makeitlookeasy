@@ -42,6 +42,7 @@ public class CaseEndTimeReminder {
             try {
                 emailSender.sendRemindingEmail(c);
                 c.setRequestStatus(Case.RUNNING_EMAILSENT);
+                cases.save(c);
             } catch (Exception e) {
                 LOGGER.info("Could not send reminder email for case {}.", c.getId());
             }
