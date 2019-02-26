@@ -142,7 +142,6 @@ public class CaseServiceTest {
         assertTrue(caseService.getFreeCasesFromPersonOwner(0L).isEmpty());
     }
 
-    @Ignore //TO-DO: fix pls
     @Test
     public void requestArticle() {
         final Long articleId = 0L;
@@ -155,6 +154,7 @@ public class CaseServiceTest {
         when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
         when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
         when(accountHandlerMock.hasValidFunds(eq(""), Mockito.anyDouble())).thenReturn(true);
+        doReturn(true).when(caseService).articleNotRented(any(), eq(st), eq(et));
         final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         caseService.requestArticle(articleId, st, et, username);
@@ -453,13 +453,13 @@ public class CaseServiceTest {
         assertTrue(caseService.findAllTransactionsFromPersonReceiver(0L).isEmpty());
     }
 
-    @Ignore //TO-DO: fix pls
     @Test
     public void sellArticle(){
         Article article= new Article();
         article.setCostPerDay(10d);
         when(articleServiceMock.findArticleById(0L)).thenReturn(article);
         when(userServiceMock.findUserByPrincipal(any())).thenReturn(new User());
+        when(accountHandlerMock.hasValidFunds(any(), anyDouble())).thenReturn(true);
         PPTransaction transaction = new PPTransaction();
         transaction.setLendingCost(10d);
         transaction.setDate(new Date().getTime());
@@ -476,6 +476,8 @@ public class CaseServiceTest {
         caseService.sellArticle(0L ,null);
 
         verify(caseRepositoryMock).save(argument.capture());
+        //aligns Date
+        c.getPpTransaction().setDate(argument.getValue().getPpTransaction().getDate());
         assertEquals(c, argument.getValue());
     }
 }
