@@ -11,7 +11,6 @@
   <rule ref="rulesets/java/braces.xml"/>
   <rule ref="rulesets/java/clone.xml"/>
   <rule ref="rulesets/java/codesize.xml"/>
-  <rule ref="rulesets/java/comments.xml"/>
   <rule ref="rulesets/java/controversial.xml"/>
   <rule ref="rulesets/java/coupling.xml"/>
   <rule ref="rulesets/java/design.xml"/>
@@ -35,9 +34,11 @@
 
   <!-- Controversial rule, we decided to not use it
        https://github.com/pmd/pmd/issues/387 -->
+  <!-- This rule also conflicts with assignments from streams -->
+  <!-- This rule also conflicts with the usage of lambda functions -->
   <rule ref="category/java/errorprone.xml/DataflowAnomalyAnalysis">
     <properties>
-      <property name="violationSuppressRegex" value="^Found 'UR'-anomaly.*"/>
+      <property name="violationSuppressRegex" value="^Found 'DD'.*|^Found 'UR'.*|^Found 'DU'.*"/>
     </properties>
   </rule>
 
@@ -46,6 +47,27 @@
   <rule ref="category/java/errorprone.xml/BeanMembersShouldSerialize">
     <properties>
       <property name="violationSuppressRegex" value="^Found non-transient.*"/>
+    </properties>
+  </rule>
+
+  <!-- This rule is in conflict with fluent APIs -->
+  <rule ref="category/java/design.xml/LawOfDemeter">
+    <properties>
+      <property name="violationSuppressRegex" value=".*"/>
+    </properties>
+  </rule>
+
+  <!-- We ignore this rule since we want to use default constructors in some places  -->
+  <rule ref="category/java/codestyle.xml/AtLeastOneConstructor">
+    <properties>
+      <property name="violationSuppressRegex" value="Each class should declare at least one constructor"/>
+    </properties>
+  </rule>
+
+  <!-- We ignore this rule since we prefer early returns over if else blocks  -->
+  <rule ref="category/java/codestyle.xml/OnlyOneReturn">
+    <properties>
+      <property name="violationSuppressRegex" value="A method should have only one exit point.*"/>
     </properties>
   </rule>
 </ruleset>

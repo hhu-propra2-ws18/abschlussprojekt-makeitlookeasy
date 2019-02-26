@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.model;
 
+import java.text.SimpleDateFormat;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,5 +54,14 @@ public class CustomerReview {
                 + "Title: " + title + "\n"
                 + "Text: " + text + "\n"
                 + "timestamp: " + timestamp;
+    }
+
+    /**
+     * Is used in HTML view to convert long into time string.
+     * @return
+     */
+    public String getFormattedTime() {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        return simpleDateFormat.format(timestamp);
     }
 }

@@ -40,13 +40,13 @@ public class ArticleServiceTest {
 
         articles = new ArrayList<>();
         article01 = new Article(0L, "", "", "", 0D, 0D, "",
-                false, true,true, null, Category.TOYS, null);
+                false, true, true, null, Category.TOYS, null);
         article02 = new Article(1L, "", "", "", 0D, 0D,
-                "",false, true, true, null, Category.TOYS, null);
+                "", false, true, true, null, Category.TOYS, null);
         article03 = new Article(2L, "", "", "", 0D, 0D,
-                "",false, true, true, null, Category.TOYS, null);
+                "", false, true, true, null, Category.TOYS, null);
         article04 = new Article(3L, "", "", "", 0D, 0D,
-                "",false, true, true, null, Category.TOYS, null);
+                "", false, true, true, null, Category.TOYS, null);
     }
 
     @Test
@@ -262,5 +262,16 @@ public class ArticleServiceTest {
 
         verify(articleRepositoryMock).save(argument.capture());
         assertEquals(article, argument.getValue());
+    }
+
+    @Test
+    public void setForSaleToFalse(){
+        when(articleRepositoryMock.findById(0L)).thenReturn(Optional.of(new Article()));
+        ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
+
+        articleService.setSellStatusFromArticle(0L, false);
+
+        verify(articleRepositoryMock).save(argument.capture());
+        assertFalse(argument.getValue().isForSale());
     }
 }

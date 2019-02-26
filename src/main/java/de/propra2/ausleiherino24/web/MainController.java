@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-// TODO: Extract duplicate code. Fix!
-
 /**
  * MainController manages all actions that are available to every visitor of the platform. This
  * includes basic browsing, and sign-up/login.
@@ -30,12 +28,7 @@ public class MainController {
     private final ArticleService articleService;
     private final UserService userService;
 
-    private static final String ALL_STRING = "all";
-    private static final String USER_STRING = "user";
     private static final String INDEX_STRING = "index";
-    private static final String CATEGORIES_STRING = "categories";
-    private static final String CATEGORY_STRING = "category";
-    private final List<Category> allCategories = Category.getAllCategories();
 
     @Autowired
     public MainController(final UserService userService, final ArticleService articleService) {
@@ -43,70 +36,114 @@ public class MainController {
         this.articleService = articleService;
     }
 
+    /**
+     * Displays the main page. Here you can see all articles offered by users.
+     *
+     * @param principal Current user.
+     * @return Main page / "index.html".
+     */
     @GetMapping(value = {"/", "/index"})
     public ModelAndView getIndex(final Principal principal) {
         final List<Article> allArticles = articleService.findAllActiveAndForRentalArticles();
-        final User currentUser = userService.findUserByPrincipal(principal);
 
         final ModelAndView mav = new ModelAndView(INDEX_STRING);
-        mav.addObject(ALL_STRING, allArticles);
-        mav.addObject(USER_STRING, currentUser);
-        mav.addObject(CATEGORIES_STRING, allCategories);
-        mav.addObject(CATEGORY_STRING, ALL_STRING);
+        addStandardModelAttributes(mav, principal, allArticles, "all");
         return mav;
     }
 
-    @GetMapping("/categories")
-    public ModelAndView getIndexByCategory(final @RequestParam String category,
-            final Principal principal) {
-        final List<Article> allArticlesInCategory = articleService
-                .findAllArticlesByCategory(Category.valueOf(category.toUpperCase(Locale.ENGLISH)));
-        final User currentUser = userService.findUserByPrincipal(principal);
-
-        final ModelAndView mav = new ModelAndView(INDEX_STRING);
-        mav.addObject(ALL_STRING, allArticlesInCategory);
-        mav.addObject(USER_STRING, currentUser);
-        mav.addObject(CATEGORIES_STRING, allCategories);
-        mav.addObject(CATEGORY_STRING, category);
-        return mav;
-    }
-
+    /**
+     * @return Spring Security login form.
+     */
     @GetMapping("/login")
     public ModelAndView getLogin() {
         return new ModelAndView("login");
     }
 
+    /**
+     * Displays user registration form. Creates new User and Person objects, that will be filled
+     * with required information about the user.
+     */
     @GetMapping("/signup")
     public ModelAndView getRegistration() {
         final User user = new User();
         final Person person = new Person();
 
         final ModelAndView mav = new ModelAndView("registration");
-        mav.addObject(USER_STRING, user);
+        mav.addObject("user", user);
         mav.addObject("person", person);
         return mav;
     }
 
-    @GetMapping("/search")
-    public ModelAndView getIndexBySearchString(final @RequestParam String searchString,
-            final Principal principal) {
-        final List<Article> allArticlesWithNameLikeSearchStr = articleService
-                .findAllArticlesByName(searchString);
-        final User currentUser = userService.findUserByPrincipal(principal);
-
-        final ModelAndView mav = new ModelAndView(INDEX_STRING);
-        mav.addObject(ALL_STRING, allArticlesWithNameLikeSearchStr);
-        mav.addObject(USER_STRING, currentUser);
-        mav.addObject(CATEGORIES_STRING, allCategories);
-        mav.addObject(CATEGORY_STRING, "");
-        return mav;
-    }
-
+    /**
+     * Saves new User and Person object in database after user has completed the registration
+     * process. They will then be redirected to the login page.
+     *
+     * @param user User object with attributes parsed from HTML form.
+     * @param person Person object with attributes parsed fro HTML form.
+     * @return Spring security login form.
+     *
+     * TODO: Automate login after registration.
+     */
     @PostMapping("/registerNewUser")
     public ModelAndView registerNewUser(final @ModelAttribute @Valid User user,
             final @ModelAttribute @Valid Person person) {
         userService.saveUserWithProfile(user, person, "Created");
 
         return new ModelAndView("redirect:/login");
+    }
+
+    /**
+     * Visitors can browse all articles in database by a simple search query.
+     *
+     * @param searchString Article name, that the current visitor is looking for.
+     * @param principal Current user.
+     * @return View of all query-related articles.
+     */
+    @GetMapping("/search")
+    public ModelAndView getIndexBySearchString(final @RequestParam String searchString,
+            final Principal principal) {
+        final List<Article> allArticlesWithNameLikeSearchStr = articleService
+                .findAllArticlesByName(searchString);
+
+        final ModelAndView mav = new ModelAndView(INDEX_STRING);
+        addStandardModelAttributes(mav, principal, allArticlesWithNameLikeSearchStr, "");
+        return mav;
+    }
+
+    /**
+     * Visitors can browse all articles by category.
+     *
+     * @param category Category selected by the user.
+     * @param principal Current user.
+     * @return View of all category-related articles.
+     */
+    @GetMapping("/categories")
+    public ModelAndView getIndexByCategory(final @RequestParam String category,
+            final Principal principal) {
+        final List<Article> allArticlesInCategory = articleService
+                .findAllArticlesByCategory(Category.valueOf(category.toUpperCase(Locale.ENGLISH)));
+
+        final ModelAndView mav = new ModelAndView(INDEX_STRING);
+        addStandardModelAttributes(mav, principal, allArticlesInCategory, category);
+        return mav;
+    }
+
+    /**
+     * Extracted method to reduce code duplication.
+     *
+     * @param mav ModelAndView object.
+     * @param principal Current user.
+     * @param allArticles List of all articles queried by request.
+     * @param category Category to be displayed.
+     */
+    private void addStandardModelAttributes(ModelAndView mav, Principal principal,
+            List<Article> allArticles, String category) {
+        final User currentUser = userService.findUserByPrincipal(principal);
+        final List<Category> allCategories = Category.getAllCategories();
+
+        mav.addObject("user", currentUser);
+        mav.addObject("all", allArticles);
+        mav.addObject("categories", allCategories);
+        mav.addObject("category", category);
     }
 }

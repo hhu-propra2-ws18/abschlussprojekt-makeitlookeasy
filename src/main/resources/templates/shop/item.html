@@ -128,9 +128,10 @@
           Article was succesfully booked!
         </div>
 
-        <a th:href="@{~/test}" style="text-decoration: none">
+        <a th:href="@{~/bankAccount}" style="text-decoration: none">
           <div class="alert alert-warning absolue center" th:if="${param.failed}">
-            Could not book the item! You probably got not enough money. Click to get more money.
+            Could not book the item! You probably got not enough money or the article is already
+            booked. Click to get more money.
           </div>
         </a>
       </div>
@@ -159,7 +160,8 @@
 
         </div>
         <!-- Item for rental -->
-        <div class="card-body" th:style="${article.forSale==true} ? 'display:none' : 'display:block'" >>
+        <div class="card-body"
+             th:style="${article.forSale==true} ? 'display:none' : 'display:block'">
           <h3 class="card-title" th:text="|${article.getName()}|">Product Name</h3>
           <h4 th:text="|${article.getCostPerDay()}€ per day|">24.99€ pro Tag</h4>
           <h6 th:text="|${article.getDeposit()}€ deposit|">200€ Kaution</h6>
@@ -239,7 +241,8 @@
         </div>
 
         <!-- Item for sell -->
-        <div class="card-body" th:style="${article.forSale==true} ? 'display:block' : 'display:none'" >
+        <div class="card-body"
+             th:style="${article.forSale==true} ? 'display:block' : 'display:none'">
           <h3 class="card-title" th:text="|${article.getName()}|"></h3>
           <h4 th:text="|${article.getCostPerDay()}€|"></h4>
           <p class="card-text" th:text="|${article.getDescription()}|"></p>
@@ -252,9 +255,9 @@
               <!-- Button to buy article -->
               <form method="post" th:action="@{~/buyArticle}">
                 <input type="hidden" name="articleId" th:value="${article.id}">
-              <button type="submit" class="btn btn-success"
-                     >Buy now
-              </button>
+                <button type="submit" class="btn btn-success"
+                >Buy now
+                </button>
               </form>
 
             </div>
@@ -270,19 +273,12 @@
         <div class="card-header">
           Product Reviews
         </div>
-        <!-- Reviews, could be added soon
-                <div class="card-body">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
-                    <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+                <div class="card-body" th:each="revi : ${review}">
+                    <h6 th:text="${revi.title}"></h6>
+                    <p th:text="${revi.text}"></p>
+                    <small class="text-muted" th:text="|Posted by ${revi.acase.receiver.username}  on ${revi.getFormattedTime()}  |">Posted by Anonymous on 3/1/17</small>
                     <hr>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
-                    <small class="text-muted">Posted by Anonymous on 3/1/17</small>
-                    <hr>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
-                    <small class="text-muted">Posted by Anonymous on 3/1/17</small>
-                    <hr>
-                    <a href="#" class="btn btn-success">Leave a Review</a>
-                </div> -->
+                </div>
       </div>
       <!-- /.card -->
     </div>
@@ -331,4 +327,3 @@
 <script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script> -->
 </body>
 </html>
-

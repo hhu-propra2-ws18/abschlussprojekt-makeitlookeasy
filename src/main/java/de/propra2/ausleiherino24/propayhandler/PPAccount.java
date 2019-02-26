@@ -18,11 +18,6 @@ class PPAccount {
     double amount;
     List<Reservation> reservations;
 
-    PPAccount(final String account, final Double amount) {
-        this.account = account;
-        this.amount = amount;
-    }
-
     /*
         returns amount of all reservations added up
      */

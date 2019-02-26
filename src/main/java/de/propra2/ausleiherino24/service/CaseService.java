@@ -4,8 +4,10 @@ import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.PPTransaction;
+import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
+import java.security.Principal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
@@ -115,6 +117,7 @@ public class CaseService {
 
     /**
      * Creates ppTransaction and Case for request.
+     *
      * @return true, if param username has valid funds. else, otherwise.
      */
     public boolean requestArticle(final Long articleId, final Long startTime, final Long endTime,
@@ -122,7 +125,9 @@ public class CaseService {
         final Double totalCost = getCostForAllDays(articleId, startTime, endTime);
 
         if (accountHandler.hasValidFunds(username,
-                totalCost + articleService.findArticleById(articleId).getDeposit())) {
+                totalCost + articleService.findArticleById(articleId).getDeposit())
+                && articleNotRented(articleService.findArticleById(articleId), startTime,
+                endTime)) {
 
             final PPTransaction ppTransaction = new PPTransaction();
             ppTransaction.setLendingCost(totalCost);
@@ -162,12 +167,10 @@ public class CaseService {
 
 
     /**
-     * // TODO: JavaDoc ...
-     * Checks, if article request is ok.
-     * @return 0: case could not be found
-     *     1: everything alright
-     *     2: the article is already rented in the given time
-     *     3: receiver does not have enough money on ProPay
+     * // TODO: JavaDoc ... Checks, if article request is ok.
+     *
+     * @return 0: case could not be found 1: everything alright 2: the article is already rented in
+     * the given time 3: receiver does not have enough money on ProPay
      */
     public int acceptArticleRequest(final Long id) {
         final Optional<Case> optCase = caseRepository.findById(id);
@@ -220,8 +223,7 @@ public class CaseService {
     /**
      * Overloaded method for views.
      */
-    boolean articleNotRented(final Article article, final Long startTime, final Long endTime,
-            final Case c) {
+    boolean articleNotRented(final Article article, final Long startTime, final Long endTime) {
         final List<Case> cases = article.getCases().stream()
                 .filter(ca -> ca.getRequestStatus() == Case.REQUEST_ACCEPTED)
                 .collect(Collectors.toList());
@@ -255,6 +257,7 @@ public class CaseService {
     public List<Case> findAllExpiredCasesByUserId(final Long id) {
         return findAllCasesByUserId(id)
                 .stream()
+                .filter(c -> !c.getArticle().isForSale())
                 .filter(c -> c.getEndTime() < new Date().getTime())
                 .filter(c -> c.getRequestStatus() == Case.RUNNING
                         || c.getRequestStatus() == Case.FINISHED
@@ -273,6 +276,7 @@ public class CaseService {
 
     /**
      * Accepts the return of an Article.
+     *
      * @param id CaseId
      */
     public void acceptCaseReturn(final Long id) {
@@ -326,5 +330,36 @@ public class CaseService {
                 .filter(c -> c.getRequestStatus() == Case.OPEN_CONFLICT)
                 .sorted(Comparator.comparing(Case::getEndTime))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Sells article, transfers money and creates case
+     * @param articleId article that is sold
+     * @param principal costumer who buys article
+     */
+    public boolean sellArticle(Long articleId, Principal principal) {
+        Article article = articleService.findArticleById(articleId);
+        User costumer = userService.findUserByPrincipal(principal);
+
+        if (accountHandler.hasValidFunds(costumer.getUsername(),
+                articleService.findArticleById(articleId).getCostPerDay())) {
+            Case c = new Case();
+            c.setRequestStatus(Case.FINISHED);
+            c.setDeposit(0d);
+            c.setPrice(article.getCostPerDay());
+            c.setArticle(article);
+            c.setReceiver(costumer);
+            article.setActive(false);
+            PPTransaction transaction = new PPTransaction();
+            transaction.setLendingCost(article.getCostPerDay());
+            transaction.setDate(new Date().getTime());
+            transaction.setCautionPaid(false);
+            c.setPpTransaction(transaction);
+            caseRepository.save(c);
+            accountHandler.transferFundsByCase(c);
+            articleService.setSellStatusFromArticle(articleId, false);
+            return true;
+        }
+        return false;
     }
 }

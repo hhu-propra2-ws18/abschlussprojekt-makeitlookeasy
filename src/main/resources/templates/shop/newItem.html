@@ -32,17 +32,16 @@
       var mainFrameOneButton = document.getElementById("forRental");
       var mainFrameTwoButton = document.getElementById("forBuy");
 
-
       mainFrameOne.style.display = (
           mainFrameOne.style.display == "block" ? "none" : "block");
 
-      mainFrameOneButton.checked =  (
+      mainFrameOneButton.checked = (
           mainFrameOneButton.checkbox == false ? true : false);
 
       mainFrameTwo.style.display = (
           mainFrameOne.style.display == "none" ? "block" : "none");
 
-      mainFrameTwoButton.checked =  (
+      mainFrameTwoButton.checked = (
           mainFrameOneButton.checkbox == true ? false : true);
     }
   </script>
@@ -69,7 +68,7 @@
           </label>
         </div>
       </div>
-      <form enctype="multipart/form-data" method="post" th:action="@{/saveNewArticle}"
+      <form enctype="multipart/form-data" method="post" th:action="@{/article/saveNew}"
             th:object="${article}">
         <div class="form-group">
           <label for="formInput1">Name</label>
@@ -108,18 +107,18 @@
       </form>
     </div>
     <!-- Sell View-->
-    <div class="col-lg 9" style="margin-top: 50px;display:none" id="sellView" >
+    <div class="col-lg 9" style="margin-top: 50px;display:none" id="sellView">
       <div class="form-group text-center">
         <label>Sell</label>
         <div>
           <label class="switch">
             <input type="checkbox"
-                   name="forRental" id="forBuy"  onclick="changeView()" >
+                   name="forRental" id="forBuy" onclick="changeView()">
             <span class="slider round"></span>
           </label>
         </div>
       </div>
-      <form enctype="multipart/form-data" method="post" th:action="@{/saveNewSellArticle}"
+      <form enctype="multipart/form-data" method="post" th:action="@{/article/saveNewToSell}"
             th:object="${article}">
         <div class="form-group">
           <label for="formControlInput1">Name</label>
