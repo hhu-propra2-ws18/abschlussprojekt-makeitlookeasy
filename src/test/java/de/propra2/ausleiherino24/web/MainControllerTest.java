@@ -21,7 +21,6 @@ import de.propra2.ausleiherino24.service.ConflictService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
 import de.propra2.ausleiherino24.service.ImageService;
 import de.propra2.ausleiherino24.service.PersonService;
-import de.propra2.ausleiherino24.service.RoleService;
 import de.propra2.ausleiherino24.service.SearchUserService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
@@ -80,8 +79,7 @@ public class MainControllerTest {
     private ImageService imageService;
     @MockBean
     private PersonService personService;
-    @MockBean
-    private RoleService roleService;
+
     @MockBean
     private SearchUserService searchUserService;
     @MockBean
