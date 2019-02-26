@@ -172,6 +172,7 @@ public class CaseService {
             return 1;
         } else {
             c.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
+            reservationHandler.releaseReservation(c);
             caseRepository.save(c);
             if (articleRented) {
                 return 3;
