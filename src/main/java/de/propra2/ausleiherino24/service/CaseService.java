@@ -134,6 +134,7 @@ public class CaseService {
             final PPTransaction ppTransaction = new PPTransaction();
             ppTransaction.setLendingCost(totalCost);
             ppTransaction.setCautionPaid(false);
+            ppTransaction.setDate(new Date().getTime());
 
             final Case aCase = new Case();
             aCase.setArticle(articleService.findArticleById(articleId));
@@ -182,6 +183,7 @@ public class CaseService {
 
         //Check whether the article is not reserved in this period of time
         final boolean articleRented = articleNotRented(id);
+
         if (articleRented && accountHandler.hasValidFunds(c)) {
             c.setRequestStatus(Case.REQUEST_ACCEPTED);
             reservationHandler.handleReservedMoney(c);
@@ -189,6 +191,7 @@ public class CaseService {
             return 1;
         } else {
             c.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
+            reservationHandler.releaseReservation(c);
             caseRepository.save(c);
             if (articleRented) {
                 return 3;

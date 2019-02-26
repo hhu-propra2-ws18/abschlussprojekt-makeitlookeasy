@@ -20,12 +20,13 @@ public class CaseEndTimeReminderTest {
     private Case a;
     private CaseEndTimeReminder r;
     private LocalDateTime today;
+    private CaseRepository caseRepository;
 
     @Before
     public void init() {
         formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         es = Mockito.mock(EmailSender.class);
-        final CaseRepository caseRepository = Mockito.mock(CaseRepository.class);
+        caseRepository = Mockito.mock(CaseRepository.class);
         a = Mockito.mock(Case.class);
         Mockito.when(a.getRequestStatus()).thenReturn(Case.RUNNING);
         Mockito.when(caseRepository.findAll()).thenReturn(Arrays.asList(a));
@@ -53,13 +54,27 @@ public class CaseEndTimeReminderTest {
     }
 
     @Test
-    public void sendRemindingEmailShouldNOtSendEmailIfCaseEndTimeWasYesterday() {
+    public void sendRemindingEmailShouldNotSendEmailIfCaseEndTimeWasYesterday() {
         final LocalDateTime yesterday = today.minusDays(1L);
         final String s = yesterday.format(formatter);
         Mockito.when(a.getFormattedEndTime()).thenReturn(s);
         r.sendRemindingEmail();
 
         Mockito.verify(es, Mockito.times(0)).sendRemindingEmail(a);
+    }
+
+    @Test
+    public void sendRemindingEmailShouldSendOnlyOneEmailIfCaseEndTimeIsTomorrow() {
+        final LocalDateTime tomorrow = today.plusDays(1L);
+        final String s = tomorrow.format(formatter);
+        Mockito.when(a.getFormattedEndTime()).thenReturn(s);
+        r.sendRemindingEmail();
+        Mockito.when(a.getRequestStatus()).thenReturn(Case.RUNNING_EMAILSENT);
+        r.sendRemindingEmail();
+
+        Mockito.verify(a, Mockito.times(1)).setRequestStatus(Case.RUNNING_EMAILSENT);
+        Mockito.verify(caseRepository, Mockito.times(1)).save(a);
+        Mockito.verify(es, Mockito.times(1)).sendRemindingEmail(a);
     }
 
 }
