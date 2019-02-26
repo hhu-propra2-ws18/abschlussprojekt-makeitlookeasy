@@ -101,6 +101,33 @@ public class CaseController {
         final User user = userService.findUserByPrincipal(principal);
         article.setActive(true);
         article.setOwner(user);
+        article.setForSale(false);
+        article.setImage(imageService.store(image, null));
+        article.setForRental(true);
+        article.setActive(true);
+        articleService.saveArticle(article, "Created");
+
+        return new ModelAndView("redirect:/");
+    }
+
+    /**
+     * Mapping for save a new Article which will be sold.
+     * If you want to you can try to make on mapping out of this and saveNewArticle
+     * @param article
+     * @param result
+     * @param model
+     * @param image
+     * @param principal
+     * @return
+     */
+    @PostMapping("/saveNewSellArticle")
+    public ModelAndView saveNewCaseAndSellArticle(final @ModelAttribute @Valid Article article,
+            BindingResult result, Model model,
+            final @RequestParam("image") MultipartFile image, final Principal principal) {
+        final User user = userService.findUserByPrincipal(principal);
+        article.setActive(true);
+        article.setOwner(user);
+        article.setForSale(true);
         article.setImage(imageService.store(image, null));
         article.setForRental(true);
         article.setActive(true);
@@ -168,6 +195,14 @@ public class CaseController {
         } catch (ParseException e) {
             LOGGER.error("Could not book article {}.", id, e);
         }
+
+        // TODO: Show the user, whether the request was successful or not.
+        return "redirect:/article?id=" + id;
+    }
+
+    @PostMapping("/buyArticle")
+    public String buyArticle(final @RequestParam Long id,
+            final Principal principal) {
 
         // TODO: Show the user, whether the request was successful or not.
         return "redirect:/article?id=" + id;
