@@ -229,12 +229,17 @@ public class CaseController {
         return url;
     }
 
-
+    /**
+     * Mapping for buy an article
+     * @param id
+     * @param principal
+     * @return
+     */
     @PostMapping("/buyArticle")
     public String buyArticle(final @RequestParam Long id,
             final Principal principal) {
 
-        // TODO: Show the user, whether the request was successful or not.
+        // TODO: Set Article to false so other user cant buy, and do Transaction.
         return "redirect:/article?id=" + id;
     }
 
