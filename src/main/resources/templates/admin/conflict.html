@@ -24,8 +24,8 @@
   <link rel="stylesheet" th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}">
 
   <!-- Full Calendar Css -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.css"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.css"
+        rel="stylesheet"/>
 
   <!-- Custom styles for this template -->
   <link rel="stylesheet" th:href="@{~/css/shop-homepage.css}">
@@ -76,14 +76,14 @@
         <td th:text="${case.getFormattedEndTime()}"></td>
         <td style="white-space: nowrap">
           <div class="ml-auto flex-md-row">
-            <button class="btn btn-primary btn-sm" th:data-target="${'#'+case.id+'solve'}"
-                    data-toggle="modal" style="height:30px;width:120px"
+            <button class="btn btn-primary btn-sm" data-toggle="modal"
+                    style="height:30px;width:120px" th:data-target="${'#'+case.id+'solve'}"
                     type="button">solve Conflict
             </button>
 
             <!-- Modal -->
             <div aria-hidden="true" aria-labelledby="conflictModalLabel" class="modal fade"
-                 th:id="${case.id+'solve'}" role="dialog" tabindex="-1">
+                 role="dialog" tabindex="-1" th:id="${case.id+'solve'}">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -174,11 +174,13 @@
 
                   <div class="modal-footer">
                     <div class="ml-auto flex-md-row">
-                      <form style="display:inline-block" method="post" th:action="@{~/decideforowner(id = ${case.id})}">
+                      <form method="post" style="display:inline-block"
+                            th:action="@{~/decideforowner(id = ${case.id})}">
                         <button class="btn btn-primary btn-sm" type="submit">Owner</button>
                       </form>
                       <span>  </span>
-                      <form style="display:inline-block" method="post" th:action="@{~/decideforreceiver(id = ${case.id})}">
+                      <form method="post" style="display:inline-block"
+                            th:action="@{~/decideforreceiver(id = ${case.id})}">
                         <button class="btn btn-primary btn-sm" type="submit">Receiver</button>
                       </form>
                     </div>

@@ -86,9 +86,9 @@ public class CaseController {
 
     /**
      * Principal buys an article
+     *
      * @param articleId article that is sold
      * @param principal customer that buys article
-     * @return
      */
     @PostMapping("/buyArticle")
     public String buyArticle(final @RequestParam Long articleId,

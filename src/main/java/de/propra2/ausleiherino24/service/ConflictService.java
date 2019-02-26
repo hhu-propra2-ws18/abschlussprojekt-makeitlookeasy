@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import javax.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,8 @@ public class ConflictService {
     private final ReservationHandler reservationHandler;
 
     @Autowired
-    public ConflictService(final ConflictRepository conflictRepository, final EmailSender emailSender,
+    public ConflictService(final ConflictRepository conflictRepository,
+            final EmailSender emailSender,
             final ReservationHandler reservationHandler, final CaseService caseService) {
         this.conflictRepository = conflictRepository;
         this.emailSender = emailSender;
@@ -57,17 +57,19 @@ public class ConflictService {
 
     /**
      * Deactivates conflict with id.
+     *
      * @param id conflictId
      */
     public void deactivateConflict(final Long id, final User user) throws Exception {
         final Optional<Conflict> conflictToDeactivate = conflictRepository.findById(id);
         if (!conflictToDeactivate.isPresent()) {
-            throw new DataAccessException("No such conflict."){};
+            throw new DataAccessException("No such conflict.") {
+            };
         }
         isConflictReporterOrAdmin(conflictToDeactivate.get(), user);
         final Conflict theConflictToDeactivate = conflictToDeactivate.get();
         theConflictToDeactivate
-                .setConflictDescription("Conflict with id: "+ theConflictToDeactivate.getId()
+                .setConflictDescription("Conflict with id: " + theConflictToDeactivate.getId()
                         + " was deactivated by :" + user.getUsername());
         //sendConflictEmail(theConflictToDeactivate);
         theConflictToDeactivate.getConflictedCase().setRequestStatus(Case.FINISHED);
@@ -75,8 +77,8 @@ public class ConflictService {
     }
 
     /**
-     * Safe delete conflict. Sets conflict of case to null and deletes the conflict without
-     * deleting the case related to it.
+     * Safe delete conflict. Sets conflict of case to null and deletes the conflict without deleting
+     * the case related to it.
      */
     private void deleteConflictById(Long id) {
         Optional<Conflict> optionalConflict = conflictRepository.findById(id);
@@ -101,7 +103,8 @@ public class ConflictService {
     public Conflict getConflict(final Long id, final User user) throws Exception {
         final Optional<Conflict> conflict = conflictRepository.findById(id);
         if (!conflict.isPresent()) {
-            throw new DataAccessException("No such conflict"){};
+            throw new DataAccessException("No such conflict") {
+            };
         }
         isCorrectUser(conflict.get(), user);
         return conflict.get();
@@ -146,6 +149,7 @@ public class ConflictService {
 
     /**
      * Solves a conflict. The depositReceiver gets the whole deposit.
+     *
      * @param conflictToSolve the conflict
      * @param user person, who solved the conflict
      * @param depositReceiver person, who gets the deposit

@@ -58,7 +58,6 @@ public class CustomerReview {
 
     /**
      * Is used in HTML view to convert long into time string.
-     * @return
      */
     public String getFormattedTime() {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");

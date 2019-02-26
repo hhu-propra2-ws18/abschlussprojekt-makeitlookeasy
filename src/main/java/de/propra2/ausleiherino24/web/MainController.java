@@ -25,10 +25,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController {
 
+    private static final String INDEX_STRING = "index";
     private final ArticleService articleService;
     private final UserService userService;
-
-    private static final String INDEX_STRING = "index";
 
     @Autowired
     public MainController(final UserService userService, final ArticleService articleService) {

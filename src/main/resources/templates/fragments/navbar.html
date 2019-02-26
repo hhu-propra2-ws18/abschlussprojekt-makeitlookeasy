@@ -6,12 +6,12 @@
       <a class="navbar-brand" href="/">
         <img src="/img/mainpage/logoOhneSchrift.jpg" style="width: 50px;">Ausleiherino24</img>
       </a>
-      <form th:action="@{~/search}" method="get">
+      <form method="get" th:action="@{~/search}">
         <div class="container h-100">
           <div class="d-flex justify-content-center h-100">
             <div class="searchbar">
-              <input class="search_input" type="text" name="searchString" placeholder="Search...">
-              <a href="#" class="search_icon"><i class="fa fa-search"></i></a>
+              <input class="search_input" name="searchString" placeholder="Search..." type="text">
+              <a class="search_icon" href="#"><i class="fa fa-search"></i></a>
             </div>
           </div>
         </div>
@@ -49,8 +49,8 @@
                      role="presentation"
                      th:href="@{'/profile/' + ${user.getUsername()}}">Profil <i
                       class="fa fa-user"></i></a>
-                  <a class="dropdown-item" role="presentation" th:if="${user.role.equals('admin')}"
-                     th:href="@{~/conflicts}">Conflicts</a>
+                  <a class="dropdown-item" role="presentation" th:href="@{~/conflicts}"
+                     th:if="${user.role.equals('admin')}">Conflicts</a>
                   <a class="dropdown-item" href="/logout" role="presentation">Logout  <i
                       class="fa fa-sign-out"></i></a>
                 </div>

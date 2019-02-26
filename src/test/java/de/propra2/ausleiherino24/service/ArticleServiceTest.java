@@ -170,7 +170,7 @@ public class ArticleServiceTest {
         when(articleRepositoryMock.findById(0L)).thenReturn(op);
 
         assertFalse(articleService.deactivateArticle(0L));
-       // verify(articleRepositoryMock, times(0)).save(any());
+        // verify(articleRepositoryMock, times(0)).save(any());
     }
 
     @Test
@@ -266,7 +266,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void setForSaleToFalse(){
+    public void setForSaleToFalse() {
         when(articleRepositoryMock.findById(0L)).thenReturn(Optional.of(new Article()));
         final ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
 

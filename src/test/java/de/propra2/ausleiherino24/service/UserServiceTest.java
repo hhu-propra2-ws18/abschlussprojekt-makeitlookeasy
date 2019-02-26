@@ -17,12 +17,12 @@ import org.slf4j.LoggerFactory;
 
 public class UserServiceTest {
 
+    @Mocked
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
     private UserRepository users;
     private PersonService personService;
     private UserService userService;
     private User user;
-    @Mocked
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     @Before
     public void setup() {

@@ -334,6 +334,7 @@ public class CaseService {
 
     /**
      * Sells article, transfers money and creates case
+     *
      * @param articleId article that is sold
      * @param principal costumer who buys article
      */
