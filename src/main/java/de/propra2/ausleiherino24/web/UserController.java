@@ -93,7 +93,8 @@ public class UserController {
     @RequestMapping("/myOverview")
     public ModelAndView getMyArticlePage(final Principal principal) {
         final User currentUser = userService.findUserByPrincipal(principal);
-        final List<Article> myArticles = articleService.findAllActiveByUser(currentUser);
+        final List<Article> myRentalArticles = articleService.findAllActiveForRental(currentUser);
+        final List<Article> mySaleArticles = articleService.findAllActiveForSale(currentUser);
         final List<Case> borrowedArticles = caseService
                 .getLendCasesFromPersonReceiver(currentUser.getPerson().getId());
         final List<Case> requestedArticles = caseService
@@ -104,7 +105,8 @@ public class UserController {
         final ModelAndView mav = new ModelAndView("/user/myOverview");
         mav.addObject(USER_STRING, currentUser);
         mav.addObject(CATEGORIES, allCategories);
-        mav.addObject("myArticles", myArticles);
+        mav.addObject("myRentalArticles", myRentalArticles);
+        mav.addObject("mySaleArticles", mySaleArticles);
         mav.addObject("borrowed", borrowedArticles);
         mav.addObject("returned", returnedArticles);
         mav.addObject("requested", requestedArticles);

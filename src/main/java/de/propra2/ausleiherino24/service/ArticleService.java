@@ -53,6 +53,24 @@ public class ArticleService {
     }
 
     /**
+     * Return all articles which are active and for rental.
+     * @param user
+     * @return
+     */
+    public List<Article> findAllActiveForRental(final User user) {
+        return articleRepository.findAllActiveForRentalByUser(user);
+    }
+
+    /**
+     * Return all articles which are active and for sell.
+     * @param user
+     * @return
+     */
+    public List<Article> findAllActiveForSale(final User user) {
+        return articleRepository.findAllActiveForSaleByUser(user);
+    }
+
+    /**
      * Filters articles and checks whether they are included in given category.
      *
      * @return all Articles, which are not reserved and are of given category
