@@ -18,14 +18,14 @@ import org.springframework.stereotype.Service;
 public class ConflictService {
 
     private final CaseService caseService;
-    private final ConflictRepository conflicts;
+    private final ConflictRepository conflictRepository;
     private final EmailSender emailSender;
     private final ReservationHandler reservationHandler;
 
     @Autowired
-    public ConflictService(final ConflictRepository conflicts, final EmailSender emailSender,
+    public ConflictService(final ConflictRepository conflictRepository, final EmailSender emailSender,
             final ReservationHandler reservationHandler, final CaseService caseService) {
-        this.conflicts = conflicts;
+        this.conflictRepository = conflictRepository;
         this.emailSender = emailSender;
         this.reservationHandler = reservationHandler;
         this.caseService = caseService;
@@ -34,9 +34,9 @@ public class ConflictService {
     void saveConflict(final Conflict conflict, final User user) throws Exception {
         isCorrectUser(conflict, user);
         conflict.setConflictedCaseConflict(conflict);
-        conflicts.save(conflict);
+        conflictRepository.save(conflict);
 
-        sendConflictEmail(conflict);
+        //sendConflictEmail(conflict);
     }
 
     public void openConflict(final Case conflictedCase, final String conflictDescription)
@@ -54,31 +54,38 @@ public class ConflictService {
         emailSender.sendConflictEmail(conflict);
     }
 
+    /**
+     * Deactivates conflict with id.
+     * @param id conflictId
+     */
     public void deactivateConflict(final Long id, final User user) throws Exception {
-        final Optional<Conflict> conflictToDeactivate = conflicts.findById(id);
+        final Optional<Conflict> conflictToDeactivate = conflictRepository.findById(id);
         if (!conflictToDeactivate.isPresent()) {
-            throw new DataAccessException("No such conflict.") {
-            };
+            throw new DataAccessException("No such conflict."){};
         }
         isConflictReporterOrAdmin(conflictToDeactivate.get(), user);
         final Conflict theConflictToDeactivate = conflictToDeactivate.get();
         theConflictToDeactivate
-                .setConflictDescription("Conflict with id: " + theConflictToDeactivate.getId()
+                .setConflictDescription("Conflict with id: "+ theConflictToDeactivate.getId()
                         + " was deactivated by :" + user.getUsername());
-        sendConflictEmail(theConflictToDeactivate);
-        conflicts.delete(theConflictToDeactivate);
+        //sendConflictEmail(theConflictToDeactivate);
+        theConflictToDeactivate.getConflictedCase().setRequestStatus(Case.FINISHED);
+        System.out.println("-3----" + size());
+        System.out.println("Deletes conflict with id " + id);
+        conflictRepository.deleteById(id);
+        System.out.println("-4----" + size());
     }
 
     public List<Conflict> getAllConflictsByUser(final User user) {
         final List<Conflict> allConflicts = new ArrayList<>();
-        allConflicts.addAll(conflicts.findAllByReceiver(user));
-        allConflicts.addAll(conflicts.findAllByArticleOwner(user));
+        allConflicts.addAll(conflictRepository.findAllByReceiver(user));
+        allConflicts.addAll(conflictRepository.findAllByArticleOwner(user));
 
         return allConflicts;
     }
 
     public Conflict getConflict(final Long id, final User user) throws Exception {
-        final Optional<Conflict> conflict = conflicts.findById(id);
+        final Optional<Conflict> conflict = conflictRepository.findById(id);
         if (!conflict.isPresent()) {
             throw new Exception("No such conflict");
         }
@@ -123,9 +130,15 @@ public class ConflictService {
         return "admin".equals(user.getRole());
     }
 
+    /**
+     * Solves a conflict. The depositReceiver gets the whole deposit.
+     * @param conflictToSolve the conflict
+     * @param user person, who solved the conflict
+     * @param depositReceiver person, who gets the deposit
+     * @throws Exception if user has no permissions to solve a conflict
+     */
     public void solveConflict(final Conflict conflictToSolve, final User user,
-            final User depositReceiver)
-            throws Exception {
+            final User depositReceiver) throws Exception {
         if (!isUserAdmin(user)) {
             throw new Exception("No permission!");
         }
@@ -134,5 +147,9 @@ public class ConflictService {
             return;
         }
         reservationHandler.releaseReservationByCase(conflictToSolve.getConflictedCase());
+    }
+
+    public int size() {
+        return conflictRepository.findAll().size();
     }
 }
