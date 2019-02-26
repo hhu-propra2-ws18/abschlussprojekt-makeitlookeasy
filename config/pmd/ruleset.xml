@@ -7,7 +7,6 @@
   <description>
     This ruleset checks my code for bad stuff
   </description>
-  <rule ref="rulesets/java/android.xml"/>
   <rule ref="rulesets/java/basic.xml"/>
   <rule ref="rulesets/java/braces.xml"/>
   <rule ref="rulesets/java/clone.xml"/>
@@ -33,4 +32,20 @@
   <rule ref="rulesets/java/typeresolution.xml"/>
   <rule ref="rulesets/java/unnecessary.xml"/>
   <rule ref="rulesets/java/unusedcode.xml"/>
+
+  <!-- Controversial rule, we decided to not use it
+       https://github.com/pmd/pmd/issues/387 -->
+  <rule ref="category/java/errorprone.xml/DataflowAnomalyAnalysis">
+    <properties>
+      <property name="violationSuppressRegex" value="^Found 'UR'-anomaly.*"/>
+    </properties>
+  </rule>
+
+  <!-- We disagree with this rule, since we think there can be class variables that are not
+       accessible but should be persisted -->
+  <rule ref="category/java/errorprone.xml/BeanMembersShouldSerialize">
+    <properties>
+      <property name="violationSuppressRegex" value="^Found non-transient.*"/>
+    </properties>
+  </rule>
 </ruleset>

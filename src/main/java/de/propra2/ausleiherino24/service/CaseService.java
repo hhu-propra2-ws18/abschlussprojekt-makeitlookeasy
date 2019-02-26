@@ -93,15 +93,11 @@ public class CaseService {
      * Finds all Transactions from receiver by its personId.
      */
     public List<PPTransaction> findAllTransactionsFromPersonReceiver(final Long personId) {
-        final List<PPTransaction> ppTransactions = new ArrayList<>();
-        final List<Case> cases = getLendCasesFromPersonReceiver(personId);
-        for (final Case c : cases) {
-            if (c.getRequestStatus() != Case.REQUEST_DECLINED
-                    && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE) {
-                ppTransactions.add(c.getPpTransaction());
-            }
-        }
-        return ppTransactions;
+        return getLendCasesFromPersonReceiver(personId).stream()
+                .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
+                        && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
+                .map(Case::getPpTransaction)
+                .collect(Collectors.toList());
     }
 
     // TODO: Only implemented in tests. Necessary?
