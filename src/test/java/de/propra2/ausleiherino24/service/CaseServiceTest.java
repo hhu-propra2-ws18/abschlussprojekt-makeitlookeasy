@@ -425,7 +425,7 @@ public class CaseServiceTest {
         doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
         List<PPTransaction> transactions = new ArrayList<>(Arrays.asList(new PPTransaction(), new PPTransaction()));
 
-        assertEquals(transactions, caseService.getAllTransactionsFromPersonReceiver(0L));
+        assertEquals(transactions, caseService.findAllTransactionsFromPersonReceiver(0L));
     }
 
     @Test
@@ -440,6 +440,6 @@ public class CaseServiceTest {
         doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
         List<PPTransaction> transactions = new ArrayList<>(Arrays.asList(new PPTransaction(), new PPTransaction()));
 
-        assertTrue(caseService.getAllTransactionsFromPersonReceiver(0L).isEmpty());
+        assertTrue(caseService.findAllTransactionsFromPersonReceiver(0L).isEmpty());
     }
 }
