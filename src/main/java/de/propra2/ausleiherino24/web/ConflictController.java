@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.ResolveConflict;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ConflictController {
@@ -83,7 +85,7 @@ public class ConflictController {
         return SOMEVIEW_STRING; //view without delete button
     }
 
-    @GetMapping("/conflicts")
+    @GetMapping("/conflictsbyUser")
     public String displayAllConflicts(final Principal principal, final Model model) {
         final User user = userService.findUserByPrincipal(principal);
         final List<Conflict> conflicts = conflictService.getAllConflictsByUser(user);
@@ -122,6 +124,20 @@ public class ConflictController {
         model.addAttribute("conflicts", conflicts);
         model.addAttribute(USER_STRING, user);
         return SOMEVIEW_STRING;
+    }
+
+    /**
+     * Mapping for admins to show all open conflicts.
+     */
+    @GetMapping("/conflicts")
+    public ModelAndView solveConflicts(Principal principal) {
+        ModelAndView mav = new ModelAndView("/admin/conflict");
+
+        final User currentUser = userService.findUserByPrincipal(principal);
+        final List<Case> openConflicts = caseService.findAllCasesWithOpenConflicts();
+
+        mav.addObject(USER_STRING, currentUser);
+        return mav;
     }
 }
 
