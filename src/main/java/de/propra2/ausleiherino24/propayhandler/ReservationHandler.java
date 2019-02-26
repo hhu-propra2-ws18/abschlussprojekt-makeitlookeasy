@@ -19,7 +19,6 @@ public class ReservationHandler {
     private static final String RESERVATION_URL = "http://localhost:8888/reservation";
     private RestTemplate restTemplate;
     private AccountHandler accountHandler;
-
     private CaseRepository caseRepository;
 
 
