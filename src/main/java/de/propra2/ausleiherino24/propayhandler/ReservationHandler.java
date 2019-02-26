@@ -127,7 +127,7 @@ public class ReservationHandler {
      */
     private void punishReservation(final String account,
             final Long reservationId) {
-        restTemplate.exchange(RESERVATION_URL + "/punish/{account}?reservationId={reservationId}\"",
+        restTemplate.exchange(RESERVATION_URL + "/punish/{account}?reservationId={reservationId}",
                 HttpMethod.POST, null,
                 PPAccount.class,
                 account, reservationId.toString());
