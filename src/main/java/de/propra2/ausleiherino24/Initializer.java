@@ -291,6 +291,7 @@ public class Initializer implements ServletContextInitializer {
         final PPTransaction ppTransaction = new PPTransaction();
         aCase.setPpTransaction(ppTransaction);
         ppTransaction.setReservationId(-1L);
+        ppTransaction.setDate(10012010L);
         ppTransaction.setLendingCost(1D);
         return aCase;
     }

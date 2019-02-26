@@ -17,9 +17,9 @@ import org.springframework.web.client.RestTemplate;
 public class ReservationHandler {
 
     private static final String RESERVATION_URL = "http://localhost:8888/reservation";
-    private RestTemplate restTemplate;
-    private AccountHandler accountHandler;
-    private CaseRepository caseRepository;
+    private final RestTemplate restTemplate;
+    private final AccountHandler accountHandler;
+    private final CaseRepository caseRepository;
 
 
     /**

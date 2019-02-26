@@ -14,7 +14,7 @@ public class AccountHandler {
 
     private static final String ACCOUNT_URL = "http://localhost:8888/account";
     private static final String ACCOUNT_DEFAULT = "/{account}";
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     /**
      * @param restTemplate used to send requests to propay
@@ -81,11 +81,11 @@ public class AccountHandler {
     /**
      * calls transfer for lending cost of case with necessary Data
      *
-     * @param c case containing all necessary Data
+     * @param currentCase case containing all necessary Data
      */
-    public void transferFundsByCase(final Case c) {
-        transferFunds(c.getReceiver().getUsername(), c.getOwner().getUsername(),
-                c.getPpTransaction().getLendingCost());
+    public void transferFundsByCase(final Case currentCase) {
+        transferFunds(currentCase.getReceiver().getUsername(), currentCase.getOwner().getUsername(),
+                currentCase.getPpTransaction().getLendingCost());
     }
 
 

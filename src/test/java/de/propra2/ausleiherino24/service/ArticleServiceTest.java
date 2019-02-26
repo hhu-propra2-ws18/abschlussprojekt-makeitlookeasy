@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,7 @@ public class ArticleServiceTest {
 
     private ArticleService articleService;
     private ArticleRepository articleRepositoryMock;
-    private ArrayList<Article> articles;
+    private List<Article> articles;
 
     private Article article01;
     private Article article02;

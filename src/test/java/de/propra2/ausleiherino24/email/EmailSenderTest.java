@@ -27,6 +27,9 @@ public class EmailSenderTest {
     private Conflict conflict;
     private User conflictReporter;
 
+    private final static String USER_EMAIL ="test@mail.de";
+    private final static String SERVICE_EMAIL ="test@mail.de";
+
     @Before
     public void init() {
         emailConfigMock = mock(EmailConfig.class);
@@ -38,7 +41,7 @@ public class EmailSenderTest {
         conflictedCase = new Case();
         conflict = new Conflict();
         conflictReporter = new User();
-        conflictReporter.setEmail("test@mail.de");
+        conflictReporter.setEmail(EmailSenderTest.USER_EMAIL);
         conflictReporter.setUsername("user2");
         conflictedCase.setId(1L);
         conflictedCase.setReceiver(conflictReporter);
@@ -57,8 +60,8 @@ public class EmailSenderTest {
         when(userService.findUserByUsername("user2")).thenReturn(conflictReporter);
 
         final SimpleMailMessage expectedMessage = new SimpleMailMessage();
-        expectedMessage.setFrom("test@mail.de");
-        expectedMessage.setTo("Clearing@Service.com");
+        expectedMessage.setFrom(EmailSenderTest.USER_EMAIL);
+        expectedMessage.setTo(EmailSenderTest.SERVICE_EMAIL);
         expectedMessage.setSubject("Conflicting Case id: 1");
         expectedMessage.setText("Dies hier ist ein einfacher Test");
 
@@ -84,8 +87,8 @@ public class EmailSenderTest {
         when(userService.findUserByUsername("user2")).thenReturn(conflictReporter);
 
         final SimpleMailMessage expectedMessage = new SimpleMailMessage();
-        expectedMessage.setFrom("test@mail.de");
-        expectedMessage.setTo("Clearing@Service.com");
+        expectedMessage.setFrom(EmailSenderTest.USER_EMAIL);
+        expectedMessage.setTo(EmailSenderTest.SERVICE_EMAIL);
         expectedMessage.setSubject("Conflicting Case id: 1");
         expectedMessage.setText("Dies hier ist ein einfacher Test");
 
@@ -100,8 +103,8 @@ public class EmailSenderTest {
           conflictedCase.setArticle(art);
 
         final SimpleMailMessage expectedMessage = new SimpleMailMessage();
-        expectedMessage.setTo("test@mail.de");
-        expectedMessage.setFrom("Clearing@Service.com");
+        expectedMessage.setTo(EmailSenderTest.USER_EMAIL);
+        expectedMessage.setFrom(EmailSenderTest.SERVICE_EMAIL);
         expectedMessage.setSubject("Reminder: Article: testArticle has to be returned tomorrow!");
         expectedMessage.setText("Please do not forget to return the article on time!");
 

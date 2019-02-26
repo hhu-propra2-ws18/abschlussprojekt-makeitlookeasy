@@ -27,7 +27,7 @@ tasks.withType(Checkstyle) {
 pmd {
     consoleOutput = true
     group = "verification"
-    ignoreFailures = false
+    ignoreFailures = true
 //    ruleSets = [
 //            'java-android', 'java-basic', 'java-braces',
 //            'java-clone', 'java-codesize', 'java-comments',
