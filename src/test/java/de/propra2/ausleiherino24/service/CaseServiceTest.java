@@ -6,7 +6,12 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
@@ -283,7 +288,7 @@ public class CaseServiceTest {
         c2.setArticle(article);
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
-        when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
+        when(accountHandlerMock.hasValidFundsByCase(any())).thenReturn(true);
         final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         assertEquals(1, caseService.acceptArticleRequest(0L));
@@ -306,7 +311,7 @@ public class CaseServiceTest {
         c2.setArticle(article);
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
-        when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
+        when(accountHandlerMock.hasValidFundsByCase(any())).thenReturn(true);
         final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         assertEquals(2, caseService.acceptArticleRequest(0L));

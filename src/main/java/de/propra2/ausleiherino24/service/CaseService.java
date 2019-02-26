@@ -178,7 +178,7 @@ public class CaseService {
         //Check whether the article is not reserved in this period of time
         final boolean articleRented = articleNotRented(id);
 
-        if (articleRented && accountHandler.hasValidFunds(c)) {
+        if (articleRented && accountHandler.hasValidFundsByCase(c)) {
             c.setRequestStatus(Case.REQUEST_ACCEPTED);
             reservationHandler.handleReservedMoney(c);
             caseRepository.save(c);
