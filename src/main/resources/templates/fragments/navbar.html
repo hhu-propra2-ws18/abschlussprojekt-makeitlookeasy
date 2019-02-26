@@ -50,7 +50,7 @@
                      th:href="@{'/profile/' + ${user.getUsername()}}">Profil <i
                       class="fa fa-user"></i></a>
                   <a class="dropdown-item" role="presentation" th:if="${user.role.equals('admin')}"
-                     th:href="@{~/conflicts}">Conflicts<i class="fa fa-plus"></i></a>
+                     th:href="@{~/conflicts}">Conflicts</a>
                   <a class="dropdown-item" href="/logout" role="presentation">Logout  <i
                       class="fa fa-sign-out"></i></a>
                 </div>
