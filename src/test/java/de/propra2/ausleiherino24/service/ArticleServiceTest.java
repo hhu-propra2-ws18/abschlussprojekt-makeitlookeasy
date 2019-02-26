@@ -66,7 +66,7 @@ public class ArticleServiceTest {
         articles.remove(1);
         articles.remove(1);
 
-        assertEquals(articles, articleService.getAllActiveArticles());
+        assertEquals(articles, articleService.findAllActiveArticles());
     }
 
     @Test
@@ -83,7 +83,7 @@ public class ArticleServiceTest {
 
         articles.remove(2);
 
-        assertEquals(articles, articleService.getAllActiveAndForRentalArticles());
+        assertEquals(articles, articleService.findAllActiveAndForRentalArticles());
     }
 
     @Test
@@ -94,7 +94,7 @@ public class ArticleServiceTest {
 
         when(articleRepositoryMock.findAllActive()).thenReturn(articles);
 
-        assertEquals(articles, articleService.getAllArticlesByCategory(Category.TOYS));
+        assertEquals(articles, articleService.findAllArticlesByCategory(Category.TOYS));
     }
 
     @Test
@@ -105,7 +105,7 @@ public class ArticleServiceTest {
 
         when(articleRepositoryMock.findAllActive()).thenReturn(articles);
 
-        assertTrue(articleService.getAllArticlesByCategory(Category.TOOLS).isEmpty());
+        assertTrue(articleService.findAllArticlesByCategory(Category.TOOLS).isEmpty());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class ArticleServiceTest {
         articles.remove(3);
         articles.remove(1);
 
-        assertEquals(articles, articleService.getAllArticlesByCategory(Category.TOYS));
+        assertEquals(articles, articleService.findAllArticlesByCategory(Category.TOYS));
     }
 
     @Test
@@ -141,7 +141,7 @@ public class ArticleServiceTest {
         articles.remove(2);
         articles.remove(0);
 
-        assertEquals(articles, articleService.getAllArticlesByCategory(Category.TOOLS));
+        assertEquals(articles, articleService.findAllArticlesByCategory(Category.TOOLS));
     }
 
     @Test

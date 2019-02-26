@@ -45,7 +45,7 @@ public class MainController {
 
     @GetMapping(value = {"/", "/index"})
     public ModelAndView getIndex(final Principal principal) {
-        final List<Article> allArticles = articleService.getAllActiveAndForRentalArticles();
+        final List<Article> allArticles = articleService.findAllActiveAndForRentalArticles();
         final User currentUser = userService.findUserByPrincipal(principal);
 
         final ModelAndView mav = new ModelAndView(INDEX_STRING);
@@ -60,7 +60,7 @@ public class MainController {
     public ModelAndView getIndexByCategory(final @RequestParam String category,
             final Principal principal) {
         final List<Article> allArticlesInCategory = articleService
-                .getAllArticlesByCategory(Category.valueOf(category.toUpperCase(Locale.ENGLISH)));
+                .findAllArticlesByCategory(Category.valueOf(category.toUpperCase(Locale.ENGLISH)));
         final User currentUser = userService.findUserByPrincipal(principal);
 
         final ModelAndView mav = new ModelAndView(INDEX_STRING);
@@ -91,7 +91,7 @@ public class MainController {
     public ModelAndView getIndexBySearchString(final @RequestParam String searchString,
             final Principal principal) {
         final List<Article> allArticlesWithNameLikeSearchStr = articleService
-                .getAllArticlesByName(searchString);
+                .findAllArticlesByName(searchString);
         final User currentUser = userService.findUserByPrincipal(principal);
 
         final ModelAndView mav = new ModelAndView(INDEX_STRING);
