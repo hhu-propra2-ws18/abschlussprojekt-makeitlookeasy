@@ -47,6 +47,25 @@ public class CaseService {
         this.reservationHandler = reservationHandler;
     }
 
+    public void saveCase(Case aCase) {
+        caseRepository.save(aCase);
+    }
+
+    public Case findCaseById(final Long id) {
+        final Optional<Case> optionalCase = caseRepository.findById(id);
+
+        if (!optionalCase.isPresent()) {
+            LOGGER.warn("Couldn't find case {} in database.", id);
+            throw new NullPointerException();
+        }
+
+        return optionalCase.get();
+    }
+
+    public boolean isValidCase(Long id) {
+        return caseRepository.existsById(id);
+    }
+
     // TODO: Only implemented in tests. Necessary?
     void addCaseForNewArticle(final Article article, final Double price, final Double deposit) {
         final Case aCase = new Case();
@@ -212,17 +231,6 @@ public class CaseService {
             }
         }
         return true;
-    }
-
-    public Case findCaseById(final Long id) {
-        final Optional<Case> optionalCase = caseRepository.findById(id);
-
-        if (!optionalCase.isPresent()) {
-            LOGGER.warn("Couldn't find case {} in database.", id);
-            throw new NullPointerException();
-        }
-
-        return optionalCase.get();
     }
 
     public void declineArticleRequest(final Long id) {
