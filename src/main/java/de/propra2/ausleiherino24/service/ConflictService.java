@@ -63,7 +63,7 @@ public class ConflictService {
         isConflictReporterOrAdmin(conflictToDeactivate.get(), user);
         final Conflict theConflictToDeactivate = conflictToDeactivate.get();
         theConflictToDeactivate
-                .setConflictDescription("ConflictDeactivated by :" + user.getUsername());
+                .setConflictDescription("Conflict with id: "+ theConflictToDeactivate.getId() + " was deactivated by :" + user.getUsername());
         sendConflictEmail(theConflictToDeactivate);
         conflicts.delete(theConflictToDeactivate);
     }
