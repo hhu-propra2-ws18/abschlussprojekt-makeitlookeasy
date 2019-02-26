@@ -446,4 +446,27 @@ public class CaseServiceTest {
 
         assertTrue(caseService.findAllTransactionsFromPersonReceiver(0L).isEmpty());
     }
+
+    @Test
+    public void sellArticle(){
+        Article article= new Article();
+        article.setCostPerDay(10d);
+        when(articleServiceMock.findArticleById(0L)).thenReturn(article);
+        when(userServiceMock.findUserByPrincipal(any())).thenReturn(new User());
+        PPTransaction transaction = new PPTransaction();
+        transaction.setLendingCost(10d);
+        Case c = new Case();
+        c.setPpTransaction(transaction);
+        c.setArticle(article);
+        c.setRequestStatus(Case.REQUESTED);
+        c.setDeposit(0d);
+        c.setPrice(10d);
+        c.setReceiver(new User());
+        ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+
+        caseService.sellArticle(0L ,null);
+
+        verify(caseRepositoryMock).save(argument.capture());
+        assertEquals(c, argument.getValue());
+    }
 }

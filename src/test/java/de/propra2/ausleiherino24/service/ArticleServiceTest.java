@@ -263,4 +263,15 @@ public class ArticleServiceTest {
         verify(articleRepositoryMock).save(argument.capture());
         assertEquals(article, argument.getValue());
     }
+
+    @Test
+    public void setForSaleToFalse(){
+        when(articleRepositoryMock.findById(0L)).thenReturn(Optional.of(new Article()));
+        ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
+
+        articleService.setSellStatusFromArticle(0L, false);
+
+        verify(articleRepositoryMock).save(argument.capture());
+        assertFalse(argument.getValue().isForSale());
+    }
 }

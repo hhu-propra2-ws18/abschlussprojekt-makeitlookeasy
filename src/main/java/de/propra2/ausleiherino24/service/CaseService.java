@@ -344,7 +344,6 @@ public class CaseService {
         c.setReceiver(costumer);
         PPTransaction transaction = new PPTransaction();
         transaction.setLendingCost(article.getCostPerDay());
-        transaction.setACase(c);
         c.setPpTransaction(transaction);
         caseRepository.save(c);
         accountHandler.transferFundsByCase(c);
