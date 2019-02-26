@@ -70,4 +70,10 @@
       <property name="violationSuppressRegex" value="A method should have only one exit point.*"/>
     </properties>
   </rule>
+
+  <rule ref="category/java/codestyle.xml/DefaultPackage">
+    <properties>
+      <property name="violationSuppressRegex" value="^Use explicit scoping.*"/>
+    </properties>
+  </rule>
 </ruleset>

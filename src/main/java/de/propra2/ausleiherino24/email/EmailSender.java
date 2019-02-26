@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmailSender {
 
-    private EmailConfig config;
-    private JavaMailSenderImpl mailSender;
-    private SimpleMailMessage message;
-    private UserService userService;
+    private final EmailConfig config;
+    private final JavaMailSenderImpl mailSender;
+    private final SimpleMailMessage message;
+    private final UserService userService;
 
     @Autowired
     public EmailSender(final EmailConfig config, final JavaMailSenderImpl mailSender,
