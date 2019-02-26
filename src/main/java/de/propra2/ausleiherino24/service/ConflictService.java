@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import javax.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -80,7 +81,7 @@ public class ConflictService {
     public Conflict getConflict(final Long id, final User user) throws Exception {
         final Optional<Conflict> conflict = conflicts.findById(id);
         if (!conflict.isPresent()) {
-            throw new Exception("No such conflict");
+            throw new DataAccessException("No such conflict"){};
         }
         isCorrectUser(conflict.get(), user);
         return conflict.get();
@@ -89,14 +90,14 @@ public class ConflictService {
     public boolean isConflictedArticleOwner(final Conflict conflict, final User user)
             throws Exception {
         if (user == null) {
-            throw new Exception("No such user");
+            throw new NullPointerException("User was null");
         }
         return user.equals(conflict.getOwner());
     }
 
     public List<User> getConflictParticipants(final Conflict conflict) throws Exception {
         if (conflict == null) {
-            throw new Exception("No such conflict!");
+            throw new NullPointerException("Conflict was null");
         }
         return Arrays.asList(conflict.getOwner(), conflict.getReceiver());
     }
