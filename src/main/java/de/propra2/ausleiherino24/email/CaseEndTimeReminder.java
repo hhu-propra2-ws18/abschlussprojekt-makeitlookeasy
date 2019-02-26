@@ -15,6 +15,7 @@ public class CaseEndTimeReminder {
 
     private final CaseRepository cases;
     private final EmailSender emailSender;
+    private final static Long ONE_DAY = 1L;
 
     @Autowired
     public CaseEndTimeReminder(final CaseRepository cases, final EmailSender emailSender) {
@@ -32,7 +33,7 @@ public class CaseEndTimeReminder {
                 .stream()
                 .filter(c -> c.getRequestStatus() == Case.RUNNING)
                 .filter(c -> LocalDate.parse(c.getFormattedEndTime(), formatter).atStartOfDay()
-                        .isEqual(currentTime.plusDays(1L)))
+                        .isEqual(currentTime.plusDays(CaseEndTimeReminder.ONE_DAY)))
                 .collect(Collectors.toList());
 
         sendRemindingEmail(activeCases);
