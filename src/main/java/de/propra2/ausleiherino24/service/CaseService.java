@@ -7,7 +7,6 @@ import de.propra2.ausleiherino24.model.PPTransaction;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
-
 import java.security.Principal;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -336,20 +335,29 @@ public class CaseService {
      * @param articleId article that is sold
      * @param principal costumer who buys article
      */
-    public void sellArticle(Long articleId, Principal principal) {
+    public boolean sellArticle(Long articleId, Principal principal) {
         Article article = articleService.findArticleById(articleId);
         User costumer = userService.findUserByPrincipal(principal);
-        Case c = new Case();
-        c.setRequestStatus(Case.REQUESTED);
-        c.setDeposit(0d);
-        c.setPrice(article.getCostPerDay());
-        c.setArticle(article);
-        c.setReceiver(costumer);
-        PPTransaction transaction = new PPTransaction();
-        transaction.setLendingCost(article.getCostPerDay());
-        c.setPpTransaction(transaction);
-        caseRepository.save(c);
-        accountHandler.transferFundsByCase(c);
-        articleService.setSellStatusFromArticle(articleId, false);
+
+        if (accountHandler.hasValidFunds(costumer.getUsername(),
+                articleService.findArticleById(articleId).getCostPerDay())) {
+            Case c = new Case();
+            c.setRequestStatus(Case.FINISHED);
+            c.setDeposit(0d);
+            c.setPrice(article.getCostPerDay());
+            c.setArticle(article);
+            c.setReceiver(costumer);
+            article.setActive(false);
+            PPTransaction transaction = new PPTransaction();
+            transaction.setLendingCost(article.getCostPerDay());
+            transaction.setDate(new Date().getTime());
+            transaction.setCautionPaid(false);
+            c.setPpTransaction(transaction);
+            caseRepository.save(c);
+            accountHandler.transferFundsByCase(c);
+            articleService.setSellStatusFromArticle(articleId, false);
+            return true;
+        }
+        return false;
     }
 }
