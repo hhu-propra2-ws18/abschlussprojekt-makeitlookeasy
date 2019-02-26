@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.model;
 
+import java.text.SimpleDateFormat;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,6 +38,15 @@ public class PPTransaction {
             return lendingCost + aCase.getDeposit();
         }
         return lendingCost;
+    }
+
+    /**
+     * Returns date as String, needed for BankAccount View!
+     * @return
+     */
+    public String getFormattedDate() {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        return simpleDateFormat.format(date);
     }
 
 

@@ -21,7 +21,8 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
     @Query("SELECT c FROM #{#entityName} c WHERE c.article.owner = :owner")
     List<Case> findAllByArticleOwner(@Param("owner") User owner);
 
-    @Query("SELECT c FROM #{#entityName} c WHERE c.article.owner.id = :id ORDER BY c.requestStatus ASC")
+    @Query("SELECT c FROM #{#entityName} c WHERE c.article.owner.id = :id "
+            + "ORDER BY c.requestStatus ASC")
     List<Case> findAllByArticleOwnerId(@Param("id") Long ownerId);
 
     Optional<Case> findByArticle(Article article);
