@@ -74,7 +74,6 @@ public class UserControllerTest {
     private ImageService imageService;
     @MockBean
     private PersonService personService;
-
     @MockBean
     private SearchUserService searchUserService;
     @MockBean

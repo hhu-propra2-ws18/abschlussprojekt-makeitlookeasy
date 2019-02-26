@@ -316,4 +316,13 @@ public class CaseService {
                 .flatMap(Function.identity())
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Finds all cases with open conflicts.
+     */
+    public List<Case> findAllCasesWithOpenConflicts() {
+        return caseRepository.findAll().stream()
+                .filter(c -> c.getRequestStatus() == Case.OPEN_CONFLICT)
+                .collect(Collectors.toList());
+    }
 }

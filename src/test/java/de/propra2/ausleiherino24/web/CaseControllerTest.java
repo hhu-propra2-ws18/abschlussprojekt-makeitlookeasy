@@ -86,7 +86,6 @@ public class CaseControllerTest {
     private ImageService imageService;
     @MockBean
     private PersonService personService;
-
     @MockBean
     private SearchUserService searchUserService;
     @MockBean
