@@ -178,14 +178,14 @@ public class CaseService {
         //Check whether the article is not reserved in this period of time
         final boolean articleRented = articleNotRented(id);
 
-        if (articleRented && accountHandler.hasValidFunds(c)) {
+        if (articleRented && accountHandler.hasValidFundsByCase(c)) {
             c.setRequestStatus(Case.REQUEST_ACCEPTED);
             reservationHandler.handleReservedMoney(c);
             caseRepository.save(c);
             return 1;
         } else {
             c.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
-            reservationHandler.releaseReservation(c);
+            reservationHandler.releaseReservationByCase(c);
             caseRepository.save(c);
             if (articleRented) {
                 return 3;
@@ -243,7 +243,7 @@ public class CaseService {
         }
         final Case c = optCase.get();
         c.setRequestStatus(Case.REQUEST_DECLINED);
-        reservationHandler.releaseReservation(c);
+        reservationHandler.releaseReservationByCase(c);
         c.setPpTransaction(new PPTransaction());
         caseRepository.save(c);
     }

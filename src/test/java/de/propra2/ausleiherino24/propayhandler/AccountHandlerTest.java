@@ -114,7 +114,7 @@ public class AccountHandlerTest {
                         HttpMethod.POST,
                         request, Double.class, "Acc1", "Acc2")).thenReturn(responseEntity);
 
-        // Assertions.assertThat(accountHandler.transferFunds("Acc1", "Acc2", 10.0))
+        // Assertions.assertThat(accountHandler.transferFundsByCase("Acc1", "Acc2", 10.0))
         //        .isEqualByComparingTo(200.0);
         Mockito.verify(restTemplate, Mockito.times(1))
                 .exchange(ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}",
@@ -133,7 +133,7 @@ public class AccountHandlerTest {
                         HttpMethod.POST,
                         request, Double.class, "Acc1", "Acc2")).thenReturn(responseEntity);
 
-        //Assertions.assertThat(accountHandler.transferFunds("Acc1", "Acc2", 10.0))
+        //Assertions.assertThat(accountHandler.transferFundsByCase("Acc1", "Acc2", 10.0))
         //      .isEqualByComparingTo(0.0); TODO: change test
         Mockito.verify(restTemplate, Mockito.times(1))
                 .exchange(ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}",
@@ -152,7 +152,7 @@ public class AccountHandlerTest {
                         HttpMethod.POST,
                         request, Double.class, "Acc1", "Acc2")).thenReturn(responseEntity);
 
-        //  Assertions.assertThat(accountHandler.transferFunds("Acc1", "Acc2", 201.0))
+        //  Assertions.assertThat(accountHandler.transferFundsByCase("Acc1", "Acc2", 201.0))
         // TODO: changetest        .isEqualByComparingTo(0.0);
         Mockito.verify(restTemplate, Mockito.times(0))
                 .exchange(ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}",

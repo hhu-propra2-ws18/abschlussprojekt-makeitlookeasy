@@ -242,8 +242,8 @@ public class ConflictServiceTest {
 
         conflictService.solveConflict(conflict, admin, depoReceiver);
 
-        Mockito.verify(reservationHandler).punishReservation(null);
-        Mockito.verify(reservationHandler, Mockito.times(0)).releaseReservation(null);
+        Mockito.verify(reservationHandler).punishReservationByCase(null);
+        Mockito.verify(reservationHandler, Mockito.times(0)).releaseReservationByCase(null);
     }
 
     @Test
@@ -257,7 +257,7 @@ public class ConflictServiceTest {
 
         conflictService.solveConflict(conflict, admin, depoReceiver);
 
-        Mockito.verify(reservationHandler, Mockito.times(0)).punishReservation(null);
-        Mockito.verify(reservationHandler).releaseReservation(null);
+        Mockito.verify(reservationHandler, Mockito.times(0)).punishReservationByCase(null);
+        Mockito.verify(reservationHandler).releaseReservationByCase(null);
     }
 }
