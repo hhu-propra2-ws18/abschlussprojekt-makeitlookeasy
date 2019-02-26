@@ -440,4 +440,19 @@ public class CaseServiceTest {
 
         assertEquals(transactions, caseService.getAllTransactionsFromPersonReceiver(0L));
     }
+
+    @Test
+    public void twoUnavaibleCases(){
+        Case c1 = new Case();
+        c1.setPpTransaction(new PPTransaction());
+        c1.setRequestStatus(Case.REQUEST_DECLINED);
+        Case c2 = new Case();
+        c2.setPpTransaction(new PPTransaction());
+        c2.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
+        cases.addAll(Arrays.asList(c1, c2));
+        doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
+        List<PPTransaction> transactions = new ArrayList<>(Arrays.asList(new PPTransaction(), new PPTransaction()));
+
+        assertTrue(caseService.getAllTransactionsFromPersonReceiver(0L).isEmpty());
+    }
 }
