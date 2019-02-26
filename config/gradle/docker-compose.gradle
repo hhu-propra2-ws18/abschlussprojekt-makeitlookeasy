@@ -5,7 +5,7 @@ dockerCompose {
 //  buildAdditionalArgs = ['--force-rm']
     waitForTcpPorts = true
     tcpPortsToIgnoreWhenWaiting = []
-    captureContainersOutput = false // TODO docker-log-switch (to have all docker-log in one logone log to rule them all switch)
+    captureContainersOutput = false // TODO docker-log-switch (enable to print output of all running services to stdout)
     captureContainersOutputToFile = project.file('./build/logs/containers.log')
     captureContainersOutputToFiles = './build/logs/services/'
     composeLogToFile = project.file('./build/logs/compose.log')
