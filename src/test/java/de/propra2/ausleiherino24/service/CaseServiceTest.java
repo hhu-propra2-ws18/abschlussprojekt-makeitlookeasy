@@ -421,20 +421,21 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void twoPPTransactionsFromReceiver(){
+    public void twoPPTransactionsFromReceiver() {
         Case c1 = new Case();
         c1.setPpTransaction(new PPTransaction());
         Case c2 = new Case();
         c2.setPpTransaction(new PPTransaction());
         cases.addAll(Arrays.asList(c1, c2));
         doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
-        List<PPTransaction> transactions = new ArrayList<>(Arrays.asList(new PPTransaction(), new PPTransaction()));
+        List<PPTransaction> transactions = new ArrayList<>(
+                Arrays.asList(new PPTransaction(), new PPTransaction()));
 
         assertEquals(transactions, caseService.findAllTransactionsFromPersonReceiver(0L));
     }
 
     @Test
-    public void twoUnavaibleCases(){
+    public void twoUnavaibleCases() {
         Case c1 = new Case();
         c1.setPpTransaction(new PPTransaction());
         c1.setRequestStatus(Case.REQUEST_DECLINED);
@@ -443,7 +444,8 @@ public class CaseServiceTest {
         c2.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
         cases.addAll(Arrays.asList(c1, c2));
         doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
-        List<PPTransaction> transactions = new ArrayList<>(Arrays.asList(new PPTransaction(), new PPTransaction()));
+        List<PPTransaction> transactions = new ArrayList<>(
+                Arrays.asList(new PPTransaction(), new PPTransaction()));
 
         assertTrue(caseService.findAllTransactionsFromPersonReceiver(0L).isEmpty());
     }

@@ -36,7 +36,6 @@ public class AccountHandlerTest {
         reservations.add(new Reservation(2L, 10.0));
         testAcc2.setReservations(reservations);
 
-
         Mockito.when(restTemplate.getForObject(ACCOUNT_URL + "/{account}", PPAccount.class, "Acc1"))
                 .thenReturn(testAcc1);
         Mockito.when(restTemplate.getForObject(ACCOUNT_URL + "/{account}", PPAccount.class, "Acc2"))

@@ -3,7 +3,6 @@ package de.propra2.ausleiherino24.data;
 import de.propra2.ausleiherino24.model.PPTransaction;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
 public class PPTransactionRepoTest {
+
     @Autowired
     private PPTransactionRepository ppts;
 
@@ -24,7 +24,7 @@ public class PPTransactionRepoTest {
     private PPTransaction trans2;
 
     @Before
-    public void init(){
+    public void init() {
         trans1 = new PPTransaction();
         trans2 = new PPTransaction();
 

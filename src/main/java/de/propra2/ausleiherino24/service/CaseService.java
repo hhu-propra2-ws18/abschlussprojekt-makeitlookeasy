@@ -114,6 +114,7 @@ public class CaseService {
 
     /**
      * Creates ppTransaction and Case for request.
+     *
      * @return true, if param username has valid funds. else, otherwise.
      */
     public boolean requestArticle(final Long articleId, final Long startTime, final Long endTime,
@@ -161,12 +162,10 @@ public class CaseService {
 
 
     /**
-     * // TODO: JavaDoc ...
-     * Checks, if article request is ok.
-     * @return 0: case could not be found
-     *     1: everything alright
-     *     2: the article is already rented in the given time
-     *     3: receiver does not have enough money on ProPay
+     * // TODO: JavaDoc ... Checks, if article request is ok.
+     *
+     * @return 0: case could not be found 1: everything alright 2: the article is already rented in
+     * the given time 3: receiver does not have enough money on ProPay
      */
     public int acceptArticleRequest(final Long id) {
         final Optional<Case> optCase = caseRepository.findById(id);
@@ -272,6 +271,7 @@ public class CaseService {
 
     /**
      * Accepts the return of an Article.
+     *
      * @param id CaseId
      */
     public void acceptCaseReturn(final Long id) {

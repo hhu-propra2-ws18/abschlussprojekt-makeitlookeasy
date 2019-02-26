@@ -40,13 +40,13 @@ public class ArticleServiceTest {
 
         articles = new ArrayList<>();
         article01 = new Article(0L, "", "", "", 0D, 0D, "",
-                false, true,true, null, Category.TOYS, null);
+                false, true, true, null, Category.TOYS, null);
         article02 = new Article(1L, "", "", "", 0D, 0D,
-                "",false, true, true, null, Category.TOYS, null);
+                "", false, true, true, null, Category.TOYS, null);
         article03 = new Article(2L, "", "", "", 0D, 0D,
-                "",false, true, true, null, Category.TOYS, null);
+                "", false, true, true, null, Category.TOYS, null);
         article04 = new Article(3L, "", "", "", 0D, 0D,
-                "",false, true, true, null, Category.TOYS, null);
+                "", false, true, true, null, Category.TOYS, null);
     }
 
     @Test

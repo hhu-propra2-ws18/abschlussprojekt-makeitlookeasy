@@ -56,6 +56,7 @@ public class CaseController {
 
     /**
      * Books an article. Calls caseService.requestArticle
+     *
      * @return redirect: /article?id
      */
     @PostMapping("/bookArticle")
@@ -91,6 +92,7 @@ public class CaseController {
 
     /**
      * Mapping for user to accept an request.
+     *
      * @param id caseId
      * @return Redirects to myOverview with fitting warning.
      */
@@ -124,6 +126,7 @@ public class CaseController {
 
     /**
      * Mapping for creating an review.
+     *
      * @param id caseId
      * @param review object
      * @return redirect: /myOverview with fitting param

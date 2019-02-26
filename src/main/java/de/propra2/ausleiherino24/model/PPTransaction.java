@@ -42,7 +42,6 @@ public class PPTransaction {
 
     /**
      * Returns date as String, needed for BankAccount View!
-     * @return
      */
     public String getFormattedDate() {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");

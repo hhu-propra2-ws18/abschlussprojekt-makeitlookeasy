@@ -28,7 +28,7 @@ public class CaseEndTimeReminder {
 
     //TODO: uncomment in production
     //@Scheduled(fixedDelay = 5000, initialDelay = 20000)
-    void getRunningCasesOneDayBeforeEndTime(){
+    void getRunningCasesOneDayBeforeEndTime() {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         final LocalDateTime currentTime = LocalDate
                 .parse(LocalDateTime.now().format(formatter), formatter).atStartOfDay();

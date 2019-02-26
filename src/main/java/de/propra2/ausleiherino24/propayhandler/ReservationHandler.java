@@ -37,13 +37,11 @@ public class ReservationHandler {
 
 
     /**
-     *
-     * @param aCase contains all necessary data to process what should be done
-     *    calls createReservation when case is requested
-     *         releases old reservation, calls transfer and creates new reservation
-     *         for deposit if case was Accepted.
-     *         Handling in one Method due to Test data compromising the process and for better usage
-     *         saves ReservationId to remember which reservation belongs to the case/transaction
+     * @param aCase contains all necessary data to process what should be done calls
+     * createReservation when case is requested releases old reservation, calls transfer and creates
+     * new reservation for deposit if case was Accepted. Handling in one Method due to Test data
+     * compromising the process and for better usage saves ReservationId to remember which
+     * reservation belongs to the case/transaction
      */
     public void handleReservedMoney(final Case aCase) {
         Long reservationId = -1L;
@@ -69,7 +67,6 @@ public class ReservationHandler {
     }
 
     /**
-     *
      * @param sourceUser user for which the reservation will be created
      * @param targetUser user the reservation is pointing to
      * @param amount amount that should be reserved from source to target user
@@ -87,7 +84,8 @@ public class ReservationHandler {
     }
 
     /**
-     *  completely releases a reservation for a Case (calls method for case parameters)
+     * completely releases a reservation for a Case (calls method for case parameters)
+     *
      * @param aCase contains all necessary Data to release according reservation
      */
     public void releaseReservationByCase(final Case aCase) {
@@ -100,6 +98,7 @@ public class ReservationHandler {
 
     /**
      * releases reservation with reservationId on Propay Account account
+     *
      * @param account account on which the reservation is to be released
      * @param reservationId id of reservation to be released
      */
@@ -111,6 +110,7 @@ public class ReservationHandler {
 
     /**
      * calls punishReservationByCase with case parameters
+     *
      * @param aCase contains all necessary data to do request
      */
     public void punishReservationByCase(final Case aCase) {
@@ -122,6 +122,7 @@ public class ReservationHandler {
     /**
      * punishes reservation with reservationId from account to previously defined target account
      * this account was saved by propay when creating the reservation
+     *
      * @param account account to be punished
      * @param reservationId reservation that will be punished
      */
