@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 /**
- * gets Propay account Data, adds and transfers Funds except for reservation punishments
+ * gets Propay account Data, adds and transfers Funds except for reservation punishments.
  */
 @Service
 public class AccountHandler {
@@ -81,7 +81,7 @@ public class AccountHandler {
      * calls transfer for lending cost of case with necessary Data
      * @param c case containing all necessary Data
      */
-    void transferFundsByCase(final Case c) {
+    public void transferFundsByCase(final Case c) {
         transferFunds(c.getReceiver().getUsername(), c.getOwner().getUsername(),
                 c.getPpTransaction().getLendingCost());
     }
