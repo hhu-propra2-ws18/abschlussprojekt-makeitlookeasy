@@ -257,6 +257,7 @@ public class CaseService {
     public List<Case> findAllExpiredCasesByUserId(final Long id) {
         return findAllCasesByUserId(id)
                 .stream()
+                .filter(c -> !c.getArticle().isForSale())
                 .filter(c -> c.getEndTime() < new Date().getTime())
                 .filter(c -> c.getRequestStatus() == Case.RUNNING
                         || c.getRequestStatus() == Case.FINISHED
