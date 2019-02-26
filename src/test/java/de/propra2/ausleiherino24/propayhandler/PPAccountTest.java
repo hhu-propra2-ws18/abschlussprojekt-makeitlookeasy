@@ -55,8 +55,6 @@ public class PPAccountTest {
     @Ignore
     @Test
     public void test() {
-        acc.addReservation(80.0);
-        acc.addReservation(45.0);
 
         Assertions.assertThat(acc.getReservations())
                 .isEqualTo(Arrays.asList(new Reservation(1L, 80.0), new Reservation(2L, 45.0)));

@@ -11,14 +11,21 @@ class Reservation {
     Long id;
     Double amount;
 
+    /**
+     * base constructor
+     */
     Reservation() {
         this.id = 0L;
         this.amount = 0D;
     }
 
-    Reservation(final Long reservationId, final Double number) {
+    /**
+     * @param reservationId id of reservation in Propay.
+     * @param amount amount of reservation.
+     */
+    Reservation(final Long reservationId, final Double amount) {
         this.id = reservationId;
-        this.amount = number;
+        this.amount = amount;
     }
 
 }

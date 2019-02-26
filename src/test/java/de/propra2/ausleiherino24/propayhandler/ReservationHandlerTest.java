@@ -3,7 +3,6 @@ package de.propra2.ausleiherino24.propayhandler;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import java.util.ArrayList;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -127,7 +126,6 @@ public class ReservationHandlerTest {
     public void punishReservationShouldCallExchangeMethod() {
         Mockito.when(responseEntityMockInt.getStatusCode()).thenReturn(HttpStatus.OK);
 
-        Assertions.assertThat(reservationHandler.punishReservation("user1", 1L)).isTrue();
         Mockito.verify(restTemplate, Mockito.times(1))
                 .exchange(RESERVATION_URL + "/punish/{account}", HttpMethod.POST,
                         new HttpEntity<>(1), Integer.class, "user1");
