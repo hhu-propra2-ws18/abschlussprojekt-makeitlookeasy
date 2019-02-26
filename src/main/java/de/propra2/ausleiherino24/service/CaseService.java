@@ -94,15 +94,11 @@ public class CaseService {
     }
 
     public List<PPTransaction> getAllTransactionsFromPersonReceiver(final Long personId) {
-        final List<PPTransaction> ppTransactions = new ArrayList<>();
-        final List<Case> cases = getLendCasesFromPersonReceiver(personId);
-        for (final Case c : cases) {
-            if (c.getRequestStatus() != Case.REQUEST_DECLINED
-                    && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE) {
-                ppTransactions.add(c.getPpTransaction());
-            }
-        }
-        return ppTransactions;
+        return getLendCasesFromPersonReceiver(personId).stream()
+                .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
+                    && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
+                .map(Case::getPpTransaction)
+                .collect(Collectors.toList());
     }
 
     // TODO: Only implemented in tests. Necessary?
@@ -225,8 +221,7 @@ public class CaseService {
         return true;
     }
 
-    boolean articleNotRented(final Article article, final Long startTime, final Long endTime,
-            final Case c) {
+    boolean articleNotRented(final Article article, final Long startTime, final Long endTime) {
         final List<Case> cases = article.getCases().stream()
                 .filter(ca -> ca.getRequestStatus() == Case.REQUEST_ACCEPTED)
                 .collect(Collectors.toList());
