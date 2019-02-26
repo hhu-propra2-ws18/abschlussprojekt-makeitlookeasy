@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ArticleService {
@@ -19,10 +20,13 @@ public class ArticleService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleService.class);
 
     private final ArticleRepository articleRepository;
+    private final ImageService imageService;
 
     @Autowired
-    public ArticleService(final ArticleRepository articleRepository) {
+    public ArticleService(final ArticleRepository articleRepository,
+            ImageService imageService) {
         this.articleRepository = articleRepository;
+        this.imageService = imageService;
     }
 
     public void saveArticle(final Article article, final String msg) {
@@ -30,6 +34,9 @@ public class ArticleService {
         LOGGER.info("{} article '{}' {}.", msg, article.getName(), article.getId());
     }
 
+    /**
+     * Finds an article by its id. Throws NullPointerException in cases, the article is not present
+     */
     public Article findArticleById(final Long articleId) {
         final Optional<Article> article = articleRepository.findById(articleId);
 
@@ -50,19 +57,22 @@ public class ArticleService {
      *
      * @return all Articles, which are not reserved and are of given category
      */
-    public List<Article> getAllArticlesByCategory(final Category category) {
-        return getAllActiveAndForRentalArticles().stream()
+    public List<Article> findAllArticlesByCategory(final Category category) {
+        return findAllActiveAndForRentalArticles().stream()
                 .filter(article -> article.getCategory() == category)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    List<Article> getAllActiveArticles() {
+    List<Article> findAllActiveArticles() {
         return articleRepository.findAllActive().isEmpty() ? new ArrayList<>()
                 : articleRepository.findAllActive();
     }
 
-    public List<Article> getAllActiveAndForRentalArticles() {
-        return getAllActiveArticles()
+    /**
+     * Finds all article which have active=true and forRental=true.
+     */
+    public List<Article> findAllActiveAndForRentalArticles() {
+        return findAllActiveArticles()
                 .stream()
                 .filter(Article::isForRental)
                 .collect(Collectors.toList());
@@ -87,7 +97,8 @@ public class ArticleService {
 
         final Article article = optionalArticle.get();
 
-        //only able to deactive if article has only cases where the requeststatus is REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED
+        //only able to deactive if article has only cases where the requeststatus is
+        // REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED
         if (!article.allCasesClosed()) {
             LOGGER.warn("Article {} is still reserved, lent or has an open conflict.", articleId);
             return false;
@@ -99,24 +110,34 @@ public class ArticleService {
         return true;
     }
 
-    public void updateArticle(final Long articleId, final Article article) {
+    /**
+     * Updates an article given by the id with the information from given article.
+     *  @param articleId id for article, that is about to be updated
+     * @param article new article
+     * @param image
+     */
+    public void updateArticle(final Long articleId, final Article article,
+            MultipartFile image) {
         final Optional<Article> optionalArticle = articleRepository.findById(articleId);
 
         if (!optionalArticle.isPresent()) {
             return;
         }
 
-        final Article oldArticle = optionalArticle.get();
-        oldArticle.setForRental(article.isForRental());
-        oldArticle.setDeposit(article.getDeposit());
-        oldArticle.setCostPerDay(article.getCostPerDay());
-        oldArticle.setCategory(article.getCategory());
-        oldArticle.setDescription(article.getDescription());
-        oldArticle.setName(article.getName());
-        articleRepository.save(oldArticle);
+        final Article originalArticle = optionalArticle.get();
+        originalArticle.setForRental(article.isForRental());
+        originalArticle.setDeposit(article.getDeposit());
+        originalArticle.setCostPerDay(article.getCostPerDay());
+        originalArticle.setCategory(article.getCategory());
+        originalArticle.setDescription(article.getDescription());
+        originalArticle.setName(article.getName());
+        if (!image.isEmpty()) {
+            originalArticle.setImage(imageService.store(image, null));
+        }
+        saveArticle(originalArticle, "Update");
     }
 
-    public List<Article> getAllArticlesByName(final String searchString) {
+    public List<Article> findAllArticlesByName(final String searchString) {
         return articleRepository.findByNameContainsIgnoreCase(searchString);
     }
 }

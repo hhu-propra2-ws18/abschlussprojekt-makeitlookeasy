@@ -47,6 +47,25 @@ public class CaseService {
         this.reservationHandler = reservationHandler;
     }
 
+    public void saveCase(Case aCase) {
+        caseRepository.save(aCase);
+    }
+
+    public Case findCaseById(final Long id) {
+        final Optional<Case> optionalCase = caseRepository.findById(id);
+
+        if (!optionalCase.isPresent()) {
+            LOGGER.warn("Couldn't find case {} in database.", id);
+            throw new NullPointerException();
+        }
+
+        return optionalCase.get();
+    }
+
+    public boolean isValidCase(Long id) {
+        return caseRepository.existsById(id);
+    }
+
     // TODO: Only implemented in tests. Necessary?
     void addCaseForNewArticle(final Article article, final Double price, final Double deposit) {
         final Case aCase = new Case();
@@ -75,9 +94,15 @@ public class CaseService {
     }
 
     public List<PPTransaction> getAllTransactionsFromPersonReceiver(final Long personId) {
-        return getLendCasesFromPersonReceiver(personId).stream()
-                .map(Case::getPpTransaction)
-                .collect(Collectors.toList());
+        final List<PPTransaction> ppTransactions = new ArrayList<>();
+        final List<Case> cases = getLendCasesFromPersonReceiver(personId);
+        for (final Case c : cases) {
+            if (c.getRequestStatus() != Case.REQUEST_DECLINED
+                    && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE) {
+                ppTransactions.add(c.getPpTransaction());
+            }
+        }
+        return ppTransactions;
     }
 
     // TODO: Only implemented in tests. Necessary?
@@ -112,6 +137,7 @@ public class CaseService {
             final PPTransaction ppTransaction = new PPTransaction();
             ppTransaction.setLendingCost(totalCost);
             ppTransaction.setCautionPaid(false);
+            ppTransaction.setDate(new Date().getTime());
 
             final Case aCase = new Case();
             aCase.setArticle(articleService.findArticleById(articleId));
@@ -160,6 +186,7 @@ public class CaseService {
 
         //Check whether the article is not reserved in this period of time
         final boolean articleRented = articleNotRented(id);
+
         if (articleRented && accountHandler.hasValidFunds(c)) {
             c.setRequestStatus(Case.REQUEST_ACCEPTED);
             reservationHandler.handleReservedMoney(c);
@@ -167,6 +194,7 @@ public class CaseService {
             return 1;
         } else {
             c.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
+            reservationHandler.releaseReservation(c);
             caseRepository.save(c);
             if (articleRented) {
                 return 3;
@@ -197,7 +225,8 @@ public class CaseService {
         return true;
     }
 
-    boolean articleNotRented(final Article article, final Long startTime, final Long endTime) {
+    boolean articleNotRented(final Article article, final Long startTime, final Long endTime,
+            final Case c) {
         final List<Case> cases = article.getCases().stream()
                 .filter(ca -> ca.getRequestStatus() == Case.REQUEST_ACCEPTED)
                 .collect(Collectors.toList());
@@ -208,17 +237,6 @@ public class CaseService {
             }
         }
         return true;
-    }
-
-    public Case findCaseById(final Long id) {
-        final Optional<Case> optionalCase = caseRepository.findById(id);
-
-        if (!optionalCase.isPresent()) {
-            LOGGER.warn("Couldn't find case {} in database.", id);
-            throw new NullPointerException();
-        }
-
-        return optionalCase.get();
     }
 
     public void declineArticleRequest(final Long id) {

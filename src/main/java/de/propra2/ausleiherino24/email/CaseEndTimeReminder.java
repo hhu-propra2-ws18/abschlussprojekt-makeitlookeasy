@@ -26,8 +26,9 @@ public class CaseEndTimeReminder {
         this.emailSender = emailSender;
     }
 
+    //TODO: uncomment in production
     //@Scheduled(fixedDelay = 5000, initialDelay = 20000)
-    void sendRemindingEmail() {
+    void getRunningCasesOneDayBeforeEndTime(){
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         final LocalDateTime currentTime = LocalDate
                 .parse(LocalDateTime.now().format(formatter), formatter).atStartOfDay();
@@ -38,9 +39,15 @@ public class CaseEndTimeReminder {
                         .isEqual(currentTime.plusDays(1L)))
                 .collect(Collectors.toList());
 
+        sendRemindingEmail(activeCases);
+    }
+
+    private void sendRemindingEmail(List<Case> activeCases) {
         activeCases.forEach(c -> {
             try {
                 emailSender.sendRemindingEmail(c);
+                c.setRequestStatus(Case.RUNNING_EMAILSENT);
+                cases.save(c);
             } catch (Exception e) {
                 LOGGER.info("Could not send reminder email for case {}.", c.getId());
             }

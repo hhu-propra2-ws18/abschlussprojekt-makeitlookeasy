@@ -24,6 +24,8 @@ public class PPTransaction {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "ppTransaction")
     Case aCase;
 
+    Long date;
+
     Double lendingCost;
 
     boolean cautionPaid;

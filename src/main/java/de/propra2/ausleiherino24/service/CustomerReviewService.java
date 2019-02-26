@@ -28,7 +28,15 @@ public class CustomerReviewService {
         final List<CustomerReview> reviews = customerReviewRepository.findAll();
         return reviews.stream()
                 .filter(customerReview -> caseService.getAllCasesFromPersonOwner(id)
-                        .contains(customerReview.getACase()))
+                        .contains(customerReview.getAcase()))
                 .collect(Collectors.toList());
+    }
+
+    public void saveReview(CustomerReview review) {
+        customerReviewRepository.save(review);
+    }
+
+    public List<CustomerReview> findAllReviews() {
+        return customerReviewRepository.findAll();
     }
 }

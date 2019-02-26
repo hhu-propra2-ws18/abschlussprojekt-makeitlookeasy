@@ -29,9 +29,9 @@ public class AccountHandler {
     }
 
 
-    public boolean hasValidFunds(final Case aCase) {
-        return hasValidFunds(aCase.getReceiver().getUsername(),
-                aCase.getPpTransaction().getTotalPayment());
+    public boolean hasValidFunds(final Case acase) {
+        return hasValidFunds(acase.getReceiver().getUsername(),
+                acase.getPpTransaction().getTotalPayment());
     }
 
     public boolean hasValidFunds(final String accountName, final double requestedFunds) {
@@ -46,9 +46,9 @@ public class AccountHandler {
     }
 
     //TODO: Method extraction necessary? Discuss!
-    void transferFunds(final Case aCase) {
-        transferFunds(aCase.getReceiver().getUsername(), aCase.getOwner().getUsername(),
-                aCase.getPpTransaction().getLendingCost());
+    void transferFunds(final Case c) {
+        transferFunds(c.getReceiver().getUsername(), c.getOwner().getUsername(),
+                c.getPpTransaction().getLendingCost());
     }
 
     private void transferFunds(final String sourceUser, final String targetUser,
