@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SearchUserService implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public SearchUserService(final UserRepository userRepository) {
@@ -28,9 +28,8 @@ public class SearchUserService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String username) {
         final Optional<User> optionalUser = userRepository.findByUsername(username);
 
-        optionalUser
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
         return optionalUser
-                .map(CustomUserDetails::new).get();
+                .map(CustomUserDetails::new)
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 }
