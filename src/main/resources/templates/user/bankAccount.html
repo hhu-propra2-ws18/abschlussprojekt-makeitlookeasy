@@ -39,13 +39,20 @@
         </tr>
         <thead>
         <tr>
-          <th scope="col">Type</th>
-          <th scope="col">Ammount</th>
+          <th scope="col">Article</th>
           <th scope="col">Date</th>
-          <th scope="col"></th>
+          <th scope="col">Ammount</th>
+          <th scope="col">Blocked deposit</th>
         </tr>
         </thead>
         <tbody>
+        <tr th:each="transaction : ${transactions}" th:class="${user.id==transaction.aCase.receiver.id }? 'bg-danger' :  'bg-success'">
+          <th scope="col" th:text="${transaction.aCase.article.name}"></th>
+          <th scope="col"></th>
+          <th scope="col" th:text="${transaction.lendingCost}"></th>
+          <th scope="col" th:text="${transaction.aCase.deposit}"></th>
+
+        </tr>
         </tbody>
         <tr></tr>
       </table>
