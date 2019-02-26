@@ -58,7 +58,7 @@ public class ReservationHandler {
             if (aCase.getPpTransaction().getReservationId() != -1L) {
                 releaseReservationByCase(aCase);
             }
-            accountHandler.transferFunds(aCase);
+            accountHandler.transferFundsByCase(aCase);
             reservationId = createReservation(aCase.getReceiver().getUsername(),
                     aCase.getOwner().getUsername(),
                     aCase.getDeposit());
