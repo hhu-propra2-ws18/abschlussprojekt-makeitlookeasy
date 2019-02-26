@@ -25,5 +25,5 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
     @Query("SELECT a FROM Article a WHERE a.owner = :user and a.active = true and a.forSale = true")
     List<Article> findAllActiveForSaleByUser(@Param("user") User user);
 
-    List<Article> findByNameContainsIgnoreCase(String searchString);
+    List<Article> findByActiveTrueAndNameContainsIgnoreCase(String searchString);
 }

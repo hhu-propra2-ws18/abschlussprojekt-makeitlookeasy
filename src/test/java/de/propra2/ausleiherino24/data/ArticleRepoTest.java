@@ -109,14 +109,14 @@ public class ArticleRepoTest {
 
     @Test
     public void queryShouldFindArticleContainingString() {
-        final List<Article> us = articles.findByNameContainsIgnoreCase("saw");
+        final List<Article> us = articles.findByActiveTrueAndNameContainsIgnoreCase("saw");
         assertThat(us.size()).isEqualTo(1);
         assertThat(us.get(0)).isEqualTo(article2);
     }
 
     @Test
     public void queryShouldFindArticleContainingStringIgnoringCase() {
-        final List<Article> us = articles.findByNameContainsIgnoreCase("mOUNTAIN");
+        final List<Article> us = articles.findByActiveTrueAndNameContainsIgnoreCase("mOUNTAIN");
         assertThat(us.size()).isEqualTo(1);
         assertThat(us.get(0)).isEqualTo(article1);
     }

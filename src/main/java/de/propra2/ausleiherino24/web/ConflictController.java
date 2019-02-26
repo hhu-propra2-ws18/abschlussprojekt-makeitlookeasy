@@ -149,7 +149,7 @@ public class ConflictController {
      */
     @GetMapping("/conflicts")
     public ModelAndView solveConflicts(Principal principal) {
-        ModelAndView mav = new ModelAndView("/admin/conflict");
+        final ModelAndView mav = new ModelAndView("/admin/conflict");
 
         final User currentUser = userService.findUserByPrincipal(principal);
         final List<Case> conflicts = caseService.findAllCasesWithOpenConflicts();

@@ -70,4 +70,18 @@
       <property name="violationSuppressRegex" value="A method should have only one exit point.*"/>
     </properties>
   </rule>
+
+  <!-- this is ignored since we want to use package-private accessors -->
+  <rule ref="category/java/codestyle.xml/DefaultPackage">
+    <properties>
+      <property name="violationSuppressRegex" value="^Use explicit scoping.*"/>
+    </properties>
+  </rule>
+
+  <!-- we want to use id as a variable name -->
+  <rule ref="category/java/codestyle.xml/ShortVariable">
+    <properties>
+      <property name="violationSuppressRegex" value="^Avoid variables with short names like id"/>
+    </properties>
+  </rule>
 </ruleset>
