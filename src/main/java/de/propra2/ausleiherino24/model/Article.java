@@ -115,4 +115,21 @@ public class Article {
 
         return activeCases.isEmpty();
     }
+
+    //TODO: Löschen, falls nicht mehr gebraucht
+    @Override
+    public String toString() {
+        return "Article: \n"
+                + "  " + "id: " + id + "\n"
+                + "  " + "name: " + name + "\n"
+                + "  " + "description: " + description + "\n"
+                + "  " + "image: " + image + "\n"
+                + "  " + "deposit: " + deposit + "\n"
+                + "  " + "costPerDay: " + costPerDay + "\n"
+                + "  " + "location: " + location + "\n"
+                + "  " + "active: " + active + "\n"
+                + "  " + "forRental: " + forRental + "\n"
+                + "  " + "category: " + category + "\n";
+
+    }
 }

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ArticleService {
@@ -19,10 +20,13 @@ public class ArticleService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleService.class);
 
     private final ArticleRepository articleRepository;
+    private final ImageService imageService;
 
     @Autowired
-    public ArticleService(final ArticleRepository articleRepository) {
+    public ArticleService(final ArticleRepository articleRepository,
+            ImageService imageService) {
         this.articleRepository = articleRepository;
+        this.imageService = imageService;
     }
 
     public void saveArticle(final Article article, final String msg) {
@@ -108,25 +112,29 @@ public class ArticleService {
 
     /**
      * Updates an article given by the id with the information from given article.
-     *
-     * @param articleId id for article, that is about to be updated
+     *  @param articleId id for article, that is about to be updated
      * @param article new article
+     * @param image
      */
-    public void updateArticle(final Long articleId, final Article article) {
+    public void updateArticle(final Long articleId, final Article article,
+            MultipartFile image) {
         final Optional<Article> optionalArticle = articleRepository.findById(articleId);
 
         if (!optionalArticle.isPresent()) {
             return;
         }
 
-        final Article oldArticle = optionalArticle.get();
-        oldArticle.setForRental(article.isForRental());
-        oldArticle.setDeposit(article.getDeposit());
-        oldArticle.setCostPerDay(article.getCostPerDay());
-        oldArticle.setCategory(article.getCategory());
-        oldArticle.setDescription(article.getDescription());
-        oldArticle.setName(article.getName());
-        articleRepository.save(oldArticle);
+        final Article originalArticle = optionalArticle.get();
+        originalArticle.setForRental(article.isForRental());
+        originalArticle.setDeposit(article.getDeposit());
+        originalArticle.setCostPerDay(article.getCostPerDay());
+        originalArticle.setCategory(article.getCategory());
+        originalArticle.setDescription(article.getDescription());
+        originalArticle.setName(article.getName());
+        if (!image.isEmpty()) {
+            originalArticle.setImage(imageService.store(image, null));
+        }
+        saveArticle(originalArticle, "Update");
     }
 
     public List<Article> findAllArticlesByName(final String searchString) {

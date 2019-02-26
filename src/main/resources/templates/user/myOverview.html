@@ -202,8 +202,7 @@
                 <div aria-hidden="true" aria-labelledby="deleteModalLabel" class="modal fade"
                      th:id="${article.id+'delete'}" role="dialog" tabindex="-1">
                   <div class="modal-dialog" role="document">
-                    <form method="post"
-                          th:action="@{/deleteArticle(id=${article.id})}">
+                    <form method="post" th:action="@{/deleteArticle(id=${article.id})}">
                       <div class="modal-content">
                         <div class="modal-body">
                           <label>Are you sure you want to delete <span
@@ -222,7 +221,7 @@
                 <div aria-hidden="true" aria-labelledby="updateModalLabel" class="modal fade"
                      th:id="${article.id+'article'}" role="dialog" tabindex="-1">
                   <div class="modal-dialog" role="document">
-                    <form method="post"
+                    <form enctype="multipart/form-data" method="post" th:object="${article}"
                           th:action="@{/updateArticle(id=${article.id})}">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -289,6 +288,15 @@
                           </div>
                           <div class="form-row form-group">
                             <div class="col-sm-4 label-column"><label class="col-form-label"
+                                                                      for="image">Bild: </label>
+                            </div>
+                            <div class="col-sm-6 input-column">
+                              <input accept="image/jpg,image/png,image/jpeg" id="image" name="image"
+                                     type="file">
+                            </div>
+                          </div>
+                          <div class="form-row form-group">
+                            <div class="col-sm-4 label-column"><label class="col-form-label"
                                                                       for="forRental">Article for
                               Rental:</label>
                             </div>
@@ -305,9 +313,7 @@
                           <button class="btn btn-secondary" data-dismiss="modal" type="button">
                             Close
                           </button>
-                          <button class="btn btn-primary" onclick="checkPrice(),checkDeposit()"
-                                  type="submit">Save
-                          </button>
+                          <button class="btn btn-primary" type="submit">Save</button>
                         </div>
                       </div>
                     </form>
@@ -744,21 +750,6 @@
     integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU="
     src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <script>
-  function checkPrice() {
-    var arr = document.getElementById("price").value.split('.');
-    var length = arr[1].length
-    if (length < 2 || length > 2) {
-      alert("Invalid value at field price")
-    }
-  }
-
-  function checkDeposit() {
-    var arr = document.getElementById("deposit").value.split('.');
-    var length = arr[1].length
-    if (length < 2 || length > 2) {
-      alert("Invalid value at field deposit")
-    }
-  }
 
   var $star_rating = $('.star-rating .fa');
 
