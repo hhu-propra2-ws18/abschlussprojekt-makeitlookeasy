@@ -251,9 +251,9 @@ public class CaseService {
         return findAllCasesByUserId(id)
                 .stream()
                 .filter(c -> c.getEndTime() < new Date().getTime())
-                .filter(c -> c.getRequestStatus() == Case.RUNNING ||
-                        c.getRequestStatus() == Case.FINISHED ||
-                        c.getRequestStatus() == Case.OPEN_CONFLICT)
+                .filter(c -> c.getRequestStatus() == Case.RUNNING
+                        || c.getRequestStatus() == Case.FINISHED
+                        || c.getRequestStatus() == Case.OPEN_CONFLICT)
                 .collect(Collectors.toList());
     }
 

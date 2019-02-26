@@ -451,7 +451,6 @@ public class CaseServiceTest {
         c2.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
         cases.addAll(Arrays.asList(c1, c2));
         doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
-        List<PPTransaction> transactions = new ArrayList<>(Arrays.asList(new PPTransaction(), new PPTransaction()));
 
         assertTrue(caseService.getAllTransactionsFromPersonReceiver(0L).isEmpty());
     }

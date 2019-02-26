@@ -65,7 +65,7 @@ public class Initializer implements ServletContextInitializer {
 
     /**
      * Adds a list of persons and their corresponding users and all their articles and all their
-     * cases to the fitting databases
+     * cases to the fitting databases.
      */
     private void addToDatabases(final List<Person> persons) {
         personRepository.saveAll(persons);
@@ -84,7 +84,7 @@ public class Initializer implements ServletContextInitializer {
     }
 
     /**
-     * Deletes all data from databases
+     * Deletes all data from databases.
      */
     private void deleteAll() {
         articleRepository.deleteAll();
@@ -132,7 +132,7 @@ public class Initializer implements ServletContextInitializer {
 
     /**
      * Creates 3 accounts for testing (hans, user, admin) and adds couple of articles and cases to
-     * hans
+     * hans.
      */
     private List<Person> initTestAccounts(final List<Person> persons) {
         final List<Person> testPersons = new ArrayList<>();
@@ -226,7 +226,7 @@ public class Initializer implements ServletContextInitializer {
     }
 
     /**
-     * Creates a person from parameters
+     * Creates a person from parameters.
      */
     private Person createPerson(final String address, final String firstname,
             final String lastname) {
@@ -238,7 +238,7 @@ public class Initializer implements ServletContextInitializer {
     }
 
     /**
-     * Creates an user from parameters
+     * Creates an user from parameters.
      */
     private User createUser(final String email, final String username, final String password,
             final Person person) {
@@ -252,7 +252,7 @@ public class Initializer implements ServletContextInitializer {
     }
 
     /**
-     * Creates an article from parameters
+     * Creates an article from parameters.
      */
     private Article createArticle(final String name, final String description,
             final Category category, final User owner,
@@ -273,7 +273,7 @@ public class Initializer implements ServletContextInitializer {
     }
 
     /**
-     * Creates a case from parameters
+     * Creates a case from parameters.
      */
     private Case createCase(final Article article, final User receiver, final Long starttime,
             final Long endtime,
@@ -294,7 +294,7 @@ public class Initializer implements ServletContextInitializer {
     }
 
     /**
-     * Reads a pokemon corresponding to given id from stored files
+     * Reads a pokemon corresponding to given id from stored files.
      */
     private String readPokemonName(final int pokedexId) {
         try {
@@ -313,7 +313,7 @@ public class Initializer implements ServletContextInitializer {
     }
 
     /**
-     * Stores a pokemon pic corresponding to given id using ImageService
+     * Stores a pokemon pic corresponding to given id using ImageService.
      */
     private String storePokemonPic(final int pokedexId) {
         File file = null;
@@ -328,7 +328,7 @@ public class Initializer implements ServletContextInitializer {
     }
 
     /**
-     * Converts a Date to Long
+     * Converts a Date to Long.
      */
     private Long convertDateAsLong(final int day, final int month, final int year) {
         return new GregorianCalendar(year, month, day).getTimeInMillis();
