@@ -156,7 +156,7 @@ public class ArticleService {
     }
 
     public List<Article> findAllArticlesByName(final String searchString) {
-        return articleRepository.findByNameContainsIgnoreCase(searchString);
+        return articleRepository.findByActiveTrueAndNameContainsIgnoreCase(searchString);
     }
 
     /**

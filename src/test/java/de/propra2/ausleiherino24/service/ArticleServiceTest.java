@@ -169,7 +169,7 @@ public class ArticleServiceTest {
         when(articleRepositoryMock.findById(0L)).thenReturn(op);
 
         assertFalse(articleService.deactivateArticle(0L));
-        // verify(articleRepositoryMock, times(0)).save(any());
+       // verify(articleRepositoryMock, times(0)).save(any());
     }
 
     @Test
