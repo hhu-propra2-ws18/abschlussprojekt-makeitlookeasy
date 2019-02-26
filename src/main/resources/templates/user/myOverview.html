@@ -374,7 +374,7 @@
                 <div aria-hidden="true" aria-labelledby="deleteModalLabel" class="modal fade"
                      th:id="${article.id+'delete'}" role="dialog" tabindex="-1">
                   <div class="modal-dialog" role="document">
-                    <form method="post" th:action="@{/deleteArticle(id=${article.id})}">
+                    <form th:method="PUT" th:action="@{/article/deactivate(id=${article.id})}">>
                       <div class="modal-content">
                         <div class="modal-body">
                           <label>Are you sure you want to delete <span
