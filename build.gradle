@@ -64,14 +64,13 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 }
 
 test {
-//    useJUnitPlatform() TODO Fix JUnitPlatform
+//    useJUnitPlatform() TODO (maybe) Fix JUnitPlatform
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
-    outputs.upToDateWhen { false }
-    // this forces to always rerun all tests, even if task status was 
-}                                   // already successful (and cached) in the past.
+//    outputs.upToDateWhen { false }  // this forces to always rerun all tests, even if task status was
+}                                     // already successful (and cached) in the past. TODO force-test-rerun-switch
 
 test.finalizedBy jacocoTestReport
-check.dependsOn jacocoTestCoverageVerification
+check.dependsOn ('jacocoTestCoverageVerification','reportCoverage')
 
 configurations.all {
     exclude module: 'slf4j-log4j12'
@@ -100,7 +99,6 @@ dependencies {
     implementation 'org.springframework.session:spring-session-core'
     implementation 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.8.0'
     implementation('org.springframework.boot:spring-boot-starter-websocket')
-    implementation 'org.springframework.boot:spring-boot-configuration-processor'
     spotbugs configurations.spotbugsPlugins.dependencies
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
