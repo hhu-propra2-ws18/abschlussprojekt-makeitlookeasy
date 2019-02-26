@@ -51,7 +51,7 @@ public class ConflictController {
     @PostMapping("/openconflict")
     public String sendConflict(final @RequestParam Long id, final String conflictDescription)
             throws Exception {
-        if (caseService.isValidCase(id)) {
+        if (!caseService.isValidCase(id)) {
             return "redirect:/myOverview?returned&conflictFailed";
         }
 
@@ -109,21 +109,43 @@ public class ConflictController {
         return SOMEVIEW_STRING;
     }
 
-    @PostMapping("/solveConflict")
-    public String solveConflict(final @RequestBody ResolveConflict resolveConflict,
-            final Principal principal,
-            final Model model) throws Exception {
+    /**
+     * Admin decides conflict for Owner.
+     * @param id CaseId
+     */
+    @PostMapping("/decideforowner")
+    public String solveConflictOwner(@RequestParam Long id, final Principal principal)
+            throws Exception {
+        final Case c = caseService.findCaseById(id);
         final User user = userService.findUserByPrincipal(principal);
         final Conflict conflictToSolve = conflictService
-                .getConflict(resolveConflict.getConflictId(), user);
+                .getConflict(c.getConflict().getId(), user);
 
-        conflictService.solveConflict(conflictToSolve, user, resolveConflict.getDepositReceiver());
-        conflictService.deactivateConflict(resolveConflict.getConflictId(), user);
-        final List<Conflict> conflicts = conflictService.getAllConflictsByUser(user);
+        conflictService.solveConflict(conflictToSolve, user, c.getOwner());
+        conflictService.deactivateConflict(c.getConflict().getId(), user);
 
-        model.addAttribute("conflicts", conflicts);
-        model.addAttribute(USER_STRING, user);
-        return SOMEVIEW_STRING;
+        return "redirect:/conflicts";
+    }
+
+    /**
+     * Admin decides conflict for Receiver.
+     * @param id CaseId
+     */
+    @PostMapping("/decideforreceiver")
+    public String solveConflictReceiver(@RequestParam Long id, final Principal principal)
+            throws Exception {
+        final Case c = caseService.findCaseById(id);
+        final User user = userService.findUserByPrincipal(principal);
+        final Conflict conflictToSolve = conflictService
+                .getConflict(c.getConflict().getId(), user);
+
+        System.out.println("-f----" + conflictService.size());
+        conflictService.solveConflict(conflictToSolve, user, c.getReceiver());
+        System.out.println("-s-----" + conflictService.size());
+        conflictService.deactivateConflict(c.getConflict().getId(), user);
+        System.out.println("-l-----" + conflictService.size());
+
+        return "redirect:/conflicts";
     }
 
     /**
@@ -134,9 +156,10 @@ public class ConflictController {
         ModelAndView mav = new ModelAndView("/admin/conflict");
 
         final User currentUser = userService.findUserByPrincipal(principal);
-        final List<Case> openConflicts = caseService.findAllCasesWithOpenConflicts();
+        final List<Case> conflicts = caseService.findAllCasesWithOpenConflicts();
 
         mav.addObject(USER_STRING, currentUser);
+        mav.addObject("conflicts", conflicts);
         return mav;
     }
 }

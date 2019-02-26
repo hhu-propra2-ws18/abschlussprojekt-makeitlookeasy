@@ -591,7 +591,7 @@
                             <span>Borrower: </span> <span
                               th:text="${case.receiver.username}"></span>
                             <textarea class="form-control" style="height:300px;margin-top:20px"
-                                      placeholder="What went wrong?"
+                                      placeholder="What went wrong?" minlength="15" maxlength="2048"
                                       name="conflictDescription"></textarea>
                           </div>
                           <div class="modal-footer">
@@ -612,7 +612,7 @@
                 <div class="ml-auto flex-md-row">
                   <button style="height:30px;width:120px"
                           class="btn btn-outline-primary btn-sm disabled">
-                    Running Conlict
+                    Running Conflict
                   </button>
                 </div>
               </th:block>

@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -323,6 +324,7 @@ public class CaseService {
     public List<Case> findAllCasesWithOpenConflicts() {
         return caseRepository.findAll().stream()
                 .filter(c -> c.getRequestStatus() == Case.OPEN_CONFLICT)
+                .sorted(Comparator.comparing(Case::getEndTime))
                 .collect(Collectors.toList());
     }
 }
