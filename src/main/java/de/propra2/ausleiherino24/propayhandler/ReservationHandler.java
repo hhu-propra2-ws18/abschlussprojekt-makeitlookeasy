@@ -25,7 +25,7 @@ public class ReservationHandler {
     /**
      * @param caseRepository needed to update reservationIds of PPTransactions via Cases
      * @param restTemplate needed for propay requests accountHandler needed to transfer Funds in
-     * between Reservations
+     *      between Reservations
      */
     public ReservationHandler(final CaseRepository caseRepository,
             final RestTemplate restTemplate) {

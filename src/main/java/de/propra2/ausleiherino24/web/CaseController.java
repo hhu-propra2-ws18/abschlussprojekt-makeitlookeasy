@@ -3,6 +3,8 @@ package de.propra2.ausleiherino24.web;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.CustomerReview;
+import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
 import java.beans.PropertyEditorSupport;
@@ -83,11 +85,19 @@ public class CaseController {
         return url;
     }
 
-    @PostMapping("/buyArticle")
-    public String buyArticle(final @RequestParam Long id) {
 
+    /**
+     * Principal buys an article
+     * @param articleId article that is sold
+     * @param principal customer that buys article
+     * @return
+     */
+    @PostMapping("/buyArticle")
+    public String buyArticle(final @RequestParam Long articleId,
+            final Principal principal) {
+        caseService.sellArticle(articleId, principal);
         // TODO: Show the user, whether the request was successful or not.
-        return "redirect:/article?id=" + id;
+        return "redirect:/article?id=" + articleId;
     }
 
     /**
