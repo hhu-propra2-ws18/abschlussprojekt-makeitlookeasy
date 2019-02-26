@@ -33,6 +33,8 @@ public class Case {
     public static final int RENTAL_NOT_POSSIBLE = 4; //Falls der Artikel zu gegebenem Zeitraum bereits verliehen ist
 
     public static final int RUNNING = 7; //Verleih läuft aktuell
+    // TODO: Update views to support RUNNING_EMAILSENT as RUNNING.
+    public static final int RUNNING_EMAILSENT = 8;
     public static final int OPEN_CONFLICT = 10; //Es gibt noch einen offenen Konflikt
     public static final int FINISHED = 14; //Verleih ist beendet
 
@@ -46,7 +48,7 @@ public class Case {
     private Double price;
     private Double deposit;
     private int requestStatus;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "aCase")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "acase")
     private CustomerReview customerReview;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn
@@ -83,7 +85,7 @@ public class Case {
     void setReview(final CustomerReview review, final boolean repetition) {
         this.review = review;
         if (review != null && !repetition) {
-            review.setACase(this, true);
+            review.setAcase(this, true);
         }
     }
 

@@ -41,15 +41,14 @@ public class Article {
     private String location;
 
     /**
-     * true: Artikel existiert noch false: Artikel gelöscht
+     * true: Artikel existiert noch false: Artikel gelöscht.
      */
     private boolean active;
 
     /**
-     * true: Artikel kann zur Zeit ausgeliehen werden false: Artikel ist zur Zeit nicht zum
-     * Ausleihen verfügbar
+     * true: Other users may rent the article.
+     * false: Currently, the article is not to borrow.
      */
-    //TODO must be changed if status changes
     private boolean forRental;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -62,38 +61,30 @@ public class Article {
     private List<Case> cases;
 
     /**
-     * TODO : Welche Konstruktion? Englisch? Neuschreiben! Die Konstruktion ist nötig, damit der
-     * Case stets mit geupdated wird. Analoges ist im Case Siehe
+     * The addCase methods are necessary to be self-made, so that the article is updated in the case
+     * object. See:
      * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
      */
 
-    public void addCase(final Case aCase) {
-        addCase(aCase, false);
+    public void addCase(final Case acase) {
+        addCase(acase, false);
     }
 
-    @SuppressWarnings("Duplicates")
-        // TODO: Extract duplicate code. Fix!
-    void addCase(final Case aCase, final boolean repetition) {
-        if (aCase == null) {
+    void addCase(final Case acase, final boolean repetition) {
+        if (acase == null) {
             return;
         }
         if (cases == null) {
             cases = new ArrayList<>();
         }
-        if (cases.contains(aCase)) {
-            cases.set(cases.indexOf(aCase), aCase);
+        if (cases.contains(acase)) {
+            cases.set(cases.indexOf(acase), acase);
         } else {
-            cases.add(aCase);
+            cases.add(acase);
         }
         if (!repetition) {
-            aCase.setArticle(this, true);
+            acase.setArticle(this, true);
         }
-    }
-
-    // TODO: Method is never used. Delete?
-    public void removeCase(final Case aCase) {
-        cases.remove(aCase);
-        aCase.setArticle(null);
     }
 
     public void setOwner(final User user) {
@@ -108,8 +99,9 @@ public class Article {
     }
 
     /**
-     * @return returns true if article has only cases where the requeststatus is REQUEST_DECLINED,
-     * RENTAL_NOT_POSSIBLE or FINISHED, otherwise returns false
+     * true: if article has only cases where the requeststatus is REQUEST_DECLINED,
+     * RENTAL_NOT_POSSIBLE or FINISHED.
+     * false: otherwise
      */
     public boolean allCasesClosed() {
         List<Case> activeCases;
