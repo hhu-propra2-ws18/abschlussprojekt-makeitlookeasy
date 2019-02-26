@@ -54,7 +54,7 @@ public class ArticleController {
      * @param principal Current user.
      * @return Specific article view.
      */
-    @GetMapping("")
+    @GetMapping("/")
     public ModelAndView displayArticle(final @RequestParam("id") Long id,
             final Principal principal) {
         final Article article = articleService.findArticleById(id);
