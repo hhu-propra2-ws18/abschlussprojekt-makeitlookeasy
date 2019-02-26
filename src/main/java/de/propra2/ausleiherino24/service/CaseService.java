@@ -336,19 +336,19 @@ public class CaseService {
      * @param principal costumer who buys article
      */
     public boolean sellArticle(Long articleId, Principal principal) {
-        Article article = articleService.findArticleById(articleId);
-        User costumer = userService.findUserByPrincipal(principal);
+        final Article article = articleService.findArticleById(articleId);
+        final User costumer = userService.findUserByPrincipal(principal);
 
         if (accountHandler.hasValidFunds(costumer.getUsername(),
                 articleService.findArticleById(articleId).getCostPerDay())) {
-            Case c = new Case();
+            final Case c = new Case();
             c.setRequestStatus(Case.FINISHED);
             c.setDeposit(0d);
             c.setPrice(article.getCostPerDay());
             c.setArticle(article);
             c.setReceiver(costumer);
             article.setActive(false);
-            PPTransaction transaction = new PPTransaction();
+            final PPTransaction transaction = new PPTransaction();
             transaction.setLendingCost(article.getCostPerDay());
             transaction.setDate(new Date().getTime());
             transaction.setCautionPaid(false);

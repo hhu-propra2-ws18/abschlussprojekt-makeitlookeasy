@@ -197,7 +197,7 @@ public class ConflictServiceTest {
 
     @Test
     public void deactivateConflictShouldDeactivateConflictIfUserIsAdmin() throws Exception {
-        User admin = new User();
+        final User admin = new User();
         admin.setRole("admin");
         c1.setId(1L);
         Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
