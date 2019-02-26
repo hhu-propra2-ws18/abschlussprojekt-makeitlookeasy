@@ -129,6 +129,7 @@ public class UserController {
         mav.addObject("transactions", caseService.findAllTransactionsFromPersonReceiver(
                 userService.findUserByPrincipal(principal).getId()));
         mav.addObject("pp", accountHandler.checkFunds(principal.getName()));
+        mav.addObject("user", userService.findUserByPrincipal(principal));
         mav.addObject(USER_STRING, userService.findUserByPrincipal(principal));
         mav.addObject("allArticles", articleService);
         return mav;
