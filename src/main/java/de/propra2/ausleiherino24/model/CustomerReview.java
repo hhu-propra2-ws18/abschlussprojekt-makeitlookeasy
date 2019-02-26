@@ -37,11 +37,11 @@ public class CustomerReview {
 
     Long timestamp;
 
-    public void setAcase(Case aCase) {
+    public void setAcase(final Case aCase) {
         setAcase(aCase, false);
     }
 
-    public void setAcase(Case aCase, boolean repetition) {
+    public void setAcase(final Case aCase, final boolean repetition) {
         this.acase = aCase;
         if (aCase != null && !repetition) {
             aCase.setReview(this, true);

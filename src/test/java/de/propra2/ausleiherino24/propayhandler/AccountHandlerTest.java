@@ -31,7 +31,7 @@ public class AccountHandlerTest {
         testAcc2 = new PPAccount("Acc2", 1000.0, new ArrayList<>());
         testAcc3 = new PPAccount("Acc3", 0.0, new ArrayList<>());
 
-        List<Reservation> reservations = new ArrayList<>();
+        final List<Reservation> reservations = new ArrayList<>();
         reservations.add(new Reservation(1L, 950.0));
         reservations.add(new Reservation(2L, 10.0));
         testAcc2.setReservations(reservations);

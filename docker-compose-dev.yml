@@ -5,33 +5,45 @@ services:
     container_name: propay
     image: propra/propay:latest
     restart: always
+    ports:
+      - 8888:8888
     volumes:
       - ./PPdata:/code/data
 
+  # (alternativ: bootRun direkt ausfuehren, docker-compose ist ingetriert)
   ausleiherino24:
     container_name: ausleiherino24
     build:
       context: ./
       dockerfile: ausleiherinoDockerfile
-    working_dir: /app
-    links:
-      - "propay:propay"
-      - "db:db"
     ports:
       - 8080:8080
     env_file:
       - ./.env
-    volumes:
-      - ./scripts:/app/scripts
-      - ./config:/app/config
     command: dockerize -wait tcp://db:5432 -timeout 60s -wait tcp://propay:8888 -timeout 60s java -jar app.jar
 
   db:
     container_name: pgsql-01
-    image: postgres:latest
+    build:
+      context: ./
+      dockerfile: PGSQLDockerfile
     restart: always
+    user: "${PUID}:${PGID}"
+    ports:
+      - 5432:5432
     env_file:
       - ./.env
     volumes:
       - ./pgsql-01/data:/var/lib/postgresql/data
       - ./pgsql-01/conf:/config
+
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins:latest
+
+    restart: unless-stopped
+    ports:
+      - 9000:8080
+      - 50000:50000
+    volumes:
+      - ~/jenkins_home:/var/jenkins_home
