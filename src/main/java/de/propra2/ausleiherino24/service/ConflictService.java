@@ -70,10 +70,23 @@ public class ConflictService {
                         + " was deactivated by :" + user.getUsername());
         //sendConflictEmail(theConflictToDeactivate);
         theConflictToDeactivate.getConflictedCase().setRequestStatus(Case.FINISHED);
-        System.out.println("-3----" + size());
-        System.out.println("Deletes conflict with id " + id);
+        deleteConflictById(id);
+    }
+
+    /**
+     * Safe delete conflict. Sets conflict of case to null and deletes the conflict without
+     * deleting the case related to it.
+     */
+    private void deleteConflictById(Long id) {
+        Optional<Conflict> optionalConflict = conflictRepository.findById(id);
+        if (!optionalConflict.isPresent()) {
+            return;
+        }
+        Conflict c = optionalConflict.get();
+        c.getConflictedCase().setConflict(null);
+        c.setConflictedCase(new Case());
+        conflictRepository.save(c);
         conflictRepository.deleteById(id);
-        System.out.println("-4----" + size());
     }
 
     public List<Conflict> getAllConflictsByUser(final User user) {

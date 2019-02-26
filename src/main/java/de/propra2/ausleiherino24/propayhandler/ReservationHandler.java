@@ -83,7 +83,7 @@ public class ReservationHandler {
     }
 
     /**
-     * completely releases a reservation for a Case (calls method for case parameters)
+     * completely releases a reservation for a Case (calls method for case parameters).
      *
      * @param aCase contains all necessary Data to release according reservation
      */
@@ -96,7 +96,7 @@ public class ReservationHandler {
     }
 
     /**
-     * releases reservation with reservationId on Propay Account account
+     * releases reservation with reservationId on Propay Account account.
      *
      * @param account account on which the reservation is to be released
      * @param reservationId id of reservation to be released
@@ -108,7 +108,7 @@ public class ReservationHandler {
     }
 
     /**
-     * calls punishReservationByCase with case parameters
+     * calls punishReservationByCase with case parameters.
      *
      * @param aCase contains all necessary data to do request
      */
@@ -120,14 +120,14 @@ public class ReservationHandler {
 
     /**
      * punishes reservation with reservationId from account to previously defined target account
-     * this account was saved by propay when creating the reservation
+     * this account was saved by propay when creating the reservation.
      *
      * @param account account to be punished
      * @param reservationId reservation that will be punished
      */
     private void punishReservation(final String account,
             final Long reservationId) {
-        restTemplate.exchange(RESERVATION_URL + "/punish/{account}?reservationId={reservationId}\"",
+        restTemplate.exchange(RESERVATION_URL + "/punish/{account}?reservationId={reservationId}",
                 HttpMethod.POST, null,
                 PPAccount.class,
                 account, reservationId.toString());

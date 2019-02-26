@@ -138,11 +138,8 @@ public class ConflictController {
         final Conflict conflictToSolve = conflictService
                 .getConflict(c.getConflict().getId(), user);
 
-        System.out.println("-f----" + conflictService.size());
         conflictService.solveConflict(conflictToSolve, user, c.getReceiver());
-        System.out.println("-s-----" + conflictService.size());
         conflictService.deactivateConflict(c.getConflict().getId(), user);
-        System.out.println("-l-----" + conflictService.size());
 
         return "redirect:/conflicts";
     }
