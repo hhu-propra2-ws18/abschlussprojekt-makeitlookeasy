@@ -345,7 +345,7 @@ public class CaseServiceTest {
 
         verify(caseRepositoryMock).save(argument.capture());
         assertEquals(Case.REQUEST_DECLINED, argument.getValue().getRequestStatus());
-        verify(reservationHandlerMock).releaseReservation(argument.getValue());
+        verify(reservationHandlerMock).releaseReservationByCase(argument.getValue());
         assertEquals(new PPTransaction(), argument.getValue().getPpTransaction());
     }
 

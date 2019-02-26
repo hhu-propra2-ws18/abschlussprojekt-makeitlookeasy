@@ -56,7 +56,7 @@ public class ReservationHandler {
 
         if (aCase.getRequestStatus() == Case.REQUEST_ACCEPTED) {
             if (aCase.getPpTransaction().getReservationId() != -1L) {
-                releaseReservation(aCase);
+                releaseReservationByCase(aCase);
             }
             accountHandler.transferFunds(aCase);
             reservationId = createReservation(aCase.getReceiver().getUsername(),
@@ -90,7 +90,7 @@ public class ReservationHandler {
      *  completely releases a reservation for a Case (calls method for case parameters)
      * @param aCase contains all necessary Data to release according reservation
      */
-    public void releaseReservation(final Case aCase) {
+    public void releaseReservationByCase(final Case aCase) {
         if (aCase.getPpTransaction().getReservationId() != -1) {
             releaseReservation(aCase.getReceiver().getUsername(),
                     aCase.getPpTransaction().getReservationId());
@@ -110,10 +110,10 @@ public class ReservationHandler {
     }
 
     /**
-     * calls punishReservation with case parameters
+     * calls punishReservationByCase with case parameters
      * @param aCase contains all necessary data to do request
      */
-    public void punishReservation(final Case aCase) {
+    public void punishReservationByCase(final Case aCase) {
         punishReservation(aCase.getReceiver().getUsername(),
                 aCase.getPpTransaction().getReservationId());
     }

@@ -194,7 +194,7 @@ public class CaseService {
             return 1;
         } else {
             c.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
-            reservationHandler.releaseReservation(c);
+            reservationHandler.releaseReservationByCase(c);
             caseRepository.save(c);
             if (articleRented) {
                 return 3;
@@ -246,7 +246,7 @@ public class CaseService {
         }
         final Case c = optCase.get();
         c.setRequestStatus(Case.REQUEST_DECLINED);
-        reservationHandler.releaseReservation(c);
+        reservationHandler.releaseReservationByCase(c);
         c.setPpTransaction(new PPTransaction());
         caseRepository.save(c);
     }
