@@ -6,10 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
@@ -21,6 +18,7 @@ import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,8 +44,8 @@ public class CaseServiceTest {
         personServiceMock = mock(PersonService.class);
         articleServiceMock = mock(ArticleService.class);
         userServiceMock = mock(UserService.class);
-        caseService = new CaseService(caseRepositoryMock, articleServiceMock, personServiceMock,
-                userServiceMock, accountHandlerMock, reservationHandlerMock);
+        caseService = spy(new CaseService(caseRepositoryMock, articleServiceMock, personServiceMock,
+                userServiceMock, accountHandlerMock, reservationHandlerMock));
         cases = new ArrayList<>();
     }
 
@@ -428,5 +426,18 @@ public class CaseServiceTest {
         cases.remove(c3);
 
         assertEquals(cases, caseService.findAllRequestedCasesByUserId(0L));
+    }
+
+    @Test
+    public void twoPPTransactionsFromReceiver(){
+        Case c1 = new Case();
+        c1.setPpTransaction(new PPTransaction());
+        Case c2 = new Case();
+        c2.setPpTransaction(new PPTransaction());
+        cases.addAll(Arrays.asList(c1, c2));
+        doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
+        List<PPTransaction> transactions = new ArrayList<>(Arrays.asList(new PPTransaction(), new PPTransaction()));
+
+        assertEquals(transactions, caseService.getAllTransactionsFromPersonReceiver(0L));
     }
 }

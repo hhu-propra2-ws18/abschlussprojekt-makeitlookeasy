@@ -90,12 +90,6 @@ public class Article {
         }
     }
 
-    // TODO: Method is never used. Delete?
-    public void removeCase(final Case aCase) {
-        cases.remove(aCase);
-        aCase.setArticle(null);
-    }
-
     public void setOwner(final User user) {
         setOwner(user, false);
     }
