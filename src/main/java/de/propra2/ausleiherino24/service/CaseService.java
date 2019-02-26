@@ -93,15 +93,11 @@ public class CaseService {
      * Finds all Transactions from receiver by its personId.
      */
     public List<PPTransaction> findAllTransactionsFromPersonReceiver(final Long personId) {
-        final List<PPTransaction> ppTransactions = new ArrayList<>();
-        final List<Case> cases = getLendCasesFromPersonReceiver(personId);
-        for (final Case c : cases) {
-            if (c.getRequestStatus() != Case.REQUEST_DECLINED
-                    && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE) {
-                ppTransactions.add(c.getPpTransaction());
-            }
-        }
-        return ppTransactions;
+        return getLendCasesFromPersonReceiver(personId).stream()
+                .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
+                        && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
+                .map(Case::getPpTransaction)
+                .collect(Collectors.toList());
     }
 
     // TODO: Only implemented in tests. Necessary?
@@ -183,14 +179,14 @@ public class CaseService {
         //Check whether the article is not reserved in this period of time
         final boolean articleRented = articleNotRented(id);
 
-        if (articleRented && accountHandler.hasValidFunds(c)) {
+        if (articleRented && accountHandler.hasValidFundsByCase(c)) {
             c.setRequestStatus(Case.REQUEST_ACCEPTED);
             reservationHandler.handleReservedMoney(c);
             caseRepository.save(c);
             return 1;
         } else {
             c.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
-            reservationHandler.releaseReservation(c);
+            reservationHandler.releaseReservationByCase(c);
             caseRepository.save(c);
             if (articleRented) {
                 return 3;
@@ -247,7 +243,7 @@ public class CaseService {
         }
         final Case c = optCase.get();
         c.setRequestStatus(Case.REQUEST_DECLINED);
-        reservationHandler.releaseReservation(c);
+        reservationHandler.releaseReservationByCase(c);
         c.setPpTransaction(new PPTransaction());
         caseRepository.save(c);
     }
@@ -319,6 +315,15 @@ public class CaseService {
                             .mapToObj(start::plusDays);
                 })
                 .flatMap(Function.identity())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Finds all cases with open conflicts.
+     */
+    public List<Case> findAllCasesWithOpenConflicts() {
+        return caseRepository.findAll().stream()
+                .filter(c -> c.getRequestStatus() == Case.OPEN_CONFLICT)
                 .collect(Collectors.toList());
     }
 }

@@ -118,14 +118,13 @@ public class CaseController {
         final User user = userService.findUserByPrincipal(principal);
 
         article.setActive(true);
-        article.setOwner(user);
         article.setForRental(true);
+        article.setForSale(false);
+        article.setOwner(user);
 
         if (image != null) {
             article.setImage(imageService.store(image, null));
         }
-        article.setForSale(false);
-
         articleService.saveArticle(article, "Created");
         return new ModelAndView("redirect:/");
     }

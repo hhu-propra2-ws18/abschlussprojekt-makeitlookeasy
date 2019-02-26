@@ -6,7 +6,9 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,6 +23,7 @@ import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,8 +49,8 @@ public class CaseServiceTest {
         personServiceMock = mock(PersonService.class);
         articleServiceMock = mock(ArticleService.class);
         userServiceMock = mock(UserService.class);
-        caseService = new CaseService(caseRepositoryMock, articleServiceMock, personServiceMock,
-                userServiceMock, accountHandlerMock, reservationHandlerMock);
+        caseService = spy(new CaseService(caseRepositoryMock, articleServiceMock, personServiceMock,
+                userServiceMock, accountHandlerMock, reservationHandlerMock));
         cases = new ArrayList<>();
     }
 
@@ -285,7 +288,7 @@ public class CaseServiceTest {
         c2.setArticle(article);
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
-        when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
+        when(accountHandlerMock.hasValidFundsByCase(any())).thenReturn(true);
         final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         assertEquals(1, caseService.acceptArticleRequest(0L));
@@ -308,7 +311,7 @@ public class CaseServiceTest {
         c2.setArticle(article);
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
-        when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
+        when(accountHandlerMock.hasValidFundsByCase(any())).thenReturn(true);
         final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         assertEquals(2, caseService.acceptArticleRequest(0L));
@@ -332,7 +335,7 @@ public class CaseServiceTest {
 
         verify(caseRepositoryMock).save(argument.capture());
         assertEquals(Case.REQUEST_DECLINED, argument.getValue().getRequestStatus());
-        verify(reservationHandlerMock).releaseReservation(argument.getValue());
+        verify(reservationHandlerMock).releaseReservationByCase(argument.getValue());
         assertEquals(new PPTransaction(), argument.getValue().getPpTransaction());
     }
 
@@ -415,5 +418,33 @@ public class CaseServiceTest {
         cases.remove(c3);
 
         assertEquals(cases, caseService.findAllRequestedCasesByUserId(0L));
+    }
+
+    @Test
+    public void twoPPTransactionsFromReceiver(){
+        Case c1 = new Case();
+        c1.setPpTransaction(new PPTransaction());
+        Case c2 = new Case();
+        c2.setPpTransaction(new PPTransaction());
+        cases.addAll(Arrays.asList(c1, c2));
+        doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
+        List<PPTransaction> transactions = new ArrayList<>(Arrays.asList(new PPTransaction(), new PPTransaction()));
+
+        assertEquals(transactions, caseService.findAllTransactionsFromPersonReceiver(0L));
+    }
+
+    @Test
+    public void twoUnavaibleCases(){
+        Case c1 = new Case();
+        c1.setPpTransaction(new PPTransaction());
+        c1.setRequestStatus(Case.REQUEST_DECLINED);
+        Case c2 = new Case();
+        c2.setPpTransaction(new PPTransaction());
+        c2.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
+        cases.addAll(Arrays.asList(c1, c2));
+        doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
+        List<PPTransaction> transactions = new ArrayList<>(Arrays.asList(new PPTransaction(), new PPTransaction()));
+
+        assertTrue(caseService.findAllTransactionsFromPersonReceiver(0L).isEmpty());
     }
 }
