@@ -115,13 +115,14 @@ public class CaseController {
             BindingResult result, final @RequestParam("image") MultipartFile image,
             final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
+
         article.setActive(true);
+        article.setForRental(true);
         article.setOwner(user);
+
         if (image != null) {
             article.setImage(imageService.store(image, null));
         }
-        article.setForRental(true);
-        article.setActive(true);
         articleService.saveArticle(article, "Created");
 
         return new ModelAndView("redirect:/");
