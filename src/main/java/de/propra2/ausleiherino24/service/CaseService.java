@@ -165,6 +165,7 @@ public class CaseService {
         final boolean articleRented = articleNotRented(id);
         if (articleRented && accountHandler.hasValidFunds(c)) {
             c.setRequestStatus(Case.REQUEST_ACCEPTED);
+            c.getPpTransaction().setDate(new Date().getTime());
             reservationHandler.handleReservedMoney(c);
             caseRepository.save(c);
             return 1;
