@@ -17,8 +17,8 @@ public class CaseEndTimeReminder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CaseEndTimeReminder.class);
 
-    private CaseRepository cases;
-    private EmailSender emailSender;
+    private final CaseRepository cases;
+    private final EmailSender emailSender;
 
     @Autowired
     public CaseEndTimeReminder(final CaseRepository cases, final EmailSender emailSender) {
@@ -28,7 +28,7 @@ public class CaseEndTimeReminder {
 
     //TODO: uncomment in production
     //@Scheduled(fixedDelay = 5000, initialDelay = 20000)
-    void getRunningCasesOneDayBeforeEndTime() {
+    protected void getRunningCasesOneDayBeforeEndTime() {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         final LocalDateTime currentTime = LocalDate
                 .parse(LocalDateTime.now().format(formatter), formatter).atStartOfDay();
@@ -42,15 +42,11 @@ public class CaseEndTimeReminder {
         sendRemindingEmail(activeCases);
     }
 
-    private void sendRemindingEmail(List<Case> activeCases) {
+    private void sendRemindingEmail(final List<Case> activeCases) {
         activeCases.forEach(c -> {
-            try {
-                emailSender.sendRemindingEmail(c);
-                c.setRequestStatus(Case.RUNNING_EMAILSENT);
-                cases.save(c);
-            } catch (Exception e) {
-                LOGGER.info("Could not send reminder email for case {}.", c.getId());
-            }
+            emailSender.sendRemindingEmail(c);
+            c.setRequestStatus(Case.RUNNING_EMAILSENT);
+            cases.save(c);
         });
     }
 
