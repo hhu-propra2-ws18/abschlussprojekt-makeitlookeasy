@@ -42,7 +42,7 @@ public class PersonRepoTest {
     public void databaseShouldSaveEntities() {
         persons.saveAll(Arrays.asList(person1, person2));
 
-        List<Person> us = persons.findAll();
+        final List<Person> us = persons.findAll();
         Assertions.assertThat(us.size()).isEqualTo(2);
         Assertions.assertThat(us.get(0)).isEqualTo(person1);
         Assertions.assertThat(us.get(1)).isEqualTo(person2);
@@ -54,7 +54,7 @@ public class PersonRepoTest {
 
         persons.delete(person2);
 
-        List<Person> us = persons.findAll();
+        final List<Person> us = persons.findAll();
         Assertions.assertThat(us.size()).isOne();
         Assertions.assertThat(us.get(0)).isEqualTo(person1);
     }
@@ -63,7 +63,7 @@ public class PersonRepoTest {
     public void databaseShouldReturnCountOfTwoIfDatabaseHasTwoEntries() {
         persons.saveAll(Arrays.asList(person1, person2));
 
-        List<Person> us = persons.findAll();
+        final List<Person> us = persons.findAll();
         Assertions.assertThat(us.size()).isEqualTo(2);
     }
 

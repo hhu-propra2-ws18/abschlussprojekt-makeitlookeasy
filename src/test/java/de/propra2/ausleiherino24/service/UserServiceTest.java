@@ -5,17 +5,15 @@ import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import java.security.Principal;
 import java.util.Optional;
-
-import mockit.*;
+import mockit.Mocked;
 import mockit.Verifications;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.Logger;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UserServiceTest {
 
@@ -24,7 +22,7 @@ public class UserServiceTest {
     private UserService userService;
     private User user;
     @Mocked
-    private Logger logger;
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     @Before
     public void setup() {
@@ -38,21 +36,22 @@ public class UserServiceTest {
     }
 
     @Test
-    public void findUserByUsernameTest() throws Exception {
+    public void findUserByUsernameTest() {
         Assertions.assertThat(userService.findUserByUsername("user1")).isEqualTo(user);
     }
 
-	@Test(expected = Exception.class)
-	public void findUserByUsernameTest2() throws Exception {
-		userService.findUserByUsername("user2");
-		new Verifications(){{
-            logger.warn("Couldn't find user %s in UserRepository.", "user2"); times = 1;
+    @Test(expected = Exception.class)
+    public void findUserByUsernameTest2() {
+        userService.findUserByUsername("user2");
+        new Verifications() {{
+            LOGGER.warn("Couldn't find user {} in UserRepository.", "user2");
+            times = 1;
         }};
     }
 
     @Test
     public void saveUserWithProfileTest() {
-        Person person = new Person();
+        final Person person = new Person();
         person.setId(1L);
         userService.saveUserWithProfile(user, person, "str");
 
@@ -65,9 +64,9 @@ public class UserServiceTest {
 
     @Test
     public void findUserByPrincipalTest() {
-        Principal principal = Mockito.mock(Principal.class);
+        final Principal principal = Mockito.mock(Principal.class);
         Mockito.when(principal.getName()).thenReturn("");
-        User expected = new User();
+        final User expected = new User();
         expected.setUsername("");
         expected.setRole("");
         Mockito.when(users.findByUsername("")).thenReturn(Optional.of(expected));
@@ -77,9 +76,9 @@ public class UserServiceTest {
 
     @Test
     public void findUserByPrincipalTest2() {
-        Principal principal = Mockito.mock(Principal.class);
+        final Principal principal = Mockito.mock(Principal.class);
         Mockito.when(principal.getName()).thenReturn(null);
-        User expected = new User();
+        final User expected = new User();
         expected.setUsername("");
         expected.setRole("");
 
@@ -88,7 +87,7 @@ public class UserServiceTest {
 
     @Test
     public void findUserByPrincipalTest3() {
-        User expected = new User();
+        final User expected = new User();
         expected.setUsername("");
         expected.setRole("");
 
@@ -113,14 +112,14 @@ public class UserServiceTest {
 
     @Test
     public void saveExistingUserWithEqualPasswords() {
-        String pw = "1";
-        Person person = new Person();
-        User user = new User();
+        final String pw = "1";
+        final Person person = new Person();
+        final User user = new User();
         user.setPerson(person);
         user.setPassword(pw);
         user.setEmail("test@mail.de");
         Mockito.when(users.findByUsername("")).thenReturn(Optional.of(user));
-        ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
+        final ArgumentCaptor<User> argument = ArgumentCaptor.forClass(User.class);
 
         Assertions.assertThat(userService.saveUserIfPasswordsAreEqual("", user, person, pw, pw))
                 .isEqualTo("Success");

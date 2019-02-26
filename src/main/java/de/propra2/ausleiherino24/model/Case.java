@@ -65,22 +65,22 @@ public class Case {
      * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
      */
 
-    public void setArticle(Article article) {
+    public void setArticle(final Article article) {
         setArticle(article, false);
     }
 
-    void setArticle(Article article, boolean repetition) {
+    void setArticle(final Article article, final boolean repetition) {
         this.article = article;
         if (article != null && !repetition) {
             article.addCase(this, true);
         }
     }
 
-    public void setReview(CustomerReview review) {
+    public void setReview(final CustomerReview review) {
         setReview(review, false);
     }
 
-    void setReview(CustomerReview review, boolean repetition) {
+    void setReview(final CustomerReview review, final boolean repetition) {
         this.review = review;
         if (review != null && !repetition) {
             review.setAcase(this, true);
@@ -95,7 +95,7 @@ public class Case {
      * Formatiert die Startzeit in dd.mm.yyy
      */
     public String getFormattedStartTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         return simpleDateFormat.format(startTime);
     }
 
@@ -103,11 +103,11 @@ public class Case {
      * Formatiert die Endzeit in dd.mm.yyy
      */
     public String getFormattedEndTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
         return simpleDateFormat.format(endTime);
     }
 
-    public boolean getActive() {
+    public boolean isActive() {
         return article.isActive();
     }
 

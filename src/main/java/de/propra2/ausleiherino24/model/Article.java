@@ -41,14 +41,13 @@ public class Article {
     private String location;
 
     /**
-     * true: Artikel existiert noch
-     * false: Artikel gelöscht
+     * true: Artikel existiert noch false: Artikel gelöscht
      */
     private boolean active;
 
     /**
-     * true: Artikel kann zur Zeit ausgeliehen werden
-     * false: Artikel ist zur Zeit nicht zum Ausleihen verfügbar
+     * true: Artikel kann zur Zeit ausgeliehen werden false: Artikel ist zur Zeit nicht zum
+     * Ausleihen verfügbar
      */
     //TODO must be changed if status changes
     private boolean forRental;
@@ -63,19 +62,18 @@ public class Article {
     private List<Case> cases;
 
     /**
-     * TODO : Welche Konstruktion? Englisch? Neuschreiben!
-     * Die Konstruktion ist nötig, damit der Case stets mit geupdated wird. Analoges ist im Case
-     * Siehe
+     * TODO : Welche Konstruktion? Englisch? Neuschreiben! Die Konstruktion ist nötig, damit der
+     * Case stets mit geupdated wird. Analoges ist im Case Siehe
      * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
      */
 
-    public void addCase(Case aCase) {
+    public void addCase(final Case aCase) {
         addCase(aCase, false);
     }
 
     @SuppressWarnings("Duplicates")
         // TODO: Extract duplicate code. Fix!
-    void addCase(Case aCase, boolean repetition) {
+    void addCase(final Case aCase, final boolean repetition) {
         if (aCase == null) {
             return;
         }
@@ -93,16 +91,16 @@ public class Article {
     }
 
     // TODO: Method is never used. Delete?
-    public void removeCase(Case aCase) {
+    public void removeCase(final Case aCase) {
         cases.remove(aCase);
         aCase.setArticle(null);
     }
 
-    public void setOwner(User user) {
+    public void setOwner(final User user) {
         setOwner(user, false);
     }
 
-    void setOwner(User user, boolean repetition) {
+    void setOwner(final User user, final boolean repetition) {
         this.owner = user;
         if (user != null && !repetition) {
             user.addArticle(this, true);
@@ -110,17 +108,19 @@ public class Article {
     }
 
     /**
-     * @return returns true if article has only cases where the requeststatus is REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED, otherwise returns false
+     * @return returns true if article has only cases where the requeststatus is REQUEST_DECLINED,
+     * RENTAL_NOT_POSSIBLE or FINISHED, otherwise returns false
      */
     public boolean allCasesClosed() {
-        List<Case> activeCases;
-        if(getCases() != null) {
+        List<Case> activeCases = new ArrayList<>();
+
+        if (getCases() != null) {
             activeCases = getCases().stream()
-                    .filter(c -> c.getRequestStatus() != 12 && c.getRequestStatus() != 4 && c.getRequestStatus() != 14)
+                    .filter(c -> c.getRequestStatus() != 12 && c.getRequestStatus() != 4
+                            && c.getRequestStatus() != 14)
                     .collect(Collectors.toList());
-        } else {
-            activeCases = new ArrayList<>();
         }
+
         return activeCases.isEmpty();
     }
 }

@@ -25,15 +25,11 @@ import de.propra2.ausleiherino24.service.RoleService;
 import de.propra2.ausleiherino24.service.SearchUserService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatcher;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -49,6 +45,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @WebMvcTest
 @ActiveProfiles(profiles = "test")
 public class ConflictControllerTest {
+
     @Autowired
     private MockMvc mvc;
 
@@ -108,7 +105,7 @@ public class ConflictControllerTest {
     private Conflict c1;
 
     @Before
-    public void init(){
+    public void init() {
         user = new User();
         user2 = new User();
         art = new Article();
@@ -125,6 +122,7 @@ public class ConflictControllerTest {
         c1.setConflictDescription("TestDescription");
     }
 
+    @Ignore
     @Test
     @WithMockUser(roles = "user")
     public void test() throws Exception {
@@ -132,19 +130,23 @@ public class ConflictControllerTest {
 
         mvc.perform(MockMvcRequestBuilders.post("/accessed/user/openconflict?id=1")
                 .flashAttr("conflictDescription", "TestDescription"))
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/myOverview?returned&openedconflict"))
+                .andExpect(
+                        MockMvcResultMatchers.redirectedUrl("/myOverview?returned&openedconflict"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
         //Mockito.verify(conflictService, Mockito.times(1)).openConflict(ca, "TestDescription");
     }
 
+    @Ignore
     @Test
     @WithMockUser(roles = "user")
     public void test2() throws Exception {
-        Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class))).thenReturn(user);
+        Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class)))
+                .thenReturn(user);
 
         mvc.perform(MockMvcRequestBuilders.delete("/accessed/user/deactivateconflict?id=1"))
-        .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-        .andExpect(MockMvcResultMatchers.redirectedUrl("/myOverview?returned&deactivatedconflict"));
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers
+                        .redirectedUrl("/myOverview?returned&deactivatedconflict"));
         //Mockito.verify(conflictService).deactivateConflict(1L, user);
     }
 }

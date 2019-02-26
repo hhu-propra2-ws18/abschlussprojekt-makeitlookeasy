@@ -52,29 +52,27 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void OwnerWithThreeCases() {
+    public void ownerWithThreeCases() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
-
 
         when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
-        Person o = new Person();
+        final Person o = new Person();
         when(personServiceMock.findPersonById(0L)).thenReturn(o);
 
         assertEquals(cases, caseService.getAllCasesFromPersonOwner(0L));
     }
 
     @Test
-    public void OwnerWithThreeCases2() {
+    public void ownerWithThreeCases2() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 1L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
 
-
         when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
-        Person o = new Person();
+        final Person o = new Person();
         when(personServiceMock.findPersonById(0L)).thenReturn(o);
         cases.remove(2);
 
@@ -82,14 +80,14 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void OwnerWithTwoLendCases() {
+    public void ownerWithTwoLendCases() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
 
         when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
-        Person o = new Person();
+        final Person o = new Person();
         when(personServiceMock.findPersonById(0L)).thenReturn(o);
         cases.remove(2);
         cases.remove(0);
@@ -98,27 +96,27 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void OwnerWithNoLendCases() {
+    public void ownerWithNoLendCases() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
 
         when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
-        Person o = new Person();
+        final Person o = new Person();
         when(personServiceMock.findPersonById(0L)).thenReturn(o);
 
         assertTrue(caseService.getLendCasesFromPersonOwner(0L).isEmpty());
     }
 
     @Test
-    public void OwnerWithTwoFreeCases() {
+    public void ownerWithTwoFreeCases() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
 
         when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
-        Person o = new Person();
+        final Person o = new Person();
         when(personServiceMock.findPersonById(0L)).thenReturn(o);
         cases.remove(3);
         cases.remove(1);
@@ -127,14 +125,13 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void OwnerWithNoFreeCases() {
+    public void ownerWithNoFreeCases() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
-
 
         when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
-        Person o = new Person();
+        final Person o = new Person();
         when(personServiceMock.findPersonById(0L)).thenReturn(o);
 
         assertTrue(caseService.getFreeCasesFromPersonOwner(0L).isEmpty());
@@ -142,8 +139,8 @@ public class CaseServiceTest {
 
     @Test
     public void saveNewArticleCase() {
-        Article article = new Article();
-        Case c = new Case();
+        final Article article = new Article();
+        final Case c = new Case();
         c.setArticle(article);
         c.setPrice(0D);
         c.setDeposit(10D);
@@ -155,15 +152,17 @@ public class CaseServiceTest {
 
     @Test
     public void requestArticle() {
-        Long articleId = 0L, st = 5L, et = 10L;
-        String username = "";
-        Article article = new Article();
+        final Long articleId = 0L;
+        final Long st = 5L;
+        final Long et = 10L;
+        final String username = "";
+        final Article article = new Article();
         article.setDeposit(100D);
         article.setCostPerDay(50D);
         when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
         when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
         when(accountHandlerMock.hasValidFunds(eq(""), Mockito.anyDouble())).thenReturn(true);
-        ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+        final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         caseService.requestArticle(articleId, st, et, username);
 
@@ -178,9 +177,11 @@ public class CaseServiceTest {
 
     @Test
     public void requestArticleWithoutEnoughMoney() {
-        Long articleId = 0L, st = 5L, et = 10L;
-        String username = "";
-        Article article = new Article();
+        final Long articleId = 0L;
+        final Long st = 5L;
+        final Long et = 10L;
+        final String username = "";
+        final Article article = new Article();
         article.setDeposit(100D);
         article.setCostPerDay(50D);
         when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
@@ -194,8 +195,10 @@ public class CaseServiceTest {
 
     @Test(expected = Exception.class)
     public void requestArticleCatchException() {
-        Long articleId = 0L, st = 5L, et = 10L;
-        String username = "";
+        final Long articleId = 0L;
+        final Long st = 5L;
+        final Long et = 10L;
+        final String username = "";
         when(articleServiceMock.findArticleById(articleId)).thenReturn(null);
         when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
 
@@ -206,13 +209,13 @@ public class CaseServiceTest {
 
     @Test
     public void articleAlreadyRequestedInTheTime() {
-        Article article = new Article();
-        Case c1 = new Case();
+        final Article article = new Article();
+        final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUEST_ACCEPTED);
         c1.setStartTime(0L);
         c1.setEndTime(5L);
         c1.setArticle(article);
-        Case c2 = new Case();
+        final Case c2 = new Case();
         c2.setRequestStatus(Case.REQUEST_ACCEPTED);
         c2.setStartTime(1L);
         c2.setEndTime(4L);
@@ -225,13 +228,13 @@ public class CaseServiceTest {
 
     @Test
     public void articleAlreadyRequestedInTheTime2() {
-        Article article = new Article();
-        Case c1 = new Case();
+        final Article article = new Article();
+        final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUEST_ACCEPTED);
         c1.setStartTime(0L);
         c1.setEndTime(5L);
         c1.setArticle(article);
-        Case c2 = new Case();
+        final Case c2 = new Case();
         c2.setRequestStatus(Case.REQUEST_ACCEPTED);
         c2.setStartTime(1L);
         c2.setEndTime(4L);
@@ -244,13 +247,13 @@ public class CaseServiceTest {
 
     @Test
     public void articleAlreadyRequestedInTheTime3() {
-        Article article = new Article();
-        Case c1 = new Case();
+        final Article article = new Article();
+        final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUEST_ACCEPTED);
         c1.setStartTime(1L);
         c1.setEndTime(4L);
         c1.setArticle(article);
-        Case c2 = new Case();
+        final Case c2 = new Case();
         c2.setRequestStatus(Case.REQUEST_ACCEPTED);
         c2.setStartTime(3L);
         c2.setEndTime(5L);
@@ -263,13 +266,13 @@ public class CaseServiceTest {
 
     @Test
     public void articleNotRequestedInTheTime() {
-        Article article = new Article();
-        Case c1 = new Case();
+        final Article article = new Article();
+        final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUEST_ACCEPTED);
         c1.setStartTime(0L);
         c1.setEndTime(1L);
         c1.setArticle(article);
-        Case c2 = new Case();
+        final Case c2 = new Case();
         c2.setRequestStatus(Case.REQUEST_ACCEPTED);
         c2.setStartTime(2L);
         c2.setEndTime(3L);
@@ -282,13 +285,13 @@ public class CaseServiceTest {
 
     @Test
     public void acceptingRequestPossible() {
-        Article article = new Article();
-        Case c1 = new Case();
+        final Article article = new Article();
+        final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUEST_ACCEPTED);
         c1.setStartTime(0L);
         c1.setEndTime(1L);
         c1.setArticle(article);
-        Case c2 = new Case();
+        final Case c2 = new Case();
         c2.setRequestStatus(Case.REQUEST_ACCEPTED);
         c2.setStartTime(2L);
         c2.setEndTime(3L);
@@ -296,7 +299,7 @@ public class CaseServiceTest {
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
         when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
-        ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+        final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         assertEquals(1, caseService.acceptArticleRequest(0L));
         verify(caseRepositoryMock).save(argument.capture());
@@ -305,13 +308,13 @@ public class CaseServiceTest {
 
     @Test
     public void acceptingRequestNotPossible() {
-        Article article = new Article();
-        Case c1 = new Case();
+        final Article article = new Article();
+        final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUEST_ACCEPTED);
         c1.setStartTime(0L);
         c1.setEndTime(4L);
         c1.setArticle(article);
-        Case c2 = new Case();
+        final Case c2 = new Case();
         c2.setRequestStatus(Case.REQUEST_ACCEPTED);
         c2.setStartTime(3L);
         c2.setEndTime(5L);
@@ -319,7 +322,7 @@ public class CaseServiceTest {
         article.setCases(Arrays.asList(c1, c2));
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(c1));
         when(accountHandlerMock.hasValidFunds(any())).thenReturn(true);
-        ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+        final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         assertEquals(2, caseService.acceptArticleRequest(0L));
         verify(caseRepositoryMock).save(argument.capture());
@@ -336,7 +339,7 @@ public class CaseServiceTest {
     @Test
     public void declineRequest() {
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(new Case()));
-        ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+        final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         caseService.declineArticleRequest(0L);
 
@@ -358,7 +361,7 @@ public class CaseServiceTest {
     @Test
     public void openConflict() {
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(new Case()));
-        ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+        final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         caseService.conflictOpened(0L);
 
@@ -369,7 +372,7 @@ public class CaseServiceTest {
     @Test
     public void finishCase() {
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(new Case()));
-        ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+        final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
         caseService.acceptCaseReturn(0L);
 
@@ -379,15 +382,15 @@ public class CaseServiceTest {
 
     @Test
     public void onlyRequestCases() {
-        Case c1 = new Case();
+        final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUESTED);
-        Case c2 = new Case();
+        final Case c2 = new Case();
         c2.setRequestStatus(Case.REQUEST_ACCEPTED);
-        Case c3 = new Case();
+        final Case c3 = new Case();
         c3.setRequestStatus(Case.REQUEST_DECLINED);
-        Case c4 = new Case();
+        final Case c4 = new Case();
         c4.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
-        ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
+        final ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
         when(caseRepositoryMock.findAllByArticleOwnerId(0L)).thenReturn(cases);
 
         assertEquals(cases, caseService.findAllRequestedCasesByUserId(0L));
@@ -395,15 +398,15 @@ public class CaseServiceTest {
 
     @Test
     public void zeroRequestCases() {
-        Case c1 = new Case();
+        final Case c1 = new Case();
         c1.setRequestStatus(Case.FINISHED);
-        Case c2 = new Case();
+        final Case c2 = new Case();
         c2.setRequestStatus(Case.OPEN_CONFLICT);
-        Case c3 = new Case();
+        final Case c3 = new Case();
         c3.setRequestStatus(Case.RUNNING);
-        Case c4 = new Case();
+        final Case c4 = new Case();
         c4.setRequestStatus(Case.RUNNING);
-        ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
+        final ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
         when(caseRepositoryMock.findAllByArticleOwnerId(0L)).thenReturn(cases);
 
         assertTrue(caseService.findAllRequestedCasesByUserId(0L).isEmpty());
@@ -411,15 +414,15 @@ public class CaseServiceTest {
 
     @Test
     public void twoRequestCases() {
-        Case c1 = new Case();
+        final Case c1 = new Case();
         c1.setRequestStatus(Case.RUNNING);
-        Case c2 = new Case();
+        final Case c2 = new Case();
         c2.setRequestStatus(Case.REQUEST_ACCEPTED);
-        Case c3 = new Case();
+        final Case c3 = new Case();
         c3.setRequestStatus(Case.FINISHED);
-        Case c4 = new Case();
+        final Case c4 = new Case();
         c4.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
-        ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
+        final ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
         when(caseRepositoryMock.findAllByArticleOwnerId(0L)).thenReturn(cases);
         cases.remove(c1);
         cases.remove(c3);

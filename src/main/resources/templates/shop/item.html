@@ -76,35 +76,35 @@
       }
     }
 
-   /* var getJSON = function (url, callback) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.responseType = 'json';
-      xhr.onload = function () {
-        var status = xhr.status;
-        if (status === 200) {
-          console.log(xhr.response);
-        } else {
-          callback(status, xhr.response);
-        }
-      };
-      xhr.send();
-    }; */
+    /* var getJSON = function (url, callback) {
+       var xhr = new XMLHttpRequest();
+       xhr.open('GET', url, true);
+       xhr.responseType = 'json';
+       xhr.onload = function () {
+         var status = xhr.status;
+         if (status === 200) {
+           console.log(xhr.response);
+         } else {
+           callback(status, xhr.response);
+         }
+       };
+       xhr.send();
+     }; */
 
-    function JsonpCallback(json)  {
+    function JsonpCallback(json) {
       console.log(json.result);
     }
 
-    function CallURL()  {
+    function CallURL() {
       $.ajax({
         url: '/api/events',
         type: "GET",
         dataType: "json",
         async: false,
-        success: function(msg)  {
+        success: function (msg) {
           JsonpCallback(msg);
         },
-        error: function()  {
+        error: function () {
           alert("There was an error, fetching events");
         }
       });
@@ -124,15 +124,15 @@
     <div class="col-lg-9">
       <!-- Warning -->
       <div style="margin-top: 50px;">
-      <div class="alert alert-success absolue center" th:if="${param.success}">
-        Article was succesfully booked!
-      </div>
+        <div class="alert alert-success absolue center" th:if="${param.success}">
+          Article was succesfully booked!
+        </div>
 
-      <a th:href="@{~/test}" style="text-decoration: none">
-      <div class="alert alert-warning absolue center" th:if="${param.failed}">
-        Could not book the item! You probably got not enough money. Click to get more money.
-      </div>
-      </a>
+        <a th:href="@{~/test}" style="text-decoration: none">
+          <div class="alert alert-warning absolue center" th:if="${param.failed}">
+            Could not book the item! You probably got not enough money. Click to get more money.
+          </div>
+        </a>
       </div>
       <div class="card mt-4">
         <div style="height: 300px; width=900px">
@@ -150,7 +150,8 @@
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
-                  <img alt="" class="card-img-top img-fluid" th:src="@{/images/{id}(id=${article.image})}">
+                  <img alt="" class="card-img-top img-fluid"
+                       th:src="@{/images/{id}(id=${article.image})}">
                 </div>
               </div>
             </div>

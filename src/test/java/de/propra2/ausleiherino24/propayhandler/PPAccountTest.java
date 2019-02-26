@@ -34,11 +34,11 @@ public class PPAccountTest {
 
     @Test
     public void getReservationsShouldReturnCorrectListOfReservationsIfReservationsIsNotNull() {
-        Reservation res1 = new Reservation();
+        final Reservation res1 = new Reservation();
         res1.setId(1L);
-        Reservation res2 = new Reservation();
+        final Reservation res2 = new Reservation();
         res2.setId(2L);
-        List<Reservation> resList = new ArrayList<>();
+        final List<Reservation> resList = new ArrayList<>();
         resList.add(res1);
         resList.add(res2);
         acc.setReservations(resList);

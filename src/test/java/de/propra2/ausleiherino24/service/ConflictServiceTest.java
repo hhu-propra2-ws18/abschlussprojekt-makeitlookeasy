@@ -20,198 +20,244 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 public class ConflictServiceTest {
-	private CaseService caseService;
-	private EmailSender emailSender;
-	private ConflictRepository conflictRepository;
-	private ReservationHandler reservationHandler;
-	private ConflictService conflictService;
 
-	private User user;
-	private User user2;
-	private Article art;
-	private Case ca;
-	private Conflict c1;
+    private CaseService caseService;
+    private EmailSender emailSender;
+    private ConflictRepository conflictRepository;
+    private ReservationHandler reservationHandler;
+    private ConflictService conflictService;
 
-	@Before
-	public void init() {
-		caseService = Mockito.mock(CaseService.class);
-		emailSender = Mockito.mock(EmailSender.class);
-		conflictRepository = Mockito.mock(ConflictRepository.class);
-		reservationHandler = Mockito.mock(ReservationHandler.class);
-		conflictService = Mockito.spy(new ConflictService(conflictRepository, emailSender, reservationHandler, caseService));
+    private User user;
+    private User user2;
+    private Article art;
+    private Case ca;
+    private Conflict c1;
 
-		user = new User();
-		user2 = new User();
-		art = new Article();
-		ca = new Case();
-		c1 = new Conflict();
+    @Before
+    public void init() {
+        caseService = Mockito.mock(CaseService.class);
+        emailSender = Mockito.mock(EmailSender.class);
+        conflictRepository = Mockito.mock(ConflictRepository.class);
+        reservationHandler = Mockito.mock(ReservationHandler.class);
+        conflictService = Mockito
+                .spy(new ConflictService(conflictRepository, emailSender, reservationHandler,
+                        caseService));
 
-		user2.setUsername("user2");
-		user.setUsername("user1");
-		art.setOwner(user);
-		ca.setArticle(art);
-		ca.setReceiver(user2);
-		ca.setId(1L);
-		c1.setConflictedCase(ca);
-		c1.setConflictReporterUsername("user1");
-		c1.setConflictDescription("TestDescription");
-	}
+        user = new User();
+        user2 = new User();
+        art = new Article();
+        ca = new Case();
+        c1 = new Conflict();
 
-	@Test(expected=Exception.class)
-	public void isConflictedArticleOwnerShouldThrowExceptionIfUserIsNull() throws Exception {
-		user = null;
-		c1 = new Conflict();
+        user2.setUsername("user2");
+        user.setUsername("user1");
+        art.setOwner(user);
+        ca.setArticle(art);
+        ca.setReceiver(user2);
+        ca.setId(1L);
+        c1.setConflictedCase(ca);
+        c1.setConflictReporterUsername("user1");
+        c1.setConflictDescription("TestDescription");
+    }
 
-		conflictService.isConflictedArticleOwner(c1, user);
-	}
+    @Test(expected = Exception.class)
+    public void isConflictedArticleOwnerShouldThrowExceptionIfUserIsNull() throws Exception {
+        c1 = new Conflict();
 
-	@Test
-	public void isConflictedArticleOwnerShouldReturnTrueIfUserIsOwnerOfConflictedArticle() throws Exception {
-		art.setOwner(user);
+        conflictService.isConflictedArticleOwner(c1, null);
+    }
 
-		Assertions.assertThat(conflictService.isConflictedArticleOwner(c1, user)).isTrue();
-	}
+    @Test
+    public void isConflictedArticleOwnerShouldReturnTrueIfUserIsOwnerOfConflictedArticle()
+            throws Exception {
+        art.setOwner(user);
 
-	@Test
-	public void isConflictedArticleOwnerShouldReturnFalseIfUserIsOwnerOfConflictedArticle() throws Exception {
-		art.setOwner(user);
+        Assertions.assertThat(conflictService.isConflictedArticleOwner(c1, user)).isTrue();
+    }
 
-		Assertions.assertThat(conflictService.isConflictedArticleOwner(c1, user2)).isFalse();
-	}
+    @Test
+    public void isConflictedArticleOwnerShouldReturnFalseIfUserIsOwnerOfConflictedArticle()
+            throws Exception {
+        art.setOwner(user);
 
-	@Test(expected=Exception.class)
-	public void getConflictShouldThrowExceptionIfCalledWithWrongUser() throws Exception {
-		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
+        Assertions.assertThat(conflictService.isConflictedArticleOwner(c1, user2)).isFalse();
+    }
 
-		conflictService.getConflict(1L, new User());
-	}
+    @Test(expected = Exception.class)
+    public void getConflictShouldThrowExceptionIfCalledWithWrongUser() throws Exception {
+        Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
+
+        conflictService.getConflict(1L, new User());
+    }
 
 
-	@Test()
-	public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithArticleReceiver() throws Exception {
-		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
+    @Test()
+    public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithArticleReceiver()
+            throws Exception {
+        Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
-		Assertions.assertThat(conflictService.getConflict(1L, user)).isEqualTo(c1);
-	}
+        Assertions.assertThat(conflictService.getConflict(1L, user)).isEqualTo(c1);
+    }
 
-	@Test()
-	public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithArticleOwner() throws Exception {
-		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
+    @Test()
+    public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithArticleOwner()
+            throws Exception {
+        Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
-		Assertions.assertThat(conflictService.getConflict(1L, user2)).isEqualTo(c1);
-	}
+        Assertions.assertThat(conflictService.getConflict(1L, user2)).isEqualTo(c1);
+    }
 
-	@Test()
-	public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithAdmin() throws Exception {
-		User admin = new User();
-		admin.setRole("admin");
-		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
+    @Test()
+    public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithAdmin()
+            throws Exception {
+        final User admin = new User();
+        admin.setRole("admin");
+        Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
-		Assertions.assertThat(conflictService.getConflict(1L, admin)).isEqualTo(c1);
-	}
+        Assertions.assertThat(conflictService.getConflict(1L, admin)).isEqualTo(c1);
+    }
 
-	@Test(expected=Exception.class)
-	public void getConflictShouldThrowExceptionIfConflictIdNotValid() throws Exception {
-		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.empty());
-		conflictService.getConflict(1L, user);
-	}
+    @Test(expected = Exception.class)
+    public void getConflictShouldThrowExceptionIfConflictIdNotValid() throws Exception {
+        Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.empty());
+        conflictService.getConflict(1L, user);
+    }
 
-	@Test(expected=Exception.class)
-	public void getConflictParticipantsShouldThrowExceptionIfCalledWithNull() throws Exception {
-		conflictService.getConflictParticipants(null);
-	}
+    @Test(expected = Exception.class)
+    public void getConflictParticipantsShouldThrowExceptionIfCalledWithNull() throws Exception {
+        conflictService.getConflictParticipants(null);
+    }
 
-	@Test
-	public void getConflictParticipantsShouldReturnAllConflictParticipants() throws Exception {
-		List<User> conflictParticipants = conflictService.getConflictParticipants(c1);
+    @Test
+    public void getConflictParticipantsShouldReturnAllConflictParticipants() throws Exception {
+        final List<User> conflictParticipants = conflictService.getConflictParticipants(c1);
 
-		Assertions.assertThat(conflictParticipants.size()).isEqualTo(2);
-		Assertions.assertThat(conflictParticipants).containsAll(Arrays.asList(user2, user));
-	}
+        Assertions.assertThat(conflictParticipants.size()).isEqualTo(2);
+        Assertions.assertThat(conflictParticipants).containsAll(Arrays.asList(user2, user));
+    }
 
-	@Test
-	public void getAllConflictsByUserShouldReturnListOfAllCurrentConflictsByUser() throws Exception {
-		Article art2 = new Article();
-		art2.setOwner(new User());
-		Case ca2 = new Case();
-		ca2.setArticle(art2);
-		ca2.setReceiver(user2);
-		Conflict c2 = new Conflict();
-		c2.setConflictedCase(ca2);
+    @Test
+    public void getAllConflictsByUserShouldReturnListOfAllCurrentConflictsByUser() {
+        final Article art2 = new Article();
+        art2.setOwner(new User());
+        final Case ca2 = new Case();
+        ca2.setArticle(art2);
+        ca2.setReceiver(user2);
+        final Conflict c2 = new Conflict();
+        c2.setConflictedCase(ca2);
 
-		Mockito.when(conflictRepository.findAllByArticleOwner(user2)).thenReturn(Arrays.asList(c1));
-		Mockito.when(conflictRepository.findAllByReceiver(user2)).thenReturn(Arrays.asList(c2));
+        Mockito.when(conflictRepository.findAllByArticleOwner(user2)).thenReturn(Arrays.asList(c1));
+        Mockito.when(conflictRepository.findAllByReceiver(user2)).thenReturn(Arrays.asList(c2));
 
-		List<Conflict> allConflictsByUser = conflictService.getAllConflictsByUser(user2);
+        final List<Conflict> allConflictsByUser = conflictService.getAllConflictsByUser(user2);
 
-		Assertions.assertThat(allConflictsByUser).containsAll(Arrays.asList(c2,c1));
-	}
+        Assertions.assertThat(allConflictsByUser).containsAll(Arrays.asList(c2, c1));
+    }
 
-	@Test(expected=Exception.class)
-	public void saveConflictShouldThrowExceptionIfConflictIsNull() throws Exception {
-		conflictService.saveConflict(null, user);
-	}
+    @Test(expected = Exception.class)
+    public void saveConflictShouldThrowExceptionIfConflictIsNull() throws Exception {
+        conflictService.saveConflict(null, user);
+    }
 
-	@Test
-	public void saveConflictShouldSaveConflictIfConflictIsNotNull() throws Exception {
-		conflictService.saveConflict(c1, user);
+    @Test
+    public void saveConflictShouldSaveConflictIfConflictIsNotNull() throws Exception {
+        conflictService.saveConflict(c1, user);
 
-		Mockito.verify(conflictRepository, Mockito.times(1)).save(c1);
-	}
+        Mockito.verify(conflictRepository, Mockito.times(1)).save(c1);
+    }
 
-	@Test
-	public void sendConflictEmailShouldSendConflictEmail() throws Exception {
-		conflictService.sendConflictEmail(c1);
+    @Test
+    public void sendConflictEmailShouldSendConflictEmail() throws Exception {
+        conflictService.sendConflictEmail(c1);
 
-		Mockito.verify(emailSender, Mockito.times(1)).sendConflictEmail(c1);
-	}
+        Mockito.verify(emailSender, Mockito.times(1)).sendConflictEmail(c1);
+    }
 
-	@Test
-	public void deactivateConflictShouldDeactivateConflictIfUserIsConflictReporter() throws Exception {
-		c1.setId(1L);
-		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
+    @Test
+    public void deactivateConflictShouldDeactivateConflictIfUserIsConflictReporter()
+            throws Exception {
+        c1.setId(1L);
+        Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
-		conflictService.deactivateConflict(1L, user);
+        conflictService.deactivateConflict(1L, user);
 
-		Mockito.verify(conflictRepository, Mockito.times(1)).delete(c1);
-	}
+        Mockito.verify(conflictRepository, Mockito.times(1)).delete(c1);
+    }
 
-	@Test(expected=Exception.class)
-	public void deactivateConflictShouldNotDeactivateConflictIfUserIsNotConflictReporter() throws Exception {
-		c1.setId(1L);
-		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
+    @Test(expected = Exception.class)
+    public void deactivateConflictShouldNotDeactivateConflictIfUserIsNotConflictReporter()
+            throws Exception {
+        c1.setId(1L);
+        Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
-		conflictService.deactivateConflict(1L, user2);
+        conflictService.deactivateConflict(1L, user2);
 
-		Mockito.verify(conflictRepository, Mockito.times(0)).delete(c1);
-	}
+        Mockito.verify(conflictRepository, Mockito.times(0)).delete(c1);
+    }
 
-	@Test
-	public void deactivateConflictShouldDeactivateConflictIfUserIsAdmin() throws Exception {
-		User admin = new User();
-		admin.setRole("admin");
-		c1.setId(1L);
-		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
+    @Test
+    public void deactivateConflictShouldDeactivateConflictIfUserIsAdmin() throws Exception {
+        User admin = new User();
+        admin.setRole("admin");
+        c1.setId(1L);
+        Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
-		conflictService.deactivateConflict(1L, admin);
+        conflictService.deactivateConflict(1L, admin);
 
-		Mockito.verify(conflictRepository, Mockito.times(1)).delete(c1);
-	}
+        Mockito.verify(conflictRepository, Mockito.times(1)).delete(c1);
+    }
 
-	@Test(expected=DataAccessException.class)
-	public void deactivateConflictShouldThrowExceptionIfConflictNotFound() throws Exception {
-		User user = new User();
+    @Test(expected = DataAccessException.class)
+    public void deactivateConflictShouldThrowExceptionIfConflictNotFound() throws Exception {
+        final User user = new User();
 
-		Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.empty());
 
-		conflictService.deactivateConflict(1L, user);
-	}
+        conflictService.deactivateConflict(1L, user);
+    }
 
-	@Test()
-	public void openConflictTest() throws Exception {
-		conflictService.openConflict(ca, "TestDescription");
-		Mockito.verify(caseService).conflictOpened(1L);
-		Mockito.verify(conflictService).saveConflict(c1, user);
-		Mockito.verify(conflictService).sendConflictEmail(c1);
-	}
+    @Test()
+    public void openConflictTest() throws Exception {
+        conflictService.openConflict(ca, "TestDescription");
+        Mockito.verify(caseService).conflictOpened(1L);
+        Mockito.verify(conflictService).saveConflict(c1, user);
+        Mockito.verify(conflictService).sendConflictEmail(c1);
+    }
+
+    @Test(expected = Exception.class)
+    public void solveConflictShouldThrowExceptionIfUserNotAdmin() throws Exception {
+        final User user = new User();
+        user.setRole("");
+
+        conflictService.solveConflict(null, user, null);
+    }
+
+    @Test
+    public void solveConflictShouldPunishReservation() throws Exception {
+        final User depoReceiver = new User();
+        final User admin = new User();
+        admin.setRole("admin");
+        final Conflict conflict = Mockito.mock(Conflict.class);
+        Mockito.when(conflict.getOwner()).thenReturn(depoReceiver);
+
+        conflictService.solveConflict(conflict, admin, depoReceiver);
+
+        Mockito.verify(reservationHandler).punishReservation(null);
+        Mockito.verify(reservationHandler, Mockito.times(0)).releaseReservation(null);
+    }
+
+    @Test
+    public void solveConflictShouldReleaseReservation() throws Exception {
+        final User depoReceiver = new User();
+        depoReceiver.setUsername("Hans");
+        final User admin = new User();
+        admin.setRole("admin");
+        final Conflict conflict = Mockito.mock(Conflict.class);
+        Mockito.when(conflict.getOwner()).thenReturn(new User());
+
+        conflictService.solveConflict(conflict, admin, depoReceiver);
+
+        Mockito.verify(reservationHandler, Mockito.times(0)).punishReservation(null);
+        Mockito.verify(reservationHandler).releaseReservation(null);
+    }
 }

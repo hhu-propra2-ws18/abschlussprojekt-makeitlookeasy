@@ -30,18 +30,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final SearchUserService userDetailsService;
 
     @Autowired
-    public SecurityConfiguration(SearchUserService userDetailsService) {
+    public SecurityConfiguration(final SearchUserService userDetailsService) {
+        super();
         this.userDetailsService = userDetailsService;
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(getPasswordEncoder());
     }
 
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
+    protected void configure(final HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf().disable()
                 .authorizeRequests()
@@ -63,12 +64,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public PasswordEncoder getPasswordEncoder() {
         return new PasswordEncoder() {
             @Override
-            public String encode(CharSequence rawPassword) {
+            public String encode(final CharSequence rawPassword) {
                 return rawPassword.toString();
             }
 
             @Override
-            public boolean matches(CharSequence rawPassword, String s) {
+            public boolean matches(final CharSequence rawPassword, final String s) {
                 return rawPassword.toString().equals(s);
             }
         };

@@ -27,8 +27,8 @@ public class CustomerReviewRepoTest {
 
     @Before
     public void init() {
-        CustomerReview customerReview1 = new CustomerReview();
-        CustomerReview customerReview2 = new CustomerReview();
+        final CustomerReview customerReview1 = new CustomerReview();
+        final CustomerReview customerReview2 = new CustomerReview();
         customerReviewList = new ArrayList<>();
         customerReview1.setText("test1");
         customerReview1.setTimestamp(10012019L);
@@ -46,7 +46,7 @@ public class CustomerReviewRepoTest {
     public void databaseShouldSaveEntities() {
         customerReviews.saveAll(customerReviewList);
 
-        List<CustomerReview> crvws = customerReviews.findAll();
+        final List<CustomerReview> crvws = customerReviews.findAll();
         Assertions.assertThat(crvws.size()).isEqualTo(2);
         Assert.assertTrue(crvws.contains(customerReviewList.get(0)));
         Assert.assertTrue(crvws.contains(customerReviewList.get(1)));

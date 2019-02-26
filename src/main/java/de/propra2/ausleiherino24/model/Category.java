@@ -16,7 +16,7 @@ public enum Category {
 
     private String name;
 
-    Category(String name) {
+    Category(final String name) {
         this.name = name;
     }
 
@@ -28,8 +28,8 @@ public enum Category {
         return name;
     }
 
-    public static Category fromValue(String value) {
-        for (Category category : values()) {
+    public static Category fromValue(final String value) {
+        for (final Category category : values()) {
             if (category.name.equalsIgnoreCase(value)) {
                 return category;
             }

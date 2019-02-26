@@ -108,8 +108,9 @@ public class AccountHandlerTest {
 
     @Test
     public void transferFundsWorksWithValidFunds() {
-        HttpEntity<Double> request = new HttpEntity<>(10.0);
-        ResponseEntity<Double> responseEntity = new ResponseEntity<>(200.0, HttpStatus.ACCEPTED);
+        final HttpEntity<Double> request = new HttpEntity<>(10.0);
+        final ResponseEntity<Double> responseEntity = new ResponseEntity<>(200.0,
+                HttpStatus.ACCEPTED);
 
         Mockito.when(restTemplate
                 .exchange(ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}",
@@ -126,8 +127,9 @@ public class AccountHandlerTest {
 
     @Test
     public void transferFundsFailsIfFundsValidButStatusCodeNotAccepted() {
-        HttpEntity<Double> request = new HttpEntity<>(10.0);
-        ResponseEntity<Double> responseEntity = new ResponseEntity<>(200.0, HttpStatus.CONFLICT);
+        final HttpEntity<Double> request = new HttpEntity<>(10.0);
+        final ResponseEntity<Double> responseEntity = new ResponseEntity<>(200.0,
+                HttpStatus.CONFLICT);
 
         Mockito.when(restTemplate
                 .exchange(ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}",
@@ -144,8 +146,9 @@ public class AccountHandlerTest {
 
     @Test
     public void transferFundsFailsIfFundsNotValid() {
-        HttpEntity<Double> request = new HttpEntity<>(201.0);
-        ResponseEntity<Double> responseEntity = new ResponseEntity<>(200.0, HttpStatus.ACCEPTED);
+        final HttpEntity<Double> request = new HttpEntity<>(201.0);
+        final ResponseEntity<Double> responseEntity = new ResponseEntity<>(200.0,
+                HttpStatus.ACCEPTED);
 
         Mockito.when(restTemplate
                 .exchange(ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}",
@@ -162,8 +165,9 @@ public class AccountHandlerTest {
 
     @Test
     public void addFundsAddsFoundsIfStatusCodeIsAccepted() {
-        HttpEntity<Double> request = new HttpEntity<>(10.0);
-        ResponseEntity<Double> responseEntity = new ResponseEntity<>(200.0, HttpStatus.ACCEPTED);
+        final HttpEntity<Double> request = new HttpEntity<>(10.0);
+        final ResponseEntity<Double> responseEntity = new ResponseEntity<>(200.0,
+                HttpStatus.ACCEPTED);
 
         Mockito.when(restTemplate
                 .exchange(ACCOUNT_URL + "/{account}", HttpMethod.POST, request, Double.class,
@@ -178,8 +182,9 @@ public class AccountHandlerTest {
 
     @Test
     public void addFundsAddsNoFoundsIfStatusCodeIsNotAccepted() {
-        HttpEntity<Double> request = new HttpEntity<>(10.0);
-        ResponseEntity<Double> responseEntity = new ResponseEntity<>(200.0, HttpStatus.BAD_REQUEST);
+        final HttpEntity<Double> request = new HttpEntity<>(10.0);
+        final ResponseEntity<Double> responseEntity = new ResponseEntity<>(200.0,
+                HttpStatus.BAD_REQUEST);
 
         Mockito.when(restTemplate
                 .exchange(ACCOUNT_URL + "/{account}", HttpMethod.POST, request, Double.class,

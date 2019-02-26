@@ -16,32 +16,32 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArticleService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArticleService.class);
+
     private final ArticleRepository articleRepository;
 
-    private final Logger logger = LoggerFactory.getLogger(ArticleService.class);
-
     @Autowired
-    public ArticleService(ArticleRepository articleRepository) {
+    public ArticleService(final ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
     }
 
-    public void saveArticle(Article article, String msg) {
+    public void saveArticle(final Article article, final String msg) {
         articleRepository.save(article);
-        logger.info("{} article '{}' {}.", msg, article.getName(), article.getId());
+        LOGGER.info("{} article '{}' {}.", msg, article.getName(), article.getId());
     }
 
-    public Article findArticleById(Long id) {
-        Optional<Article> article = articleRepository.findById(id);
+    public Article findArticleById(final Long articleId) {
+        final Optional<Article> article = articleRepository.findById(articleId);
 
         if (!article.isPresent()) {
-            logger.warn("Couldn't find article {} in UserRepository.", id);
+            LOGGER.warn("Couldn't find article {} in UserRepository.", articleId);
             throw new NullPointerException("Couldn't find article in ArticleRepository.");
         }
 
         return article.get();
     }
 
-    public List<Article> findAllActiveByUser(User user) {
+    public List<Article> findAllActiveByUser(final User user) {
         return articleRepository.findAllActiveByUser(user);
     }
 
@@ -50,7 +50,7 @@ public class ArticleService {
      *
      * @return all Articles, which are not reserved and are of given category
      */
-    public List<Article> getAllArticlesByCategory(Category category) {
+    public List<Article> getAllArticlesByCategory(final Category category) {
         return getAllActiveAndForRentalArticles().stream()
                 .filter(article -> article.getCategory() == category)
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -74,38 +74,39 @@ public class ArticleService {
      * reserved (a.k.a bound to running case) and free to book, deactivate article. Else, throw
      * Exception.
      *
-     * @param id ID of article to be "deleted".
+     * @param articleId ID of article to be "deleted".
      * @return boolean True, if succeeded. False, if encountered error while processing request.
      */
-    public boolean deactivateArticle(Long id) {
-        Optional<Article> optionalArticle = articleRepository.findById(id);
+    public boolean deactivateArticle(final Long articleId) {
+        final Optional<Article> optionalArticle = articleRepository.findById(articleId);
 
         if (!optionalArticle.isPresent()) {
-            logger.warn("Couldn't find article {} in ArticleRepository.", id);
+            LOGGER.warn("Couldn't find article {} in ArticleRepository.", articleId);
             throw new NullPointerException("Couldn't find requested article in ArticleRepository.");
         }
 
-        Article article = optionalArticle.get();
+        final Article article = optionalArticle.get();
 
         //only able to deactive if article has only cases where the requeststatus is REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED
         if (!article.allCasesClosed()) {
-            logger.warn("Article {} is still reserved, lent or has an open conflict.", id);
+            LOGGER.warn("Article {} is still reserved, lent or has an open conflict.", articleId);
             return false;
         }
 
         article.setActive(false);
         articleRepository.save(article);
-        logger.info("Deactivated article {} [ID={}]", article.getName(), article.getId());
+        LOGGER.info("Deactivated article {} [ID={}]", article.getName(), articleId);
         return true;
     }
 
-    public void updateArticle(Long id, Article article) {
-        Optional<Article> optionalArticle = articleRepository.findById(id);
+    public void updateArticle(final Long articleId, final Article article) {
+        final Optional<Article> optionalArticle = articleRepository.findById(articleId);
 
-        if(!optionalArticle.isPresent())
+        if (!optionalArticle.isPresent()) {
             return;
+        }
 
-        Article oldArticle = optionalArticle.get();
+        final Article oldArticle = optionalArticle.get();
         oldArticle.setForRental(article.isForRental());
         oldArticle.setDeposit(article.getDeposit());
         oldArticle.setCostPerDay(article.getCostPerDay());
@@ -115,7 +116,7 @@ public class ArticleService {
         articleRepository.save(oldArticle);
     }
 
-    public List<Article> getAllArticlesByName(String searchString) {
+    public List<Article> getAllArticlesByName(final String searchString) {
         return articleRepository.findByNameContainsIgnoreCase(searchString);
     }
 }

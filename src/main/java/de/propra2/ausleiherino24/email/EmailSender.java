@@ -19,18 +19,18 @@ public class EmailSender {
     private UserService userService;
 
     @Autowired
-    public EmailSender(EmailConfig config, JavaMailSenderImpl mailSender,
-            SimpleMailMessage message, UserService userService) {
+    public EmailSender(final EmailConfig config, final JavaMailSenderImpl mailSender,
+            final SimpleMailMessage message, final UserService userService) {
         this.config = config;
         this.mailSender = mailSender;
         this.message = message;
         this.userService = userService;
     }
 
-    public void sendConflictEmail(Conflict conflict) {
+    public void sendConflictEmail(final Conflict conflict) {
         configureMailSender();
 
-        User user = userService.findUserByUsername(conflict.getConflictReporterUsername());
+        final User user = userService.findUserByUsername(conflict.getConflictReporterUsername());
 
         message.setFrom(user.getEmail());
         message.setTo("Clearing@Service.com"); // FakeEmail -> does not matter what goes in here
@@ -40,19 +40,21 @@ public class EmailSender {
         mailSender.send(message);
     }
 
-    void sendRemindingEmail(Case c) {
+    void sendRemindingEmail(final Case aCase) {
         configureMailSender();
 
         message.setFrom("Clearing@Service.com");
-        message.setTo(c.getReceiver().getEmail());
-        message.setSubject("Reminder: Article: "+ c.getArticle().getName()+" has to be returned tomorrow!");
+        message.setTo(aCase.getReceiver().getEmail());
+        message.setSubject(
+                "Reminder: Article: " + aCase.getArticle().getName()
+                        + " has to be returned tomorrow!");
         message.setText("Please do not forget to return the article on time!");
 
         mailSender.send(message);
     }
 
-    private void configureMailSender(){
-        Properties properties = new Properties();
+    private void configureMailSender() {
+        final Properties properties = new Properties();
         properties.putAll(config.getProperties());
         mailSender.setHost(config.getHost());
         mailSender.setPort(config.getPort());

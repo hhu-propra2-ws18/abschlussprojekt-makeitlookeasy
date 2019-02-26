@@ -32,6 +32,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Initializer implements ServletContextInitializer {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Initializer.class);
+
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
     private final PersonRepository personRepository;
@@ -40,12 +42,12 @@ public class Initializer implements ServletContextInitializer {
 
     private final Faker faker = new Faker(Locale.GERMAN);
     private static final String SECRET_STRING = "password";
-    private final Logger logger = LoggerFactory.getLogger(Initializer.class);
 
     @Autowired
-    public Initializer(UserRepository userRepository, ArticleRepository articleRepository,
-            PersonRepository personRepository, CaseRepository caseRepository,
-            ImageService imageService) {
+    public Initializer(final UserRepository userRepository,
+            final ArticleRepository articleRepository,
+            final PersonRepository personRepository, final CaseRepository caseRepository,
+            final ImageService imageService) {
         this.userRepository = userRepository;
         this.articleRepository = articleRepository;
         this.personRepository = personRepository;
@@ -56,7 +58,7 @@ public class Initializer implements ServletContextInitializer {
     @Override
     public void onStartup(final ServletContext servletContext) {
         deleteAll();
-        List<Person> persons = initTestArticleWithinUsers();
+        final List<Person> persons = initTestArticleWithinUsers();
         persons.addAll(initTestAccounts(persons));
         addToDatabases(persons);
     }
@@ -65,10 +67,10 @@ public class Initializer implements ServletContextInitializer {
      * Adds a list of persons and their corresponding users and all their articles and all their
      * cases to the fitting databases
      */
-    private void addToDatabases(List<Person> persons) {
+    private void addToDatabases(final List<Person> persons) {
         personRepository.saveAll(persons);
         persons.forEach(person -> {
-            User user = person.getUser();
+            final User user = person.getUser();
             userRepository.save(user);
             if (user.getArticleList() != null) {
                 user.getArticleList().forEach(article -> {
@@ -96,12 +98,12 @@ public class Initializer implements ServletContextInitializer {
      */
     private List<Person> initTestArticleWithinUsers() {
         return IntStream.range(0, 15).mapToObj(value -> {
-            Person person = createPerson(
+            final Person person = createPerson(
                     faker.address().fullAddress(),
                     faker.name().firstName(),
                     faker.name().lastName());
 
-            User user = createUser(
+            final User user = createUser(
                     person.getFirstName() + person.getLastName() + "@mail.de",
                     faker.name().fullName(),
                     SECRET_STRING,
@@ -109,16 +111,16 @@ public class Initializer implements ServletContextInitializer {
 
             IntStream.range(0, faker.random().nextInt(1, 7))
                     .forEach(value1 -> {
-                        int id = faker.random().nextInt(1, 807);
-                        Article article = createArticle(
-                                readPokemonName(id),
+                        final int pokedexId = faker.random().nextInt(1, 807);
+                        final Article article = createArticle(
+                                readPokemonName(pokedexId),
                                 faker.chuckNorris().fact(),
                                 Category.getAllCategories().get(faker.random()
                                         .nextInt(0, Category.getAllCategories().size() - 1)),
                                 user,
                                 (double) faker.random().nextInt(5, 500),
                                 (double) faker.random().nextInt(100, 2000),
-                                storePokemonPic(id),
+                                storePokemonPic(pokedexId),
                                 faker.address().fullAddress()
                         );
                         user.addArticle(article);
@@ -132,8 +134,8 @@ public class Initializer implements ServletContextInitializer {
      * Creates 3 accounts for testing (hans, user, admin) and adds couple of articles and cases to
      * hans
      */
-    private List<Person> initTestAccounts(List<Person> persons) {
-        List<Person> testPersons = new ArrayList<>();
+    private List<Person> initTestAccounts(final List<Person> persons) {
+        final List<Person> testPersons = new ArrayList<>();
         testPersons.add(createUser(
                 "user@mail.com",
                 "user",
@@ -154,7 +156,7 @@ public class Initializer implements ServletContextInitializer {
                         "Mustermann"))
                 .getPerson());
 
-        User hans = createUser(
+        final User hans = createUser(
                 "hans@mail.de",
                 "Hans",
                 SECRET_STRING,
@@ -165,16 +167,16 @@ public class Initializer implements ServletContextInitializer {
 
         IntStream.range(0, 7)
                 .forEach(value1 -> {
-                    int id = faker.random().nextInt(1, 807);
-                    Article article = createArticle(
-                            readPokemonName(id),
+                    final int pokedexId = faker.random().nextInt(1, 807);
+                    final Article article = createArticle(
+                            readPokemonName(pokedexId),
                             faker.chuckNorris().fact(),
                             Category.getAllCategories().get(faker.random()
                                     .nextInt(0, Category.getAllCategories().size() - 1)),
                             hans,
                             (double) faker.random().nextInt(5, 500),
                             (double) faker.random().nextInt(100, 2000),
-                            storePokemonPic(id),
+                            storePokemonPic(pokedexId),
                             faker.address().fullAddress()
                     );
                     hans.addArticle(article);
@@ -182,7 +184,7 @@ public class Initializer implements ServletContextInitializer {
 
         hans.getArticleList().forEach(article ->
                 IntStream.range(0, 2).forEach(a -> {
-                    Case c = createCase(
+                    final Case aCase = createCase(
                             article,
                             persons.get(faker.random().nextInt(0, persons.size() - 1)).getUser(),
                             convertDateAsLong(
@@ -195,14 +197,14 @@ public class Initializer implements ServletContextInitializer {
                                     2019),
                             Case.REQUESTED
                     );
-                    article.addCase(c);
+                    article.addCase(aCase);
                 })
         );
         hans.getArticleList().forEach(article ->
                 IntStream.range(0, 1).forEach(a -> {
-                    int startDay = faker.random().nextInt(0, 31);
-                    int startMonth = faker.random().nextInt(0, 11);
-                    Case c = createCase(
+                    final int startDay = faker.random().nextInt(0, 31);
+                    final int startMonth = faker.random().nextInt(0, 11);
+                    final Case aCase = createCase(
                             article,
                             persons.get(faker.random().nextInt(0, persons.size() - 1)).getUser(),
                             convertDateAsLong(
@@ -215,7 +217,7 @@ public class Initializer implements ServletContextInitializer {
                                     2018),
                             Case.RUNNING
                     );
-                    article.addCase(c);
+                    article.addCase(aCase);
                 })
         );
 
@@ -226,8 +228,9 @@ public class Initializer implements ServletContextInitializer {
     /**
      * Creates a person from parameters
      */
-    private Person createPerson(String address, String firstname, String lastname) {
-        Person person = new Person();
+    private Person createPerson(final String address, final String firstname,
+            final String lastname) {
+        final Person person = new Person();
         person.setAddress(address);
         person.setFirstName(firstname);
         person.setLastName(lastname);
@@ -237,8 +240,9 @@ public class Initializer implements ServletContextInitializer {
     /**
      * Creates an user from parameters
      */
-    private User createUser(String email, String username, String password, Person person) {
-        User user = new User();
+    private User createUser(final String email, final String username, final String password,
+            final Person person) {
+        final User user = new User();
         user.setEmail(email);
         user.setUsername(username);
         user.setPassword(password);
@@ -250,9 +254,11 @@ public class Initializer implements ServletContextInitializer {
     /**
      * Creates an article from parameters
      */
-    private Article createArticle(String name, String description, Category category, User owner,
-            Double costPerDay, Double deposit, String image, String location) {
-        Article article = new Article();
+    private Article createArticle(final String name, final String description,
+            final Category category, final User owner,
+            final Double costPerDay, final Double deposit, final String image,
+            final String location) {
+        final Article article = new Article();
         article.setActive(true);
         article.setName(name);
         article.setDescription(description);
@@ -269,37 +275,39 @@ public class Initializer implements ServletContextInitializer {
     /**
      * Creates a case from parameters
      */
-    private Case createCase(Article article, User receiver, Long starttime, Long endtime,
-            int requestStatus) {
-        Case c = new Case();
-        c.setReceiver(receiver);
-        c.setPrice(article.getCostPerDay());
-        c.setDeposit(article.getDeposit());
-        c.setStartTime(starttime);
-        c.setEndTime(endtime);
-        c.setArticle(article);
-        c.setRequestStatus(requestStatus);
-        PPTransaction ppTransaction = new PPTransaction();
-        c.setPpTransaction(ppTransaction);
+    private Case createCase(final Article article, final User receiver, final Long starttime,
+            final Long endtime,
+            final int requestStatus) {
+        final Case aCase = new Case();
+        aCase.setReceiver(receiver);
+        aCase.setPrice(article.getCostPerDay());
+        aCase.setDeposit(article.getDeposit());
+        aCase.setStartTime(starttime);
+        aCase.setEndTime(endtime);
+        aCase.setArticle(article);
+        aCase.setRequestStatus(requestStatus);
+        final PPTransaction ppTransaction = new PPTransaction();
+        aCase.setPpTransaction(ppTransaction);
         ppTransaction.setReservationId(-1L);
         ppTransaction.setLendingCost(1D);
-        return c;
+        return aCase;
     }
 
     /**
      * Reads a pokemon corresponding to given id from stored files
      */
-    private String readPokemonName(int id) {
+    private String readPokemonName(final int pokedexId) {
         try {
-            File resource = new ClassPathResource(
-                    "static/Pokemon/names/" + id + ".txt").getFile();
-            String name = new String(Files
+            final File resource = new ClassPathResource(
+                    "static/Pokemon/names/" + pokedexId + ".txt").getFile();
+            final String name = new String(Files
                     .readAllBytes(resource.toPath()))
                     .trim();
-            return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+            return name.substring(0, 1).toUpperCase(Locale.ENGLISH)
+                    + name.substring(1).toLowerCase(Locale.ENGLISH);
         } catch (IOException e) {
-            logger.warn("Couldn't parse name of Pokémon {}.", id, e);
-            logger.info("Returning empty String as 'name'.");
+            LOGGER.warn("Couldn't parse name of Pokémon {}.", pokedexId, e);
+            LOGGER.info("Returning empty String as 'name'.");
             return "";
         }
     }
@@ -307,14 +315,14 @@ public class Initializer implements ServletContextInitializer {
     /**
      * Stores a pokemon pic corresponding to given id using ImageService
      */
-    private String storePokemonPic(int id) {
+    private String storePokemonPic(final int pokedexId) {
         File file = null;
         try {
-            String fileName = "static/Pokemon/images/" + id + ".jpg";
-            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+            final String fileName = "static/Pokemon/images/" + pokedexId + ".jpg";
+            final ClassLoader classLoader = ClassLoader.getSystemClassLoader();
             file = new File(classLoader.getResource(fileName).getFile());
         } catch (Exception e) {
-            logger.warn("Couldn't parse picture of Pokémon {}.", id, e);
+            LOGGER.warn("Couldn't parse picture of Pokémon {}.", pokedexId, e);
         }
         return imageService.storeFile(file, null);
     }
@@ -322,7 +330,7 @@ public class Initializer implements ServletContextInitializer {
     /**
      * Converts a Date to Long
      */
-    private Long convertDateAsLong(int day, int month, int year) {
+    private Long convertDateAsLong(final int day, final int month, final int year) {
         return new GregorianCalendar(year, month, day).getTimeInMillis();
     }
 }

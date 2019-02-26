@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class PersonService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersonService.class);
+
     private final PersonRepository personRepository;
 
-    private final Logger logger = LoggerFactory.getLogger(PersonService.class);
-
     @Autowired
-    public PersonService(PersonRepository personRepository) {
+    public PersonService(final PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
 
@@ -24,18 +24,18 @@ public class PersonService {
      * Saves created/updated Person object to database.
      *
      * @param person Person object that gets stored in databased.
-     * @param msg String with message for logger. Either "Created" or "Updated".
+     * @param msg String with message for LOGGER. Either "Created" or "Updated".
      */
-    void savePerson(Person person, String msg) {
+    void savePerson(final Person person, final String msg) {
         personRepository.save(person);
-        logger.info("{} person profile [ID={}]", msg, person.getId());
+        LOGGER.info("{} person profile [ID={}]", msg, person.getId());
     }
 
-    Person findPersonById(Long id) {
-        Optional<Person> optionalPerson = personRepository.findById(id);
+    Person findPersonById(final Long id) {
+        final Optional<Person> optionalPerson = personRepository.findById(id);
 
         if (!optionalPerson.isPresent()) {
-            logger.warn("Couldn't find person {} in database.", id);
+            LOGGER.warn("Couldn't find person {} in database.", id);
             throw new NullPointerException();
         }
 

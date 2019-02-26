@@ -15,32 +15,34 @@ import org.springframework.stereotype.Service;
 @Service
 public class CaseEndTimeReminder {
 
-    private final Logger logger = LoggerFactory.getLogger(CaseEndTimeReminder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CaseEndTimeReminder.class);
 
     private CaseRepository cases;
     private EmailSender emailSender;
 
     @Autowired
-    public CaseEndTimeReminder(CaseRepository cases, EmailSender emailSender){
+    public CaseEndTimeReminder(final CaseRepository cases, final EmailSender emailSender) {
         this.cases = cases;
         this.emailSender = emailSender;
     }
 
     //@Scheduled(fixedDelay = 5000, initialDelay = 20000)
     void sendRemindingEmail() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        LocalDateTime currentTime = LocalDate.parse(LocalDateTime.now().format(formatter), formatter).atStartOfDay();
-        List<Case> activeCases = cases.findAll()
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        final LocalDateTime currentTime = LocalDate
+                .parse(LocalDateTime.now().format(formatter), formatter).atStartOfDay();
+        final List<Case> activeCases = cases.findAll()
                 .stream()
                 .filter(c -> c.getRequestStatus() == Case.RUNNING)
-                .filter(c -> LocalDate.parse(c.getFormattedEndTime(), formatter).atStartOfDay().isEqual(currentTime.plusDays(1L)))
+                .filter(c -> LocalDate.parse(c.getFormattedEndTime(), formatter).atStartOfDay()
+                        .isEqual(currentTime.plusDays(1L)))
                 .collect(Collectors.toList());
 
         activeCases.forEach(c -> {
             try {
                 emailSender.sendRemindingEmail(c);
             } catch (Exception e) {
-                logger.info("Could not send reminder email for case {}.", c.getId());
+                LOGGER.info("Could not send reminder email for case {}.", c.getId());
             }
         });
     }

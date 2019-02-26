@@ -53,19 +53,19 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver")
     private List<Case> casesReceiver;
 
-    public User(User user) {
+    public User(final User user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.email = user.getEmail();
         this.role = user.getRole();
     }
 
-    public void addArticle(Article article) {
+    public void addArticle(final Article article) {
         addArticle(article, false);
     }
 
     @SuppressWarnings("Duplicates")
-    void addArticle(Article article, boolean repetition) {
+    void addArticle(final Article article, final boolean repetition) {
         if (article == null) {
             return;
         }
@@ -82,16 +82,16 @@ public class User {
         }
     }
 
-    public void removeArticle(Article article) {
+    public void removeArticle(final Article article) {
         articleList.remove(article);
         article.setOwner(null);
     }
 
-    public void setPerson(Person person) {
+    public void setPerson(final Person person) {
         setPerson(person, false);
     }
 
-    void setPerson(Person person, boolean repetition) {
+    void setPerson(final Person person, final boolean repetition) {
         this.person = person;
         if (person != null && !repetition) {
             person.setUser(this, true);

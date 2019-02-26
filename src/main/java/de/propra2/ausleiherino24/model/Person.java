@@ -35,11 +35,11 @@ public class Person {
 
     String address;
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         setUser(user, false);
     }
 
-    void setUser(User user, boolean repetition) {
+    void setUser(final User user, final boolean repetition) {
         this.user = user;
         if (user != null && !repetition) {
             user.setPerson(this, true);

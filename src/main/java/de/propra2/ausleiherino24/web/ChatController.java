@@ -17,30 +17,33 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ChatController {
+
     private final UserService userService;
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
-    public ChatController(UserService userService, SimpMessagingTemplate simpMessagingTemplate) {
+    public ChatController(final UserService userService,
+            final SimpMessagingTemplate simpMessagingTemplate) {
         this.userService = userService;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage, Principal principal) {
-        User user = userService.findUserByPrincipal(principal);
+    public ChatMessage sendMessage(final @Payload ChatMessage chatMessage,
+            final Principal principal) {
+        final User user = userService.findUserByPrincipal(principal);
         chatMessage.setSender(user.getUsername());
         return chatMessage;
     }
 
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")
-    public ChatMessage addUser(@Payload ChatMessage chatMessage,
-                               SimpMessageHeaderAccessor headerAccessor,
-                                Principal principal) {
+    public ChatMessage addUser(final @Payload ChatMessage chatMessage,
+            final SimpMessageHeaderAccessor headerAccessor,
+            final Principal principal) {
         // Add username in web socket session
-        User user = userService.findUserByPrincipal(principal);
+        final User user = userService.findUserByPrincipal(principal);
 
         headerAccessor.getSessionAttributes().put("username", user.getUsername());
         chatMessage.setSender(user.getUsername());
@@ -48,16 +51,16 @@ public class ChatController {
     }
 
     @GetMapping("/chatBoard")
-    public ModelAndView chatBoard(@Header("simpSessionId") String sessionId) {
-        ModelAndView mav = new ModelAndView("/chatBoard");
+    public ModelAndView chatBoard(final @Header("simpSessionId") String sessionId) {
+        final ModelAndView mav = new ModelAndView("/chatBoard");
         mav.addObject("sessionId", sessionId);
         return mav;
     }
 
     /* user chat */
     @MessageMapping("/chat.privateMessage")
-    public void sendSpecific(@Payload ChatMessage msg, Principal principal) {
-        User user = userService.findUserByPrincipal(principal);
+    public void sendSpecific(final @Payload ChatMessage msg, final Principal principal) {
+        final User user = userService.findUserByPrincipal(principal);
         msg.setSender(user.getUsername());
 
         simpMessagingTemplate.convertAndSendToUser(

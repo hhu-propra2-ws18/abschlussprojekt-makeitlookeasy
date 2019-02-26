@@ -2,13 +2,19 @@ package de.propra2.ausleiherino24.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.web.multipart.MultipartFile;
 
 public class ImageServiceTest {
 
@@ -17,7 +23,7 @@ public class ImageServiceTest {
 
     @Before
     public void init() {
-        imageService = new ImageService(path);
+        imageService = spy(new ImageService(path));
     }
 
     @After
@@ -104,7 +110,7 @@ public class ImageServiceTest {
 
     @Test
     public void fileExists() throws IOException {
-        File file = new File(path + "/x.txt");
+        final File file = new File(path + "/x.txt");
         file.createNewFile();
 
         assertTrue(imageService.fileExists(path + "/x.txt"));
@@ -117,22 +123,63 @@ public class ImageServiceTest {
 
     @Test
     public void onlyDirectoryExists() {
-        File file = new File(path + "/x");
+        final File file = new File(path + "/x");
         file.mkdir();
 
         assertFalse(imageService.fileExists(path + "/x"));
     }
 
+    @Test
+    public void buildPath() {
+        when(imageService.getUploadDirectoryPath()).thenReturn("/");
+
+        assertEquals("/test/abc.txt", imageService.buildPath("abc.txt", "test"));
+    }
+
+    @Test
+    public void findFile() throws IOException {
+        new File(path + "/0").mkdir();
+        final File file = new File(path + "/0/test.txt");
+        file.createNewFile();
+        when(imageService.getUploadDirectoryPath()).thenReturn(path);
+
+        assertEquals(file, imageService.getFile("test.txt", 100L));
+    }
+
+    @Test
+    public void findFileWithoutBinningId() throws IOException {
+        final File file = new File(path + "/test.txt");
+        file.createNewFile();
+        when(imageService.getUploadDirectoryPath()).thenReturn(path);
+
+        assertEquals(file, imageService.getFile("test.txt", null));
+    }
+
+    @Test
+    public void findNotExistingFile() {
+        assertNull(imageService.getFile("test.txt", null));
+    }
+
+    @Test
+    public void storeMultipartFile() throws IOException {
+        final MultipartFile file = mock(MultipartFile.class);
+        when(file.getOriginalFilename()).thenReturn("test.txt");
+        when(imageService.generateFilePath("0", "txt")).thenReturn(path + "/0/test.txt");
+
+        assertEquals("test.txt", imageService.store(file, 100L));
+        verify(file).transferTo(new File(path + "/0/test.txt"));
+    }
+
 
     //Deletes the given directory and all included directories and files
-    private void cleanDir(File dir) {
+    private void cleanDir(final File dir) {
         if (!dir.isDirectory()) {
             dir.delete();
             return;
         }
 
-        File[] files = dir.listFiles();
-        for (File file : files) {
+        final File[] files = dir.listFiles();
+        for (final File file : files) {
             if (!file.delete()) {
                 cleanDir(file);
             }

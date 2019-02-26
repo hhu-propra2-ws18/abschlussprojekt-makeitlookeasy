@@ -15,74 +15,75 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ImageService {
 
-    private final Logger logger = LoggerFactory.getLogger(ImageService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageService.class);
 
     private static final int NR_OF_BINS = 100;
     private String uploadDirectoryPath;
 
     @Autowired
-    public ImageService(@Value("${uploadDirectoryPath}") String uploadDirectoryPath) {
+    public ImageService(final @Value("${uploadDirectoryPath}") String uploadDirectoryPath) {
         this.uploadDirectoryPath = uploadDirectoryPath;
         createUploadDirectoryIfNotExists();
     }
 
-    public String store(MultipartFile file, Long binningId) {
+    public String store(final MultipartFile file, final Long binningId) {
         if (file == null) {
             return null;
         }
 
-        String prefix = ensureBinning(binningId);
+        final String prefix = ensureBinning(binningId);
 
-        String extension = getFileExtension(file.getOriginalFilename());
-        File dest = new File(generateFilePath(prefix, extension));
+        final String extension = getFileExtension(file.getOriginalFilename());
+        final File dest = new File(generateFilePath(prefix, extension));
 
         try {
             file.transferTo(dest);
         } catch (Exception e) {
-            logger.warn("Couldn't move file {} to desired destination '{}'.", file.getName(),
+            LOGGER.warn("Couldn't move file {} to desired destination '{}'.", file.getName(),
                     dest.getAbsolutePath());
         }
 
         return dest.getName();
     }
 
-    public String storeFile(File inputFile, Long binningId) {
+    public String storeFile(final File inputFile, final Long binningId) {
         if (inputFile == null) {
             return null;
         }
 
-        String prefix = ensureBinning(binningId);
+        final String prefix = ensureBinning(binningId);
 
-        String extension = getFileExtension(inputFile.getName());
-        File destinationFile = new File(generateFilePath(prefix, extension));
+        final String extension = getFileExtension(inputFile.getName());
+        final File destinationFile = new File(generateFilePath(prefix, extension));
 
         try (FileOutputStream outputStream = new FileOutputStream(destinationFile)) {
             try (FileInputStream inputStream = new FileInputStream(inputFile)) {
 
-                byte[] buffer = new byte[1024];
+                final byte[] buffer = new byte[1024];
 
-                int length;
+                int length = inputStream.read(buffer);
 
-                while ((length = inputStream.read(buffer)) > 0) {
+                while (length > 0) {
                     outputStream.write(buffer, 0, length);
+                    length = inputStream.read(buffer);
                 }
             }
         } catch (Exception e) {
-            logger.warn("Couldn't store uploaded file in database.", e);
+            LOGGER.warn("Couldn't store uploaded file in database.", e);
         }
 
         return destinationFile.getName();
     }
 
-    public File getFile(String fileName, Long binningId) {
-        String binName = binningId == null ? "" : resolveBin(binningId).toString();
+    public File getFile(final String fileName, final Long binningId) {
+        final String binName = binningId == null ? "" : resolveBin(binningId).toString();
 
-        File file = new File(buildPath(fileName, binName));
+        final File file = new File(buildPath(fileName, binName));
 
         return file.exists() ? file : null;
     }
 
-    private String generateFilePath(String prefix, String fileEnding) {
+    String generateFilePath(final String prefix, final String fileEnding) {
         String uniqueFilepath = buildPath(buildFilename(fileEnding), prefix);
 
         while (fileExists(uniqueFilepath)) {
@@ -92,43 +93,43 @@ public class ImageService {
         return uniqueFilepath;
     }
 
-    boolean fileExists(String path) {
-        File f = new File(path);
+    boolean fileExists(final String path) {
+        final File f = new File(path);
         return f.exists() && !f.isDirectory();
     }
 
-    private String buildPath(String fileName, String prefix) {
+    String buildPath(final String fileName, final String prefix) {
         return Paths.get(getUploadDirectoryPath(), prefix, fileName).toString();
     }
 
-    private String getUploadDirectoryPath() {
-        String rootPath = Paths.get(".").toAbsolutePath().normalize().toString();
+    String getUploadDirectoryPath() {
+        final String rootPath = Paths.get(".").toAbsolutePath().normalize().toString();
         return Paths.get(rootPath, this.uploadDirectoryPath).toString();
     }
 
-    private String buildFilename(String fileEnding) {
-        return (UUID.randomUUID() + "." + fileEnding);
+    private String buildFilename(final String fileEnding) {
+        return UUID.randomUUID() + "." + fileEnding;
     }
 
-    String ensureBinning(Long binningId) {
+    String ensureBinning(final Long binningId) {
         if (binningId == null) {
             return "";
         }
 
-        String binningDirName = resolveBin(binningId).toString();
+        final String binningDirName = resolveBin(binningId).toString();
         createBinningDirectory(binningDirName);
 
         return binningDirName;
     }
 
-    private Long resolveBin(Long binningId) {
+    private Long resolveBin(final Long binningId) {
         return binningId % NR_OF_BINS;
     }
 
-    void createBinningDirectory(String name) {
-        String binPath = Paths.get(getUploadDirectoryPath(), name).toString();
+    void createBinningDirectory(final String name) {
+        final String binPath = Paths.get(getUploadDirectoryPath(), name).toString();
 
-        File binningDir = new File(binPath);
+        final File binningDir = new File(binPath);
 
         if (!binningDir.exists()) {
             binningDir.mkdir();
@@ -136,19 +137,19 @@ public class ImageService {
     }
 
     void createUploadDirectoryIfNotExists() {
-        File uploadDir = new File(getUploadDirectoryPath());
+        final File uploadDir = new File(getUploadDirectoryPath());
 
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
         }
     }
 
-    String getFileExtension(String fileName) {
+    String getFileExtension(final String fileName) {
         if (fileName == null) {
             return "";
         }
 
-        int i = fileName.lastIndexOf('.');
+        final int i = fileName.lastIndexOf('.');
 
         return i > 0 ? fileName.substring(i + 1) : "";
     }

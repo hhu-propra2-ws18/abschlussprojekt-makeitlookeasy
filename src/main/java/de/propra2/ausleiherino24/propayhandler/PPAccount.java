@@ -14,20 +14,20 @@ class PPAccount {
     double amount;
     List<Reservation> reservations;
 
-    PPAccount(String account, Double amount) {
+    PPAccount(final String account, final Double amount) {
         this.account = account;
         this.amount = amount;
     }
 
     double reservationAmount() {
         double reserved = 0;
-        for (int i = 0; i < reservations.size(); i++) {
-            reserved += reservations.get(i).getAmount();
+        for (final Reservation reservation : reservations) {
+            reserved += reservation.getAmount();
         }
         return reserved;
     }
 
-    public void addReservation(Double amount) {
+    void addReservation(final Double amount) {
         this.reservations.add(new Reservation(this.reservations.size() + 1L, amount));
     }
 }

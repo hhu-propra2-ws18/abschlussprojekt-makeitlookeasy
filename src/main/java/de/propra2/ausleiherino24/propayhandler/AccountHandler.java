@@ -2,7 +2,6 @@ package de.propra2.ausleiherino24.propayhandler;
 
 import de.propra2.ausleiherino24.model.Case;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,53 +13,50 @@ public class AccountHandler {
     private RestTemplate restTemplate;
 
     @Autowired
-    public AccountHandler(RestTemplate restTemplate) {
+    public AccountHandler(final RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
 
-    PPAccount getAccountData(String accountName) {
+    PPAccount getAccountData(final String accountName) {
         return restTemplate
                 .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
     }
 
-    public double checkFunds(String accountName) {
-        PPAccount account;
-        account = restTemplate
-                .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
+    public double checkFunds(final String accountName) {
+        final PPAccount account = getAccountData(accountName);
         return account.getAmount() - account.reservationAmount();
     }
 
 
-    public boolean hasValidFunds(Case aCase) {
+    public boolean hasValidFunds(final Case aCase) {
         return hasValidFunds(aCase.getReceiver().getUsername(),
                 aCase.getPpTransaction().getTotalPayment());
     }
 
-    public boolean hasValidFunds(String accountName, double requestedFunds) {
+    public boolean hasValidFunds(final String accountName, final double requestedFunds) {
         return checkFunds(accountName) >= requestedFunds;
     }
 
     //TODO: Used? Fix!
-    public void addFunds(String username, Double amount) {
-        HttpEntity<Double> request = new HttpEntity<>(amount);
+    public void addFunds(final String username, final Double amount) {
 
         restTemplate.postForLocation(ACCOUNT_URL + ACCOUNT_DEFAULT + "?amount=" + amount.toString(),
-                request, username);
+                null, username);
     }
 
     //TODO: Method extraction necessary? Discuss!
-    void transferFunds(Case aCase) {
+    void transferFunds(final Case aCase) {
         transferFunds(aCase.getReceiver().getUsername(), aCase.getOwner().getUsername(),
                 aCase.getPpTransaction().getLendingCost());
     }
 
-    private void transferFunds(String sourceUser, String targetUser, Double amount) {
-        HttpEntity<Double> request = new HttpEntity<>(amount);
+    private void transferFunds(final String sourceUser, final String targetUser,
+            final Double amount) {
 
         restTemplate.postForLocation(
                 ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}" + "?amount=" + amount
-                        .toString(), request, sourceUser, targetUser);
+                        .toString(), null, sourceUser, targetUser);
     }
 
 }
