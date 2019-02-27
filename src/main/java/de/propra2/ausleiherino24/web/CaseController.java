@@ -95,9 +95,11 @@ public class CaseController {
     @PostMapping("/buyArticle")
     public String buyArticle(final @RequestParam Long articleId,
             final Principal principal) {
-        caseService.sellArticle(articleId, principal);
+        if(caseService.sellArticle(articleId, principal)){
+            return "redirect:/?access";
+        }
         // TODO: Show the user, whether the request was successful or not.
-        return "redirect:/article?id=" + articleId;
+        return "redirect:/?failed";
     }
 
     /**

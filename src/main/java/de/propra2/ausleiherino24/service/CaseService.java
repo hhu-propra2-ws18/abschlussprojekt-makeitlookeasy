@@ -349,7 +349,6 @@ public class CaseService {
             c.setPrice(article.getCostPerDay());
             c.setArticle(article);
             c.setReceiver(costumer);
-            articleService.deactivateArticle(articleId);
             PPTransaction transaction = new PPTransaction();
             transaction.setLendingCost(article.getCostPerDay());
             transaction.setDate(new Date().getTime());
@@ -358,6 +357,7 @@ public class CaseService {
             caseRepository.save(c);
             accountHandler.transferFundsByCase(c);
             articleService.setSellStatusFromArticle(articleId, false);
+            articleService.deactivateArticle(articleId);
             return true;
         }
         return false;
