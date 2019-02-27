@@ -23,6 +23,9 @@ public class CalendarEventService {
     private final CaseRepository caseRepsitory;
     private final ArticleService articleService;
 
+    /**
+     * Autowired all needed repositorys and services.
+     */
     @Autowired
     public CalendarEventService(final ArticleRepository articleRepository,
             CaseRepository caseRepository, ArticleService articleService) {
