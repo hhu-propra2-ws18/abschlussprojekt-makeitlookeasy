@@ -45,6 +45,7 @@ public class CalendarEventService {
             CalendarEvent calendarEvent = new CalendarEvent();
             calendarEvent.setStart(c.getStartTime());
             calendarEvent.setEnd(c.getEndTime());
+            allCalendarevents.add(calendarEvent);
         }
         return allCalendarevents;
     }
