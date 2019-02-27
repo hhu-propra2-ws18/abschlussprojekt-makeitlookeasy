@@ -2,7 +2,10 @@ package de.propra2.ausleiherino24.data;
 
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
+import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -25,6 +28,9 @@ public class CaseRepoTest {
 
     @Autowired
     private UserRepository users;
+
+    @Autowired
+    private PersonRepository persons;
 
     private Case case1;
     private Case case2;
@@ -146,4 +152,83 @@ public class CaseRepoTest {
         Assertions.assertThat(expectedCase).containsExactly(case1, case2);
     }
 
+    @Test
+    public void customQueryFindAllExpiredCasesByUserIdShouldReturnTwoCases(){
+        User user1 = new User();
+        users.save(user1);
+
+        case1.getArticle().setForSale(false);
+        case1.getArticle().setOwner(user1);
+        case1.setEndTime(0L);
+        case1.setRequestStatus(8);
+
+        case2.getArticle().setForSale(false);
+        case2.getArticle().setOwner(user1);
+        case2.setEndTime(0L);
+        case2.setRequestStatus(14);
+
+        final List<Case> actualCases = cases.findAllExpiredCasesByUserId(case1.getArticle().getOwner().getId(), 1L);
+        final List<Case> expectedCases = new ArrayList<>(Arrays.asList(case1, case2));
+
+        Assertions.assertThat(actualCases.size()).isEqualTo(2);
+        Assertions.assertThat(actualCases).isEqualTo(expectedCases);
+    }
+
+    @Test
+    public void customQueryFindAllExpiredCasesByUserIdShouldReturnZeroCases(){
+        User user1 = new User();
+        users.save(user1);
+
+        case1.getArticle().setForSale(true);
+        case1.getArticle().setOwner(user1);
+        case1.setEndTime(2L);
+        case1.setRequestStatus(8);
+
+        case2.getArticle().setForSale(false);
+        case2.getArticle().setOwner(user1);
+        case2.setEndTime(0L);
+        case2.setRequestStatus(5);
+
+        final List<Case> actualCases = cases.findAllExpiredCasesByUserId(case1.getArticle().getOwner().getId(), 1L);
+
+        Assertions.assertThat(actualCases.isEmpty()).isTrue();
+    }
+
+    @Test
+    public void customQueryFindAllRequestedCasesByUserIdShouldReturnTwoCases(){
+        User user1 = new User();
+        users.save(user1);
+
+        case1.getArticle().setForSale(false);
+        case1.getArticle().setOwner(user1);
+        case1.setRequestStatus(1);
+
+        case2.getArticle().setForSale(false);
+        case2.getArticle().setOwner(user1);
+        case2.setRequestStatus(4);
+
+        final List<Case> actualCases = cases.findAllRequestedCasesByUserId(case1.getArticle().getOwner().getId());
+        final List<Case> expectedCases = new ArrayList<>(Arrays.asList(case1, case2));
+
+        Assertions.assertThat(actualCases.size()).isEqualTo(2);
+        Assertions.assertThat(actualCases).isEqualTo(expectedCases);
+    }
+
+    @Test
+    public void customQueryFindAllRequestedCasesByUserIdShouldReturnZeroCases(){
+        User user1 = new User();
+        users.save(user1);
+
+        case1.getArticle().setForSale(true);
+        case1.getArticle().setOwner(user1);
+        case1.setRequestStatus(1);
+
+        case2.getArticle().setForSale(false);
+        case2.getArticle().setOwner(new User());
+        case2.setRequestStatus(14);
+
+        final List<Case> actualCases = cases.findAllRequestedCasesByUserId(case1.getArticle().getOwner().getId());
+
+        Assertions.assertThat(actualCases.isEmpty()).isTrue();
+    }
 }
