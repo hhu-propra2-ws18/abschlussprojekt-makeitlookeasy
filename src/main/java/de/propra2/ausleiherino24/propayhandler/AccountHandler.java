@@ -26,7 +26,7 @@ public class AccountHandler {
 
 
     /**
-     * get Propay Account
+     * get Propay Account.
      *
      * @param accountName name of account to get
      * @return returns all data of PropayAccount
@@ -37,6 +37,7 @@ public class AccountHandler {
     }
 
     /**
+     * check funds of account.
      * @param accountName account for which funds are to be checked
      * @return returns amount of unreserved Funds
      */
@@ -47,7 +48,7 @@ public class AccountHandler {
 
 
     /**
-     * checks if lender has enough money to proceed with case
+     * checks if lender has enough money to proceed with case.
      *
      * @param aCase contains necessary Data
      * @return has enough funds to proceed with Case?
@@ -58,6 +59,7 @@ public class AccountHandler {
     }
 
     /**
+     * checks if account has requested funds.
      * @param accountName name of user to be checked
      * @param requestedFunds amount of requested Funds to be compared with actual free Funds
      * @return has requested Funds?
@@ -67,7 +69,7 @@ public class AccountHandler {
     }
 
     /**
-     * adds funds to user account
+     * adds funds to user account.
      *
      * @param username user to get funds
      * @param amount amount to be added
@@ -79,7 +81,7 @@ public class AccountHandler {
     }
 
     /**
-     * calls transfer for lending cost of case with necessary Data
+     * calls transfer for lending cost of case with necessary Data.
      *
      * @param currentCase case containing all necessary Data
      */
@@ -90,7 +92,7 @@ public class AccountHandler {
 
 
     /**
-     * transfers funds from source to target
+     * transfers funds from source to target.
      *
      * @param sourceUser user to give Funds
      * @param targetUser user to receive Funds

@@ -20,6 +20,7 @@ class Reservation {
     }
 
     /**
+     * base constructor.
      * @param reservationId id of reservation in Propay.
      * @param amount amount of reservation.
      */
