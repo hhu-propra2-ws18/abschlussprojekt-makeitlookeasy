@@ -99,6 +99,12 @@ public class ImageService {
         return file.exists() ? file : null;
     }
 
+    /**
+     *
+     * @param prefix
+     * @param fileEnding
+     * @return
+     */
     String generateFilePath(final String prefix, final String fileEnding) {
         String uniqueFilepath = buildPath(buildFilename(fileEnding), prefix);
 
@@ -109,20 +115,34 @@ public class ImageService {
         return uniqueFilepath;
     }
 
+    /**
+     * checks whether given file exists.
+     */
     boolean fileExists(final String path) {
         final File file = new File(path);
         return file.exists() && !file.isDirectory();
     }
 
+    /**
+     * returns path to the given file.
+     * @param fileName target file
+     * @param prefix positiom of target file in upload directory
+     */
     String buildPath(final String fileName, final String prefix) {
         return Paths.get(getUploadDirectoryPath(), prefix, fileName).toString();
     }
 
-    final String getUploadDirectoryPath() {
+    /**
+     * returns absolut path of upload directory
+     */
+    String getUploadDirectoryPath() {
         final String rootPath = Paths.get(".").toAbsolutePath().normalize().toString();
         return Paths.get(rootPath, this.uploadDirectoryPath).toString();
     }
 
+    /**
+     * returns and random file name with given file ending.
+     */
     private String buildFilename(final String fileEnding) {
         return UUID.randomUUID() + "." + fileEnding;
     }
@@ -142,6 +162,10 @@ public class ImageService {
         return binningId % NR_OF_BINS;
     }
 
+    /**
+     * Creates new directory in upload directory.
+     * @param name relativ path of the directory that should be created.
+     */
     void createBinningDirectory(final String name) {
         final String binPath = Paths.get(getUploadDirectoryPath(), name).toString();
 
@@ -152,7 +176,10 @@ public class ImageService {
         }
     }
 
-    final void createUploadDirectoryIfNotExists() {
+    /**
+     * Creates upload directory if it doesn't exists.
+     */
+    void createUploadDirectoryIfNotExists() {
         final File uploadDir = new File(getUploadDirectoryPath());
 
         if (!uploadDir.exists()) {
@@ -160,6 +187,9 @@ public class ImageService {
         }
     }
 
+    /**
+     * returns file extension of given filename.
+     */
     String getFileExtension(final String fileName) {
         if (fileName == null) {
             return "";

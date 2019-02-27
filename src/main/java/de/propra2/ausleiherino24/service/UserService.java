@@ -25,6 +25,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Saves given user in database.
+     */
     private void saveUser(final User user, final String msg) {
         userRepository.save(user);
         LOGGER.info("{} user profile {} [ID={}]", msg, user.getUsername(), user.getId());
@@ -110,6 +113,9 @@ public class UserService {
         return userRepository.findById(userId).orElse(null);
     }
 
+    /**
+     * Checks whether given username equals the given principalname.
+     */
     public boolean isCurrentUser(final String username, final String currentPrincipalName) {
         return username.equals(currentPrincipalName);
     }
