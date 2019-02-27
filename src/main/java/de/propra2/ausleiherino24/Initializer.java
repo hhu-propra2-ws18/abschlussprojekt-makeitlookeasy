@@ -109,9 +109,7 @@ public class Initializer implements ServletContextInitializer {
 
             final User user = createUser(
                     person.getFirstName() + person.getLastName() + "@mail.de",
-                    faker.name().fullName(),
-                    SECRET_STRING,
-                    person, USER);
+                    faker.name().fullName(), person, USER);
 
             IntStream.range(0, faker.random().nextInt(1, 7))
                     .forEach(value1 -> {
@@ -142,8 +140,7 @@ public class Initializer implements ServletContextInitializer {
         final List<Person> testPersons = new ArrayList<>();
         testPersons.add(createUser(
                 "user@mail.com",
-                "user",
-                SECRET_STRING,
+                USER,
                 createPerson(
                         "HHU",
                         "Max",
@@ -152,8 +149,7 @@ public class Initializer implements ServletContextInitializer {
 
         testPersons.add(createUser(
                 "useradmin@mail.com",
-                "admine",
-                SECRET_STRING,
+                ADMIN,
                 createPerson(
                         "HHU",
                         "Maxi",
@@ -163,7 +159,6 @@ public class Initializer implements ServletContextInitializer {
         final User hans = createUser(
                 "hans@mail.de",
                 "Hans",
-                SECRET_STRING,
                 createPerson(
                         "HHU",
                         "Hans",
@@ -232,24 +227,24 @@ public class Initializer implements ServletContextInitializer {
     /**
      * Creates a person from parameters.
      */
-    private Person createPerson(final String address, final String firstname,
-            final String lastname) {
+    private Person createPerson(final String address, final String firstName,
+            final String lastName) {
         final Person person = new Person();
         person.setAddress(address);
-        person.setFirstName(firstname);
-        person.setLastName(lastname);
+        person.setFirstName(firstName);
+        person.setLastName(lastName);
         return person;
     }
 
     /**
-     * Creates an user from parameters.
+     * Creates a user from parameters.
      */
-    private User createUser(final String email, final String username, final String password,
-            final Person person, final String role) {
+    private User createUser(final String email, final String username, final Person person,
+            String role) {
         final User user = new User();
         user.setEmail(email);
         user.setUsername(username);
-        user.setPassword(password);
+        user.setPassword(SECRET_STRING);
         user.setRole(role);
         user.setPerson(person);
         return user;
@@ -259,9 +254,8 @@ public class Initializer implements ServletContextInitializer {
      * Creates an article from parameters.
      */
     private Article createArticle(final String name, final String description,
-            final Category category, final User owner,
-            final Double costPerDay, final Double deposit, final String image,
-            final String location) {
+            final Category category, final User owner, final Double costPerDay,
+            final Double deposit, final String image, final String location) {
         final Article article = new Article();
         article.setActive(true);
         article.setName(name);
@@ -279,15 +273,14 @@ public class Initializer implements ServletContextInitializer {
     /**
      * Creates a case from parameters.
      */
-    private Case createCase(final Article article, final User receiver, final Long starttime,
-            final Long endtime,
-            final int requestStatus) {
+    private Case createCase(final Article article, final User receiver, final Long startTime,
+            final Long endTime, final int requestStatus) {
         final Case aCase = new Case();
         aCase.setReceiver(receiver);
         aCase.setPrice(article.getCostPerDay());
         aCase.setDeposit(article.getDeposit());
-        aCase.setStartTime(starttime);
-        aCase.setEndTime(endtime);
+        aCase.setStartTime(startTime);
+        aCase.setEndTime(endTime);
         aCase.setArticle(article);
         aCase.setRequestStatus(requestStatus);
         final PpTransaction ppTransaction = new PpTransaction();
@@ -325,7 +318,7 @@ public class Initializer implements ServletContextInitializer {
         final ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         final String filePath = classLoader.getResource(fileName).getFile();
 
-        if(filePath == null) {
+        if (filePath == null) {
             LOGGER.warn("Couldn't parse picture of Pokémon {}.", pokedexId);
             return null;
         }

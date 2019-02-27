@@ -32,13 +32,16 @@ public class ArticleService {
         this.imageService = imageService;
     }
 
+    /**
+     * Saves the given article in the database.
+     */
     public void saveArticle(final Article article, final String msg) {
         articleRepository.save(article);
         LOGGER.info("{} article '{}' {}.", msg, article.getName(), article.getId());
     }
 
     /**
-     * Finds an article by its id. Throws NullPointerException in cases, the article is not present
+     * Finds an article by its id. Throws NullPointerException in cases, the article is not present.
      */
     public Article findArticleById(final Long articleId) {
         final Optional<Article> article = articleRepository.findById(articleId);
@@ -63,7 +66,7 @@ public class ArticleService {
     }
 
     /**
-     * Return all articles which are active and for sell.
+     * Returns all articles which are active and for sell.
      */
     public List<Article> findAllActiveForSale(final User user) {
         return articleRepository.findAllActiveForSaleByUser(user);
@@ -71,7 +74,6 @@ public class ArticleService {
 
     /**
      * Filters articles and checks whether they are included in given category.
-     *
      * @return all Articles, which are not reserved and are of given category
      */
     public List<Article> findAllArticlesByCategory(final Category category) {
@@ -80,6 +82,9 @@ public class ArticleService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /**
+     * Returns all active articles.
+     */
     List<Article> findAllActiveArticles() {
         return articleRepository.findAllActive().isEmpty() ? new ArrayList<>()
                 : articleRepository.findAllActive();
@@ -100,7 +105,6 @@ public class ArticleService {
      * article is present by looking for ID key. If fails, throw Exception. If article is not being
      * reserved (a.k.a bound to running case) and free to book, deactivate article. Else, throw
      * Exception.
-     *
      * @param articleId ID of article to be "deleted".
      * @return boolean True, if succeeded. False, if encountered error while processing request.
      */
@@ -123,7 +127,6 @@ public class ArticleService {
 
     /**
      * Updates an article given by the id with the information from given article.
-     *
      * @param articleId id for article, that is about to be updated
      * @param article new article
      */
@@ -144,6 +147,9 @@ public class ArticleService {
         saveArticle(originalArticle, "Update");
     }
 
+    /**
+     * Returns List of all articles, which name contains the given searchstring. Case of letters is ignored.
+     */
     public List<Article> findAllArticlesByName(final String searchString) {
         return articleRepository.findByActiveTrueAndNameContainsIgnoreCase(searchString);
     }
