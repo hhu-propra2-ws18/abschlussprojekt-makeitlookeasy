@@ -3,6 +3,7 @@ package de.propra2.ausleiherino24.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ public class ImageService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageService.class);
 
     private static final int NR_OF_BINS = 100;
-    private String uploadDirectoryPath;
+    private final String uploadDirectoryPath;
 
     @Autowired
     public ImageService(final @Value("${uploadDirectoryPath}") String uploadDirectoryPath) {
@@ -43,7 +44,7 @@ public class ImageService {
 
         try {
             file.transferTo(dest);
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOGGER.warn("Couldn't move file {} to desired destination '{}'.", file.getName(),
                     dest.getAbsolutePath());
         }
@@ -78,7 +79,7 @@ public class ImageService {
                     length = inputStream.read(buffer);
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOGGER.warn("Couldn't store uploaded file in database.", e);
         }
 
@@ -109,15 +110,15 @@ public class ImageService {
     }
 
     boolean fileExists(final String path) {
-        final File f = new File(path);
-        return f.exists() && !f.isDirectory();
+        final File file = new File(path);
+        return file.exists() && !file.isDirectory();
     }
 
     String buildPath(final String fileName, final String prefix) {
         return Paths.get(getUploadDirectoryPath(), prefix, fileName).toString();
     }
 
-    String getUploadDirectoryPath() {
+    final String getUploadDirectoryPath() {
         final String rootPath = Paths.get(".").toAbsolutePath().normalize().toString();
         return Paths.get(rootPath, this.uploadDirectoryPath).toString();
     }
@@ -151,7 +152,7 @@ public class ImageService {
         }
     }
 
-    void createUploadDirectoryIfNotExists() {
+    final void createUploadDirectoryIfNotExists() {
         final File uploadDir = new File(getUploadDirectoryPath());
 
         if (!uploadDir.exists()) {
@@ -164,8 +165,8 @@ public class ImageService {
             return "";
         }
 
-        final int i = fileName.lastIndexOf('.');
+        final int index = fileName.lastIndexOf('.');
 
-        return i > 0 ? fileName.substring(i + 1) : "";
+        return index > 0 ? fileName.substring(index + 1) : "";
     }
 }
