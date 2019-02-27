@@ -109,6 +109,7 @@ public class ArticleRepoTest {
 
     @Test
     public void queryShouldFindArticleContainingString() {
+        article2.setActive(true);
         final List<Article> us = articles.findByActiveTrueAndNameContainsIgnoreCase("saw");
         assertThat(us.size()).isEqualTo(1);
         assertThat(us.get(0)).isEqualTo(article2);
