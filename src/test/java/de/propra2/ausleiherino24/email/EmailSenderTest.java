@@ -19,7 +19,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 public class EmailSenderTest {
 
     private final static String USER_EMAIL = "test@mail.de";
-    private final static String SERVICE_EMAIL = "test@mail.de";
+    private final static String SERVICE_EMAIL = "Clearing@Service.com";
     private EmailConfig emailConfigMock;
     private JavaMailSenderImpl javaMailSenderMock;
     private EmailSender emailSender;
