@@ -121,8 +121,10 @@ public class ReservationHandler {
      * @param currentCase contains all necessary data to do request
      */
     public void punishReservationByCase(final Case currentCase) {
-        punishReservation(currentCase.getReceiver().getUsername(),
-                currentCase.getPpTransaction().getReservationId());
+        if (currentCase.getPpTransaction().getReservationId() != -1) {
+            punishReservation(currentCase.getReceiver().getUsername(),
+                    currentCase.getPpTransaction().getReservationId());
+        }
     }
 
 
