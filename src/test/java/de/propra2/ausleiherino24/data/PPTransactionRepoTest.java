@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class PPTransactionRepoTest {
 
     @Autowired
-    private PPTransactionRepository ppts;
+    private PpTransactionRepository ppts;
 
     private PPTransaction trans1;
     private PPTransaction trans2;

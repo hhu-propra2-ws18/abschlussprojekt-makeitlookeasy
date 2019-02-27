@@ -32,9 +32,9 @@ public class AccountHandler {
      * @param accountName name of account to get
      * @return returns all data of PropayAccount
      */
-    PPAccount getAccountData(final String accountName) {
+    PpAccount getAccountData(final String accountName) {
         return restTemplate
-                .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PPAccount.class, accountName);
+                .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PpAccount.class, accountName);
     }
 
     /**
@@ -43,7 +43,7 @@ public class AccountHandler {
      * @return returns amount of unreserved Funds
      */
     public double checkFunds(final String accountName) {
-        final PPAccount account = getAccountData(accountName);
+        final PpAccount account = getAccountData(accountName);
         return account.getAmount() - account.reservationAmount();
     }
 
