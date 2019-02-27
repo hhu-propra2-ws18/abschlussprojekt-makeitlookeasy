@@ -23,7 +23,7 @@ public class PPTransaction {
     Long id;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "ppTransaction")
-    Case aCase;
+    Case acase;
 
     Long date;
 
@@ -33,15 +33,18 @@ public class PPTransaction {
 
     Long reservationId;
 
+    /**
+     * Gets total payment. Either lendingCosts + deposit or just the lendingCosts.
+     */
     public Double getTotalPayment() {
         if (cautionPaid) {
-            return lendingCost + aCase.getDeposit();
+            return lendingCost + acase.getDeposit();
         }
         return lendingCost;
     }
 
     /**
-     * Returns date as String, needed for BankAccount View!
+     * Returns date as String, needed for BankAccount View.
      */
     public String getFormattedDate() {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");

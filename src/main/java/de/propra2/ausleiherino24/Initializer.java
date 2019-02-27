@@ -45,6 +45,9 @@ public class Initializer implements ServletContextInitializer {
     private static final String USER = "user";
     private static final String ADMIN = "admin";
 
+    /**
+     * Autowired constructor.
+     */
     @Autowired
     public Initializer(final UserRepository userRepository,
             final ArticleRepository articleRepository,
