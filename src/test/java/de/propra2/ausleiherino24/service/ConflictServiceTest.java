@@ -1,6 +1,5 @@
 package de.propra2.ausleiherino24.service;
 
-import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.ConflictRepository;
 import de.propra2.ausleiherino24.email.EmailSender;
 import de.propra2.ausleiherino24.model.Article;

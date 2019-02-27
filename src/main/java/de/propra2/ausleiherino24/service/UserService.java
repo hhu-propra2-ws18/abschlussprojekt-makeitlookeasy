@@ -100,7 +100,7 @@ public class UserService {
 
         try {
             user = findUserByUsername(principal.getName());
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
             user = new User();
             user.setRole("");
             user.setUsername("");

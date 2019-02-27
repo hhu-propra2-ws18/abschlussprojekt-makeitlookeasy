@@ -140,7 +140,8 @@ public class CaseService {
                 totalCost + articleService.findArticleById(articleId).getDeposit())
                 && articleNotRented(articleService.findArticleById(articleId), startTime,
                 endTime) && new Date().getTime() < startTime && startTime < endTime
-                && !articleService.findArticleById(articleId).getOwner().getUsername().equals(username)) {
+                && !articleService.findArticleById(articleId).getOwner().getUsername()
+                .equals(username)) {
 
             final PpTransaction ppTransaction = new PpTransaction();
             ppTransaction.setLendingCost(totalCost);
@@ -186,7 +187,7 @@ public class CaseService {
      * // TODO: JavaDoc ... Checks, if article request is ok.
      *
      * @return 0: case could not be found 1: everything alright 2: the article is already rented in
-     *      the given time 3: receiver does not have enough money on ProPay.
+     * the given time 3: receiver does not have enough money on ProPay.
      */
     public int acceptArticleRequest(final Long id) {
         final Optional<Case> optCase = caseRepository.findById(id);
