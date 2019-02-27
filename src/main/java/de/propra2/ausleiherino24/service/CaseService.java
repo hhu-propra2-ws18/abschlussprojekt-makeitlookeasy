@@ -115,7 +115,7 @@ public class CaseService {
     /**
      * Gets all cases for articles a person has borrowed.
      * @param personId
-     * @return
+     * @return all cases borrowed by a person
      */
     public List<Case> getLendCasesFromPersonReceiver(final Long personId) {
         return caseRepository
