@@ -409,79 +409,13 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void onlyRequestCases() {
-        final Case c1 = new Case();
-        c1.setRequestStatus(Case.REQUESTED);
-        c1.setArticle(new Article());
-        c1.getArticle().setForSale(false);
-        final Case c2 = new Case();
-        c2.setRequestStatus(Case.REQUEST_ACCEPTED);
-        c2.setArticle(new Article());
-        c2.getArticle().setForSale(false);
-        final Case c3 = new Case();
-        c3.setRequestStatus(Case.REQUEST_DECLINED);
-        c3.setArticle(new Article());
-        c3.getArticle().setForSale(false);
-        final Case c4 = new Case();
-        c4.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
-        c4.setArticle(new Article());
-        c4.getArticle().setForSale(false);
-        final ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
-        when(caseRepositoryMock.findAllByArticleOwnerId(0L)).thenReturn(cases);
-
-        assertEquals(cases, caseService.findAllRequestedCasesByUserId(0L));
-    }
-
-    @Test
-    public void zeroRequestCases() {
-        final Case c1 = new Case();
-        c1.setRequestStatus(Case.FINISHED);
-        final Case c2 = new Case();
-        c2.setRequestStatus(Case.OPEN_CONFLICT);
-        final Case c3 = new Case();
-        c3.setRequestStatus(Case.RUNNING);
-        final Case c4 = new Case();
-        c4.setRequestStatus(Case.RUNNING);
-        final ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
-        when(caseRepositoryMock.findAllByArticleOwnerId(0L)).thenReturn(cases);
-
-        assertTrue(caseService.findAllRequestedCasesByUserId(0L).isEmpty());
-    }
-
-    @Test
-    public void twoRequestCases() {
-        final Case c1 = new Case();
-        c1.setArticle(new Article());
-        c1.getArticle().setForSale(false);
-        c1.setRequestStatus(Case.RUNNING);
-        final Case c2 = new Case();
-        c2.setArticle(new Article());
-        c2.getArticle().setForSale(false);
-        c2.setRequestStatus(Case.REQUEST_ACCEPTED);
-        final Case c3 = new Case();
-        c3.setArticle(new Article());
-        c3.getArticle().setForSale(false);
-        c3.setRequestStatus(Case.FINISHED);
-        final Case c4 = new Case();
-        c4.setArticle(new Article());
-        c4.getArticle().setForSale(false);
-        c4.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
-        final ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
-        when(caseRepositoryMock.findAllByArticleOwnerId(0L)).thenReturn(cases);
-        cases.remove(c1);
-        cases.remove(c3);
-
-        assertEquals(cases, caseService.findAllRequestedCasesByUserId(0L));
-    }
-
-    @Test
     public void twoPPTransactionsFromReceiver() {
         final Case c1 = new Case();
         c1.setPpTransaction(new PpTransaction());
         final Case c2 = new Case();
         c2.setPpTransaction(new PpTransaction());
         cases.addAll(Arrays.asList(c1, c2));
-        doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
+        doReturn(cases).when(caseService).findAllCasesByUserId(0L);
         final List<PpTransaction> transactions = new ArrayList<>(
                 Arrays.asList(new PpTransaction(), new PpTransaction()));
 
@@ -530,5 +464,16 @@ public class CaseServiceTest {
         //aligns Date
         c.getPpTransaction().setDate(argument.getValue().getPpTransaction().getDate());
         assertEquals(c, argument.getValue());
+    }
+
+    @Test
+    public void twoCasesWithOpenConflicts(){
+        cases.add(new Case(null, 0L, null, 0L, 0D, 0D, Case.OPEN_CONFLICT, null, null, null, null, null));
+        cases.add(new Case(null, 0L, null, 1L, 0D, 0D, 0, null, null, null, null, null));
+        cases.add(new Case(null, 0L, null, 2L, 0D, 0D, Case.OPEN_CONFLICT, null, null, null, null, null));
+        when(caseRepositoryMock.findAll()).thenReturn(cases);
+        cases.remove(1);
+
+        assertEquals(cases, caseService.findAllCasesWithOpenConflicts());
     }
 }

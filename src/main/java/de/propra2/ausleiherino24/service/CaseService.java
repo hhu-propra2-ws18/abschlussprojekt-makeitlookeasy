@@ -96,7 +96,7 @@ public class CaseService {
      * @param userId userId of the owner of the lend article.
      * @return all cases, where the given id is the userId of the person who owns the article.
      */
-    private List<Case> findAllCasesByUserId(final Long userId) {
+    List<Case> findAllCasesByUserId(final Long userId) {
         return caseRepository.findAllByArticleOwnerId(userId);
     }
 
