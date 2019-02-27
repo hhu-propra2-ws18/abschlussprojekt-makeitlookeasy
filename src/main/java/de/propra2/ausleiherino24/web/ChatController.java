@@ -19,7 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class ChatController {
 
     private final UserService userService;
-    private SimpMessagingTemplate simpMessagingTemplate;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
     public ChatController(final UserService userService,

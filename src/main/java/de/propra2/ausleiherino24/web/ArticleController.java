@@ -104,7 +104,7 @@ public class ArticleController {
      */
     @PostMapping("/saveNew")
     public ModelAndView saveNewArticle(final @ModelAttribute @Valid Article article,
-            BindingResult result, final @RequestParam("image") MultipartFile image,
+            final BindingResult result, final @RequestParam("image") MultipartFile image,
             final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
 
@@ -128,7 +128,7 @@ public class ArticleController {
      */
     @PostMapping("/saveNewToSell")
     public ModelAndView saveNewArticleForSale(final @ModelAttribute @Valid Article article,
-            BindingResult result, final @RequestParam("image") MultipartFile image,
+            final BindingResult result, final @RequestParam("image") MultipartFile image,
             final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
 
@@ -181,8 +181,8 @@ public class ArticleController {
      * @param principal Current user.
      * @param article Article object.
      */
-    private void addStandardModelAttributes(ModelAndView mav, Principal principal,
-            Article article) {
+    private void addStandardModelAttributes(final ModelAndView mav, final Principal principal,
+            final Article article) {
         final User currentUser = userService.findUserByPrincipal(principal);
 
         mav.addObject("user", currentUser);
