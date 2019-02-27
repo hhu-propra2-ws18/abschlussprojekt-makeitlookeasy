@@ -60,7 +60,8 @@
   <!-- We ignore this rule since we want to use default constructors in some places  -->
   <rule ref="category/java/codestyle.xml/AtLeastOneConstructor">
     <properties>
-      <property name="violationSuppressRegex" value="Each class should declare at least one constructor"/>
+      <property name="violationSuppressRegex"
+        value="Each class should declare at least one constructor"/>
     </properties>
   </rule>
 
@@ -95,7 +96,8 @@
   <!-- sometimes long names are more expressive -->
   <rule ref="category/java/codestyle.xml/LongVariable">
     <properties>
-      <property name="violationSuppressRegex" value="Avoid excessively long variable names like .*"/>
+      <property name="violationSuppressRegex"
+        value="Avoid excessively long variable names like .*"/>
     </properties>
   </rule>
 </ruleset>

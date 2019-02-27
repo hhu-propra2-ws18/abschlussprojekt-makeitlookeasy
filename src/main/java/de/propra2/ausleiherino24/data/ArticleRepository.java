@@ -19,7 +19,8 @@ public interface ArticleRepository extends CrudRepository<Article, Long> {
     @Query("SELECT a FROM Article a WHERE a.active = true")
     List<Article> findAllActive();
 
-    @Query("SELECT a FROM Article a WHERE a.owner = :user and a.active = true and a.forSale = false")
+    @Query("SELECT a FROM Article a "
+            + "WHERE a.owner = :user and a.active = true and a.forSale = false")
     List<Article> findAllActiveForRentalByUser(@Param("user") User user);
 
     @Query("SELECT a FROM Article a WHERE a.owner = :user and a.active = true and a.forSale = true")

@@ -51,7 +51,9 @@ public class MainController {
     }
 
     /**
-     * @return Spring Security login form.
+     * Returns the login prompt and form for visitors.
+     *
+     * @return Spring Security login view.
      */
     @GetMapping("/login")
     public ModelAndView getLogin() {
@@ -62,7 +64,7 @@ public class MainController {
      * Displays user registration form. Creates new User and Person objects, that will be filled
      * with required information about the user.
      */
-    @GetMapping("/signup")
+    @GetMapping("/signUp")
     public ModelAndView getRegistration() {
         final User user = new User();
         final Person person = new Person();

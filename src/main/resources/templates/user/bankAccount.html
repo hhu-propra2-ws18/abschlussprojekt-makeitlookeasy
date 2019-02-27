@@ -30,7 +30,7 @@
       <h1 style="margin-bottom: 20px" th:text="|Your bank amount is : ${pp} €|"></h1>
       <form method="post" th:action="@{~/addMoney}">
         <label>Money :</label>
-        <input name="money" required step="0.01" type="number">
+        <input min="0" name="money" required step="0.01" type="number">
         <button class="btn btn-success" type="submit">Get money</button>
       </form>
       <table class="table table-striped">
@@ -41,7 +41,7 @@
         <tr>
           <th scope="col">Article</th>
           <th scope="col">Date</th>
-          <th scope="col">Ammount</th>
+          <th scope="col">Amount</th>
           <th scope="col">Blocked deposit</th>
         </tr>
         </thead>

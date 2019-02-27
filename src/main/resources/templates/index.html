@@ -34,10 +34,20 @@
   <div class="row">
 
     <!-- Categories -->
-    <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
+    <div name="category" th:replace="/../fragments/categories ::categories"></div>
     <!-- /.col-lg-3 -->
 
     <div class="col-lg-9">
+
+      <div class="alert alert-warning absolue center" th:if="${param.access}" style="margin-top:50px">
+        Article was bought successfully!
+      </div>
+
+      <a th:href="@{~/bankAccount}" style="text-decoration: none">
+      <div class="alert alert-warning absolue center" th:if="${param.failed}" style="margin-top:50px">
+        Sth. went wrong while buying! Not enaugh money ? Click!
+      </div>
+      </a>
 
       <div class="carousel slide my-4" data-ride="carousel" id="carouselExampleIndicators">
         <ol class="carousel-indicators">

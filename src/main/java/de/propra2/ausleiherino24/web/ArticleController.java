@@ -13,7 +13,6 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,6 +37,14 @@ public class ArticleController {
 
     private final List<Category> allCategories = Category.getAllCategories();
 
+    /**
+     * Autowired ArticleController constructor.
+     *
+     * @param articleService Abstraction of service layer, regarding Article objects.
+     * @param userService Abstraction of service layer, regarding User objects.
+     * @param imageService Abstraction of service layer, regarding Image objects.
+     * @param customerReviewService Abstraction of service layer, regarding CustomerReview objects.
+     */
     @Autowired
     public ArticleController(final ArticleService articleService, final UserService userService,
             final ImageService imageService, final CustomerReviewService customerReviewService) {
@@ -90,14 +97,14 @@ public class ArticleController {
      *
      * @param article Article object.
      * @param result must not be deleted, even though there is no obvious use. Otherwise you cannot
-     * create an article without a picture
+     * create an article without a picture.
      * @param image Image, that the user uploaded to be displayed.
      * @param principal Current user.
      * @return Redirects the user to the main page aka index.html.
      */
     @PostMapping("/saveNew")
     public ModelAndView saveNewArticle(final @ModelAttribute @Valid Article article,
-            BindingResult result, Model model, final @RequestParam("image") MultipartFile image,
+            BindingResult result, final @RequestParam("image") MultipartFile image,
             final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
 
@@ -120,8 +127,8 @@ public class ArticleController {
      * mapping out of this and saveNewArticle
      */
     @PostMapping("/saveNewToSell")
-    public ModelAndView saveNewCaseAndSellArticle(final @ModelAttribute @Valid Article article,
-            BindingResult result, Model model, final @RequestParam("image") MultipartFile image,
+    public ModelAndView saveNewArticleForSale(final @ModelAttribute @Valid Article article,
+            BindingResult result, final @RequestParam("image") MultipartFile image,
             final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
 
@@ -170,7 +177,7 @@ public class ArticleController {
     /**
      * Extracted method to reduce code duplication.
      *
-     * @param mav ModelAndView object.
+     * @param mav ModelAndView object to be returned in implementing methods.
      * @param principal Current user.
      * @param article Article object.
      */

@@ -6,6 +6,7 @@ import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,26 +23,32 @@ public class ConflictService {
     private final EmailSender emailSender;
     private final ReservationHandler reservationHandler;
 
+    /**
+     * Autowired constructor.
+     */
     @Autowired
     public ConflictService(final ConflictRepository conflictRepository,
-            final EmailSender emailSender,
-            final ReservationHandler reservationHandler, final CaseService caseService) {
+            final EmailSender emailSender, final ReservationHandler reservationHandler,
+            final CaseService caseService) {
         this.conflictRepository = conflictRepository;
         this.emailSender = emailSender;
         this.reservationHandler = reservationHandler;
         this.caseService = caseService;
     }
 
-    void saveConflict(final Conflict conflict, final User user) throws Exception {
+    void saveConflict(final Conflict conflict, final User user) throws AccessDeniedException {
         isCorrectUser(conflict, user);
         conflict.setConflictedCaseConflict(conflict);
         conflictRepository.save(conflict);
 
-        //sendConflictEmail(conflict);
+        sendConflictEmail(conflict);
     }
 
+    /**
+     * Opens a conflict from given Data.
+     */
     public void openConflict(final Case conflictedCase, final String conflictDescription)
-            throws Exception {
+            throws AccessDeniedException {
         final Conflict conflict = new Conflict();
         conflict.setConflictDescription(conflictDescription);
         conflict.setConflictedCase(conflictedCase);
@@ -60,7 +67,7 @@ public class ConflictService {
      *
      * @param id conflictId
      */
-    public void deactivateConflict(final Long id, final User user) throws Exception {
+    public void deactivateConflict(final Long id, final User user) throws AccessDeniedException {
         final Optional<Conflict> conflictToDeactivate = conflictRepository.findById(id);
         if (!conflictToDeactivate.isPresent()) {
             throw new DataAccessException("No such conflict.") {
@@ -71,7 +78,7 @@ public class ConflictService {
         theConflictToDeactivate
                 .setConflictDescription("Conflict with id: " + theConflictToDeactivate.getId()
                         + " was deactivated by :" + user.getUsername());
-        //sendConflictEmail(theConflictToDeactivate);
+        sendConflictEmail(theConflictToDeactivate);
         theConflictToDeactivate.getConflictedCase().setRequestStatus(Case.FINISHED);
         deleteConflictById(id);
     }
@@ -92,7 +99,10 @@ public class ConflictService {
         conflictRepository.deleteById(id);
     }
 
-    public List<Conflict> getAllConflictsByUser(final User user) {
+    /**
+     * Gets all conflicts a user is involved in.
+     */
+    List<Conflict> getAllConflictsByUser(final User user) {
         final List<Conflict> allConflicts = new ArrayList<>();
         allConflicts.addAll(conflictRepository.findAllByReceiver(user));
         allConflicts.addAll(conflictRepository.findAllByArticleOwner(user));
@@ -100,7 +110,15 @@ public class ConflictService {
         return allConflicts;
     }
 
-    public Conflict getConflict(final Long id, final User user) throws Exception {
+    /**
+     * Gets a conflict by its id.
+     *
+     * @param id conflict id
+     * @param user User, which want to access the data
+     * @return conflict
+     * @throws AccessDeniedException in case the user has no rights to do so
+     */
+    public Conflict getConflict(final Long id, final User user) throws AccessDeniedException {
         final Optional<Conflict> conflict = conflictRepository.findById(id);
         if (!conflict.isPresent()) {
             throw new DataAccessException("No such conflict") {
@@ -110,35 +128,41 @@ public class ConflictService {
         return conflict.get();
     }
 
-    public boolean isConflictedArticleOwner(final Conflict conflict, final User user)
-            throws Exception {
+    boolean isConflictedArticleOwner(final Conflict conflict, final User user) {
         if (user == null) {
             throw new NullPointerException("User was null");
         }
         return user.equals(conflict.getOwner());
     }
 
-    public List<User> getConflictParticipants(final Conflict conflict) throws Exception {
+    List<User> getConflictParticipants(final Conflict conflict) {
         if (conflict == null) {
             throw new NullPointerException("Conflict was null");
         }
         return Arrays.asList(conflict.getOwner(), conflict.getReceiver());
     }
 
-    private boolean isCorrectUser(final Conflict conflict, final User user) throws Exception {
+    /**
+     * Checks whether the user is either a admin or a user involved in given conflict.
+     *
+     * @return true or throws Exception
+     * @throws AccessDeniedException when user is not involved in conflict and is no admin.
+     */
+    private boolean isCorrectUser(final Conflict conflict, final User user)
+            throws AccessDeniedException {
         if (!(user.equals(conflict.getOwner()) || user.equals(conflict.getReceiver()))
                 && !isUserAdmin(
                 user)) {
-            throw new Exception("Access denied!");
+            throw new AccessDeniedException("Access denied!");
         }
         return true;
     }
 
     private boolean isConflictReporterOrAdmin(final Conflict conflict, final User user)
-            throws Exception {
+            throws AccessDeniedException {
         if (!(conflict.getConflictReporterUsername().equals(user.getUsername()) || isUserAdmin(
                 user))) {
-            throw new Exception("Access denied!");
+            throw new AccessDeniedException("Access denied!");
         }
         return true;
     }
@@ -156,9 +180,9 @@ public class ConflictService {
      * @throws Exception if user has no permissions to solve a conflict
      */
     public void solveConflict(final Conflict conflictToSolve, final User user,
-            final User depositReceiver) throws Exception {
+            final User depositReceiver) throws AccessDeniedException {
         if (!isUserAdmin(user)) {
-            throw new Exception("No permission!");
+            throw new AccessDeniedException("No permission!");
         }
         if (depositReceiver.equals(conflictToSolve.getOwner())) {
             reservationHandler.punishReservationByCase(conflictToSolve.getConflictedCase());

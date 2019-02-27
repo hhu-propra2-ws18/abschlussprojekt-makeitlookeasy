@@ -70,7 +70,7 @@ test {
 }                                     // already successful (and cached) in the past. TODO force-test-rerun-switch
 
 test.finalizedBy jacocoTestReport
-check.dependsOn ('jacocoTestCoverageVerification','reportCoverage')
+check.dependsOn('jacocoTestCoverageVerification', 'reportCoverage')
 
 configurations.all {
     exclude module: 'slf4j-log4j12'

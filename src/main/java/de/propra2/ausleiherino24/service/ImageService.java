@@ -26,6 +26,10 @@ public class ImageService {
         createUploadDirectoryIfNotExists();
     }
 
+    /**
+     * Stores an image.
+     * @return FileName
+     */
     public String store(final MultipartFile file, final Long binningId) {
         if (file == null) {
             return null;
@@ -46,6 +50,10 @@ public class ImageService {
         return dest.getName();
     }
 
+    /**
+     * Stores an image inputted as File.
+     * @return FileName
+     */
     public String storeFile(final File inputFile, final Long binningId) {
         if (inputFile == null) {
             return null;
@@ -75,6 +83,10 @@ public class ImageService {
         return destinationFile.getName();
     }
 
+    /**
+     * Gets file by its name and its binningId.
+     * @return requested File, if exists. Else, null
+     */
     public File getFile(final String fileName, final Long binningId) {
         final String binName = binningId == null ? "" : resolveBin(binningId).toString();
 

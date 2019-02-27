@@ -45,7 +45,8 @@ public class Article {
     private String location;
 
     /**
-     * true: Article will be sold false: Article is aviable for rental
+     * true: Article will be sold.
+     * false: Article is available for rental.
      */
     private boolean forSale;
 

@@ -53,13 +53,13 @@
 <div class="container">
   <div class="row">
     <!-- Categories -->
-    <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
+    <div name="category" th:replace="/../fragments/categories ::categories"></div>
 
 
     <!-- main information (input) -->
     <div class="col-lg 9" id="rentalView" style="margin-top: 50px">
       <div class="form-group text-center">
-        <label>Sell</label>
+        <label>For Sale</label>
         <div>
           <label class="switch">
             <input id="forRental"
@@ -76,24 +76,22 @@
         </div>
         <div class="form-group">
           <label for="formInput2">Price per Day</label>
-          <input class="form-control" id="formInput2" name="costPerDay" step="0.01"
-                 type="number">
+          <input class="form-control" id="formInput2" min="0" name="costPerDay"
+                 step="0.01" type="number">
         </div>
         <div class="form-group">
           <label for="formInput3">Deposit</label>
-          <input class="form-control" id="formInput3" name="deposit" step="0.01"
-                 type="number">
+          <input class="form-control" id="formInput3" min="0" name="deposit"
+                 step="0.01" type="number">
         </div>
         <div class="form-group">
           <label for="formInput4">Location</label>
           <input class="form-control" id="formInput4" name="location" type="text">
         </div>
         <div class="form-group">
-          <label for="formSelect1">Categorie</label>
+          <label for="formSelect1">Category</label>
           <select class="form-control" id="formSelect1" name="categorie">
-            <div th:each="category : ${categories}">
-              <option th:text="|${category.name}|">Motors</option>
-            </div>
+            <option th:each="category : ${categories}" th:text="|${category.name}|">Motors</option>
           </select>
         </div>
         <div class="form-group">
@@ -109,7 +107,7 @@
     <!-- Sell View-->
     <div class="col-lg 9" id="sellView" style="margin-top: 50px;display:none">
       <div class="form-group text-center">
-        <label>Sell</label>
+        <label>For Sale</label>
         <div>
           <label class="switch">
             <input id="forBuy"
@@ -126,19 +124,17 @@
         </div>
         <div class="form-group">
           <label for="formControlInput2">Price</label>
-          <input class="form-control" id="formControlInput2" name="costPerDay" step="0.01"
-                 type="number">
+          <input class="form-control" id="formControlInput2" min="0" name="costPerDay"
+                 step="0.01" type="number">
         </div>
         <div class="form-group">
           <label for="formControlInput4">Location</label>
           <input class="form-control" id="formControlInput4" name="location" type="text">
         </div>
         <div class="form-group">
-          <label for="formControlSelect1">Categorie</label>
+          <label for="formControlSelect1">Category</label>
           <select class="form-control" id="formControlSelect1" name="categorie">
-            <div th:each="category : ${categories}">
-              <option th:text="|${category.name}|">Motors</option>
-            </div>
+            <option th:each="category : ${categories}" th:text="|${category.name}|">Motors</option>
           </select>
         </div>
         <div class="form-group">
@@ -153,7 +149,6 @@
     </div>
 
   </div>
-</div>
 </div>
 <!-- Footer -->
 <div name="footer" th:replace="/../fragments/footer ::footer"></div>

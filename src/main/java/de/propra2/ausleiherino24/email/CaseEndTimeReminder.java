@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CaseEndTimeReminder {
 
-    private final static Long ONE_DAY = 1L;
+    private static final Long ONE_DAY = 1L;
     private final CaseRepository cases;
     private final EmailSender emailSender;
 
