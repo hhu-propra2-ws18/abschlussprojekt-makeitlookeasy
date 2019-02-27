@@ -77,7 +77,7 @@ public class ArticleServiceTest {
     @Test
     public void twoArticlesForRental() {
         final Case c = new Case();
-        c.setRequestStatus(7);  //requestStatus = RUNNING
+        c.setRequestStatus(Case.RUNNING);  //requestStatus = RUNNING
         article03.setCases(Arrays.asList(c));
 
         articles.add(article01);
@@ -164,7 +164,7 @@ public class ArticleServiceTest {
     @Test
     public void deactivateLendArticle() {
         final Case c = new Case();
-        c.setRequestStatus(7);  //requestStatus = RUNNING
+        c.setRequestStatus(Case.RUNNING);  //requestStatus = RUNNING
         article01.setCases(Arrays.asList(c));
         final Optional<Article> op = Optional.of(article01);
         when(articleRepositoryMock.findById(0L)).thenReturn(op);
@@ -176,7 +176,7 @@ public class ArticleServiceTest {
     @Test
     public void deactivateArticleWithConflict() {
         final Case c = new Case();
-        c.setRequestStatus(10);  //requestStatus = OPEN_CONFLICT
+        c.setRequestStatus(Case.OPEN_CONFLICT);  //requestStatus = OPEN_CONFLICT
         article01.setCases(Arrays.asList(c));
         final Optional<Article> op = Optional.of(article01);
         when(articleRepositoryMock.findById(0L)).thenReturn(op);
@@ -188,7 +188,7 @@ public class ArticleServiceTest {
     @Test
     public void deactivateFinishedArticle() {
         final Case c = new Case();
-        c.setRequestStatus(14);  //requestStatus = FINISHED
+        c.setRequestStatus(Case.FINISHED);  //requestStatus = FINISHED
         article01.setCases(Arrays.asList(c));
         final Optional<Article> op = Optional.of(article01);
         when(articleRepositoryMock.findById(0L)).thenReturn(op);

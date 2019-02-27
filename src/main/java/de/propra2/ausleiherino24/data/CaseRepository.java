@@ -28,4 +28,28 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
     Optional<Case> findByArticle(Article article);
 
     List<Case> findAllByArticleAndRequestStatus(Article article, int status);
+
+    @Query("SELECT c FROM #{#entityName} c "
+            + "WHERE c.article.forSale = false "
+            + "AND c.article.owner.id = :id "
+            + "AND c.endTime < :today "
+            + "AND c.requestStatus in (7, 8, 10, 14)")
+    List<Case> findAllExpiredCasesByUserId(@Param("id") Long id, @Param("today") long today);
+
+    @Query("SELECT c FROM #{#entityName} c "
+            + "WHERE c.article.forSale = false "
+            + "AND c.article.owner.id = :id "
+            + "AND c.requestStatus in (1, 2, 4, 12)")
+    List<Case> findAllRequestedCasesByUserId(@Param("id") Long id);
+
+    @Query("SELECT c FROM Case c "
+            + "WHERE c.receiver.person.id = :id "
+            + "AND c.article.forSale = false")
+    List<Case> getLendCasesFromPersonReceiver(@Param("id") Long personId);
+
+    @Query("SELECT c FROM Case c "
+            + "WHERE c.article.forSale = true "
+            + "AND c.article.owner.id = :id "
+            + "AND c.requestStatus = 14")
+    List<Case> findAllSoldItemsByUserId(@Param("id") Long id);
 }

@@ -245,7 +245,7 @@ public class Initializer implements ServletContextInitializer {
      * Creates an user from parameters.
      */
     private User createUser(final String email, final String username, final String password,
-            final Person person, String role) {
+            final Person person, final String role) {
         final User user = new User();
         user.setEmail(email);
         user.setUsername(username);
@@ -321,14 +321,16 @@ public class Initializer implements ServletContextInitializer {
      * Stores a pokemon pic corresponding to given id using ImageService.
      */
     private String storePokemonPic(final int pokedexId) {
-        File file = null;
-        try {
-            final String fileName = "static/Pokemon/images/" + pokedexId + ".jpg";
-            final ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-            file = new File(classLoader.getResource(fileName).getFile());
-        } catch (Exception e) {
-            LOGGER.warn("Couldn't parse picture of Pokémon {}.", pokedexId, e);
+        final String fileName = "static/Pokemon/images/" + pokedexId + ".jpg";
+        final ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        final String filePath = classLoader.getResource(fileName).getFile();
+
+        if(filePath == null) {
+            LOGGER.warn("Couldn't parse picture of Pokémon {}.", pokedexId);
+            return null;
         }
+
+        final File file = new File(classLoader.getResource(fileName).getFile());
         return imageService.storeFile(file, null);
     }
 

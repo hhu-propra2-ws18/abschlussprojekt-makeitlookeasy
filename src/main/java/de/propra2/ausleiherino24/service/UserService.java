@@ -4,6 +4,7 @@ import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import java.security.Principal;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,20 +63,19 @@ public class UserService {
         final Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()) {
             return "UserNotFound";
-        } else {
-            final User dbUser = optionalUser.get();
-            final Person dbPerson = dbUser.getPerson();
-            dbPerson.setFirstName(person.getFirstName());
-            dbPerson.setLastName(person.getLastName());
-            dbPerson.setAddress(person.getAddress());
-            dbUser.setPerson(person);
-            dbUser.setEmail(user.getEmail());
-            dbUser.setPassword(pw1);
-            this.saveUser(dbUser, "Save");
-            personService.savePerson(person, "Save");
-            return "Success";
         }
 
+        final User dbUser = optionalUser.get();
+        final Person dbPerson = dbUser.getPerson();
+        dbPerson.setFirstName(person.getFirstName());
+        dbPerson.setLastName(person.getLastName());
+        dbPerson.setAddress(person.getAddress());
+        dbUser.setPerson(person);
+        dbUser.setEmail(user.getEmail());
+        dbUser.setPassword(pw1);
+        this.saveUser(dbUser, "Save");
+        personService.savePerson(person, "Save");
+        return "Success";
     }
 
     /**
@@ -86,7 +86,7 @@ public class UserService {
 
         if (!optionalUser.isPresent()) {
             LOGGER.warn("Couldn't find user {} in UserRepository.", username);
-            throw new NullPointerException("Couldn't find current principal in UserRepository.");
+            throw new NoSuchElementException("Couldn't find current principal in UserRepository.");
         }
 
         return optionalUser.get();
@@ -100,7 +100,7 @@ public class UserService {
 
         try {
             user = findUserByUsername(principal.getName());
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             user = new User();
             user.setRole("");
             user.setUsername("");

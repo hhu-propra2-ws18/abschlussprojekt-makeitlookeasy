@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImageController {
 
     private static final String URL = "/imageUpload";
-    private ImageService imageService;
+    private final ImageService imageService;
 
     @Autowired
     public ImageController(final ImageService imageService) {

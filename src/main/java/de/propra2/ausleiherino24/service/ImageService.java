@@ -3,6 +3,7 @@ package de.propra2.ausleiherino24.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ public class ImageService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageService.class);
 
     private static final int NR_OF_BINS = 100;
-    private String uploadDirectoryPath;
+    private final String uploadDirectoryPath;
 
     @Autowired
     public ImageService(final @Value("${uploadDirectoryPath}") String uploadDirectoryPath) {
@@ -28,6 +29,7 @@ public class ImageService {
 
     /**
      * Stores an image.
+     *
      * @return FileName
      */
     public String store(final MultipartFile file, final Long binningId) {
@@ -42,7 +44,7 @@ public class ImageService {
 
         try {
             file.transferTo(dest);
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOGGER.warn("Couldn't move file {} to desired destination '{}'.", file.getName(),
                     dest.getAbsolutePath());
         }
@@ -52,6 +54,7 @@ public class ImageService {
 
     /**
      * Stores an image inputted as File.
+     *
      * @return FileName
      */
     public String storeFile(final File inputFile, final Long binningId) {
@@ -76,7 +79,7 @@ public class ImageService {
                     length = inputStream.read(buffer);
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOGGER.warn("Couldn't store uploaded file in database.", e);
         }
 
@@ -85,6 +88,7 @@ public class ImageService {
 
     /**
      * Gets file by its name and its binningId.
+     *
      * @return requested File, if exists. Else, null
      */
     public File getFile(final String fileName, final Long binningId) {
@@ -115,8 +119,8 @@ public class ImageService {
      * checks whether given file exists.
      */
     boolean fileExists(final String path) {
-        final File f = new File(path);
-        return f.exists() && !f.isDirectory();
+        final File file = new File(path);
+        return file.exists() && !file.isDirectory();
     }
 
     /**
@@ -191,8 +195,8 @@ public class ImageService {
             return "";
         }
 
-        final int i = fileName.lastIndexOf('.');
+        final int index = fileName.lastIndexOf('.');
 
-        return i > 0 ? fileName.substring(i + 1) : "";
+        return index > 0 ? fileName.substring(index + 1) : "";
     }
 }

@@ -96,21 +96,19 @@ public class ArticleController {
      * attributes.
      *
      * @param article Article object.
-     * @param result must not be deleted, even though there is no obvious use. Otherwise you cannot
-     * create an article without a picture.
+     * @param result must not be deleted. Necessary to create article without a picture.
      * @param image Image, that the user uploaded to be displayed.
      * @param principal Current user.
      * @return Redirects the user to the main page aka index.html.
      */
     @PostMapping("/saveNew")
     public ModelAndView saveNewArticle(final @ModelAttribute @Valid Article article,
-            BindingResult result, final @RequestParam("image") MultipartFile image,
+            final BindingResult result, final @RequestParam("image") MultipartFile image,
             final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
 
-        article.setActive(true);
         article.setOwner(user);
-        article.setImage(imageService.store(image, null));
+        article.setActive(true);
         article.setForRental(true);
         article.setForSale(false);
 
@@ -128,18 +126,18 @@ public class ArticleController {
      */
     @PostMapping("/saveNewToSell")
     public ModelAndView saveNewArticleForSale(final @ModelAttribute @Valid Article article,
-            BindingResult result, final @RequestParam("image") MultipartFile image,
+            final BindingResult result, final @RequestParam("image") MultipartFile image,
             final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
 
-        article.setActive(true);
         article.setOwner(user);
+        article.setActive(true);
         article.setForRental(true);
+        article.setForSale(true);
 
         if (image != null) {
             article.setImage(imageService.store(image, null));
         }
-        article.setForSale(true);
 
         articleService.saveArticle(article, "Created");
         return new ModelAndView("redirect:/");
@@ -181,8 +179,8 @@ public class ArticleController {
      * @param principal Current user.
      * @param article Article object.
      */
-    private void addStandardModelAttributes(ModelAndView mav, Principal principal,
-            Article article) {
+    private void addStandardModelAttributes(final ModelAndView mav, final Principal principal,
+            final Article article) {
         final User currentUser = userService.findUserByPrincipal(principal);
 
         mav.addObject("user", currentUser);

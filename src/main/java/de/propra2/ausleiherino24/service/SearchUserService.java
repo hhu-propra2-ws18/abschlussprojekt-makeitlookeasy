@@ -1,6 +1,5 @@
 package de.propra2.ausleiherino24.service;
 
-
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.CustomUserDetails;
 import de.propra2.ausleiherino24.model.User;

@@ -154,6 +154,7 @@ public class ArticleService {
 
     /**
      * Sets forSale-flag in article and saves in database.
+     *
      * @param articleId article that is modified
      * @param status value to set
      */

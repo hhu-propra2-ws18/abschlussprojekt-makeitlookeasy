@@ -71,45 +71,28 @@ public class ConflictService {
      */
     public void deactivateConflict(final Long id, final User user) throws AccessDeniedException {
         final Optional<Conflict> conflictToDeactivate = conflictRepository.findById(id);
-        if (!conflictToDeactivate.isPresent()) {
+        if (!conflictToDeactivate.isPresent() || !isUserAdmin(user)) {
             throw new DataAccessException("No such conflict.") {
             };
         }
-        isConflictReporterOrAdmin(conflictToDeactivate.get(), user);
         final Conflict theConflictToDeactivate = conflictToDeactivate.get();
         theConflictToDeactivate
                 .setConflictDescription("Conflict with id: " + theConflictToDeactivate.getId()
                         + " was deactivated by :" + user.getUsername());
         sendConflictEmail(theConflictToDeactivate);
         theConflictToDeactivate.getConflictedCase().setRequestStatus(Case.FINISHED);
-        deleteConflictById(id);
+        deleteConflictById(id, theConflictToDeactivate);
     }
 
     /**
      * Safe delete conflict. Sets conflict of case to null and deletes the conflict without deleting
      * the case related to it.
      */
-    private void deleteConflictById(Long id) {
-        Optional<Conflict> optionalConflict = conflictRepository.findById(id);
-        if (!optionalConflict.isPresent()) {
-            return;
-        }
-        Conflict c = optionalConflict.get();
+    private void deleteConflictById(Long id, Conflict c) {
         c.getConflictedCase().setConflict(null);
         c.setConflictedCase(new Case());
         conflictRepository.save(c);
         conflictRepository.deleteById(id);
-    }
-
-    /**
-     * Gets all conflicts a user is involved in.
-     */
-    List<Conflict> getAllConflictsByUser(final User user) {
-        final List<Conflict> allConflicts = new ArrayList<>();
-        allConflicts.addAll(conflictRepository.findAllByReceiver(user));
-        allConflicts.addAll(conflictRepository.findAllByArticleOwner(user));
-
-        return allConflicts;
     }
 
     /**
@@ -127,16 +110,6 @@ public class ConflictService {
         }
         isCorrectUser(conflict.get(), user);
         return conflict.get();
-    }
-
-    /**
-     * Checks whether the given user is the the owner in the given conflict.
-     */
-    boolean isConflictedArticleOwner(final Conflict conflict, final User user) {
-        if (user == null) {
-            throw new NullPointerException("User was null");
-        }
-        return user.equals(conflict.getOwner());
     }
 
     /**
@@ -159,21 +132,6 @@ public class ConflictService {
         if (!(user.equals(conflict.getOwner()) || user.equals(conflict.getReceiver()))
                 && !isUserAdmin(
                 user)) {
-            throw new AccessDeniedException("Access denied!");
-        }
-        return true;
-    }
-
-    /**
-     * @param conflict
-     * @param user
-     * @return true, if given user is an admin or the conflict reporter.
-     * @throws AccessDeniedException when user isn't an admin and isn't the conflict reporter.
-     */
-    private boolean isConflictReporterOrAdmin(final Conflict conflict, final User user)
-            throws AccessDeniedException {
-        if (!(conflict.getConflictReporterUsername().equals(user.getUsername()) || isUserAdmin(
-                user))) {
             throw new AccessDeniedException("Access denied!");
         }
         return true;

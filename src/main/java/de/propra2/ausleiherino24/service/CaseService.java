@@ -111,28 +111,21 @@ public class CaseService {
     /**
      * Finds all Transactions from receiver by its personId.
      */
-    public List<PpTransaction> findAllTransactionsFromPersonReceiver(final Long personId) {
-        return getLendCasesFromPersonReceiver(personId).stream()
+    public List<PpTransaction> findAllTransactionsForPerson(final Long personId) {
+        return findAllCasesByUserId(personId).stream()
                 .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
                         && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
                 .map(Case::getPpTransaction)
                 .collect(Collectors.toList());
     }
 
-    // TODO: Only implemented in tests. Necessary?
-    List<Case> getFreeCasesFromPersonOwner(final Long personId) {
-        final List<Case> cases = getAllCasesFromPersonOwner(personId);
-        return cases.stream()
-                .filter(c -> c.getReceiver() == null)
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
     /**
-     * @param personId personId of the person
-     * @return all cases, where the given person borrows an article.
+     * Gets all cases for articles a person has borrowed.
+     * @param personId of person to obtain lend cases.
+     * @return all cases borrowed by a person
      */
     public List<Case> getLendCasesFromPersonReceiver(final Long personId) {
-        return caseRepository.findAllByReceiver(personService.findPersonById(personId).getUser());
+        return caseRepository.getLendCasesFromPersonReceiver(personId);
     }
 
     /**
@@ -146,7 +139,8 @@ public class CaseService {
         if (accountHandler.hasValidFunds(username,
                 totalCost + articleService.findArticleById(articleId).getDeposit())
                 && articleNotRented(articleService.findArticleById(articleId), startTime,
-                endTime)) {
+                endTime) && new Date().getTime() < startTime && startTime < endTime
+                && !articleService.findArticleById(articleId).getOwner().getUsername().equals(username)) {
 
             final PpTransaction ppTransaction = new PpTransaction();
             ppTransaction.setLendingCost(totalCost);
@@ -192,7 +186,7 @@ public class CaseService {
      * // TODO: JavaDoc ... Checks, if article request is ok.
      *
      * @return 0: case could not be found 1: everything alright 2: the article is already rented in
-     *     the given time 3: receiver does not have enough money on ProPay
+     *      the given time 3: receiver does not have enough money on ProPay.
      */
     public int acceptArticleRequest(final Long id) {
         final Optional<Case> optCase = caseRepository.findById(id);
@@ -225,7 +219,7 @@ public class CaseService {
      * Checks, if the article of the case isn't lend in the wanted time
      * @param id id of the case to check
      * @return true: article isn't lend in the given time. false: article is lend in the given time
-     * or the article doesn't exists in the database.
+     *      or the article doesn't exists in the database.
      * */
     boolean articleNotRented(final Long id) {
         final Optional<Case> currentCase = caseRepository.findById(id);
@@ -240,7 +234,8 @@ public class CaseService {
         cases.remove(currentCase.get());
 
         for (final Case ca : cases) {
-            if (!(ca.getStartTime() > currentCase.get().getEndTime() || ca.getEndTime() < currentCase.get()
+            if (!(ca.getStartTime() > currentCase.get().getEndTime()
+                    || ca.getEndTime() < currentCase.get()
                     .getStartTime())) {
                 return false;
             }
@@ -284,14 +279,7 @@ public class CaseService {
      * Finds all expired cases, where requestStatus in {RUNNING, FINISHED, OPEN_CONFLICT}.
      */
     public List<Case> findAllExpiredCasesByUserId(final Long id) {
-        return findAllCasesByUserId(id)
-                .stream()
-                .filter(c -> !c.getArticle().isForSale())
-                .filter(c -> c.getEndTime() < new Date().getTime())
-                .filter(c -> c.getRequestStatus() == Case.RUNNING
-                        || c.getRequestStatus() == Case.FINISHED
-                        || c.getRequestStatus() == Case.OPEN_CONFLICT)
-                .collect(Collectors.toList());
+        return caseRepository.findAllExpiredCasesByUserId(id, new Date().getTime());
     }
 
     /**
@@ -325,13 +313,7 @@ public class CaseService {
      * @param id userId
      */
     public List<Case> findAllRequestedCasesByUserId(final Long id) {
-        return findAllCasesByUserId(id)
-                .stream()
-                .filter(c -> c.getRequestStatus() == Case.REQUESTED
-                        || c.getRequestStatus() == Case.REQUEST_ACCEPTED
-                        || c.getRequestStatus() == Case.REQUEST_DECLINED
-                        || c.getRequestStatus() == Case.RENTAL_NOT_POSSIBLE)
-                .collect(Collectors.toList());
+        return caseRepository.findAllRequestedCasesByUserId(id);
     }
 
     /**
@@ -368,6 +350,7 @@ public class CaseService {
 
     /**
      * Sells article, transfers money and creates case.
+     *
      * @param articleId article that is sold
      * @param principal costumer who buys article
      * @return true: sale successful. false: costumer hasn't enought money on PPAcount.
@@ -392,10 +375,14 @@ public class CaseService {
             currentCase.setPpTransaction(transaction);
             caseRepository.save(currentCase);
             accountHandler.transferFundsByCase(currentCase);
-            articleService.setSellStatusFromArticle(articleId, false);
+            //articleService.setSellStatusFromArticle(articleId, false);
             articleService.deactivateArticle(articleId);
             return true;
         }
         return false;
+    }
+
+    public List<Case> findAllSoldItemsByUserId(Long id) {
+        return caseRepository.findAllSoldItemsByUserId(id);
     }
 }

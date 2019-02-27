@@ -11,8 +11,6 @@ import java.security.Principal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,11 +19,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ConflictController {
 
+    private static final String USER_STRING = "user";
     private final CaseService caseService;
     private final ConflictService conflictService;
     private final UserService userService;
-
-    private static final String USER_STRING = "user";
 
     /**
      * Autowired constructor.
@@ -50,13 +47,18 @@ public class ConflictController {
      */
     @PostMapping("/openconflict")
     public String sendConflict(final @RequestParam Long id, final String conflictDescription)
-            throws Exception {
+            {
         if (!caseService.isValidCase(id)) {
             return "redirect:/myOverview?returned&conflictFailed";
         }
 
         final Case aCase = caseService.findCaseById(id);
-        conflictService.openConflict(aCase, conflictDescription);
+        try {
+            conflictService.openConflict(aCase, conflictDescription);
+        } catch (AccessDeniedException ex) {
+            return "redirect:/myOverview?returned&conflictFailed";
+        }
+
         return "redirect:/myOverview?returned&openedConflict";
     }
 
@@ -66,15 +68,15 @@ public class ConflictController {
      * @param id CaseId
      */
     @PostMapping("/decideforowner")
-    public String solveConflictOwner(@RequestParam Long id, final Principal principal)
+    public String solveConflictOwner(@RequestParam final Long id, final Principal principal)
             throws AccessDeniedException {
-        final Case c = caseService.findCaseById(id);
+        final Case currentCase = caseService.findCaseById(id);
         final User user = userService.findUserByPrincipal(principal);
         final Conflict conflictToSolve = conflictService
-                .getConflict(c.getConflict().getId(), user);
+                .getConflict(currentCase.getConflict().getId(), user);
 
-        conflictService.solveConflict(conflictToSolve, user, c.getOwner());
-        conflictService.deactivateConflict(c.getConflict().getId(), user);
+        conflictService.solveConflict(conflictToSolve, user, currentCase.getOwner());
+        conflictService.deactivateConflict(currentCase.getConflict().getId(), user);
 
         return "redirect:/conflicts";
     }
@@ -85,15 +87,15 @@ public class ConflictController {
      * @param id CaseId
      */
     @PostMapping("/decideforreceiver")
-    public String solveConflictReceiver(@RequestParam Long id, final Principal principal)
+    public String solveConflictReceiver(@RequestParam final Long id, final Principal principal)
             throws AccessDeniedException {
-        final Case c = caseService.findCaseById(id);
+        final Case currentCase = caseService.findCaseById(id);
         final User user = userService.findUserByPrincipal(principal);
         final Conflict conflictToSolve = conflictService
-                .getConflict(c.getConflict().getId(), user);
+                .getConflict(currentCase.getConflict().getId(), user);
 
-        conflictService.solveConflict(conflictToSolve, user, c.getReceiver());
-        conflictService.deactivateConflict(c.getConflict().getId(), user);
+        conflictService.solveConflict(conflictToSolve, user, currentCase.getReceiver());
+        conflictService.deactivateConflict(currentCase.getConflict().getId(), user);
 
         return "redirect:/conflicts";
     }
@@ -102,7 +104,7 @@ public class ConflictController {
      * Mapping for admins to show all open conflicts.
      */
     @GetMapping("/conflicts")
-    public ModelAndView solveConflicts(Principal principal) {
+    public ModelAndView solveConflicts(final Principal principal) {
         final ModelAndView mav = new ModelAndView("/admin/conflict");
 
         final User currentUser = userService.findUserByPrincipal(principal);

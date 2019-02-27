@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class CustomerReviewService {
 
     private final CustomerReviewRepository customerReviewRepository;
-    private CaseService caseService;
+    private final CaseService caseService;
 
     @Autowired
     public CustomerReviewService(final CustomerReviewRepository customerReviewRepository,

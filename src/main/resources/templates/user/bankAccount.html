@@ -43,16 +43,19 @@
           <th scope="col">Date</th>
           <th scope="col">Amount</th>
           <th scope="col">Blocked deposit</th>
+          <th scope="col">From</th>
+          <th scope="col">To</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:class="${user.id==transaction.aCase.receiver.id }? 'bg-danger' :  'bg-success'"
+        <tr th:class="${user.id==transaction.acase.receiver.id }? 'bg-danger' :  'bg-success'"
             th:each="transaction : ${transactions}">
-          <th scope="col" th:text="${transaction.aCase.article.name}"></th>
+          <th scope="col" th:text="${transaction.acase.article.name}"></th>
           <th scope="col" th:text="${transaction.getFormattedDate()}"></th>
           <th scope="col" th:text="${transaction.lendingCost}"></th>
-          <th scope="col" th:text="${transaction.aCase.deposit}"></th>
-
+          <th scope="col" th:text="${transaction.acase.deposit}"></th>
+          <th scope="col" th:text="${transaction.acase.article.owner.username}"></th>
+          <th scope="col" th:text="${transaction.acase.receiver.username}"></th>
         </tr>
         </tbody>
         <tr></tr>
