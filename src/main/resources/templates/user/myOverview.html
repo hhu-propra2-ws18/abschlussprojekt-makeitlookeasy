@@ -561,7 +561,7 @@
                   Conflict
                 </button>
               </th:block>
-              <th:block th:if="${case.requestStatus==7}">
+              <th:block th:if="${case.requestStatus==7 || case.requestStatus==8}">
                 <button class="btn btn-outline-success btn-sm disabled"
                         style="height:30px;width:80px">
                   Running
@@ -723,7 +723,7 @@
             <td th:text="${case.deposit+'€'}"></td>
 
             <td style="white-space: nowrap">
-              <th:block th:if="${case.requestStatus==7}">
+              <th:block th:if="${case.requestStatus==7 || case.requestStatus==8}">
                 <div class="ml-auto flex-md-row">
                   <form method="post" style="display:inline-block"
                         th:action="@{~/acceptCaseReturn(id=${case.id})}">
