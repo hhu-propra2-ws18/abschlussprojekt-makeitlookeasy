@@ -111,8 +111,17 @@ public class CaseService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /**
+     * Gets all cases for articles a person has borrowed.
+     * @param personId
+     * @return
+     */
     public List<Case> getLendCasesFromPersonReceiver(final Long personId) {
-        return caseRepository.findAllByReceiver(personService.findPersonById(personId).getUser());
+        return caseRepository
+                .findAllByReceiver(personService.findPersonById(personId).getUser())
+                .stream()
+                .filter(c -> !c.getArticle().isForSale())
+                .collect(Collectors.toList());
     }
 
     /**
@@ -255,14 +264,7 @@ public class CaseService {
      * Finds all expired cases, where requestStatus in {RUNNING, FINISHED, OPEN_CONFLICT}.
      */
     public List<Case> findAllExpiredCasesByUserId(final Long id) {
-        return findAllCasesByUserId(id)
-                .stream()
-                .filter(c -> !c.getArticle().isForSale())
-                .filter(c -> c.getEndTime() < new Date().getTime())
-                .filter(c -> c.getRequestStatus() == Case.RUNNING
-                        || c.getRequestStatus() == Case.FINISHED
-                        || c.getRequestStatus() == Case.OPEN_CONFLICT)
-                .collect(Collectors.toList());
+        return caseRepository.findAllExpiredCasesByUserId(id, new Date().getTime());
     }
 
     void conflictOpened(final Long id) {
@@ -298,6 +300,7 @@ public class CaseService {
                         || c.getRequestStatus() == Case.REQUEST_ACCEPTED
                         || c.getRequestStatus() == Case.REQUEST_DECLINED
                         || c.getRequestStatus() == Case.RENTAL_NOT_POSSIBLE)
+                .filter(c -> !c.getArticle().isForSale())
                 .collect(Collectors.toList());
     }
 
