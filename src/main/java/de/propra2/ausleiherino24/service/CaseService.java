@@ -76,7 +76,6 @@ public class CaseService {
 
     /**
      * Checks if case exists.
-     *
      * @return true, if a case with the given id exists. Otherwise returns false.
      */
     public boolean isValidCase(Long id) {
@@ -137,7 +136,6 @@ public class CaseService {
 
     /**
      * Creates ppTransaction and Case for request.
-     *
      * @return true, if param username has valid funds. else, otherwise.
      */
     public boolean requestArticle(final Long articleId, final Long startTime, final Long endTime,
@@ -224,7 +222,6 @@ public class CaseService {
 
     /**
      * Checks, if the article of the case isn't lend in the wanted time
-     *
      * @param id id of the case to check
      * @return true: article isn't lend in the given time. false: article is lend in the given time
      * or the article doesn't exists in the database.
@@ -268,7 +265,6 @@ public class CaseService {
 
     /**
      * Declines an article request.
-     *
      * @param id id of the case where the request should be declined.
      */
     public void declineArticleRequest(final Long id) {
@@ -299,7 +295,6 @@ public class CaseService {
 
     /**
      * If the given case exists, the status is changed to OPEN_CONFLICT.
-     *
      * @param id id of the case, where the status should be changed.
      */
     void conflictOpened(final Long id) {
@@ -313,7 +308,6 @@ public class CaseService {
 
     /**
      * Accepts the return of an Article.
-     *
      * @param id CaseId
      */
     public void acceptCaseReturn(final Long id) {
@@ -327,7 +321,6 @@ public class CaseService {
 
     /**
      * Finds all requested cases from one user by its id.
-     *
      * @param id userId
      */
     public List<Case> findAllRequestedCasesByUserId(final Long id) {
@@ -342,7 +335,6 @@ public class CaseService {
 
     /**
      * Finds all days where an article is reserved.
-     *
      * @param id articleId
      */
     public List<LocalDate> findAllReservedDaysByArticle(final Long id) {

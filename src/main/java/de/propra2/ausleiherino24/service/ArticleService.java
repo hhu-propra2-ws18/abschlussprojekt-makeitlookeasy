@@ -71,7 +71,6 @@ public class ArticleService {
 
     /**
      * Filters articles and checks whether they are included in given category.
-     *
      * @return all Articles, which are not reserved and are of given category
      */
     public List<Article> findAllArticlesByCategory(final Category category) {
@@ -103,7 +102,6 @@ public class ArticleService {
      * article is present by looking for ID key. If fails, throw Exception. If article is not being
      * reserved (a.k.a bound to running case) and free to book, deactivate article. Else, throw
      * Exception.
-     *
      * @param articleId ID of article to be "deleted".
      * @return boolean True, if succeeded. False, if encountered error while processing request.
      */
@@ -132,7 +130,6 @@ public class ArticleService {
 
     /**
      * Updates an article given by the id with the information from given article.
-     *
      * @param articleId id for article, that is about to be updated
      * @param article new article
      */

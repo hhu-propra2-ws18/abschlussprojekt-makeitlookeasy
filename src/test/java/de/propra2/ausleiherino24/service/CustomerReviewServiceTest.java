@@ -72,7 +72,7 @@ public class CustomerReviewServiceTest {
 
     @Test
     public void saveCustomerReviewShouldSaveCustomerReview() {
-        customerReviewService.addCustomerReview(customerReviews.get(0));
+        customerReviewService.saveReview(customerReviews.get(0));
         Mockito.verify(customerReviewRepository, Mockito.times(1)).save(customerReviews.get(0));
     }
 

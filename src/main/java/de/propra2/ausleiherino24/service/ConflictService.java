@@ -36,6 +36,9 @@ public class ConflictService {
         this.caseService = caseService;
     }
 
+    /**
+     * saves conflict in database if possible and sends an conflict mail.
+     */
     void saveConflict(final Conflict conflict, final User user) throws AccessDeniedException {
         isCorrectUser(conflict, user);
         conflict.setConflictedCaseConflict(conflict);
@@ -64,7 +67,6 @@ public class ConflictService {
 
     /**
      * Deactivates conflict with id.
-     *
      * @param id conflictId
      */
     public void deactivateConflict(final Long id, final User user) throws AccessDeniedException {
@@ -112,7 +114,6 @@ public class ConflictService {
 
     /**
      * Gets a conflict by its id.
-     *
      * @param id conflict id
      * @param user User, which want to access the data
      * @return conflict
@@ -128,6 +129,9 @@ public class ConflictService {
         return conflict.get();
     }
 
+    /**
+     * Checks whether the given user is the the owner in the given conflict.
+     */
     boolean isConflictedArticleOwner(final Conflict conflict, final User user) {
         if (user == null) {
             throw new NullPointerException("User was null");
@@ -135,6 +139,9 @@ public class ConflictService {
         return user.equals(conflict.getOwner());
     }
 
+    /**
+     * returns a list of users, which contains the owner and the receiver of the given conflict.
+     */
     List<User> getConflictParticipants(final Conflict conflict) {
         if (conflict == null) {
             throw new NullPointerException("Conflict was null");
@@ -144,7 +151,6 @@ public class ConflictService {
 
     /**
      * Checks whether the user is either a admin or a user involved in given conflict.
-     *
      * @return true or throws Exception
      * @throws AccessDeniedException when user is not involved in conflict and is no admin.
      */
@@ -158,6 +164,12 @@ public class ConflictService {
         return true;
     }
 
+    /**
+     * @param conflict
+     * @param user
+     * @return true, if given user is an admin or the conflict reporter.
+     * @throws AccessDeniedException when user isn't an admin and isn't the conflict reporter.
+     */
     private boolean isConflictReporterOrAdmin(final Conflict conflict, final User user)
             throws AccessDeniedException {
         if (!(conflict.getConflictReporterUsername().equals(user.getUsername()) || isUserAdmin(
@@ -167,13 +179,15 @@ public class ConflictService {
         return true;
     }
 
+    /**
+     * Checks, whether the given user is an admin.
+     */
     private boolean isUserAdmin(final User user) {
         return "admin".equals(user.getRole());
     }
 
     /**
      * Solves a conflict. The depositReceiver gets the whole deposit.
-     *
      * @param conflictToSolve the conflict
      * @param user person, who solved the conflict
      * @param depositReceiver person, who gets the deposit
