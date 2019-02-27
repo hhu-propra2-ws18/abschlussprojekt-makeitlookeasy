@@ -46,8 +46,7 @@ public class ConflictController {
      * @throws Exception Wirft tatsächlich nie eine exception
      */
     @PostMapping("/openconflict")
-    public String sendConflict(final @RequestParam Long id, final String conflictDescription)
-            {
+    public String sendConflict(final @RequestParam Long id, final String conflictDescription) {
         if (!caseService.isValidCase(id)) {
             return "redirect:/myOverview?returned&conflictFailed";
         }

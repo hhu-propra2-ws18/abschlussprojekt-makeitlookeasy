@@ -115,8 +115,8 @@ public class CaseServiceTest {
     @Test
     public void requestArticle() {
         final Long articleId = 0L;
-        final Long st = new Date().getTime()+100L;
-        final Long et = new Date().getTime()+200L;
+        final Long st = new Date().getTime() + 100L;
+        final Long et = new Date().getTime() + 200L;
         final String username = "";
         final Article article = new Article();
         User user = new User();
@@ -158,7 +158,7 @@ public class CaseServiceTest {
         when(accountHandlerMock.hasValidFunds(eq(""), Mockito.anyDouble())).thenReturn(true);
         doReturn(true).when(caseService).articleNotRented(any(), eq(st), eq(et));
 
-        assertEquals(false,  caseService.requestArticle(articleId, st, et, username));
+        assertEquals(false, caseService.requestArticle(articleId, st, et, username));
     }
 
     @Test
@@ -179,7 +179,7 @@ public class CaseServiceTest {
         doReturn(true).when(caseService).articleNotRented(any(), eq(st), eq(et));
         final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
-        assertEquals(false,  caseService.requestArticle(articleId, st, et, username));
+        assertEquals(false, caseService.requestArticle(articleId, st, et, username));
     }
 
     @Test
@@ -200,14 +200,14 @@ public class CaseServiceTest {
         doReturn(true).when(caseService).articleNotRented(any(), eq(st), eq(et));
         final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
-        assertEquals(false,  caseService.requestArticle(articleId, st, et, username));
+        assertEquals(false, caseService.requestArticle(articleId, st, et, username));
     }
 
     @Test
     public void requestArticleWithoutEnoughMoney() {
         final Long articleId = 0L;
-        final Long st = new Date().getTime()+100L;
-        final Long et = new Date().getTime()+200L;
+        final Long st = new Date().getTime() + 100L;
+        final Long et = new Date().getTime() + 200L;
         final String username = "";
         final Article article = new Article();
         article.setDeposit(100D);
@@ -224,8 +224,8 @@ public class CaseServiceTest {
     @Test(expected = Exception.class)
     public void requestArticleCatchException() {
         final Long articleId = 0L;
-        final Long st = new Date().getTime()+100L;
-        final Long et = new Date().getTime()+200L;
+        final Long st = new Date().getTime() + 100L;
+        final Long et = new Date().getTime() + 200L;
         final String username = "";
         when(articleServiceMock.findArticleById(articleId)).thenReturn(null);
         when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
