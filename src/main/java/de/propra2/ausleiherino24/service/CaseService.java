@@ -97,11 +97,18 @@ public class CaseService {
      * Finds all Transactions from receiver by its personId.
      */
     public List<PpTransaction> findAllTransactionsForPerson(final Long personId) {
-        return findAllCasesByUserId(personId).stream()
+        List<PpTransaction> ppTransactions = new ArrayList<>(
+                getAllCasesFromPersonOwner(personId).stream()
                 .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
                         && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
                 .map(Case::getPpTransaction)
-                .collect(Collectors.toList());
+                        .collect(Collectors.toList()));
+        ppTransactions.addAll(getLendCasesFromPersonReceiver(personId).stream()
+                .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
+                        && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
+                .map(Case::getPpTransaction)
+                .collect(Collectors.toList()));
+        return ppTransactions;
     }
 
     /**
