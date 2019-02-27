@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImageServiceTest {
 
     private ImageService imageService;
-    private String path = "imagestoretest";
+    private String path = "imageStoreTest";
 
     @Before
     public void init() {

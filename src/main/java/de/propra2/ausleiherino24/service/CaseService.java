@@ -3,7 +3,7 @@ package de.propra2.ausleiherino24.service;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.PPTransaction;
+import de.propra2.ausleiherino24.model.PpTransaction;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -53,7 +54,7 @@ public class CaseService {
         this.reservationHandler = reservationHandler;
     }
 
-    public void saveCase(Case acase) {
+    public void saveCase(final Case acase) {
         caseRepository.save(acase);
     }
 
@@ -65,13 +66,13 @@ public class CaseService {
 
         if (!optionalCase.isPresent()) {
             LOGGER.warn("Couldn't find case {} in database.", id);
-            throw new NullPointerException();
+            throw new NoSuchElementException();
         }
 
         return optionalCase.get();
     }
 
-    public boolean isValidCase(Long id) {
+    public boolean isValidCase(final Long id) {
         return caseRepository.existsById(id);
     }
 
@@ -95,7 +96,7 @@ public class CaseService {
     /**
      * Finds all Transactions from receiver by its personId.
      */
-    public List<PPTransaction> findAllTransactionsFromPersonReceiver(final Long personId) {
+    public List<PpTransaction> findAllTransactionsFromPersonReceiver(final Long personId) {
         return getLendCasesFromPersonReceiver(personId).stream()
                 .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
                         && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
@@ -138,7 +139,7 @@ public class CaseService {
                 && articleNotRented(articleService.findArticleById(articleId), startTime,
                 endTime)) {
 
-            final PPTransaction ppTransaction = new PPTransaction();
+            final PpTransaction ppTransaction = new PpTransaction();
             ppTransaction.setLendingCost(totalCost);
             ppTransaction.setCautionPaid(false);
             ppTransaction.setDate(new Date().getTime());
@@ -179,27 +180,27 @@ public class CaseService {
      * // TODO: JavaDoc ... Checks, if article request is ok.
      *
      * @return 0: case could not be found 1: everything alright 2: the article is already rented in
-     *     the given time 3: receiver does not have enough money on ProPay
+     *      the given time 3: receiver does not have enough money on ProPay.
      */
     public int acceptArticleRequest(final Long id) {
         final Optional<Case> optCase = caseRepository.findById(id);
         if (!optCase.isPresent()) {
             return 0;
         }
-        final Case c = optCase.get();
+        final Case currentCase = optCase.get();
 
         //Check whether the article is not reserved in this period of time
         final boolean articleRented = articleNotRented(id);
 
-        if (articleRented && accountHandler.hasValidFundsByCase(c)) {
-            c.setRequestStatus(Case.REQUEST_ACCEPTED);
-            reservationHandler.handleReservedMoney(c);
-            caseRepository.save(c);
+        if (articleRented && accountHandler.hasValidFundsByCase(currentCase)) {
+            currentCase.setRequestStatus(Case.REQUEST_ACCEPTED);
+            reservationHandler.handleReservedMoney(currentCase);
+            caseRepository.save(currentCase);
             return 1;
         } else {
-            c.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
-            reservationHandler.releaseReservationByCase(c);
-            caseRepository.save(c);
+            currentCase.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
+            reservationHandler.releaseReservationByCase(currentCase);
+            caseRepository.save(currentCase);
             if (articleRented) {
                 return 3;
             } else {
@@ -209,19 +210,20 @@ public class CaseService {
     }
 
     boolean articleNotRented(final Long id) {
-        final Optional<Case> c = caseRepository.findById(id);
-        if (!c.isPresent()) {
+        final Optional<Case> currentCase = caseRepository.findById(id);
+        if (!currentCase.isPresent()) {
             return false;
         }
 
-        final Article article = c.get().getArticle();
+        final Article article = currentCase.get().getArticle();
         final List<Case> cases = article.getCases().stream()
                 .filter(ca -> ca.getRequestStatus() == Case.REQUEST_ACCEPTED)
                 .collect(Collectors.toList());
-        cases.remove(c.get());
+        cases.remove(currentCase.get());
 
         for (final Case ca : cases) {
-            if (!(ca.getStartTime() > c.get().getEndTime() || ca.getEndTime() < c.get()
+            if (!(ca.getStartTime() > currentCase.get().getEndTime()
+                    || ca.getEndTime() < currentCase.get()
                     .getStartTime())) {
                 return false;
             }
@@ -253,11 +255,11 @@ public class CaseService {
         if (!optCase.isPresent()) {
             return;
         }
-        final Case c = optCase.get();
-        c.setRequestStatus(Case.REQUEST_DECLINED);
-        reservationHandler.releaseReservationByCase(c);
-        c.setPpTransaction(new PPTransaction());
-        caseRepository.save(c);
+        final Case currentCase = optCase.get();
+        currentCase.setRequestStatus(Case.REQUEST_DECLINED);
+        reservationHandler.releaseReservationByCase(currentCase);
+        currentCase.setPpTransaction(new PpTransaction());
+        caseRepository.save(currentCase);
     }
 
     /**
@@ -270,9 +272,9 @@ public class CaseService {
     void conflictOpened(final Long id) {
         final Optional<Case> opt = caseRepository.findById(id);
         if (opt.isPresent()) {
-            final Case c = opt.get();
-            c.setRequestStatus(Case.OPEN_CONFLICT);
-            caseRepository.save(c);
+            final Case currentCase = opt.get();
+            currentCase.setRequestStatus(Case.OPEN_CONFLICT);
+            caseRepository.save(currentCase);
         }
     }
 
@@ -284,9 +286,9 @@ public class CaseService {
     public void acceptCaseReturn(final Long id) {
         final Optional<Case> opt = caseRepository.findById(id);
         if (opt.isPresent()) {
-            final Case c = opt.get();
-            c.setRequestStatus(Case.FINISHED);
-            caseRepository.save(c);
+            final Case currentCase = opt.get();
+            currentCase.setRequestStatus(Case.FINISHED);
+            caseRepository.save(currentCase);
         }
     }
 
@@ -337,28 +339,30 @@ public class CaseService {
 
     /**
      * Sells article, transfers money and creates case.
+     *
      * @param articleId article that is sold
      * @param principal costumer who buys article
      */
-    public boolean sellArticle(Long articleId, Principal principal) {
-        Article article = articleService.findArticleById(articleId);
-        User costumer = userService.findUserByPrincipal(principal);
+    public boolean sellArticle(final Long articleId, final Principal principal) {
+        final Article article = articleService.findArticleById(articleId);
+        final User costumer = userService.findUserByPrincipal(principal);
 
         if (accountHandler.hasValidFunds(costumer.getUsername(),
                 articleService.findArticleById(articleId).getCostPerDay())) {
-            Case c = new Case();
-            c.setRequestStatus(Case.FINISHED);
-            c.setDeposit(0d);
-            c.setPrice(article.getCostPerDay());
-            c.setArticle(article);
-            c.setReceiver(costumer);
-            PPTransaction transaction = new PPTransaction();
+            final Case currentCase = new Case();
+            currentCase.setRequestStatus(Case.FINISHED);
+            currentCase.setDeposit(0d);
+            currentCase.setPrice(article.getCostPerDay());
+            currentCase.setArticle(article);
+            currentCase.setReceiver(costumer);
+
+            final PpTransaction transaction = new PpTransaction();
             transaction.setLendingCost(article.getCostPerDay());
             transaction.setDate(new Date().getTime());
             transaction.setCautionPaid(false);
-            c.setPpTransaction(transaction);
-            caseRepository.save(c);
-            accountHandler.transferFundsByCase(c);
+            currentCase.setPpTransaction(transaction);
+            caseRepository.save(currentCase);
+            accountHandler.transferFundsByCase(currentCase);
             articleService.setSellStatusFromArticle(articleId, false);
             articleService.deactivateArticle(articleId);
             return true;

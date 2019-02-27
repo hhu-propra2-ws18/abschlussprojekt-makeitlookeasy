@@ -1,12 +1,12 @@
 package de.propra2.ausleiherino24.data;
 
-import de.propra2.ausleiherino24.model.PPTransaction;
+import de.propra2.ausleiherino24.model.PpTransaction;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.NonNull;
 
-public interface PPTransactionRepository extends CrudRepository<PPTransaction, Long> {
+public interface PpTransactionRepository extends CrudRepository<PpTransaction, Long> {
 
     @NonNull
-    List<PPTransaction> findAll();
+    List<PpTransaction> findAll();
 }
