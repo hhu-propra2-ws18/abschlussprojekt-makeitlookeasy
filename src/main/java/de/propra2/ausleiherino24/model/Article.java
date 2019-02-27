@@ -75,24 +75,24 @@ public class Article {
      * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
      */
 
-    public void addCase(final Case acase) {
-        addCase(acase, false);
+    public void addCase(final Case aCase) {
+        addCase(aCase, false);
     }
 
-    void addCase(final Case acase, final boolean repetition) {
-        if (acase == null) {
+    void addCase(final Case aCase, final boolean repetition) {
+        if (aCase == null) {
             return;
         }
         if (cases == null) {
             cases = new ArrayList<>();
         }
-        if (cases.contains(acase)) {
-            cases.set(cases.indexOf(acase), acase);
+        if (cases.contains(aCase)) {
+            cases.set(cases.indexOf(aCase), aCase);
         } else {
-            cases.add(acase);
+            cases.add(aCase);
         }
         if (!repetition) {
-            acase.setArticle(this, true);
+            aCase.setArticle(this, true);
         }
     }
 

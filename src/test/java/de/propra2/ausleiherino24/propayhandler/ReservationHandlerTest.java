@@ -4,7 +4,6 @@ import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.PPTransaction;
 import de.propra2.ausleiherino24.model.User;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,14 +19,12 @@ public class ReservationHandlerTest {
 
     private static final String RESERVATION_URL = "http://localhost:8888/reservation";
     private Reservation reservation1;
-    private Reservation reservation2;
     private ResponseEntity<Reservation> reservationResp1;
     private PPTransaction ppTransaction;
     private User user;
     private User user2;
     private Case aCase;
     private RestTemplate restTemplate;
-    private List<Reservation> resList;
     private ReservationHandler reservationHandler;
     @MockBean
     private CaseRepository caseRepository;

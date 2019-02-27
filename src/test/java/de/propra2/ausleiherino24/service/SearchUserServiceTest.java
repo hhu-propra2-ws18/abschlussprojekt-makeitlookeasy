@@ -24,8 +24,6 @@ public class SearchUserServiceTest {
         users = Mockito.mock(UserRepository.class);
         user1 = new User();
         user1.setUsername("user1");
-        User user2 = new User();
-        user2.setUsername("user2");
         searchUserService = new SearchUserService(users);
     }
 
