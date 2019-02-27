@@ -33,11 +33,11 @@ public class CustomerReviewRepoTest {
         customerReview1.setText("test1");
         customerReview1.setTimestamp(10012019L);
         customerReview1.setStars(3);
-        customerReview1.setAcase(new Case());
+        customerReview1.setACase(new Case());
         customerReview2.setText("test2");
         customerReview2.setTimestamp(11012019L);
         customerReview2.setStars(5);
-        customerReview2.setAcase(new Case());
+        customerReview2.setACase(new Case());
         customerReviewList.add(customerReview1);
         customerReviewList.add(customerReview2);
     }
