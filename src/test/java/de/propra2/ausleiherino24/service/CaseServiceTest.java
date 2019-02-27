@@ -113,35 +113,6 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void ownerWithTwoFreeCases() {
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
-
-        when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
-        final Person o = new Person();
-        when(personServiceMock.findPersonById(0L)).thenReturn(o);
-        cases.remove(3);
-        cases.remove(1);
-
-        assertEquals(cases, caseService.getFreeCasesFromPersonOwner(0L));
-    }
-
-    @Test
-    public void ownerWithNoFreeCases() {
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
-
-        when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
-        final Person o = new Person();
-        when(personServiceMock.findPersonById(0L)).thenReturn(o);
-
-        assertTrue(caseService.getFreeCasesFromPersonOwner(0L).isEmpty());
-    }
-
-    @Test
     public void requestArticle() {
         final Long articleId = 0L;
         final Long st = 5L;
