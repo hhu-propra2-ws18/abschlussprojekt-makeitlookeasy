@@ -96,7 +96,7 @@ public class CaseServiceTest {
         cases.remove(2);
         cases.remove(0);
 
-        assertEquals(cases, caseService.getLendCasesFromPersonOwner(0L));
+        assertEquals(cases, caseService.getAllCasesFromPersonOwner(0L));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class CaseServiceTest {
         final Person o = new Person();
         when(personServiceMock.findPersonById(0L)).thenReturn(o);
 
-        assertTrue(caseService.getLendCasesFromPersonOwner(0L).isEmpty());
+        assertTrue(caseService.getAllCasesFromPersonOwner(0L).isEmpty());
     }
 
     @Test
@@ -413,7 +413,7 @@ public class CaseServiceTest {
         final Case c2 = new Case();
         c2.setPpTransaction(new PpTransaction());
         cases.addAll(Arrays.asList(c1, c2));
-        doReturn(cases).when(caseService).findAllCasesByUserId(0L);
+        doReturn(cases).when(caseService).getAllCasesFromPersonOwner(0L);
         final List<PpTransaction> transactions = new ArrayList<>(
                 Arrays.asList(new PpTransaction(), new PpTransaction()));
 

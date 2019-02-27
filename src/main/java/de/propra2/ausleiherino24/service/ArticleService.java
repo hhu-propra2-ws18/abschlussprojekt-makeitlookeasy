@@ -82,6 +82,7 @@ public class ArticleService {
 
     /**
      * Returns all active articles.
+     * @return all active articles.
      */
     List<Article> findAllActiveArticles() {
         return articleRepository.findAllActive().isEmpty() ? new ArrayList<>()
@@ -90,6 +91,7 @@ public class ArticleService {
 
     /**
      * Finds all article which have active=true and forRental=true.
+     * @return all non-active, not rented articles.
      */
     public List<Article> findAllActiveAndForRentalArticles() {
         return findAllActiveArticles()
@@ -146,7 +148,8 @@ public class ArticleService {
     }
 
     /**
-     * Returns List of all articles, which name contains the given searchstring. Case of letters is ignored.
+     * Returns List of all articles, which name contains the given searchstring.
+     * Case of letters is ignored.
      */
     public List<Article> findAllArticlesByName(final String searchString) {
         return articleRepository.findByActiveTrueAndNameContainsIgnoreCase(searchString);
