@@ -96,8 +96,8 @@ public class CaseService {
     /**
      * Finds all Transactions from receiver by its personId.
      */
-    public List<PpTransaction> findAllTransactionsFromPersonReceiver(final Long personId) {
-        return getLendCasesFromPersonReceiver(personId).stream()
+    public List<PpTransaction> findAllTransactionsForPerson(final Long personId) {
+        return findAllCasesByUserId(personId).stream()
                 .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
                         && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
                 .map(Case::getPpTransaction)

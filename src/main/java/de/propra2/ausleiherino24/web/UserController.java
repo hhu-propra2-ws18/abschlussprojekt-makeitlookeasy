@@ -125,7 +125,7 @@ public class UserController {
     public ModelAndView getBankAccountPage(final Principal principal) {
         final ModelAndView mav = new ModelAndView("/user/bankAccount");
         mav.addObject(CATEGORIES, Category.getAllCategories());
-        mav.addObject("transactions", caseService.findAllTransactionsFromPersonReceiver(
+        mav.addObject("transactions", caseService.findAllTransactionsForPerson(
                 userService.findUserByPrincipal(principal).getPerson().getId()));
         mav.addObject("pp", accountHandler.checkFunds(principal.getName()));
         mav.addObject("user", userService.findUserByPrincipal(principal));

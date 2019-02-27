@@ -433,7 +433,7 @@ public class CaseServiceTest {
         final List<PpTransaction> transactions = new ArrayList<>(
                 Arrays.asList(new PpTransaction(), new PpTransaction()));
 
-        assertEquals(transactions, caseService.findAllTransactionsFromPersonReceiver(0L));
+        assertEquals(transactions, caseService.findAllTransactionsForPerson(0L));
     }
 
     @Test
@@ -449,7 +449,7 @@ public class CaseServiceTest {
         final List<PpTransaction> transactions = new ArrayList<>(
                 Arrays.asList(new PpTransaction(), new PpTransaction()));
 
-        assertTrue(caseService.findAllTransactionsFromPersonReceiver(0L).isEmpty());
+        assertTrue(caseService.findAllTransactionsForPerson(0L).isEmpty());
     }
 
     @Test
