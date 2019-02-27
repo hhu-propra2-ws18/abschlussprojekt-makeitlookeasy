@@ -100,10 +100,10 @@ public class ImageService {
     }
 
     /**
-     *
-     * @param prefix
-     * @param fileEnding
-     * @return
+     * gernerates the Path for a file.
+     * @param prefix file prefix
+     * @param fileEnding file suffix
+     * @return generated path.
      */
     String generateFilePath(final String prefix, final String fileEnding) {
         String uniqueFilepath = buildPath(buildFilename(fileEnding), prefix);
@@ -133,7 +133,7 @@ public class ImageService {
     }
 
     /**
-     * returns absolut path of upload directory
+     * returns absolut path of upload directory.
      */
     String getUploadDirectoryPath() {
         final String rootPath = Paths.get(".").toAbsolutePath().normalize().toString();

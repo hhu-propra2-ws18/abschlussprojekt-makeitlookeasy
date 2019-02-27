@@ -98,7 +98,9 @@ public class UserService {
     public User findUserByPrincipal(final Principal principal) {
         User user;
 
-        if(principal == null) return buildNewUser();
+        if (principal == null) {
+            return buildNewUser();
+        }
 
         try {
             user = findUserByUsername(principal.getName());

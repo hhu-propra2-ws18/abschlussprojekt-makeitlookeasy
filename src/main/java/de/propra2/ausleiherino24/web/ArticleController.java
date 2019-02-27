@@ -1,6 +1,5 @@
 package de.propra2.ausleiherino24.web;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.CalendarEvent;
 import de.propra2.ausleiherino24.model.Category;
@@ -11,10 +10,8 @@ import de.propra2.ausleiherino24.service.CalendarEventService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
 import de.propra2.ausleiherino24.service.ImageService;
 import de.propra2.ausleiherino24.service.UserService;
-import java.lang.reflect.Array;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

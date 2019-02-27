@@ -35,6 +35,9 @@ public class UserController {
     private final UserService userService;
     private final List<Category> allCategories = Category.getAllCategories();
 
+    /**
+     * constructor.
+     */
     @Autowired
     public UserController(final UserService userService, final ArticleService articleService,
             final AccountHandler accountHandler, final CaseService caseService) {
@@ -44,6 +47,9 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * profile overview.
+     */
     @GetMapping("/profile/{username}")
     public ModelAndView getUserProfile(final @PathVariable String username,
             final Principal principal) {
@@ -66,6 +72,9 @@ public class UserController {
         return mav;
     }
 
+    /**
+     * edit profile view.
+     */
     @PutMapping("/editProfile")
     public ModelAndView editUserProfile(final @ModelAttribute @Valid User user,
             final @ModelAttribute @Valid Person person, final Principal principal) {
@@ -88,7 +97,7 @@ public class UserController {
     }
 
     /**
-     * Mapping for userOverview.
+     * profile overview.
      */
     @GetMapping("/myOverview")
     public ModelAndView getMyArticlePage(final Principal principal) {
@@ -119,6 +128,9 @@ public class UserController {
         return mav;
     }
 
+    /**
+     * create new Item.
+     */
     @GetMapping("/newItem")
     public ModelAndView getNewItemPage(final Principal principal) {
         final User currentUser = userService.findUserByPrincipal(principal);
@@ -130,6 +142,9 @@ public class UserController {
         return mav;
     }
 
+    /**
+     * bank account overview.
+     */
     @GetMapping("/bankAccount")
     public ModelAndView getBankAccountPage(final Principal principal) {
         final ModelAndView mav = new ModelAndView("/user/bankAccount");
@@ -143,6 +158,9 @@ public class UserController {
         return mav;
     }
 
+    /**
+     * save profile after editing.
+     */
     @PostMapping("accessed/user/saveProfile")
     public String saveEditedUserProfile(final Principal principal, final User user,
             final Person person,
@@ -161,6 +179,9 @@ public class UserController {
         }
     }
 
+    /**
+     * add Money to Propay Account.
+     */
     @PostMapping("/addMoney")
     public String addMoneyToUserAccount(final Principal principal, final double money) {
         accountHandler.addFunds(principal.getName(), money);
