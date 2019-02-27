@@ -7,6 +7,7 @@ import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ConflictService;
 import de.propra2.ausleiherino24.service.UserService;
+import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class ConflictController {
     private final CaseService caseService;
     private final ConflictService conflictService;
     private final UserService userService;
-    
+
     private static final String USER_STRING = "user";
 
     /**
@@ -67,7 +68,7 @@ public class ConflictController {
      */
     @PostMapping("/decideforowner")
     public String solveConflictOwner(@RequestParam Long id, final Principal principal)
-            throws Exception {
+            throws AccessDeniedException {
         final Case c = caseService.findCaseById(id);
         final User user = userService.findUserByPrincipal(principal);
         final Conflict conflictToSolve = conflictService
@@ -85,7 +86,7 @@ public class ConflictController {
      */
     @PostMapping("/decideforreceiver")
     public String solveConflictReceiver(@RequestParam Long id, final Principal principal)
-            throws Exception {
+            throws AccessDeniedException {
         final Case c = caseService.findCaseById(id);
         final User user = userService.findUserByPrincipal(principal);
         final Conflict conflictToSolve = conflictService
