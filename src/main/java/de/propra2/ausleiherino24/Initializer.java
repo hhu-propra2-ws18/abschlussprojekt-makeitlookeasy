@@ -33,17 +33,15 @@ import org.springframework.stereotype.Component;
 public class Initializer implements ServletContextInitializer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Initializer.class);
-
+    private static final String SECRET_STRING = "password";
+    private static final String USER = "user";
+    private static final String ADMIN = "admin";
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
     private final PersonRepository personRepository;
     private final CaseRepository caseRepository;
     private final ImageService imageService;
-
     private final Faker faker = new Faker(Locale.GERMAN);
-    private static final String SECRET_STRING = "password";
-    private static final String USER = "user";
-    private static final String ADMIN = "admin";
 
     /**
      * Autowired constructor.

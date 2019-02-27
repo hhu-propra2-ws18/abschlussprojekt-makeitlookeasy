@@ -24,10 +24,6 @@ public enum Category {
         return Arrays.asList(values());
     }
 
-    public String getName() {
-        return name;
-    }
-
     /**
      * Finds Category matching given value.
      */
@@ -39,5 +35,9 @@ public enum Category {
         }
         throw new IllegalArgumentException(
                 "Unknown enum type " + value + ", Allowed values are " + Arrays.toString(values()));
+    }
+
+    public String getName() {
+        return name;
     }
 }

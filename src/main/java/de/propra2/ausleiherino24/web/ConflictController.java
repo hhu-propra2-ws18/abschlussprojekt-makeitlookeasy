@@ -2,7 +2,6 @@ package de.propra2.ausleiherino24.web;
 
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
-import de.propra2.ausleiherino24.model.ResolveConflict;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ConflictService;
@@ -16,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -64,6 +62,7 @@ public class ConflictController {
 
     /**
      * Admin decides conflict for Owner.
+     *
      * @param id CaseId
      */
     @PostMapping("/decideforowner")
@@ -82,6 +81,7 @@ public class ConflictController {
 
     /**
      * Admin decides conflict for Receiver.
+     *
      * @param id CaseId
      */
     @PostMapping("/decideforreceiver")

@@ -24,8 +24,8 @@
   <link rel="stylesheet" th:href="@{~/vendor/fontawesome/fonts/font-awesome.min.css}">
 
   <!-- Full Calendar Css -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.css"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.css"
+        rel="stylesheet"/>
 
   <!-- Custom styles for this template -->
   <link rel="stylesheet" th:href="@{~/css/shop-homepage.css}">
@@ -128,7 +128,7 @@
           Article was succesfully booked!
         </div>
 
-        <a th:href="@{~/bankAccount}" style="text-decoration: none">
+        <a style="text-decoration: none" th:href="@{~/bankAccount}">
           <div class="alert alert-warning absolue center" th:if="${param.failed}">
             Could not book the item! You probably got not enough money or the article is already
             booked. Click to get more money.
@@ -137,9 +137,10 @@
       </div>
       <div class="card mt-4">
         <div style="height: 300px; width=900px">
-          <a href="#showImageModal" data-target="#showImageModal" data-toggle="modal">
-            <img alt="" class="card-img-top img-fluid" th:src="@{/images/{id}(id=${article.image})}"
-                 style='height: 100%; width: 100%; object-fit: contain'>
+          <a data-target="#showImageModal" data-toggle="modal" href="#showImageModal">
+            <img alt="" class="card-img-top img-fluid"
+                 style='height: 100%; width: 100%; object-fit: contain'
+                 th:src="@{/images/{id}(id=${article.image})}">
           </a>
 
           <!-- Modal -->
@@ -148,7 +149,7 @@
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-body">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                     <span aria-hidden="true">&times;</span>
                   </button>
                   <img alt="" class="card-img-top img-fluid"
@@ -173,12 +174,12 @@
                 th:text="|${article.getOwner().getUsername()}|">Mick Potzkai</a></p>
             <div class="ml-auto">
               <!-- Button trigger Modal -->
-              <button type="button" class="btn btn-success" data-target="#modal"
-                      data-toggle="modal">Book now
+              <button class="btn btn-success" data-target="#modal" data-toggle="modal"
+                      type="button">Book now
               </button>
 
               <!-- Modal -->
-              <div class="modal fade" id="modal" role="dialog" aria-labelledby="modalLabel"
+              <div aria-labelledby="modalLabel" class="modal fade" id="modal" role="dialog"
                    tabindex="-1">
                 <form method="post" th:action="@{/bookArticle(id=${article.id})}">
                   <div class="modal-dialog" role="document">
@@ -190,7 +191,7 @@
                             th:text="|${article.getCostPerDay()}€ per Day|">24.99€ per day</h5>
                         <h5 class="modal-title" th:text="|${article.getDeposit()}€ deposit|">200€
                           deposit</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
@@ -199,8 +200,8 @@
                           <div class="form-group">
                             <div>Start</div>
                             <div class='input-group date' id='startDate'>
-                              <input type='text' class="form-control" onchange="cal()"
-                                     id="startDateInput" name="startDate"/>
+                              <input class="form-control" id="startDateInput" name="startDate"
+                                     onchange="cal()" type='text'/>
                               <span class="input-group-addon"><span
                                   class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -209,17 +210,17 @@
                           <div class="form-group">
                             <div>End</div>
                             <div class='input-group date' id='endDate'>
-                              <input type='text' class="form-control" onchange="cal()"
-                                     id="endDateInput" name="endDate"/>
+                              <input class="form-control" id="endDateInput" name="endDate"
+                                     onchange="cal()" type='text'/>
                               <span class="input-group-addon"><span
                                   class="glyphicon glyphicon-calendar"></span>
                     </span>
                             </div>
                           </div>
                           <h6>Cost</h6>
-                          <input class="from-control" id="price" disabled>
+                          <input class="from-control" disabled id="price">
                           <h6>Cost with deposit</h6>
-                          <input class="from-control" id="priceWithDep" disabled>
+                          <input class="from-control" disabled id="priceWithDep">
 
                         </div>
                       </div>
@@ -254,8 +255,8 @@
             <div class="ml-auto">
               <!-- Button to buy article -->
               <form method="post" th:action="@{~/buyArticle}">
-                <input type="hidden" name="articleId" th:value="${article.id}">
-                <button type="submit" class="btn btn-success"
+                <input name="articleId" th:value="${article.id}" type="hidden">
+                <button class="btn btn-success" type="submit"
                 >Buy now
                 </button>
               </form>
@@ -273,12 +274,15 @@
         <div class="card-header">
           Product Reviews
         </div>
-                <div class="card-body" th:each="revi : ${review}">
-                    <h6 th:text="${revi.title}"></h6>
-                    <p th:text="${revi.text}"></p>
-                    <small class="text-muted" th:text="|Posted by ${revi.acase.receiver.username}  on ${revi.getFormattedTime()}  |">Posted by Anonymous on 3/1/17</small>
-                    <hr>
-                </div>
+        <div class="card-body" th:each="revi : ${review}">
+          <h6 th:text="${revi.title}"></h6>
+          <p th:text="${revi.text}"></p>
+          <small class="text-muted"
+                 th:text="|Posted by ${revi.acase.receiver.username}  on ${revi.getFormattedTime()}  |">
+            Posted by Anonymous on 3/1/17
+          </small>
+          <hr>
+        </div>
       </div>
       <!-- /.card -->
     </div>
@@ -302,7 +306,7 @@
     zIndexOffset: 2048,
   }).on("changeDate", function (e) {
     var date = e.date;
-    date.setDate(date.getDate() + 1)
+    date.setDate(date.getDate() + 1);
     jQuery('#endDate').datepicker("setStartDate", e.date);
   });
 
@@ -316,7 +320,7 @@
     zIndexOffset: 2048,
   }).on("changeDate", function (e) {
     var date = e.date;
-    date.setDate(date.getDate() - 1)
+    date.setDate(date.getDate() - 1);
     jQuery('#startDate').datepicker("setEndDate", e.date);
   });
   $('#endDate').datepicker('update', now);

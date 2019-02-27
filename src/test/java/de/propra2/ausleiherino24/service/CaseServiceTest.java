@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -454,8 +453,8 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void sellArticle(){
-        final Article article= new Article();
+    public void sellArticle() {
+        final Article article = new Article();
         article.setCostPerDay(10d);
         when(articleServiceMock.findArticleById(0L)).thenReturn(article);
         when(userServiceMock.findUserByPrincipal(any())).thenReturn(new User());
@@ -473,7 +472,7 @@ public class CaseServiceTest {
         c.setReceiver(new User());
         final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
-        caseService.sellArticle(0L ,null);
+        caseService.sellArticle(0L, null);
 
         verify(caseRepositoryMock).save(argument.capture());
         //aligns Date
