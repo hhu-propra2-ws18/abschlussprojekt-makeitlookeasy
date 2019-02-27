@@ -16,12 +16,18 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -169,6 +175,25 @@ public class Initializer implements ServletContextInitializer {
                         "Hans",
                         "Peter"), USER);
 
+        List<Article> articles = persons
+                .stream()
+                .map(p -> p.getUser().getArticleList())
+                .flatMap(a -> a.stream())
+                .collect(Collectors.toList());
+
+        //Hans leiht sich 10 zufällige Artikel aus
+        IntStream.range(0, 10)
+                .mapToObj(articles::get)
+                .forEach(article -> {
+                    Case c = createCase(
+                            article,
+                            hans,
+                            convertDateAsLong(1, 1, 2019),
+                            new Date().getTime() + 3600 * 24 * 1000,
+                            Case.RUNNING);
+                    article.addCase(c);
+                });
+
         IntStream.range(0, 7)
                 .forEach(value1 -> {
                     final int pokedexId = faker.random().nextInt(1, 807);
@@ -280,8 +305,7 @@ public class Initializer implements ServletContextInitializer {
      * Creates a case from parameters.
      */
     private Case createCase(final Article article, final User receiver, final Long starttime,
-            final Long endtime,
-            final int requestStatus) {
+            final Long endtime, final int requestStatus) {
         final Case aCase = new Case();
         aCase.setReceiver(receiver);
         aCase.setPrice(article.getCostPerDay());
