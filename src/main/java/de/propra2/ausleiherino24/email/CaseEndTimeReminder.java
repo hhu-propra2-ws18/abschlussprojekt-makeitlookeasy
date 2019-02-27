@@ -15,7 +15,7 @@ public class CaseEndTimeReminder {
 
     private final CaseRepository cases;
     private final EmailSender emailSender;
-    private final static Long ONE_DAY = 1L;
+    private static final Long ONE_DAY = 1L;
 
     @Autowired
     public CaseEndTimeReminder(final CaseRepository cases, final EmailSender emailSender) {

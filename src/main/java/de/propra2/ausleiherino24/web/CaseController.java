@@ -85,7 +85,7 @@ public class CaseController {
 
 
     /**
-     * Principal buys an article
+     * Principal buys an article.
      * @param articleId article that is sold
      * @param principal customer that buys article
      * @return

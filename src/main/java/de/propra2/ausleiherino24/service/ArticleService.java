@@ -54,8 +54,6 @@ public class ArticleService {
 
     /**
      * Return all articles which are active and for rental.
-     * @param user
-     * @return
      */
     public List<Article> findAllActiveForRental(final User user) {
         return articleRepository.findAllActiveForRentalByUser(user);
@@ -63,8 +61,6 @@ public class ArticleService {
 
     /**
      * Return all articles which are active and for sell.
-     * @param user
-     * @return
      */
     public List<Article> findAllActiveForSale(final User user) {
         return articleRepository.findAllActiveForSaleByUser(user);
@@ -160,7 +156,7 @@ public class ArticleService {
     }
 
     /**
-     * Sets forSale-flag in article and saves in database
+     * Sets forSale-flag in article and saves in database.
      * @param articleId article that is modified
      * @param status value to set
      */
