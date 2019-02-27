@@ -99,4 +99,12 @@
         value="Avoid excessively long variable names like .*"/>
     </properties>
   </rule>
+
+  <!-- We want to use the default timezone of the used machine -->
+  <rule ref="category/java/errorprone.xml/SimpleDateFormatNeedsLocale">
+    <properties>
+      <property name="violationSuppressRegex"
+        value="When instantiating a SimpleDateFormat object, specify a Locale"/>
+    </properties>
+  </rule>
 </ruleset>
