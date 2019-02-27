@@ -325,7 +325,7 @@ public class Initializer implements ServletContextInitializer {
         final ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         final String filePath = classLoader.getResource(fileName).getFile();
 
-        if(filePath == null) {
+        if (filePath == null) {
             LOGGER.warn("Couldn't parse picture of Pokémon {}.", pokedexId);
             return null;
         }
