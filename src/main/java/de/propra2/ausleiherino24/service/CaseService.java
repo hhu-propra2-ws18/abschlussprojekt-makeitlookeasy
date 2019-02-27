@@ -342,7 +342,7 @@ public class CaseService {
             currentCase.setPpTransaction(transaction);
             caseRepository.save(currentCase);
             accountHandler.transferFundsByCase(currentCase);
-            articleService.setSellStatusFromArticle(articleId, false);
+            //articleService.setSellStatusFromArticle(articleId, false);
             articleService.deactivateArticle(articleId);
             return true;
         }
