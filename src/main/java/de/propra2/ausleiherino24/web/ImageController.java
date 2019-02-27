@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class ImageController {
 
-    private static final String URL = "/imageupload";
+    private static final String URL = "/imageUpload";
     private ImageService imageService;
 
     @Autowired
@@ -38,6 +38,13 @@ public class ImageController {
         return "redirect:" + URL;
     }
 
+    /**
+     * TODO: JavaDoc.
+     *
+     * @param fileName .
+     * @param response .
+     * @throws IOException .
+     */
     @GetMapping("/images/{fileName}")
     public void getImage(final @PathVariable String fileName, final HttpServletResponse response)
             throws IOException {

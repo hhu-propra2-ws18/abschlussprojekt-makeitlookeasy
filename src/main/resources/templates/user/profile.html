@@ -24,7 +24,7 @@
 <div class="container" style="margin-bottom: 100px;margin-top:50px">
   <div class="row">
     <!-- Categories -->
-    <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
+    <div name="category" th:replace="/../fragments/categories ::categories"></div>
     <div class="col-lg-8">
       <div class="row">
         <div class="col-md-12 alert-col relative">
@@ -44,7 +44,7 @@
               <div class="col-sm-12 col-md-6">
                 <div class="form-group"><label>First Name </label><input class="form-control"
                                                                          disabled
-                                                                         name="firstname"
+                                                                         name="firstName"
                                                                          th:value="${visitedUser.getPerson().getFirstName()}"
                                                                          type="text">
                 </div>
@@ -52,7 +52,7 @@
               <div class="col-sm-12 col-md-6">
                 <div class="form-group"><label>Last Name </label><input class="form-control"
                                                                         disabled
-                                                                        name="lastname"
+                                                                        name="lastName"
                                                                         th:value="${visitedUser.getPerson().getLastName()}"
                                                                         type="text">
                 </div>
