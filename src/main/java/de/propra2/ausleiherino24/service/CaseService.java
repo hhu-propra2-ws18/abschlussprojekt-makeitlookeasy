@@ -170,7 +170,7 @@ public class CaseService {
      * // TODO: JavaDoc ... Checks, if article request is ok.
      *
      * @return 0: case could not be found 1: everything alright 2: the article is already rented in
-     * the given time 3: receiver does not have enough money on ProPay
+     *     the given time 3: receiver does not have enough money on ProPay
      */
     public int acceptArticleRequest(final Long id) {
         final Optional<Case> optCase = caseRepository.findById(id);
@@ -333,8 +333,7 @@ public class CaseService {
     }
 
     /**
-     * Sells article, transfers money and creates case
-     *
+     * Sells article, transfers money and creates case.
      * @param articleId article that is sold
      * @param principal costumer who buys article
      */
@@ -350,7 +349,6 @@ public class CaseService {
             c.setPrice(article.getCostPerDay());
             c.setArticle(article);
             c.setReceiver(costumer);
-            articleService.deactivateArticle(articleId);
             PPTransaction transaction = new PPTransaction();
             transaction.setLendingCost(article.getCostPerDay());
             transaction.setDate(new Date().getTime());
@@ -359,6 +357,7 @@ public class CaseService {
             caseRepository.save(c);
             accountHandler.transferFundsByCase(c);
             articleService.setSellStatusFromArticle(articleId, false);
+            articleService.deactivateArticle(articleId);
             return true;
         }
         return false;

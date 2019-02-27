@@ -39,6 +39,16 @@
 
     <div class="col-lg-9">
 
+      <div class="alert alert-warning absolue center" th:if="${param.access}" style="margin-top:50px">
+        Article was bought successfully!
+      </div>
+
+      <a th:href="@{~/bankAccount}" style="text-decoration: none">
+      <div class="alert alert-warning absolue center" th:if="${param.failed}" style="margin-top:50px">
+        Sth. went wrong while buying! Not enaugh money ? Click!
+      </div>
+      </a>
+
       <div class="carousel slide my-4" data-ride="carousel" id="carouselExampleIndicators">
         <ol class="carousel-indicators">
           <li class="active" data-slide-to="0" data-target="#carouselExampleIndicators"></li>

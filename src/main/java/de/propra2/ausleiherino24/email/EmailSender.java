@@ -18,6 +18,9 @@ public class EmailSender {
     private final SimpleMailMessage message;
     private final UserService userService;
 
+    /**
+     * Autowired constructor.
+     */
     @Autowired
     public EmailSender(final EmailConfig config, final JavaMailSenderImpl mailSender,
             final SimpleMailMessage message, final UserService userService) {
@@ -27,6 +30,9 @@ public class EmailSender {
         this.userService = userService;
     }
 
+    /**
+     * Sends an email to the ConflictReporter.
+     */
     public void sendConflictEmail(final Conflict conflict) {
         configureMailSender();
 
@@ -40,13 +46,13 @@ public class EmailSender {
         mailSender.send(message);
     }
 
-    void sendRemindingEmail(final Case aCase) {
+    void sendRemindingEmail(final Case acase) {
         configureMailSender();
 
         message.setFrom("Clearing@Service.com");
-        message.setTo(aCase.getReceiver().getEmail());
+        message.setTo(acase.getReceiver().getEmail());
         message.setSubject(
-                "Reminder: Article: " + aCase.getArticle().getName()
+                "Reminder: Article: " + acase.getArticle().getName()
                         + " has to be returned tomorrow!");
         message.setText("Please do not forget to return the article on time!");
 

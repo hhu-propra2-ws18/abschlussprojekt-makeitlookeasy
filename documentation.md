@@ -83,7 +83,6 @@ Additional user information, like name or contact is stored in the class `Person
 The `ImageController` essentially maps the services provided by the `ImageService` to appropriate endpoints.
 
 
-
 ## Services
 
 ### ImageService

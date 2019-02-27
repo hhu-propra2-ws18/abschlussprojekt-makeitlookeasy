@@ -43,6 +43,9 @@ public class Initializer implements ServletContextInitializer {
     private final ImageService imageService;
     private final Faker faker = new Faker(Locale.GERMAN);
 
+    /**
+     * Autowired constructor.
+     */
     @Autowired
     public Initializer(final UserRepository userRepository,
             final ArticleRepository articleRepository,
