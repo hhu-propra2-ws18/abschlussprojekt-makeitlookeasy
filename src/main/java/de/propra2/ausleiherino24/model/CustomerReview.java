@@ -37,10 +37,20 @@ public class CustomerReview {
 
     Long timestamp;
 
+    /**
+     * sets which case belongs to review.
+     *
+     * @param aCase case to set
+     */
     public void setAcase(final Case aCase) {
         setAcase(aCase, false);
     }
 
+    /**
+     * sets which case belongs to review.
+     * @param aCase case to set
+     * @param repetition for database error prevention
+     */
     public void setAcase(final Case aCase, final boolean repetition) {
         this.acase = aCase;
         if (aCase != null && !repetition) {
@@ -48,6 +58,10 @@ public class CustomerReview {
         }
     }
 
+    /**
+     * converts review to string.
+     * @return returns converted Form of Review
+     */
     @Override
     public String toString() {
         return "Stars: " + stars + "\n"
