@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -90,7 +89,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/myOverview")
+    @GetMapping("/myOverview")
     public ModelAndView getMyArticlePage(final Principal principal) {
         final User currentUser = userService.findUserByPrincipal(principal);
         final List<Article> myRentalArticles = articleService.findAllActiveForRental(currentUser);

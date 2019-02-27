@@ -1,17 +1,12 @@
-dockerCompose.isRequiredBy(bootRun)
-//dockerCompose.isRequiredBy(tasks.sonarqube)
-//dockerCompose.isRequiredBy(tasks.check)
-//dockerCompose.isRequiredBy(tasks.test)
-
 dockerCompose {
-    useComposeFiles = ['docker-compose.yml']
-    startedServices = ['propay', 'db']
+    useComposeFiles = ['docker-compose-dev.yml']
+    startedServices = ['propay','db'] // TODO docker-services-to-start
 //  forceRecreate = false
 //  buildAdditionalArgs = ['--force-rm']
     waitForTcpPorts = true
     tcpPortsToIgnoreWhenWaiting = []
-    captureContainersOutput = false // one log to rule them all switch
-//  captureContainersOutputToFile = '/logs'
+    captureContainersOutput = false // TODO docker-log-switch (to have all docker-log in one logone log to rule them all switch)
+    captureContainersOutputToFile = project.file('./build/logs/containers.log')
     captureContainersOutputToFiles = './build/logs/services/'
     composeLogToFile = project.file('./build/logs/compose.log')
     containerLogToDir = project.file('./build/logs/container-logs')
@@ -20,6 +15,7 @@ dockerCompose {
     removeImages = "Local"
     removeVolumes = true
     removeOrphans = true
+    isRequiredBy(tasks.bootRun)
 //    projectName = 'rentarino24'
 //  dockerComposeWorkingDirectory = '/path/where/docker-compose/is/invoked/from'
 //  dockerComposeStopTimeout = java.time.Duration.ofSeconds(20)

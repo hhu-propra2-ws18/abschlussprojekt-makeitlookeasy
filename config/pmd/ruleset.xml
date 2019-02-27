@@ -84,4 +84,18 @@
       <property name="violationSuppressRegex" value="^Avoid variables with short names like id"/>
     </properties>
   </rule>
+
+  <!-- class names of length 4 are ok in our opinion -->
+  <rule ref="category/java/codestyle.xml/ShortClassName">
+    <properties>
+      <property name="violationSuppressRegex" value="Avoid short class names like .{4,}"/>
+    </properties>
+  </rule>
+
+  <!-- sometimes long names are more expressive -->
+  <rule ref="category/java/codestyle.xml/LongVariable">
+    <properties>
+      <property name="violationSuppressRegex" value="Avoid excessively long variable names like .*"/>
+    </properties>
+  </rule>
 </ruleset>

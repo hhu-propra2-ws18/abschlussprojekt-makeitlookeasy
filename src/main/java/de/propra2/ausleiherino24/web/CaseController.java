@@ -3,8 +3,6 @@ package de.propra2.ausleiherino24.web;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.CustomerReview;
-import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
 import java.beans.PropertyEditorSupport;
@@ -19,9 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -50,7 +48,7 @@ public class CaseController {
     /**
      * Method is needed, so that the calender shows, on which days the article is already reserved.
      */
-    @RequestMapping("/api/events")
+    @GetMapping("/api/events")
     @ResponseBody
     public List<LocalDate> test() {
         return caseService.findAllReservedDaysByArticle((long) 3);
