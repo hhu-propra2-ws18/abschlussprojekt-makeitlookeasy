@@ -123,7 +123,8 @@ public class CaseService {
         if (accountHandler.hasValidFunds(username,
                 totalCost + articleService.findArticleById(articleId).getDeposit())
                 && articleNotRented(articleService.findArticleById(articleId), startTime,
-                endTime)) {
+                endTime) && new Date().getTime() < startTime && startTime < endTime
+                && !articleService.findArticleById(articleId).getOwner().getUsername().equals(username)) {
 
             final PpTransaction ppTransaction = new PpTransaction();
             ppTransaction.setLendingCost(totalCost);
