@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -163,6 +164,25 @@ public class Initializer implements ServletContextInitializer {
                         "HHU",
                         "Hans",
                         "Peter"), USER);
+
+        List<Article> articles = persons
+                .stream()
+                .map(p -> p.getUser().getArticleList())
+                .flatMap(a -> a.stream())
+                .collect(Collectors.toList());
+
+        //Hans leiht sich 10 zufällige Artikel aus
+        IntStream.range(0, 10)
+                .mapToObj(articles::get)
+                .forEach(article -> {
+                    Case c = createCase(
+                            article,
+                            hans,
+                            convertDateAsLong(1, 1, 2019),
+                            new Date().getTime() + 3600 * 24 * 1000,
+                            Case.RUNNING);
+                    article.addCase(c);
+                });
 
         IntStream.range(0, 7)
                 .forEach(value1 -> {

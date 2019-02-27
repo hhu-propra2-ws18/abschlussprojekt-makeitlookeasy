@@ -96,20 +96,7 @@ public class CaseServiceTest {
         cases.remove(2);
         cases.remove(0);
 
-        assertEquals(cases, caseService.getLendCasesFromPersonOwner(0L));
-    }
-
-    @Test
-    public void ownerWithNoLendCases() {
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
-
-        when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
-        final Person o = new Person();
-        when(personServiceMock.findPersonById(0L)).thenReturn(o);
-
-        assertTrue(caseService.getLendCasesFromPersonOwner(0L).isEmpty());
+        assertEquals(cases, caseService.getAllCasesFromPersonOwner(0L));
     }
 
     @Test
@@ -158,7 +145,7 @@ public class CaseServiceTest {
         when(accountHandlerMock.hasValidFunds(eq(""), Mockito.anyDouble())).thenReturn(true);
         doReturn(true).when(caseService).articleNotRented(any(), eq(st), eq(et));
 
-        assertEquals(false, caseService.requestArticle(articleId, st, et, username));
+        assertFalse(caseService.requestArticle(articleId, st, et, username));
     }
 
     @Test
@@ -177,9 +164,8 @@ public class CaseServiceTest {
         when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
         when(accountHandlerMock.hasValidFunds(eq(""), Mockito.anyDouble())).thenReturn(true);
         doReturn(true).when(caseService).articleNotRented(any(), eq(st), eq(et));
-        final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
-        assertEquals(false, caseService.requestArticle(articleId, st, et, username));
+        assertFalse(caseService.requestArticle(articleId, st, et, username));
     }
 
     @Test
@@ -198,9 +184,8 @@ public class CaseServiceTest {
         when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
         when(accountHandlerMock.hasValidFunds(eq(""), Mockito.anyDouble())).thenReturn(true);
         doReturn(true).when(caseService).articleNotRented(any(), eq(st), eq(et));
-        final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
-        assertEquals(false, caseService.requestArticle(articleId, st, et, username));
+        assertFalse(caseService.requestArticle(articleId, st, et, username));
     }
 
     @Test
@@ -415,7 +400,7 @@ public class CaseServiceTest {
         final Case c2 = new Case();
         c2.setPpTransaction(new PpTransaction());
         cases.addAll(Arrays.asList(c1, c2));
-        doReturn(cases).when(caseService).findAllCasesByUserId(0L);
+        doReturn(cases).when(caseService).getAllCasesFromPersonOwner(0L);
         final List<PpTransaction> transactions = new ArrayList<>(
                 Arrays.asList(new PpTransaction(), new PpTransaction()));
 
@@ -423,7 +408,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void twoUnavaibleCases() {
+    public void twoUnavailableCases() {
         final Case c1 = new Case();
         c1.setPpTransaction(new PpTransaction());
         c1.setRequestStatus(Case.REQUEST_DECLINED);
@@ -432,8 +417,6 @@ public class CaseServiceTest {
         c2.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
         cases.addAll(Arrays.asList(c1, c2));
         doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
-        final List<PpTransaction> transactions = new ArrayList<>(
-                Arrays.asList(new PpTransaction(), new PpTransaction()));
 
         assertTrue(caseService.findAllTransactionsForPerson(0L).isEmpty());
     }

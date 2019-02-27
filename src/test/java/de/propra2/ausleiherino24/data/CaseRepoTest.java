@@ -78,12 +78,6 @@ public class CaseRepoTest {
     }
 
     @Test
-    public void queryFindByArticleShouldReturnCaseWithCorrespondingArticle() {
-        final Case expectedCase = cases.findByArticle(case2.getArticle()).get();
-        Assertions.assertThat(expectedCase).isEqualTo(case2);
-    }
-
-    @Test
     public void queryFindByArticleAndRequestStatusShouldReturnCaseWithCorrespondingArticleIfStatusIsMatching() {
         case2.setRequestStatus(Case.RUNNING);
         final List<Case> expectedCases = cases

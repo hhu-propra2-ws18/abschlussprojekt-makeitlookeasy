@@ -24,10 +24,10 @@ public class ReservationHandler {
 
     /**
      * Constructor.
+     * accountHandler needed to transfer Funds in between Reservations.
      *
      * @param caseRepository needed to update reservationIds of PPTransactions via Cases
-     * @param restTemplate needed for propay requests accountHandler needed to transfer Funds in
-     * between Reservations.
+     * @param restTemplate needed for propay requests
      */
     public ReservationHandler(final CaseRepository caseRepository,
             final RestTemplate restTemplate) {

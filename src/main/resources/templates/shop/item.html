@@ -51,7 +51,28 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/fullcalendar.js"></script>
   <!-- Calculate cost script and Calendar init-->
   <script>
+    $(document).ready(function () {
+      $('#calendar').fullCalendar({
+        defaultView: 'month',
+        events: {
+          url: '/article/events?id=' + getParam(),
+          type: 'GET',
+          error: function () {
+            alert('there was an error while fetching events!');
+          },
+          color: 'yellow',   // a non-ajax option
+          textColor: 'black' // a non-ajax option
+        }
+      });
+    });
 
+    function getParam() {
+      var url_string = window.location.href;
+      var url = new URL(url_string);
+      var c = url.searchParams.get("id");
+      console.log(c);
+      return c;
+    }
 
     function GetDays() {
       var dropdt = new Date(
@@ -72,24 +93,8 @@
         console.log(GetDays());
         document.getElementById("price").value = GetDays() * pricePerDay;
         document.getElementById("priceWithDep").value = GetDays() * pricePerDay + deposit;
-
       }
     }
-
-    /* var getJSON = function (url, callback) {
-       var xhr = new XMLHttpRequest();
-       xhr.open('GET', url, true);
-       xhr.responseType = 'json';
-       xhr.onload = function () {
-         var status = xhr.status;
-         if (status === 200) {
-           console.log(xhr.response);
-         } else {
-           callback(status, xhr.response);
-         }
-       };
-       xhr.send();
-     }; */
 
     function JsonpCallback(json) {
       console.log(json.result);
@@ -110,6 +115,7 @@
       });
     }
   </script>
+
 </head>
 <body>
 <!-- Navigation -->
@@ -280,12 +286,10 @@
       </div>
       <!-- /.card -->
     </div>
+    <div id="calendar"></div>
     <!-- /.col-lg-9 -->
     <!-- Modal -->
   </div>
-</div>
-<div class="container" style="width: 300px;height:500px">
-  <div id='calendar1'></div>
 </div>
 <!-- Footer -->
 <div name="footer" th:replace="/../fragments/footer ::footer"></div>
@@ -302,10 +306,8 @@
     date.setDate(date.getDate() + 1);
     jQuery('#endDate').datepicker("setStartDate", e.date);
   });
-
   var d = new Date();
   var now = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-
   $('#startDate').datepicker('update', now);
   jQuery('#endDate').datepicker({
     format: 'dd-mm-yyyy',

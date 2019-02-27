@@ -16,6 +16,7 @@ import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CalendarEventService;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ConflictService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
@@ -26,9 +27,7 @@ import de.propra2.ausleiherino24.service.UserService;
 import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.Arrays;
-import java.util.Optional;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -68,6 +67,8 @@ public class ConflictControllerTest {
     @MockBean
     private UserRepository userRepository;
 
+    @MockBean
+    private CalendarEventService calendarEventService;
     @MockBean
     private ArticleService articleService;
     @MockBean

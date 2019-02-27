@@ -13,9 +13,53 @@ The key aspects are:
 * Payment of borrowed articles using ProPay
 * Conflict resolution
 
-### Functionality
+## Management
 
-## 
+* To provide a convenient overview of our project we used **javadocs** throughout the project.
+* Since the project requires a certain amount of configuration we started our own **wiki** in github. Here we describe the different configurations and the initial setup.
+
+## Functionality
+
+### Main page
+
+The main age is visible for everybody, even if not logged in. It displays all available Products.
+If a product is rented it is not displayed. The Articles are categorized and the category of the
+displayed articles can be selected. Additionally the articles can be searched by name.
+
+### Detailed article view
+
+The detailed article view are only accessible to logged in users.
+Next to the article details it displays the article reviews and provides a button to rent or buy the article.
+
+### Booking modal
+
+As soon as a article shall be booked (by pressing the booking button), a modal is displayed.
+As soon the booking period was selected the booking can be confirmed.
+
+### Bank account
+
+In the personal bank account the current balance can be viewed,
+new money can be requested and past transactions be viewed.
+
+### Profile
+
+On the profile page, personal information can be viewed and edited.
+
+### Overview
+
+The overview page provides a set of functionality:
+* **My articles:** Overview over own articles with the options to update or delete them.
+* **Borrowed:** Overview over borrowed articles.
+* **Returned:** Overview over returned articles with the option to accept the return or open a conflict.
+* **Request:** Overview over requested articles with the option to accept or decline the request.
+* **Sold:** Overview over sold articles.
+
+### Add Item
+
+On the Add item page a new item can be created. Special notice is to be taken to the `For Sale` check box.
+This checkbox determines if a article is for sale or if it only can be borrowed.
+
+## Project overview
 
 ### Design pattern
 The design pattern we are aiming for is the classical Model-View-Controller (MVC) pattern. To outsource shared code from the controllers we introduced a additional service layer.
@@ -29,13 +73,13 @@ packages. Logic to interact with ProPay is located in a separate ProPay-handler 
 
 ## Model
 
-#### Article
+### Article
 An article is represented by the `Article` class. Next to descriptive features like name,
 description and image, it has relations to the owner of the article (instance of `User`) and to
 related cases. Custom logic is implemented to keep the article in sync with its related cases and
 retrieve information about the current state of the article.
 
-#### Case
+### Case
 The class `Case` represents a contract between loaner and borrower. It links two Users, `receiver`
 and the owner of the article, together. Additionally time, pricing and status information are stored
 here. For every article borrowed a new case is created. An article is considered available if no
@@ -50,7 +94,7 @@ To implement a simple user chat, the `ChatMessage` class was needed. It is a sim
 in essence, stores the text, receiver and sender of a chat message.
 
 ### Conflict
-To manage conflicts in the rental process the `Conlict` class was introduced. It wraps the
+To manage conflicts in the rental process the `Conflict` class was introduced. It wraps the
 conflicted case with a description and a user who is responsible to resolve the conflict.
 
 ### CustomerReview
@@ -81,12 +125,51 @@ Person with a User, a one-to-one relation is provided.
 
 ## Controller
 
+### ArticleController
+
+TODO: provide description
+
+### CaseController
+
+TODO: provide description
+
+### ChatController
+
+The in essence the`ChatController` maps the received chat messages to the endpoints of the Spring `MessageBroker`.
+
+### ConflictController
+
+TODO: provide description
+
 ### ImageController
 The `ImageController` essentially maps the services provided by the `ImageService` to appropriate
 endpoints.
 
+### MainController
+
+TODO: provide description
+
+### UserController
+
+TODO: provide description
 
 ## Services
+
+### ArticleService
+
+TODO: provide description
+
+### CaseService
+
+TODO: provide description
+
+### ConflictService
+
+TODO: provide description
+
+### CustomerReviewService
+
+TODO: provide description
 
 ### ImageService
 The `ImageService` is used to upload images to a file system and retrieve them.
@@ -98,8 +181,42 @@ Additionally on can provide a number to the storing methods (`binningId`). This 
 is used to store files in a specific subdirectory. This leads to a B-tree like structure which can
 speed up the search for a specific image.
 
+### PersonService
+
+TODO: provide description
+
+### SearchUserService
+
+TODO: provide description
+
+### UserService
+
+TODO: provide description
+
+## Security
+
+TODO: provide short description about the spring security configuration
+
+## PropayHandler
+
+### AccountHandler
+
+TODO: provide description
+
+### PpAccount
+
+TODO: provide description
+
+### Reservation
+
+TODO: provide description
+
+### Reservation Handler
+
+TODO: provide description
 
 ## Deviations from the task descriptions
+
 * According to our architectural idea the available offers are **visible even when not logged in.**
 
 

@@ -2,8 +2,10 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.CalendarEvent;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -82,6 +84,7 @@ public class ArticleService {
 
     /**
      * Returns all active articles.
+     * @return all active articles.
      */
     List<Article> findAllActiveArticles() {
         return articleRepository.findAllActive().isEmpty() ? new ArrayList<>()
@@ -90,6 +93,7 @@ public class ArticleService {
 
     /**
      * Finds all article which have active=true and forRental=true.
+     * @return all non-active, not rented articles.
      */
     public List<Article> findAllActiveAndForRentalArticles() {
         return findAllActiveArticles()
@@ -146,7 +150,8 @@ public class ArticleService {
     }
 
     /**
-     * Returns List of all articles, which name contains the given searchstring. Case of letters is ignored.
+     * Returns List of all articles, which name contains the given searchstring.
+     * Case of letters is ignored.
      */
     public List<Article> findAllArticlesByName(final String searchString) {
         return articleRepository.findByActiveTrueAndNameContainsIgnoreCase(searchString);
@@ -163,4 +168,6 @@ public class ArticleService {
         article.setForSale(status);
         articleRepository.save(article);
     }
+
+
 }

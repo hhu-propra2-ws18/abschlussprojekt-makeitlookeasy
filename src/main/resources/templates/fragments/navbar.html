@@ -42,7 +42,9 @@
                   <a class="dropdown-item" role="presentation" th:href="@{~/bankAccount}">
                     Bank Account <i class="fa fa-money"></i></a>
                   <a class="dropdown-item" role="presentation" th:href="@{~/myOverview}">
-                    Overview <i class="fa fa-list"></i></a>
+                    Overview <i class="fa fa-list"></i>
+                    <span class="badge badge-danger" style="margin-left: 2px"
+                          th:if="${true}">4</span></a>
                   <a class="dropdown-item" role="presentation" th:href="@{/article/create}">Add
                     item <i class="fa fa-plus"></i></a>
                   <a class="dropdown-item"

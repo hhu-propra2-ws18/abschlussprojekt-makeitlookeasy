@@ -3,6 +3,7 @@ package de.propra2.ausleiherino24.data;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.User;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
@@ -25,7 +26,7 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
             + "ORDER BY c.requestStatus ASC")
     List<Case> findAllByArticleOwnerId(@Param("id") Long ownerId);
 
-    Optional<Case> findByArticle(Article article);
+    ArrayList<Case> findAllByArticle(Article article);
 
     List<Case> findAllByArticleAndRequestStatus(Article article, int status);
 
@@ -54,4 +55,13 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
             + "AND c.article.owner.id = :id "
             + "AND c.requestStatus = 14")
     List<Case> findAllSoldItemsByUserId(@Param("id") Long id);
+
+    @Query("SELECT c FROM #{#entityName} c "
+            + "WHERE c.article.forSale = false "
+            + "AND c.receiver.id = :id "
+            + "AND c.endTime between :today AND :tomorrow")
+    List<Case> findAllOutrunningCasesByUserId(
+            @Param("id") Long id,
+            @Param("today") long today,
+            @Param("tomorrow") long tomorrow);
 }
