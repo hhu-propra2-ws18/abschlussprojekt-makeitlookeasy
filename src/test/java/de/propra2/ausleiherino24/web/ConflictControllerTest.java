@@ -23,7 +23,9 @@ import de.propra2.ausleiherino24.service.ImageService;
 import de.propra2.ausleiherino24.service.PersonService;
 import de.propra2.ausleiherino24.service.SearchUserService;
 import de.propra2.ausleiherino24.service.UserService;
+import java.nio.file.AccessDeniedException;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -97,6 +99,7 @@ public class ConflictControllerTest {
 
     private User user;
     private User user2;
+    private User admin;
     private Article art;
     private Case ca;
     private Conflict c1;
@@ -105,45 +108,117 @@ public class ConflictControllerTest {
     public void init() {
         user = new User();
         user2 = new User();
+        admin = new User();
         art = new Article();
         ca = new Case();
         c1 = new Conflict();
 
         user2.setUsername("user2");
+        user2.setRole("user");
         user.setUsername("user1");
+        user.setRole("user");
+        admin.setUsername("admin");
+        admin.setRole("admin");
         art.setOwner(user);
         ca.setArticle(art);
         ca.setReceiver(user2);
+        ca.setConflict(c1);
+        ca.setStartTime(1234453521L);
+        ca.setEndTime(143436432124L);
+        ca.setPrice(200.0);
+        c1.setId(2L);
         c1.setConflictedCase(ca);
         c1.setConflictReporterUsername("user1");
         c1.setConflictDescription("TestDescription");
     }
 
-    @Ignore
     @Test
     @WithMockUser(roles = "user")
-    public void test() throws Exception {
-        Mockito.when(caseRepository.findById(1L)).thenReturn(Optional.of(ca));
+    public void sendConflictShouldSendConflictIfCorrespondingCaseIdIsValid() throws Exception {
+        Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
+        Mockito.when(caseService.isValidCase(1L)).thenReturn(true);
 
-        mvc.perform(MockMvcRequestBuilders.post("/accessed/user/openconflict?id=1")
-                .flashAttr("conflictDescription", "TestDescription"))
+        mvc.perform(MockMvcRequestBuilders.post("/openconflict?id=1")
+                .param("conflictDescription", "TestDescription"))
                 .andExpect(
-                        MockMvcResultMatchers.redirectedUrl("/myOverview?returned&openedconflict"))
+                        MockMvcResultMatchers.redirectedUrl("/myOverview?returned&openedConflict"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
-        //Mockito.verify(conflictService, Mockito.times(1)).openConflict(ca, "TestDescription");
+        Mockito.verify(conflictService, Mockito.times(1)).openConflict(ca, "TestDescription");
     }
 
-    @Ignore
     @Test
     @WithMockUser(roles = "user")
-    public void test2() throws Exception {
-        Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class)))
-                .thenReturn(user);
+    public void sendConflictShouldNotSendConflictIfCorrespondingCaseIdIsNotValid() throws Exception {
+        Mockito.when(caseService.isValidCase(1L)).thenReturn(false);
 
-        mvc.perform(MockMvcRequestBuilders.delete("/accessed/user/deactivateconflict?id=1"))
+        mvc.perform(MockMvcRequestBuilders.post("/openconflict?id=1")
+                .param("conflictDescription", "TestDescription"))
+                .andExpect(
+                        MockMvcResultMatchers.redirectedUrl("/myOverview?returned&conflictFailed"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+        Mockito.verify(caseService, Mockito.times(0)).findCaseById(1L);
+        Mockito.verify(conflictService, Mockito.times(0)).openConflict(ca, "TestDescription");
+    }
+
+    @Test
+    @WithMockUser(roles = "user")
+    public void sendConflictShouldNotSendConflictIfExceptionIsThrown() throws Exception {
+        Mockito.when(caseService.isValidCase(1L)).thenReturn(true);
+        Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
+        Mockito.doThrow(new AccessDeniedException("")).when(conflictService).openConflict(ca,"TestDescription");
+
+        mvc.perform(MockMvcRequestBuilders.post("/openconflict?id=1")
+                .param("conflictDescription", "TestDescription"))
+                .andExpect(
+                        MockMvcResultMatchers.redirectedUrl("/myOverview?returned&conflictFailed"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+        Mockito.verify(caseService, Mockito.times(1)).findCaseById(1L);
+        Mockito.verify(conflictService, Mockito.times(1)).openConflict(ca, "TestDescription");
+    }
+
+    @Test
+    @WithMockUser(roles = "admin")
+    public void solveConflictOwnerShouldSolveConflictForOwner() throws Exception {
+        Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class)))
+                .thenReturn(admin);
+        Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
+        Mockito.when(conflictService.getConflict(2L, admin)).thenReturn(c1);
+
+        mvc.perform(MockMvcRequestBuilders.post("/decideforowner?id=1"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers
-                        .redirectedUrl("/myOverview?returned&deactivatedconflict"));
-        //Mockito.verify(conflictService).deactivateConflict(1L, user);
+                        .redirectedUrl("/conflicts"));
+        Mockito.verify(conflictService, Mockito.times(1)).solveConflict(c1, admin, user);
+        Mockito.verify(conflictService, Mockito.times(1)).deactivateConflict(2L, admin);
+    }
+
+    @Test
+    @WithMockUser(roles = "admin")
+    public void solveConflictReceiverShouldSolveConflictForOwner() throws Exception {
+        Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class)))
+                .thenReturn(admin);
+        Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
+        Mockito.when(conflictService.getConflict(2L, admin)).thenReturn(c1);
+
+        mvc.perform(MockMvcRequestBuilders.post("/decideforowner?id=1"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers
+                        .redirectedUrl("/conflicts"));
+        Mockito.verify(conflictService, Mockito.times(1)).solveConflict(c1, admin, user);
+        Mockito.verify(conflictService, Mockito.times(1)).deactivateConflict(2L, admin);
+    }
+
+    @Test
+    @WithMockUser(roles = "admin")
+    public void solveConflicts() throws Exception {
+        Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class)))
+                .thenReturn(admin);
+        Mockito.when(caseService.findAllCasesWithOpenConflicts()).thenReturn(Arrays.asList(ca));
+
+        mvc.perform(MockMvcRequestBuilders.get("/conflicts"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attribute("user", admin))
+                .andExpect(MockMvcResultMatchers.model().attribute("conflicts", Arrays.asList(ca)))
+                .andExpect(MockMvcResultMatchers.view().name("/admin/conflict"));
     }
 }
