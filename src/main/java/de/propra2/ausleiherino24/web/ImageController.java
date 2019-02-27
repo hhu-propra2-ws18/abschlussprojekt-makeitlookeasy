@@ -39,11 +39,8 @@ public class ImageController {
     }
 
     /**
-     * TODO: JavaDoc.
-     *
-     * @param fileName .
-     * @param response .
-     * @throws IOException .
+     * Provides a method to receive images stored by the ImageService. Those are responded using
+     * HttpServletResponse.
      */
     @GetMapping("/images/{fileName}")
     public void getImage(final @PathVariable String fileName, final HttpServletResponse response)
@@ -59,8 +56,7 @@ public class ImageController {
 
         try (DataInputStream dataInputStream = new DataInputStream(
                 new FileInputStream(requestedFile))) {
-            IOUtils.copy(dataInputStream, response.getOutputStream()
-            );
+            IOUtils.copy(dataInputStream, response.getOutputStream());
         }
 
     }

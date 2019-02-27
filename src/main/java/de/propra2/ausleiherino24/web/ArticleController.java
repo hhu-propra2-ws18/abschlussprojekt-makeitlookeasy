@@ -37,6 +37,9 @@ public class ArticleController {
 
     private final List<Category> allCategories = Category.getAllCategories();
 
+    /**
+     * Autowired constructor.
+     */
     @Autowired
     public ArticleController(final ArticleService articleService, final UserService userService,
             final ImageService imageService, final CustomerReviewService customerReviewService) {
@@ -89,7 +92,7 @@ public class ArticleController {
      *
      * @param article Article object.
      * @param result must not be deleted, even though there is no obvious use. Otherwise you cannot
-     * create an article without a picture
+     *     create an article without a picture
      * @param image Image, that the user uploaded to be displayed.
      * @param principal Current user.
      * @return Redirects the user to the main page aka index.html.

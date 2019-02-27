@@ -40,22 +40,22 @@ public class CustomerReview {
     /**
      * sets which case belongs to review.
      *
-     * @param aCase case to set
+     * @param acase case to set
      */
-    public void setACase(final Case aCase) {
-        setACase(aCase, false);
+    public void setACase(final Case acase) {
+        setACase(acase, false);
     }
 
     /**
      * sets which case belongs to review.
      *
-     * @param aCase case to set
+     * @param acase case to set
      * @param repetition for database error prevention
      */
-    public void setACase(final Case aCase, final boolean repetition) {
-        this.aCase = aCase;
-        if (aCase != null && !repetition) {
-            aCase.setReview(this, true);
+    public void setACase(final Case acase, final boolean repetition) {
+        this.aCase = acase;
+        if (acase != null && !repetition) {
+            acase.setReview(this, true);
         }
     }
 
