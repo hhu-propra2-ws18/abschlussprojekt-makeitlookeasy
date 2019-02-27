@@ -17,6 +17,7 @@ public class AccountHandler {
     private final RestTemplate restTemplate;
 
     /**
+     * Autowired constructor.
      * @param restTemplate used to send requests to propay
      */
     @Autowired
@@ -26,7 +27,7 @@ public class AccountHandler {
 
 
     /**
-     * get Propay Account
+     * Gets Propay Account.
      *
      * @param accountName name of account to get
      * @return returns all data of PropayAccount
@@ -37,6 +38,7 @@ public class AccountHandler {
     }
 
     /**
+     * Checks the Funds of an account by the accountName.
      * @param accountName account for which funds are to be checked
      * @return returns amount of unreserved Funds
      */
@@ -47,17 +49,19 @@ public class AccountHandler {
 
 
     /**
-     * checks if lender has enough money to proceed with case
+     * Checks if lender has enough money to proceed with case.
      *
-     * @param aCase contains necessary Data
+     * @param acase contains necessary Data
      * @return has enough funds to proceed with Case?
      */
-    public boolean hasValidFundsByCase(final Case aCase) {
-        return hasValidFunds(aCase.getReceiver().getUsername(),
-                aCase.getPpTransaction().getTotalPayment());
+    public boolean hasValidFundsByCase(final Case acase) {
+        return hasValidFunds(acase.getReceiver().getUsername(),
+                acase.getPpTransaction().getTotalPayment());
     }
 
     /**
+     * Checks whether the account given by its accountName has more or equal money than
+     * requestFunds.
      * @param accountName name of user to be checked
      * @param requestedFunds amount of requested Funds to be compared with actual free Funds
      * @return has requested Funds?
@@ -67,7 +71,7 @@ public class AccountHandler {
     }
 
     /**
-     * adds funds to user account
+     * Adds funds to user account.
      *
      * @param username user to get funds
      * @param amount amount to be added
@@ -79,7 +83,7 @@ public class AccountHandler {
     }
 
     /**
-     * calls transfer for lending cost of case with necessary Data
+     * Calls transfer for lending cost of case with necessary Data.
      *
      * @param currentCase case containing all necessary Data
      */
@@ -90,7 +94,7 @@ public class AccountHandler {
 
 
     /**
-     * transfers funds from source to target
+     * Transfers funds from source to target.
      *
      * @param sourceUser user to give Funds
      * @param targetUser user to receive Funds

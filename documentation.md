@@ -76,12 +76,12 @@ To manage the login and permissions we created the `Users` class. Here we store 
 Additional user information, like name or contact is stored in the class `Person`. To connect a Person with a User, a one-to-one relation is provided.
 
 
-## Controler
+## Controller
 
 ### ImageController
 
-The `ImageController` essenntialy maps the services provided by the `ImageService` to appropriate endpoints.
-
+The `ImageController` essentially maps the services provided by the `ImageService` to appropriate endpoints.
+### 
 
 
 ## Services
