@@ -3,7 +3,7 @@ package de.propra2.ausleiherino24.service;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.PPTransaction;
+import de.propra2.ausleiherino24.model.PpTransaction;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
@@ -96,7 +96,7 @@ public class CaseService {
     /**
      * Finds all Transactions from receiver by its personId.
      */
-    public List<PPTransaction> findAllTransactionsFromPersonReceiver(final Long personId) {
+    public List<PpTransaction> findAllTransactionsFromPersonReceiver(final Long personId) {
         return getLendCasesFromPersonReceiver(personId).stream()
                 .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
                         && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
@@ -130,7 +130,7 @@ public class CaseService {
                 && articleNotRented(articleService.findArticleById(articleId), startTime,
                 endTime)) {
 
-            final PPTransaction ppTransaction = new PPTransaction();
+            final PpTransaction ppTransaction = new PpTransaction();
             ppTransaction.setLendingCost(totalCost);
             ppTransaction.setCautionPaid(false);
             ppTransaction.setDate(new Date().getTime());
@@ -248,7 +248,7 @@ public class CaseService {
         final Case currentCase = optCase.get();
         currentCase.setRequestStatus(Case.REQUEST_DECLINED);
         reservationHandler.releaseReservationByCase(currentCase);
-        currentCase.setPpTransaction(new PPTransaction());
+        currentCase.setPpTransaction(new PpTransaction());
         caseRepository.save(currentCase);
     }
 
@@ -351,7 +351,7 @@ public class CaseService {
             currentCase.setArticle(article);
             currentCase.setReceiver(costumer);
 
-            final PPTransaction transaction = new PPTransaction();
+            final PpTransaction transaction = new PpTransaction();
             transaction.setLendingCost(article.getCostPerDay());
             transaction.setDate(new Date().getTime());
             transaction.setCautionPaid(false);
