@@ -138,35 +138,75 @@
     <div class="col-lg 9" style="margin-top: 70px">
 
       <!-- Warnings -->
-      <div class="alert alert-warning absolue center" th:if="${param.error}">
+      <div class="alert alert-danger absolue center alert-dismissible fade show" role="alert"
+           th:if="${param.error}">
         An unknown error occurred.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="alert alert-warning absolue center" th:if="${param.alreadyRented}">
+      <div class="alert alert-warning absolue center alert-dismissible fade show" role="alert"
+           th:if="${param.alreadyRented}">
         Could not accept article, because its already rented in the requested time.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="alert alert-warning absolue center" th:if="${param.receiverOutOfMoney}">
+      <div class="alert alert-warning absolue center alert-dismissible fade show" role="alert"
+           th:if="${param.receiverOutOfMoney}">
         The borrower unfortunately has too little money on Propay. We are sorry about that.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="alert alert-success absolue center" th:if="${param.successfullyReturned}">
+      <div class="alert alert-success absolue center alert-dismissible fade show" role="alert"
+           th:if="${param.successfullyReturned}">
         The case will be closed. The deposit will be returned.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="alert alert-success absolue center" th:if="${param.openedConflict}">
+      <div class="alert alert-success absolue center alert-dismissible fade show" role="alert"
+           th:if="${param.openedConflict}">
         A conflict is now open for given case. You will be informed by our employees.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="alert alert-danger absolue center" th:if="${param.conflictFailed}">
+      <div class="alert alert-danger absolue center alert-dismissible fade show" role="alert"
+           th:if="${param.conflictFailed}">
         Failed to open a conflict.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="alert alert-success absolue center" th:if="${param.updatedArticle}">
+      <div class="alert alert-success absolue center alert-dismissible fade show" role="alert"
+           th:if="${param.updatedArticle}">
         Article successfully updated.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="alert alert-warning absolue center" th:if="${param.deactivatedArticle}">
+      <div class="alert alert-warning absolue center alert-dismissible fade show" role="alert"
+           th:if="${param.deactivatedArticle}">
         Article successfully deleted.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="alert alert-danger absolue center" th:if="${param.deactivationFailed}">
+      <div class="alert alert-danger absolue center alert-dismissible fade show" role="alert"
+           th:if="${param.deactivationFailed}">
         This article has open cases. You cannot delete it right now.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="alert alert-warning absolue center" th:if="${param.declined}">
+      <div class="alert alert-warning absolue center alert-dismissible fade show" role="alert"
+           th:if="${param.declined}">
         Request declined.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
 
       <!-- Frame for articles from User-->

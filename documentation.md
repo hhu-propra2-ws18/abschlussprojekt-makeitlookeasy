@@ -13,9 +13,16 @@ The key aspects are:
 * Payment of borrowed articles using ProPay
 * Conflict resolution
 
-### Functionality
+## Management
 
-## 
+* To provide a convenient overview of our project we used **javadocs** throughout the project.
+* Since the project requires a certain amount of configuration we started our own **wiki** in github. Here we describe the different configurations and the initial setup.
+
+## Functionality
+
+### 
+
+## Project overview
 
 ### Design pattern
 The design pattern we are aiming for is the classical Model-View-Controller (MVC) pattern. To outsource shared code from the controllers we introduced a additional service layer.
