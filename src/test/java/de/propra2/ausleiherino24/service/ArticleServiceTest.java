@@ -1,8 +1,9 @@
 package de.propra2.ausleiherino24.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,12 +18,16 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 
+@ExtendWith(SpringExtension.class)
 public class ArticleServiceTest {
 
     private ArticleService articleService;
@@ -34,7 +39,7 @@ public class ArticleServiceTest {
     private Article article03;
     private Article article04;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         articleRepositoryMock = mock(ArticleRepository.class);
         articleService = new ArticleService(articleRepositoryMock, mock(ImageService.class));
@@ -200,11 +205,14 @@ public class ArticleServiceTest {
         assertFalse(argument.getValue().isActive());
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void deactivateNotExistingArticle() {
-        when(articleRepositoryMock.findById(0L)).thenReturn(Optional.empty());
 
-        articleService.deactivateArticle(0L);
+        assertThrows(NoSuchElementException.class, () -> {
+            when(articleRepositoryMock.findById(0L)).thenReturn(Optional.empty());
+            articleService.deactivateArticle(0L);
+        });
+
     }
 
     @Test

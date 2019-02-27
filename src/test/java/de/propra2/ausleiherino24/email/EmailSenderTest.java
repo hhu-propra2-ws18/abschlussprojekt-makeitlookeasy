@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.email;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -10,8 +11,8 @@ import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.UserService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -28,7 +29,7 @@ public class EmailSenderTest {
     private Conflict conflict;
     private User conflictReporter;
 
-    @Before
+    @BeforeEach
     public void init() {
         emailConfigMock = mock(EmailConfig.class);
         javaMailSenderMock = mock(JavaMailSenderImpl.class);
@@ -80,18 +81,22 @@ public class EmailSenderTest {
         verify(javaMailSenderMock).setPassword("password");
     }
 
-    @Test(expected = MailSendException.class)
+    @Test
     public void sendConflictEmailShouldThrowException() {
-        when(userService.findUserByUsername("user2")).thenReturn(conflictReporter);
 
-        final SimpleMailMessage expectedMessage = new SimpleMailMessage();
-        expectedMessage.setFrom(EmailSenderTest.USER_EMAIL);
-        expectedMessage.setTo(EmailSenderTest.SERVICE_EMAIL);
-        expectedMessage.setSubject("Conflicting Case id: 1");
-        expectedMessage.setText("Dies hier ist ein einfacher Test");
+        assertThrows(MailSendException.class, () -> {
+            when(userService.findUserByUsername("user2")).thenReturn(conflictReporter);
 
-        doThrow(new MailSendException("")).when(javaMailSenderMock).send(expectedMessage);
-        emailSender.sendConflictEmail(conflict);
+            final SimpleMailMessage expectedMessage = new SimpleMailMessage();
+            expectedMessage.setFrom(EmailSenderTest.USER_EMAIL);
+            expectedMessage.setTo(EmailSenderTest.SERVICE_EMAIL);
+            expectedMessage.setSubject("Conflicting Case id: 1");
+            expectedMessage.setText("Dies hier ist ein einfacher Test");
+
+            doThrow(new MailSendException("")).when(javaMailSenderMock).send(expectedMessage);
+            emailSender.sendConflictEmail(conflict);
+        });
+
     }
 
     @Test

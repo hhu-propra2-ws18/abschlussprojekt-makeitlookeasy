@@ -6,13 +6,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class CaseEndTimeReminderTest {
 
     private DateTimeFormatter formatter;
@@ -22,7 +22,7 @@ public class CaseEndTimeReminderTest {
     private LocalDateTime today;
     private CaseRepository caseRepository;
 
-    @Before
+    @BeforeEach
     public void init() {
         formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         es = Mockito.mock(EmailSender.class);

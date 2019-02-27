@@ -101,6 +101,7 @@ public class ImageService {
 
     /**
      * gernerates the Path for a file.
+     *
      * @param prefix file prefix
      * @param fileEnding file suffix
      * @return generated path.
@@ -125,6 +126,7 @@ public class ImageService {
 
     /**
      * returns path to the given file.
+     *
      * @param fileName target file
      * @param prefix positiom of target file in upload directory
      */
@@ -164,6 +166,7 @@ public class ImageService {
 
     /**
      * Creates new directory in upload directory.
+     *
      * @param name relativ path of the directory that should be created.
      */
     void createBinningDirectory(final String name) {

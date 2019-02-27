@@ -13,6 +13,7 @@ import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CalendarEventService;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ConflictService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
@@ -23,21 +24,20 @@ import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
 import java.util.Optional;
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
-//@PowerMockIgnore("javax.security.*") TODO: Replace PowerMock with JMockit
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest
 public class UserControllerTest {
 
@@ -46,6 +46,8 @@ public class UserControllerTest {
 
     @MockBean
     private Principal principal;
+    @MockBean
+    private CalendarEventService calendarEventService;
 
     @MockBean
     private ArticleRepository articleRepository;
@@ -91,7 +93,7 @@ public class UserControllerTest {
     @MockBean
     private ChatController chatController;
 
-    @Ignore
+    @Disabled
     @Test
     public void displayUserProfileStatusTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/accessed/user/user?id=1"))
@@ -99,7 +101,7 @@ public class UserControllerTest {
                         .status().is3xxRedirection());
     }
 
-    @Ignore //TODO: fix test
+    @Disabled //TODO: fix test
     @Test
     public void displayUserProfileViewTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/accessed/user?id=1"))
@@ -107,7 +109,7 @@ public class UserControllerTest {
                         .view().name("profile"));
     }
 
-    @Ignore //TODO: fix test
+    @Disabled //TODO: fix test
     @Test
     public void displayUserProfileModelTest() throws Exception {
         final User user = User.builder()
@@ -126,7 +128,7 @@ public class UserControllerTest {
         Mockito.verify(userService, Mockito.times(1)).findUserByUsername("user1");
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void getIndexStatusTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/accessed/user/index"))
@@ -136,13 +138,4 @@ public class UserControllerTest {
                         .redirectedUrl("http://localhost/login"));
     }
 
-// TODO: Dead?
-//	@SuppressWarnings("static-access")
-//	@Test
-//	public void getIndexModelTest() throws Exception {
-//		RoleService rs = Mockito.control(RoleService.class);
-//		MockHttpServletRequest req = new MockHttpServletRequest();
-//		Mockito.when(rs.getUserRole(Mockito.anyObject())).thenReturn("user");
-//		mvc.perform(MockMvcRequestBuilders.get("/accessed/user/index")).andExpect(MockMvcResultMatchers.model().attribute("role", "user"));
-//	}
 }

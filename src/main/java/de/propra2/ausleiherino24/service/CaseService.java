@@ -101,15 +101,15 @@ public class CaseService {
     public List<PpTransaction> findAllTransactionsForPerson(final Long personId) {
 
         try {
-            List<PpTransaction> ppTransactions = new ArrayList<>(
+            final List<PpTransaction> ppTransactions = new ArrayList<>(
                     getAllCasesFromPersonOwner(personId).stream()
-                            .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
-                                    && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
+                            .filter(cases -> cases.getRequestStatus() != Case.REQUEST_DECLINED
+                                    && cases.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
                             .map(Case::getPpTransaction)
                             .collect(Collectors.toList()));
             ppTransactions.addAll(getLendCasesFromPersonReceiver(personId).stream()
-                    .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
-                            && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
+                    .filter(crequest -> crequest.getRequestStatus() != Case.REQUEST_DECLINED
+                            && crequest.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
                     .map(Case::getPpTransaction)
                     .collect(Collectors.toList()));
             return ppTransactions;
@@ -233,7 +233,7 @@ public class CaseService {
 
         final Article article = currentCase.get().getArticle();
         final List<Case> cases = article.getCases().stream()
-                .filter(ca -> ca.getRequestStatus() == Case.REQUEST_ACCEPTED)
+                .filter(caseList -> caseList.getRequestStatus() == Case.REQUEST_ACCEPTED)
                 .collect(Collectors.toList());
         cases.remove(currentCase.get());
 
@@ -252,7 +252,7 @@ public class CaseService {
      */
     boolean articleNotRented(final Article article, final Long startTime, final Long endTime) {
         final List<Case> cases = article.getCases().stream()
-                .filter(ca -> ca.getRequestStatus() == Case.REQUEST_ACCEPTED)
+                .filter(reqcase -> reqcase.getRequestStatus() == Case.REQUEST_ACCEPTED)
                 .collect(Collectors.toList());
 
         for (final Case ca : cases) {
@@ -333,10 +333,10 @@ public class CaseService {
         return caseRepository
                 .findAllByArticleAndRequestStatus(articleService.findArticleById(id), 2)
                 .stream()
-                .map(c -> {
-                    final LocalDate start = Instant.ofEpochMilli(c.getStartTime())
+                .map(caseStream -> {
+                    final LocalDate start = Instant.ofEpochMilli(caseStream.getStartTime())
                             .atZone(ZoneId.systemDefault()).toLocalDate();
-                    final LocalDate end = Instant.ofEpochMilli(c.getEndTime())
+                    final LocalDate end = Instant.ofEpochMilli(caseStream.getEndTime())
                             .atZone(ZoneId.systemDefault()).toLocalDate();
                     final int daysInBetween = Period.between(start, end).getDays();
                     return IntStream
@@ -352,7 +352,7 @@ public class CaseService {
      */
     public List<Case> findAllCasesWithOpenConflicts() {
         return caseRepository.findAll().stream()
-                .filter(c -> c.getRequestStatus() == Case.OPEN_CONFLICT)
+                .filter(cases -> cases.getRequestStatus() == Case.OPEN_CONFLICT)
                 .sorted(Comparator.comparing(Case::getEndTime))
                 .collect(Collectors.toList());
     }
@@ -390,11 +390,14 @@ public class CaseService {
         return false;
     }
 
-    public List<Case> findAllSoldItemsByUserId(Long id) {
+    public List<Case> findAllSoldItemsByUserId(final Long id) {
         return caseRepository.findAllSoldItemsByUserId(id);
     }
 
-    public List<Case> findAllOutrunningCasesByUserId(Long id) {
+    /**
+     * find cases that will have to be returned soon.
+     */
+    public List<Case> findAllOutrunningCasesByUserId(final Long id) {
         return caseRepository.findAllOutrunningCasesByUserId(id,
                 new Date().getTime(),
                 new Date().getTime() + 86400000L);

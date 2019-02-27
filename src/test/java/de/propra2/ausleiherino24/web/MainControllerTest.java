@@ -16,6 +16,7 @@ import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CalendarEventService;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ConflictService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
@@ -27,21 +28,21 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest
 @ActiveProfiles(profiles = "test")
 public class MainControllerTest {
@@ -51,6 +52,8 @@ public class MainControllerTest {
 
     @MockBean
     private Principal principal;
+    @MockBean
+    private CalendarEventService calendarEventService;
 
     @MockBean
     private ArticleRepository articleRepository;
@@ -96,7 +99,7 @@ public class MainControllerTest {
     @MockBean
     private ChatController chatController;
 
-    @Ignore
+    @Disabled
     @Test
     public void getIndex() throws Exception {
         principal = mock(Principal.class);
@@ -112,18 +115,8 @@ public class MainControllerTest {
                         .view().name("index"));
     }
 
-//	@Test
-//	public void indexModelTest() throws Exception {
-//		MockHttpServletRequest request = new MockHttpServletRequest();
-//		request.addUserRole(HttpServletRequest.BASIC_AUTH);
-//		System.err.println(request);
-//		// Mockito.when(request.isUserInRole(Mockito.any())).thenReturn(true);
-//
-//		mvc.perform(MockMvcRequestBuilders.get("/").flashAttr("request", request))
-//				.andExpect(MockMvcResultMatchers.model().attribute("loggedIn", Matchers.is(true)));
-//	}
 
-    @Ignore
+    @Disabled
     @Test
     public void getLogin() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/login"))
@@ -133,7 +126,7 @@ public class MainControllerTest {
                         .view().name("login"));
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void getRegistration() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/signup"))
@@ -143,7 +136,7 @@ public class MainControllerTest {
                         .view().name("registration"));
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void getRegistrationModelTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/signup"))
@@ -153,7 +146,7 @@ public class MainControllerTest {
                         .model().attribute("person", Matchers.instanceOf(Person.class)));
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void registerNewUserStatusTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/registerNewUser"))
@@ -166,7 +159,7 @@ public class MainControllerTest {
                         ArgumentMatchers.refEq("Created"));
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void registerNewUserModelTest() throws Exception {
         final Person person = new Person();

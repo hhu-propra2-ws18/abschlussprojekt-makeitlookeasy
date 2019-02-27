@@ -1,7 +1,6 @@
 package de.propra2.ausleiherino24.web;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
@@ -14,12 +13,12 @@ import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.email.EmailConfig;
 import de.propra2.ausleiherino24.email.EmailSender;
 import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CalendarEventService;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ConflictService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
@@ -28,27 +27,22 @@ import de.propra2.ausleiherino24.service.PersonService;
 import de.propra2.ausleiherino24.service.SearchUserService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
-import java.util.ArrayList;
-import org.assertj.core.api.Assertions;
-import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.multipart.MultipartFile;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest
 @ActiveProfiles(profiles = "test")
 public class ArticleControllerTest {
@@ -58,6 +52,8 @@ public class ArticleControllerTest {
 
     @MockBean
     private Principal principal;
+    @MockBean
+    private CalendarEventService calendarEventService;
 
     @MockBean
     private ArticleRepository articleRepository;
@@ -106,7 +102,7 @@ public class ArticleControllerTest {
     private User user;
     private Article article;
 
-    @Before
+    @BeforeEach
     public void setup() {
         user = new User();
         user.setUsername("user");
@@ -117,7 +113,7 @@ public class ArticleControllerTest {
         article.setId(1L);
     }
 
-    @Ignore
+    @Disabled
     @Test
     @WithMockUser(roles = "user")
     public void successfulDisplayArticleStatusTest() throws Exception {

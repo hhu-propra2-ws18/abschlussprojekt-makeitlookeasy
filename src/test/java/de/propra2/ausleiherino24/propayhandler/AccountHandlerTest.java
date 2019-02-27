@@ -3,15 +3,15 @@ package de.propra2.ausleiherino24.propayhandler;
 import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class AccountHandlerTest {
 
     private static final String ACCOUNT_URL = "http://localhost:8888/account";
@@ -23,7 +23,7 @@ public class AccountHandlerTest {
     private PpAccount testAcc2;
     private PpAccount testAcc3;
 
-    @Before
+    @BeforeEach
     public void initialize() {
         restTemplate = Mockito.mock(RestTemplate.class);
         accountHandler = new AccountHandler(restTemplate);

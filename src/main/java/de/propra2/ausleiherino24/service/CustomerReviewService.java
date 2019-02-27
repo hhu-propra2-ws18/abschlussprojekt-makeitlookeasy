@@ -29,6 +29,7 @@ public class CustomerReviewService {
 
     /**
      * Returns list of all Reviews, in which cases the given person is the article owner.
+     *
      * @param id personId
      */
     List<CustomerReview> findAllReviewsByLenderId(final Long id) {

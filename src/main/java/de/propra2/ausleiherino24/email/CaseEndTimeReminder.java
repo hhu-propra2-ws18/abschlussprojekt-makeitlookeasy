@@ -31,8 +31,9 @@ public class CaseEndTimeReminder {
                 .parse(LocalDateTime.now().format(formatter), formatter).atStartOfDay();
         final List<Case> activeCases = cases.findAll()
                 .stream()
-                .filter(c -> c.getRequestStatus() == Case.RUNNING)
-                .filter(c -> LocalDate.parse(c.getFormattedEndTime(), formatter).atStartOfDay()
+                .filter(cases -> cases.getRequestStatus() == Case.RUNNING)
+                .filter(cases -> LocalDate.parse(cases.getFormattedEndTime(), formatter)
+                        .atStartOfDay()
                         .isEqual(currentTime.plusDays(CaseEndTimeReminder.ONE_DAY)))
                 .collect(Collectors.toList());
 
@@ -40,10 +41,10 @@ public class CaseEndTimeReminder {
     }
 
     private void sendRemindingEmail(final List<Case> activeCases) {
-        activeCases.forEach(c -> {
-            emailSender.sendRemindingEmail(c);
-            c.setRequestStatus(Case.RUNNING_EMAILSENT);
-            cases.save(c);
+        activeCases.forEach(caseActive -> {
+            emailSender.sendRemindingEmail(caseActive);
+            caseActive.setRequestStatus(Case.RUNNING_EMAILSENT);
+            cases.save(caseActive);
         });
     }
 

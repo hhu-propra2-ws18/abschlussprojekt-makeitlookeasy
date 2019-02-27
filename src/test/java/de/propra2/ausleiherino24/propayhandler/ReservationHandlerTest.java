@@ -4,17 +4,17 @@ import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.PpTransaction;
 import de.propra2.ausleiherino24.model.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class ReservationHandlerTest {
 
     private static final String RESERVATION_URL = "http://localhost:8888/reservation";
@@ -31,7 +31,7 @@ public class ReservationHandlerTest {
     @MockBean
     private AccountHandler accountHandler;
 
-    @Before
+    @BeforeEach
     public void init() {
         reservation1 = Mockito.mock(Reservation.class);
         reservationResp1 = Mockito.mock(ResponseEntity.class);
@@ -93,6 +93,5 @@ public class ReservationHandlerTest {
                         HttpMethod.POST, null,
                         Reservation.class, "user", "user2", Double.toString(300));
     }
-
 
 }

@@ -2,10 +2,8 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.CalendarEvent;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -41,7 +39,8 @@ public class ArticleService {
     }
 
     /**
-     * Finds an article by its id. Throws NullPointerException in cases, the article is not present.
+     * Finds an article by its id. Throws NullPointerException in cases, the article is not
+     * present.
      */
     public Article findArticleById(final Long articleId) {
         final Optional<Article> article = articleRepository.findById(articleId);
@@ -74,6 +73,7 @@ public class ArticleService {
 
     /**
      * Filters articles and checks whether they are included in given category.
+     *
      * @return all Articles, which are not reserved and are of given category
      */
     public List<Article> findAllArticlesByCategory(final Category category) {
@@ -84,6 +84,7 @@ public class ArticleService {
 
     /**
      * Returns all active articles.
+     *
      * @return all active articles.
      */
     List<Article> findAllActiveArticles() {
@@ -93,6 +94,7 @@ public class ArticleService {
 
     /**
      * Finds all article which have active=true and forRental=true.
+     *
      * @return all non-active, not rented articles.
      */
     public List<Article> findAllActiveAndForRentalArticles() {
@@ -107,6 +109,7 @@ public class ArticleService {
      * article is present by looking for ID key. If fails, throw Exception. If article is not being
      * reserved (a.k.a bound to running case) and free to book, deactivate article. Else, throw
      * Exception.
+     *
      * @param articleId ID of article to be "deleted".
      * @return boolean True, if succeeded. False, if encountered error while processing request.
      */
@@ -129,6 +132,7 @@ public class ArticleService {
 
     /**
      * Updates an article given by the id with the information from given article.
+     *
      * @param articleId id for article, that is about to be updated
      * @param article new article
      */
@@ -150,8 +154,8 @@ public class ArticleService {
     }
 
     /**
-     * Returns List of all articles, which name contains the given searchstring.
-     * Case of letters is ignored.
+     * Returns List of all articles, which name contains the given searchstring. Case of letters is
+     * ignored.
      */
     public List<Article> findAllArticlesByName(final String searchString) {
         return articleRepository.findByActiveTrueAndNameContainsIgnoreCase(searchString);

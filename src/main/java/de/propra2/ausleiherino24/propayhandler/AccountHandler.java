@@ -12,7 +12,12 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class AccountHandler {
 
+    // TODO: Link not working inside Docker
+    // Innerhalb des Dockers ist Propay auf http://propay:8888/account erreichbar.
+    // Es gibt ein Whitelabel, wenn man auf buchen klickt, hier muss  eine andere Loesung her!
     private static final String ACCOUNT_URL = "http://localhost:8888/account";
+    // private static final String ACCOUNT_URL = "http://db:8888/account";
+
     private static final String ACCOUNT_DEFAULT = "/{account}";
     private final RestTemplate restTemplate;
 

@@ -1,25 +1,27 @@
 package de.propra2.ausleiherino24.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.CustomUserDetails;
 import de.propra2.ausleiherino24.model.User;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class SearchUserServiceTest {
 
     private UserRepository users;
     private SearchUserService searchUserService;
     private User user1;
 
-    @Before
+    @BeforeEach
     public void init() {
         users = Mockito.mock(UserRepository.class);
         user1 = new User();
@@ -34,10 +36,14 @@ public class SearchUserServiceTest {
         Assertions.assertThat(searchUserService.loadUserByUsername("user1")).isEqualTo(expected);
     }
 
-    @Test(expected = UsernameNotFoundException.class)
+    @Test
     public void test2() {
-        Mockito.when(users.findByUsername("user1")).thenThrow(UsernameNotFoundException.class);
 
-        searchUserService.loadUserByUsername("user1");
+        assertThrows(UsernameNotFoundException.class, () -> {
+            Mockito.when(users.findByUsername("user1")).thenThrow(UsernameNotFoundException.class);
+
+            searchUserService.loadUserByUsername("user1");
+        });
+
     }
 }

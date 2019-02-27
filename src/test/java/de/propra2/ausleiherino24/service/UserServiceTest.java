@@ -1,20 +1,26 @@
 package de.propra2.ausleiherino24.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import java.security.Principal;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import mockit.Mocked;
 import mockit.Verifications;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@ExtendWith(SpringExtension.class)
 public class UserServiceTest {
 
     @Mocked
@@ -24,7 +30,7 @@ public class UserServiceTest {
     private UserService userService;
     private User user;
 
-    @Before
+    @BeforeEach
     public void setup() {
         users = Mockito.mock(UserRepository.class);
         personService = Mockito.mock(PersonService.class);
@@ -40,13 +46,18 @@ public class UserServiceTest {
         Assertions.assertThat(userService.findUserByUsername("user1")).isEqualTo(user);
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void findUserByUsernameTest2() {
-        userService.findUserByUsername("user2");
-        new Verifications() {{
-            LOGGER.warn("Couldn't find user {} in UserRepository.", "user2");
-            times = 1;
-        }};
+
+        assertThrows(NoSuchElementException.class, () -> {
+            userService.findUserByUsername("user2");
+
+            new Verifications() {{
+                LOGGER.warn("Couldn't find user {} in UserRepository.", "user2");
+                times = 1;
+            }};
+        });
+
     }
 
     @Test

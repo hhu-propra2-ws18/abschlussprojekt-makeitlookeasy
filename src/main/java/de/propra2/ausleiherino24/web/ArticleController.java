@@ -53,7 +53,7 @@ public class ArticleController {
     @Autowired
     public ArticleController(final ArticleService articleService, final UserService userService,
             final ImageService imageService, final CustomerReviewService customerReviewService,
-            CalendarEventService calendarEventService) {
+            final CalendarEventService calendarEventService) {
         this.articleService = articleService;
         this.userService = userService;
         this.imageService = imageService;
@@ -196,7 +196,7 @@ public class ArticleController {
 
     /**
      * Return CalendarEvents as JSON for the calendar which shows all non available dates of an
-     * article.
+     * article. TODO
      */
     @GetMapping("/events")
     @ResponseBody

@@ -1,9 +1,9 @@
 package de.propra2.ausleiherino24.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -11,22 +11,25 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 
+@ExtendWith(SpringExtension.class)
 public class ImageServiceTest {
 
     private ImageService imageService;
     private String path = "imageStoreTest";
 
-    @Before
+    @BeforeEach
     public void init() {
         imageService = spy(new ImageService(path));
     }
 
-    @After
+    @AfterEach
     public void clean() {
         cleanDir(new File(path));
     }

@@ -2,22 +2,20 @@ package de.propra2.ausleiherino24.data;
 
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
 
@@ -35,7 +33,7 @@ public class CaseRepoTest {
     private Case case1;
     private Case case2;
 
-    @Before
+    @BeforeEach
     public void init() {
         case1 = new Case();
         case1.setReceiver(new User());
@@ -153,7 +151,7 @@ public class CaseRepoTest {
     }
 
     @Test
-    public void customQueryFindAllExpiredCasesByUserIdShouldReturnTwoCases(){
+    public void customQueryFindAllExpiredCasesByUserIdShouldReturnTwoCases() {
         User user1 = new User();
         users.save(user1);
 
@@ -167,7 +165,8 @@ public class CaseRepoTest {
         case2.setEndTime(0L);
         case2.setRequestStatus(14);
 
-        final List<Case> actualCases = cases.findAllExpiredCasesByUserId(case1.getArticle().getOwner().getId(), 1L);
+        final List<Case> actualCases = cases
+                .findAllExpiredCasesByUserId(case1.getArticle().getOwner().getId(), 1L);
         final List<Case> expectedCases = new ArrayList<>(Arrays.asList(case1, case2));
 
         Assertions.assertThat(actualCases.size()).isEqualTo(2);
@@ -175,7 +174,7 @@ public class CaseRepoTest {
     }
 
     @Test
-    public void customQueryFindAllExpiredCasesByUserIdShouldReturnZeroCases(){
+    public void customQueryFindAllExpiredCasesByUserIdShouldReturnZeroCases() {
         User user1 = new User();
         users.save(user1);
 
@@ -189,13 +188,14 @@ public class CaseRepoTest {
         case2.setEndTime(0L);
         case2.setRequestStatus(5);
 
-        final List<Case> actualCases = cases.findAllExpiredCasesByUserId(case1.getArticle().getOwner().getId(), 1L);
+        final List<Case> actualCases = cases
+                .findAllExpiredCasesByUserId(case1.getArticle().getOwner().getId(), 1L);
 
         Assertions.assertThat(actualCases.isEmpty()).isTrue();
     }
 
     @Test
-    public void customQueryFindAllRequestedCasesByUserIdShouldReturnTwoCases(){
+    public void customQueryFindAllRequestedCasesByUserIdShouldReturnTwoCases() {
         User user1 = new User();
         users.save(user1);
 
@@ -207,7 +207,8 @@ public class CaseRepoTest {
         case2.getArticle().setOwner(user1);
         case2.setRequestStatus(4);
 
-        final List<Case> actualCases = cases.findAllRequestedCasesByUserId(case1.getArticle().getOwner().getId());
+        final List<Case> actualCases = cases
+                .findAllRequestedCasesByUserId(case1.getArticle().getOwner().getId());
         final List<Case> expectedCases = new ArrayList<>(Arrays.asList(case1, case2));
 
         Assertions.assertThat(actualCases.size()).isEqualTo(2);
@@ -215,7 +216,7 @@ public class CaseRepoTest {
     }
 
     @Test
-    public void customQueryFindAllRequestedCasesByUserIdShouldReturnZeroCases(){
+    public void customQueryFindAllRequestedCasesByUserIdShouldReturnZeroCases() {
         User user1 = new User();
         users.save(user1);
 
@@ -227,7 +228,8 @@ public class CaseRepoTest {
         case2.getArticle().setOwner(new User());
         case2.setRequestStatus(14);
 
-        final List<Case> actualCases = cases.findAllRequestedCasesByUserId(case1.getArticle().getOwner().getId());
+        final List<Case> actualCases = cases
+                .findAllRequestedCasesByUserId(case1.getArticle().getOwner().getId());
 
         Assertions.assertThat(actualCases.isEmpty()).isTrue();
     }

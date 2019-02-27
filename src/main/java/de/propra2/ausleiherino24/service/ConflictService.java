@@ -66,6 +66,7 @@ public class ConflictService {
 
     /**
      * Deactivates conflict with id.
+     *
      * @param id conflictId
      */
     public void deactivateConflict(final Long id, final User user) throws AccessDeniedException {
@@ -87,15 +88,16 @@ public class ConflictService {
      * Safe delete conflict. Sets conflict of case to null and deletes the conflict without deleting
      * the case related to it.
      */
-    private void deleteConflictById(Long id, Conflict c) {
-        c.getConflictedCase().setConflict(null);
-        c.setConflictedCase(new Case());
-        conflictRepository.save(c);
+    private void deleteConflictById(final Long id, final Conflict cases) {
+        cases.getConflictedCase().setConflict(null);
+        cases.setConflictedCase(new Case());
+        conflictRepository.save(cases);
         conflictRepository.deleteById(id);
     }
 
     /**
      * Gets a conflict by its id.
+     *
      * @param id conflict id
      * @param user User, which want to access the data
      * @return conflict
@@ -123,6 +125,7 @@ public class ConflictService {
 
     /**
      * Checks whether the user is either a admin or a user involved in given conflict.
+     *
      * @return true or throws Exception
      * @throws AccessDeniedException when user is not involved in conflict and is no admin.
      */
@@ -145,6 +148,7 @@ public class ConflictService {
 
     /**
      * Solves a conflict. The depositReceiver gets the whole deposit.
+     *
      * @param conflictToSolve the conflict
      * @param user person, who solved the conflict
      * @param depositReceiver person, who gets the deposit
