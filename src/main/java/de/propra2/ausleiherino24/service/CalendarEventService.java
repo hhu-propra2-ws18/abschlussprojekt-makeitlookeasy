@@ -19,7 +19,7 @@ public class CalendarEventService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleService.class);
 
-    private final ArticleRepository articleRepository;
+
     private final CaseRepository caseRepsitory;
     private final ArticleService articleService;
 
@@ -27,9 +27,7 @@ public class CalendarEventService {
      * Autowired all needed repositorys and services.
      */
     @Autowired
-    public CalendarEventService(final ArticleRepository articleRepository,
-            CaseRepository caseRepository, ArticleService articleService) {
-        this.articleRepository = articleRepository;
+    public CalendarEventService(CaseRepository caseRepository, ArticleService articleService) {
         this.caseRepsitory = caseRepository;
         this.articleService = articleService;
 
