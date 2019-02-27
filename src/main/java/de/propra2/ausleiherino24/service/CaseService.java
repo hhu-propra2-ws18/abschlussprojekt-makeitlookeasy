@@ -394,6 +394,10 @@ public class CaseService {
         return caseRepository.findAllSoldItemsByUserId(id);
     }
 
+    /**
+     * Search for cases from a user which will be closed tomorrow.
+     * This is nessesary to show the info that you have to bring back sth. until tomorrow.
+     */
     public List<Case> findAllOutrunningCasesByUserId(Long id) {
         return caseRepository.findAllOutrunningCasesByUserId(id,
                 new Date().getTime(),
