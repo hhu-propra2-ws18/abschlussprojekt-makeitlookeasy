@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CalendarEventService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleService.class);
 
     private final ArticleRepository articleRepository;
@@ -23,7 +24,8 @@ public class CalendarEventService {
     private final ArticleService articleService;
 
     @Autowired
-    public CalendarEventService(final ArticleRepository articleRepository, CaseRepository caseRepository,ArticleService articleService) {
+    public CalendarEventService(final ArticleRepository articleRepository,
+            CaseRepository caseRepository, ArticleService articleService) {
         this.articleRepository = articleRepository;
         this.caseRepsitory = caseRepository;
         this.articleService = articleService;
@@ -33,14 +35,12 @@ public class CalendarEventService {
     /**
      * Search all cases by article, than write them into a new CalendarEvent Object and return as
      * arrayList.
-     * @param articleId
-     * @return
      */
-    public ArrayList<CalendarEvent> getAllEventsFromOneArticle (final Long articleId) {
+    public ArrayList<CalendarEvent> getAllEventsFromOneArticle(final Long articleId) {
         final Article article = articleService.findArticleById(articleId);
         ArrayList<Case> allCases = caseRepsitory.findAllByArticle(article);
         ArrayList<CalendarEvent> allCalendarevents = new ArrayList<CalendarEvent>();
-        for(Case c : allCases){
+        for (Case c : allCases) {
             CalendarEvent calendarEvent = new CalendarEvent();
             calendarEvent.setStart(c.getStartTime());
             calendarEvent.setEnd(c.getEndTime());
