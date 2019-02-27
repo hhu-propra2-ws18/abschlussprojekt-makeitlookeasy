@@ -98,14 +98,21 @@ public class UserService {
     public User findUserByPrincipal(final Principal principal) {
         User user;
 
+        if(principal == null) return buildNewUser();
+
         try {
             user = findUserByUsername(principal.getName());
-        } catch (Exception e) {
-            user = new User();
-            user.setRole("");
-            user.setUsername("");
+        } catch (NoSuchElementException e) {
+            user = buildNewUser();
         }
 
+        return user;
+    }
+
+    private User buildNewUser() {
+        User user = new User();
+        user.setRole("");
+        user.setUsername("");
         return user;
     }
 
