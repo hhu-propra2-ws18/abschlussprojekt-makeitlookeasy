@@ -1,6 +1,5 @@
 package de.propra2.ausleiherino24.security;
 
-
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.service.SearchUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +60,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout");
     }
 
+    /**
+     * password encoder to encode and check passwords.
+     *
+     * @return passwordEncoder Entity to be used
+     */
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new PasswordEncoder() {

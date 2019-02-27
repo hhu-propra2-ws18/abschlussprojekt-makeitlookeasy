@@ -96,8 +96,7 @@ public class ArticleController {
      * attributes.
      *
      * @param article Article object.
-     * @param result must not be deleted, even though there is no obvious use. Otherwise you cannot
-     * create an article without a picture.
+     * @param result must not be deleted. Necessary to create article without a picture.
      * @param image Image, that the user uploaded to be displayed.
      * @param principal Current user.
      * @return Redirects the user to the main page aka index.html.
