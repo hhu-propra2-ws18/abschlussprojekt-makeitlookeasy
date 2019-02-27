@@ -29,13 +29,16 @@ public class ArticleService {
         this.imageService = imageService;
     }
 
+    /**
+     * Saves the given article in the database.
+     */
     public void saveArticle(final Article article, final String msg) {
         articleRepository.save(article);
         LOGGER.info("{} article '{}' {}.", msg, article.getName(), article.getId());
     }
 
     /**
-     * Finds an article by its id. Throws NullPointerException in cases, the article is not present
+     * Finds an article by its id. Throws NullPointerException in cases, the article is not present.
      */
     public Article findArticleById(final Long articleId) {
         final Optional<Article> article = articleRepository.findById(articleId);
@@ -60,7 +63,7 @@ public class ArticleService {
     }
 
     /**
-     * Return all articles which are active and for sell.
+     * Returns all articles which are active and for sell.
      */
     public List<Article> findAllActiveForSale(final User user) {
         return articleRepository.findAllActiveForSaleByUser(user);
@@ -77,6 +80,9 @@ public class ArticleService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /**
+     * Returns all active articles.
+     */
     List<Article> findAllActiveArticles() {
         return articleRepository.findAllActive().isEmpty() ? new ArrayList<>()
                 : articleRepository.findAllActive();
@@ -151,6 +157,9 @@ public class ArticleService {
         saveArticle(originalArticle, "Update");
     }
 
+    /**
+     * Returns List of all articles, which name contains the given searchstring. Case of letters is ignored.
+     */
     public List<Article> findAllArticlesByName(final String searchString) {
         return articleRepository.findByActiveTrueAndNameContainsIgnoreCase(searchString);
     }

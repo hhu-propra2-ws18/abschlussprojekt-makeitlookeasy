@@ -53,6 +53,9 @@ public class CaseService {
         this.reservationHandler = reservationHandler;
     }
 
+    /**
+     * Saves given case in database.
+     */
     public void saveCase(Case acase) {
         caseRepository.save(acase);
     }
@@ -71,15 +74,28 @@ public class CaseService {
         return optionalCase.get();
     }
 
+    /**
+     * Checks if case exists.
+     *
+     * @return true, if a case with the given id exists. Otherwise returns false.
+     */
     public boolean isValidCase(Long id) {
         return caseRepository.existsById(id);
     }
 
+    /**
+     * @param personId personId of the owner of the lend article.
+     * @return all cases, where the given id is the personId of the person who owns the article.
+     */
     List<Case> getAllCasesFromPersonOwner(final Long personId) {
         return caseRepository
                 .findAllByArticleOwner(personService.findPersonById(personId).getUser());
     }
 
+    /**
+     * @param userId userId of the owner of the lend article.
+     * @return all cases, where the given id is the userId of the person who owns the article.
+     */
     private List<Case> findAllCasesByUserId(final Long userId) {
         return caseRepository.findAllByArticleOwnerId(userId);
     }
@@ -111,6 +127,10 @@ public class CaseService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /**
+     * @param personId personId of the person
+     * @return all cases, where the given person borrows an article.
+     */
     public List<Case> getLendCasesFromPersonReceiver(final Long personId) {
         return caseRepository.findAllByReceiver(personService.findPersonById(personId).getUser());
     }
@@ -153,6 +173,9 @@ public class CaseService {
         return false;
     }
 
+    /**
+     * @return the total cost for lending the article in the given time.
+     */
     private Double getCostForAllDays(final Long articleId, final Long startTime,
             final Long endTime) {
 
@@ -170,7 +193,7 @@ public class CaseService {
      * // TODO: JavaDoc ... Checks, if article request is ok.
      *
      * @return 0: case could not be found 1: everything alright 2: the article is already rented in
-     * the given time 3: receiver does not have enough money on ProPay
+     * the given time 3: receiver does not have enough money on ProPay.
      */
     public int acceptArticleRequest(final Long id) {
         final Optional<Case> optCase = caseRepository.findById(id);
@@ -199,6 +222,13 @@ public class CaseService {
         }
     }
 
+    /**
+     * Checks, if the article of the case isn't lend in the wanted time
+     *
+     * @param id id of the case to check
+     * @return true: article isn't lend in the given time. false: article is lend in the given time
+     * or the article doesn't exists in the database.
+     * */
     boolean articleNotRented(final Long id) {
         final Optional<Case> c = caseRepository.findById(id);
         if (!c.isPresent()) {
@@ -238,6 +268,8 @@ public class CaseService {
 
     /**
      * Declines an article request.
+     *
+     * @param id id of the case where the request should be declined.
      */
     public void declineArticleRequest(final Long id) {
         final Optional<Case> optCase = caseRepository.findById(id);
@@ -265,6 +297,11 @@ public class CaseService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * If the given case exists, the status is changed to OPEN_CONFLICT.
+     *
+     * @param id id of the case, where the status should be changed.
+     */
     void conflictOpened(final Long id) {
         final Optional<Case> opt = caseRepository.findById(id);
         if (opt.isPresent()) {
@@ -290,6 +327,8 @@ public class CaseService {
 
     /**
      * Finds all requested cases from one user by its id.
+     *
+     * @param id userId
      */
     public List<Case> findAllRequestedCasesByUserId(final Long id) {
         return findAllCasesByUserId(id)
@@ -303,6 +342,8 @@ public class CaseService {
 
     /**
      * Finds all days where an article is reserved.
+     *
+     * @param id articleId
      */
     public List<LocalDate> findAllReservedDaysByArticle(final Long id) {
         return caseRepository
@@ -337,6 +378,7 @@ public class CaseService {
      *
      * @param articleId article that is sold
      * @param principal costumer who buys article
+     * @return true: sale successful. false: costumer hasn't enought money on PPAcount.
      */
     public boolean sellArticle(Long articleId, Principal principal) {
         Article article = articleService.findArticleById(articleId);
