@@ -51,8 +51,9 @@ public class MainController {
     }
 
     /**
-     * Mapping for Login-Page.
-     * @return Spring Security login form.
+     * Returns the login prompt and form for visitors.
+     *
+     * @return Spring Security login view.
      */
     @GetMapping("/login")
     public ModelAndView getLogin() {
@@ -63,7 +64,7 @@ public class MainController {
      * Displays user registration form. Creates new User and Person objects, that will be filled
      * with required information about the user.
      */
-    @GetMapping("/signup")
+    @GetMapping("/signUp")
     public ModelAndView getRegistration() {
         final User user = new User();
         final Person person = new Person();
@@ -81,8 +82,9 @@ public class MainController {
      * @param user User object with attributes parsed from HTML form.
      * @param person Person object with attributes parsed fro HTML form.
      * @return Spring security login form.
+     *
+     * TODO: Automate login after registration.
      */
-    //TODO: Automate login after registration.
     @PostMapping("/registerNewUser")
     public ModelAndView registerNewUser(final @ModelAttribute @Valid User user,
             final @ModelAttribute @Valid Person person) {

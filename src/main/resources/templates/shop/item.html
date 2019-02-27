@@ -118,14 +118,14 @@
 <div class="container">
   <div class="row">
     <!-- Categories -->
-    <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
+    <div name="category" th:replace="/../fragments/categories ::categories"></div>
 
     <!-- Item  -->
     <div class="col-lg-9">
       <!-- Warning -->
       <div style="margin-top: 50px;">
         <div class="alert alert-success absolue center" th:if="${param.success}">
-          Article was succesfully booked!
+          Article was successfully booked!
         </div>
 
         <a style="text-decoration: none" th:href="@{~/bankAccount}">
@@ -235,9 +235,7 @@
               </div>
             </div>
           </div>
-          <p class="card-text" th:text="|${article.location}|">47877
-            Willich,Plutoweg
-            5</p>
+          <p class="card-text" th:text="|${article.location}|">47877 Willich,Plutoweg 5</p>
 
         </div>
 
@@ -263,9 +261,7 @@
 
             </div>
           </div>
-          <p class="card-text" th:text="|${article.location}|">47877
-            Willich,Plutoweg
-            5</p>
+          <p class="card-text" th:text="|${article.location}|">47877 Willich,Plutoweg 5</p>
 
         </div>
       </div>
@@ -289,7 +285,6 @@
     <!-- /.col-lg-9 -->
     <!-- Modal -->
   </div>
-</div>
 </div>
 <div class="container" style="width: 300px;height:500px">
   <div id='calendar1'></div>
