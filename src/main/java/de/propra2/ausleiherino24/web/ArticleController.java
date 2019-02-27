@@ -198,12 +198,13 @@ public class ArticleController {
     }
 
     /**
-     * Return CalendarEvents as JSON for the calendar which shows all non available dates of an
-     * article.
+     * Return CalendarEvents as JSON for the calendar which shows all non available dates of an article.
+     * @param id
+     * @return
      */
     @GetMapping("/events")
     @ResponseBody
-    private ArrayList<CalendarEvent> getEventsForCalendar(final @RequestParam Long id) {
+    private ArrayList<CalendarEvent> getEventsForCalendar(final @RequestParam Long id){
         return calendarEventService.getAllEventsFromOneArticle(id);
     }
 
