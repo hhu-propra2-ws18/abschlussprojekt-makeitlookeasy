@@ -100,19 +100,6 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void ownerWithNoLendCases() {
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
-
-        when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
-        final Person o = new Person();
-        when(personServiceMock.findPersonById(0L)).thenReturn(o);
-
-        assertTrue(caseService.getAllCasesFromPersonOwner(0L).isEmpty());
-    }
-
-    @Test
     public void requestArticle() {
         final Long articleId = 0L;
         final Long st = new Date().getTime() + 100L;

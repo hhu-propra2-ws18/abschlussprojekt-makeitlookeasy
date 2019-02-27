@@ -99,19 +99,25 @@ public class CaseService {
      * Finds all Transactions from receiver by its personId.
      */
     public List<PpTransaction> findAllTransactionsForPerson(final Long personId) {
-        List<PpTransaction> ppTransactions = new ArrayList<>(
-                getAllCasesFromPersonOwner(personId).stream()
-                        .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
-                                && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
-                        .map(Case::getPpTransaction)
-                        .collect(Collectors.toList()));
-        ppTransactions.addAll(getLendCasesFromPersonReceiver(personId).stream()
-                .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
-                        && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
-                .map(Case::getPpTransaction)
-                .collect(Collectors.toList()));
-        return ppTransactions;
+
+        try {
+            List<PpTransaction> ppTransactions = new ArrayList<>(
+                    getAllCasesFromPersonOwner(personId).stream()
+                            .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
+                                    && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
+                            .map(Case::getPpTransaction)
+                            .collect(Collectors.toList()));
+            ppTransactions.addAll(getLendCasesFromPersonReceiver(personId).stream()
+                    .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
+                            && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
+                    .map(Case::getPpTransaction)
+                    .collect(Collectors.toList()));
+            return ppTransactions;
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
+
 
     /**
      * Gets all cases for articles a person has borrowed.
