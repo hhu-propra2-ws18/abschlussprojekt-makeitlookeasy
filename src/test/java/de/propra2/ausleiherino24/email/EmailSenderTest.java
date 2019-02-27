@@ -18,17 +18,15 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 public class EmailSenderTest {
 
+    private final static String USER_EMAIL = "test@mail.de";
+    private final static String SERVICE_EMAIL = "test@mail.de";
     private EmailConfig emailConfigMock;
     private JavaMailSenderImpl javaMailSenderMock;
     private EmailSender emailSender;
     private UserService userService;
-
     private Case conflictedCase;
     private Conflict conflict;
     private User conflictReporter;
-
-    private final static String USER_EMAIL ="test@mail.de";
-    private final static String SERVICE_EMAIL ="test@mail.de";
 
     @Before
     public void init() {
@@ -98,9 +96,9 @@ public class EmailSenderTest {
 
     @Test
     public void sendRemindingEmailShouldSendCorrectMail() {
-          final Article art = new Article();
-          art.setName("testArticle");
-          conflictedCase.setArticle(art);
+        final Article art = new Article();
+        art.setName("testArticle");
+        conflictedCase.setArticle(art);
 
         final SimpleMailMessage expectedMessage = new SimpleMailMessage();
         expectedMessage.setTo(EmailSenderTest.USER_EMAIL);

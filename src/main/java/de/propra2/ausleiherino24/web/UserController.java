@@ -27,14 +27,12 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-
+    private static final String USER_STRING = "user";
+    private static final String CATEGORIES = "categories";
     private final AccountHandler accountHandler;
     private final ArticleService articleService;
     private final CaseService caseService;
     private final UserService userService;
-
-    private static final String USER_STRING = "user";
-    private static final String CATEGORIES = "categories";
     private final List<Category> allCategories = Category.getAllCategories();
 
     @Autowired

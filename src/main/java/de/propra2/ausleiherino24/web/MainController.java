@@ -25,10 +25,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController {
 
+    private static final String INDEX_STRING = "index";
     private final ArticleService articleService;
     private final UserService userService;
-
-    private static final String INDEX_STRING = "index";
 
     @Autowired
     public MainController(final UserService userService, final ArticleService articleService) {
@@ -52,6 +51,7 @@ public class MainController {
     }
 
     /**
+     * Mapping for Login-Page.
      * @return Spring Security login form.
      */
     @GetMapping("/login")
@@ -81,9 +81,8 @@ public class MainController {
      * @param user User object with attributes parsed from HTML form.
      * @param person Person object with attributes parsed fro HTML form.
      * @return Spring security login form.
-     *
-     * TODO: Automate login after registration.
      */
+    //TODO: Automate login after registration.
     @PostMapping("/registerNewUser")
     public ModelAndView registerNewUser(final @ModelAttribute @Valid User user,
             final @ModelAttribute @Valid Person person) {

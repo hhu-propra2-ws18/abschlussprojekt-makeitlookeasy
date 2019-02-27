@@ -86,6 +86,7 @@ public class CaseController {
 
     /**
      * Principal buys an article.
+     *
      * @param articleId article that is sold
      * @param principal customer that buys article
      */
@@ -145,10 +146,10 @@ public class CaseController {
         final Case opt = caseService.findCaseById(id);
 
         review.setTimestamp(new Date().getTime());
-        review.setAcase(opt);
+        review.setACase(opt);
         customerReviewService.saveReview(review);
 
-        caseService.saveCase(review.getAcase());
+        caseService.saveCase(review.getACase());
 
         System.out.println(review); // TODO: What happens here?
 

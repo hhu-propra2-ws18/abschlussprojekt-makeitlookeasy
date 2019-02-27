@@ -26,7 +26,7 @@ public class CustomerReview {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @NotNull
-    Case acase;
+    Case aCase;
 
     double stars;
 
@@ -37,17 +37,33 @@ public class CustomerReview {
 
     Long timestamp;
 
-    public void setAcase(final Case acase) {
-        setAcase(acase, false);
+    /**
+     * sets which case belongs to review.
+     *
+     * @param acase case to set
+     */
+    public void setACase(final Case acase) {
+        setACase(acase, false);
     }
 
-    void setAcase(final Case acase, final boolean repetition) {
-        this.acase = acase;
+    /**
+     * sets which case belongs to review.
+     *
+     * @param acase case to set
+     * @param repetition for database error prevention
+     */
+    public void setACase(final Case acase, final boolean repetition) {
+        this.aCase = acase;
         if (acase != null && !repetition) {
             acase.setReview(this, true);
         }
     }
 
+    /**
+     * converts review to string.
+     *
+     * @return returns converted Form of Review
+     */
     @Override
     public String toString() {
         return "Stars: " + stars + "\n"
@@ -58,7 +74,6 @@ public class CustomerReview {
 
     /**
      * Is used in HTML view to convert long into time string.
-     * @return
      */
     public String getFormattedTime() {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");

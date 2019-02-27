@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class CaseEndTimeReminder {
 
+    private static final Long ONE_DAY = 1L;
     private final CaseRepository cases;
     private final EmailSender emailSender;
-    private static final Long ONE_DAY = 1L;
 
     @Autowired
     public CaseEndTimeReminder(final CaseRepository cases, final EmailSender emailSender) {

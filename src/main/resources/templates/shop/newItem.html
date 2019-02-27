@@ -62,8 +62,8 @@
         <label>Sell</label>
         <div>
           <label class="switch">
-            <input type="checkbox"
-                   name="forRental" id="forRental" onclick="changeView()">
+            <input id="forRental"
+                   name="forRental" onclick="changeView()" type="checkbox">
             <span class="slider round"></span>
           </label>
         </div>
@@ -76,13 +76,13 @@
         </div>
         <div class="form-group">
           <label for="formInput2">Price per Day</label>
-          <input class="form-control" id="formInput2" name="costPerDay" type="number"
-                 step="0.01">
+          <input class="form-control" id="formInput2" name="costPerDay" step="0.01"
+                 type="number">
         </div>
         <div class="form-group">
           <label for="formInput3">Deposit</label>
-          <input class="form-control" id="formInput3" name="deposit" type="number"
-                 step="0.01">
+          <input class="form-control" id="formInput3" name="deposit" step="0.01"
+                 type="number">
         </div>
         <div class="form-group">
           <label for="formInput4">Location</label>
@@ -107,13 +107,13 @@
       </form>
     </div>
     <!-- Sell View-->
-    <div class="col-lg 9" style="margin-top: 50px;display:none" id="sellView">
+    <div class="col-lg 9" id="sellView" style="margin-top: 50px;display:none">
       <div class="form-group text-center">
         <label>Sell</label>
         <div>
           <label class="switch">
-            <input type="checkbox"
-                   name="forRental" id="forBuy" onclick="changeView()">
+            <input id="forBuy"
+                   name="forRental" onclick="changeView()" type="checkbox">
             <span class="slider round"></span>
           </label>
         </div>
@@ -126,8 +126,8 @@
         </div>
         <div class="form-group">
           <label for="formControlInput2">Price</label>
-          <input class="form-control" id="formControlInput2" name="costPerDay" type="number"
-                 step="0.01">
+          <input class="form-control" id="formControlInput2" name="costPerDay" step="0.01"
+                 type="number">
         </div>
         <div class="form-group">
           <label for="formControlInput4">Location</label>

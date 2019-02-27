@@ -23,9 +23,11 @@ public class ReservationHandler {
 
 
     /**
+     * Constructor.
+     *
      * @param caseRepository needed to update reservationIds of PPTransactions via Cases
      * @param restTemplate needed for propay requests accountHandler needed to transfer Funds in
-     *      between Reservations
+     *     between Reservations
      */
     public ReservationHandler(final CaseRepository caseRepository,
             final RestTemplate restTemplate) {
@@ -36,33 +38,33 @@ public class ReservationHandler {
 
 
     /**
-     * @param aCase contains all necessary data to process what should be done calls
-     * createReservation when case is requested releases old reservation, calls transfer and creates
-     * new reservation for deposit if case was Accepted. Handling in one Method due to Test data
-     * compromising the process and for better usage saves ReservationId to remember which
-     * reservation belongs to the case/transaction
+     * @param acase contains all necessary data to process what should be done calls
+     *     createReservation when case is requested releases old reservation, calls transfer and
+     *     creates new reservation for deposit if case was Accepted. Handling in one Method due to
+     *     Test data compromising the process and for better usage saves ReservationId to remember
+     *     which reservation belongs to the case/transaction
      */
-    public void handleReservedMoney(final Case aCase) {
+    public void handleReservedMoney(final Case acase) {
         Long reservationId = -1L;
 
-        if (aCase.getRequestStatus() == Case.REQUESTED) {
-            reservationId = createReservation(aCase.getReceiver().getUsername(),
-                    aCase.getOwner().getUsername(),
-                    aCase.getDeposit() + aCase.getPpTransaction().getLendingCost());
+        if (acase.getRequestStatus() == Case.REQUESTED) {
+            reservationId = createReservation(acase.getReceiver().getUsername(),
+                    acase.getOwner().getUsername(),
+                    acase.getDeposit() + acase.getPpTransaction().getLendingCost());
         }
 
-        if (aCase.getRequestStatus() == Case.REQUEST_ACCEPTED) {
-            if (aCase.getPpTransaction().getReservationId() != -1L) {
-                releaseReservationByCase(aCase);
+        if (acase.getRequestStatus() == Case.REQUEST_ACCEPTED) {
+            if (acase.getPpTransaction().getReservationId() != -1L) {
+                releaseReservationByCase(acase);
             }
-            accountHandler.transferFundsByCase(aCase);
-            reservationId = createReservation(aCase.getReceiver().getUsername(),
-                    aCase.getOwner().getUsername(),
-                    aCase.getDeposit());
+            accountHandler.transferFundsByCase(acase);
+            reservationId = createReservation(acase.getReceiver().getUsername(),
+                    acase.getOwner().getUsername(),
+                    acase.getDeposit());
         }
 
-        aCase.getPpTransaction().setReservationId(reservationId);
-        caseRepository.save(aCase);
+        acase.getPpTransaction().setReservationId(reservationId);
+        caseRepository.save(acase);
     }
 
     /**
