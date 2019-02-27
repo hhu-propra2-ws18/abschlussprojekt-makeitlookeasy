@@ -104,25 +104,14 @@ public class CaseService {
                 .collect(Collectors.toList());
     }
 
-    // TODO: Only implemented in tests. Necessary?
-    List<Case> getFreeCasesFromPersonOwner(final Long personId) {
-        final List<Case> cases = getAllCasesFromPersonOwner(personId);
-        return cases.stream()
-                .filter(c -> c.getReceiver() == null)
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
     /**
      * Gets all cases for articles a person has borrowed.
+     *
      * @param personId of person to obtain lend cases.
      * @return all cases borrowed by a person
      */
     public List<Case> getLendCasesFromPersonReceiver(final Long personId) {
-        return caseRepository
-                .findAllByReceiver(personService.findPersonById(personId).getUser())
-                .stream()
-                .filter(c -> !c.getArticle().isForSale())
-                .collect(Collectors.toList());
+        return caseRepository.getLendCasesFromPersonReceiver(personId);
     }
 
     /**
@@ -137,7 +126,8 @@ public class CaseService {
         if (accountHandler.hasValidFunds(username,
                 totalCost + articleService.findArticleById(articleId).getDeposit())
                 && articleNotRented(articleService.findArticleById(articleId), startTime,
-                endTime)) {
+                endTime) && new Date().getTime() < startTime && startTime < endTime
+                && !articleService.findArticleById(articleId).getOwner().getUsername().equals(username)) {
 
             final PpTransaction ppTransaction = new PpTransaction();
             ppTransaction.setLendingCost(totalCost);
@@ -296,14 +286,7 @@ public class CaseService {
      * Finds all requested cases from one user by its id.
      */
     public List<Case> findAllRequestedCasesByUserId(final Long id) {
-        return findAllCasesByUserId(id)
-                .stream()
-                .filter(c -> c.getRequestStatus() == Case.REQUESTED
-                        || c.getRequestStatus() == Case.REQUEST_ACCEPTED
-                        || c.getRequestStatus() == Case.REQUEST_DECLINED
-                        || c.getRequestStatus() == Case.RENTAL_NOT_POSSIBLE)
-                .filter(c -> !c.getArticle().isForSale())
-                .collect(Collectors.toList());
+        return caseRepository.findAllRequestedCasesByUserId(id);
     }
 
     /**
@@ -363,10 +346,14 @@ public class CaseService {
             currentCase.setPpTransaction(transaction);
             caseRepository.save(currentCase);
             accountHandler.transferFundsByCase(currentCase);
-            articleService.setSellStatusFromArticle(articleId, false);
+            //articleService.setSellStatusFromArticle(articleId, false);
             articleService.deactivateArticle(articleId);
             return true;
         }
         return false;
+    }
+
+    public List<Case> findAllSoldItemsByUserId(Long id) {
+        return caseRepository.findAllSoldItemsByUserId(id);
     }
 }

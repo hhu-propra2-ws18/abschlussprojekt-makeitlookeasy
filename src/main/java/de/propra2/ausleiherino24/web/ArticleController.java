@@ -107,9 +107,8 @@ public class ArticleController {
             final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
 
-        article.setActive(true);
         article.setOwner(user);
-        article.setImage(imageService.store(image, null));
+        article.setActive(true);
         article.setForRental(true);
         article.setForSale(false);
 
@@ -131,14 +130,14 @@ public class ArticleController {
             final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);
 
-        article.setActive(true);
         article.setOwner(user);
+        article.setActive(true);
         article.setForRental(true);
+        article.setForSale(true);
 
         if (image != null) {
             article.setImage(imageService.store(image, null));
         }
-        article.setForSale(true);
 
         articleService.saveArticle(article, "Created");
         return new ModelAndView("redirect:/");

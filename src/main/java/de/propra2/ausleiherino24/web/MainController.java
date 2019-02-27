@@ -137,8 +137,8 @@ public class MainController {
      * @param allArticles List of all articles queried by request.
      * @param category Category to be displayed.
      */
-    private void addStandardModelAttributes(ModelAndView mav, Principal principal,
-            List<Article> allArticles, String category) {
+    private void addStandardModelAttributes(final ModelAndView mav, final Principal principal,
+            final List<Article> allArticles, final String category) {
         final User currentUser = userService.findUserByPrincipal(principal);
         final List<Category> allCategories = Category.getAllCategories();
 

@@ -31,6 +31,7 @@
       var mainFrameTwo = document.getElementById("mainFrameTwo");
       var mainFrameThree = document.getElementById("mainFrameThree");
       var mainFrameFour = document.getElementById("mainFrameFour");
+      var mainFrameFive = document.getElementById("mainFrameFive");
 
       mainFrameOne.style.display = (
           mainFrameOne.style.display == "block" ? "block" : "block");
@@ -40,6 +41,9 @@
           mainFrameThree.style.display == "none" ? "none" : "none");
       mainFrameFour.style.display = (
           mainFrameFour.style.display == "none" ? "none" : "none");
+      mainFrameFive.style.display = (
+          mainFrameFive.style.display == "none" ? "none" : "none");
+
     }
 
     function twoFunction() {
@@ -47,6 +51,7 @@
       var mainFrameTwo = document.getElementById("mainFrameTwo");
       var mainFrameThree = document.getElementById("mainFrameThree");
       var mainFrameFour = document.getElementById("mainFrameFour");
+      var mainFrameFive = document.getElementById("mainFrameFive");
 
       mainFrameOne.style.display = (
           mainFrameOne.style.display == "none" ? "none" : "none");
@@ -56,6 +61,8 @@
           mainFrameThree.style.display == "none" ? "none" : "none");
       mainFrameFour.style.display = (
           mainFrameFour.style.display == "none" ? "none" : "none");
+      mainFrameFive.style.display = (
+          mainFrameFive.style.display == "none" ? "none" : "none");
     }
 
     function threeFunction() {
@@ -63,6 +70,7 @@
       var mainFrameTwo = document.getElementById("mainFrameTwo");
       var mainFrameThree = document.getElementById("mainFrameThree");
       var mainFrameFour = document.getElementById("mainFrameFour");
+      var mainFrameFive = document.getElementById("mainFrameFive");
 
       mainFrameOne.style.display = (
           mainFrameOne.style.display == "none" ? "none" : "none");
@@ -72,6 +80,8 @@
           mainFrameThree.style.display == "block" ? "block" : "block");
       mainFrameFour.style.display = (
           mainFrameFour.style.display == "none" ? "none" : "none");
+      mainFrameFive.style.display = (
+          mainFrameFive.style.display == "none" ? "none" : "none");
     }
 
     function fourFunction() {
@@ -79,6 +89,7 @@
       var mainFrameTwo = document.getElementById("mainFrameTwo");
       var mainFrameThree = document.getElementById("mainFrameThree");
       var mainFrameFour = document.getElementById("mainFrameFour");
+      var mainFrameFive = document.getElementById("mainFrameFive");
 
       mainFrameOne.style.display = (
           mainFrameOne.style.display == "none" ? "none" : "none");
@@ -88,6 +99,27 @@
           mainFrameThree.style.display == "none" ? "none" : "none");
       mainFrameFour.style.display = (
           mainFrameFour.style.display == "block" ? "block" : "block");
+      mainFrameFive.style.display = (
+          mainFrameFive.style.display == "none" ? "none" : "none");
+    }
+
+    function fiveFunction() {
+      var mainFrameOne = document.getElementById("mainFrameOne");
+      var mainFrameTwo = document.getElementById("mainFrameTwo");
+      var mainFrameThree = document.getElementById("mainFrameThree");
+      var mainFrameFour = document.getElementById("mainFrameFour");
+      var mainFrameFive = document.getElementById("mainFrameFive");
+
+      mainFrameOne.style.display = (
+          mainFrameOne.style.display == "none" ? "none" : "none");
+      mainFrameTwo.style.display = (
+          mainFrameTwo.style.display == "none" ? "none" : "none");
+      mainFrameThree.style.display = (
+          mainFrameThree.style.display == "none" ? "none" : "none");
+      mainFrameFour.style.display = (
+          mainFrameFour.style.display == "none" ? "none" : "none");
+      mainFrameFive.style.display = (
+          mainFrameFive.style.display == "block" ? "block" : "block");
     }
 
   </script>
@@ -157,6 +189,9 @@
                 </button>
                 <button class="btn btn-outline-dark" onclick="fourFunction()"
                         style="margin-bottom: 10px"> Requests
+                </button>
+                <button class="btn btn-outline-dark" onclick="fiveFunction()"
+                        style="margin-bottom: 10px">Sold
                 </button>
               </div>
             </div>
@@ -512,6 +547,9 @@
                 <button class="btn btn-outline-dark" onclick="fourFunction()"
                         style="margin-bottom: 10px"> Requests
                 </button>
+                <button class="btn btn-outline-dark" onclick="fiveFunction()"
+                        style="margin-bottom: 10px">Sold
+                </button>
               </div>
             </div>
           </tr>
@@ -561,7 +599,7 @@
                   Conflict
                 </button>
               </th:block>
-              <th:block th:if="${case.requestStatus==7}">
+              <th:block th:if="${case.requestStatus==7 || case.requestStatus==8}">
                 <button class="btn btn-outline-success btn-sm disabled"
                         style="height:30px;width:80px">
                   Running
@@ -697,6 +735,9 @@
                 <button class="btn btn-outline-dark" onclick="fourFunction()"
                         style="margin-bottom: 10px"> Requests
                 </button>
+                <button class="btn btn-outline-dark" onclick="fiveFunction()"
+                        style="margin-bottom: 10px">Sold
+                </button>
               </div>
             </div>
           </tr>
@@ -723,7 +764,7 @@
             <td th:text="${case.deposit+'€'}"></td>
 
             <td style="white-space: nowrap">
-              <th:block th:if="${case.requestStatus==7}">
+              <th:block th:if="${case.requestStatus==7 || case.requestStatus==8}">
                 <div class="ml-auto flex-md-row">
                   <form method="post" style="display:inline-block"
                         th:action="@{~/acceptCaseReturn(id=${case.id})}">
@@ -809,13 +850,16 @@
                         style="margin-bottom: 10px">My articles
                 </button>
                 <button class="btn btn-outline-dark" onclick="twoFunction()"
-                        style="margin-bottom: 10px"> Borrowed
+                        style="margin-bottom: 10px">Borrowed
                 </button>
                 <button class="btn btn-outline-dark" onclick="threeFunction()"
-                        style="margin-bottom: 10px"> Returned
+                        style="margin-bottom: 10px">Returned
                 </button>
                 <button class="btn btn-dark" onclick="fourFunction()" style="margin-bottom: 10px">
                   Requests
+                </button>
+                <button class="btn btn-outline-dark" onclick="fiveFunction()"
+                        style="margin-bottom: 10px">Sold
                 </button>
               </div>
             </div>
@@ -884,6 +928,52 @@
                 </div>
               </th:block>
             </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Frame for saled articles -->
+      <div id="mainFrameFive"
+           th:style="'margin-top: 20px;display:'+${(param.sold!=null)? 'block' : 'none'}">
+        <table class="table">
+          <tr>
+            <div class="text-center">
+              <div class="btn-group">
+                <button class="btn btn-outline-dark " onclick="oneFunction()"
+                        style="margin-bottom: 10px">My articles
+                </button>
+                <button class="btn btn-outline-dark" onclick="twoFunction()"
+                        style="margin-bottom: 10px"> Borrowed
+                </button>
+                <button class="btn btn-outline-dark" onclick="threeFunction()"
+                        style="margin-bottom: 10px"> Returned
+                </button>
+                <button class="btn btn-outline-dark" onclick="fourFunction()"
+                        style="margin-bottom: 10px"> Requests
+                </button>
+                <button class="btn btn-dark" onclick="fiveFunction()" style="margin-bottom: 10px">
+                  Sold
+                </button>
+              </div>
+            </div>
+          </tr>
+          <thead>
+          <tr>
+            <th scope="col">Buyer</th>
+            <th scope="col">Article</th>
+            <th scope="col">Profit</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="case:${sold}">
+            <td><a th:href="@{~/profile/{username}(username=${case.receiver.username})}"
+                   th:text="${case.receiver.username}"></a>
+            </td>
+            <td><a th:href="@{/article(id=${case.article.getId()})}"
+                   th:text="${case.article.name}"></a>
+            </td>
+            <td th:text="${case.price+'€'}"></td>
           </tr>
           </tbody>
         </table>

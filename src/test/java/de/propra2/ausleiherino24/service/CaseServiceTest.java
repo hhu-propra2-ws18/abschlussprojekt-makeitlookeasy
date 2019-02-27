@@ -113,41 +113,15 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void ownerWithTwoFreeCases() {
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
-
-        when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
-        final Person o = new Person();
-        when(personServiceMock.findPersonById(0L)).thenReturn(o);
-        cases.remove(3);
-        cases.remove(1);
-
-        assertEquals(cases, caseService.getFreeCasesFromPersonOwner(0L));
-    }
-
-    @Test
-    public void ownerWithNoFreeCases() {
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
-        cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
-
-        when(caseRepositoryMock.findAllByArticleOwner(null)).thenReturn(cases);
-        final Person o = new Person();
-        when(personServiceMock.findPersonById(0L)).thenReturn(o);
-
-        assertTrue(caseService.getFreeCasesFromPersonOwner(0L).isEmpty());
-    }
-
-    @Test
     public void requestArticle() {
         final Long articleId = 0L;
-        final Long st = 5L;
-        final Long et = 10L;
+        final Long st = new Date().getTime()+100L;
+        final Long et = new Date().getTime()+200L;
         final String username = "";
         final Article article = new Article();
+        User user = new User();
+        user.setUsername("test");
+        article.setOwner(user);
         article.setDeposit(100D);
         article.setCostPerDay(50D);
         when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
@@ -168,10 +142,72 @@ public class CaseServiceTest {
     }
 
     @Test
+    public void requestArticleButTimeIsLowerThanActualTime() {
+        final Long articleId = 0L;
+        final Long st = 100L;
+        final Long et = 200L;
+        final String username = "";
+        final Article article = new Article();
+        User user = new User();
+        user.setUsername("test");
+        article.setOwner(user);
+        article.setDeposit(100D);
+        article.setCostPerDay(50D);
+        when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
+        when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
+        when(accountHandlerMock.hasValidFunds(eq(""), Mockito.anyDouble())).thenReturn(true);
+        doReturn(true).when(caseService).articleNotRented(any(), eq(st), eq(et));
+
+        assertEquals(false,  caseService.requestArticle(articleId, st, et, username));
+    }
+
+    @Test
+    public void requestArticleButUserEqualsReceiver() {
+        final Long articleId = 0L;
+        final Long st = 100L;
+        final Long et = 200L;
+        final String username = "";
+        final Article article = new Article();
+        User user = new User();
+        user.setUsername(username);
+        article.setOwner(user);
+        article.setDeposit(100D);
+        article.setCostPerDay(50D);
+        when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
+        when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
+        when(accountHandlerMock.hasValidFunds(eq(""), Mockito.anyDouble())).thenReturn(true);
+        doReturn(true).when(caseService).articleNotRented(any(), eq(st), eq(et));
+        final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+
+        assertEquals(false,  caseService.requestArticle(articleId, st, et, username));
+    }
+
+    @Test
+    public void requestArticleButStartTimeIsHigherThanEndTime() {
+        final Long articleId = 0L;
+        final Long st = 300L;
+        final Long et = 200L;
+        final String username = "";
+        final Article article = new Article();
+        User user = new User();
+        user.setUsername("test");
+        article.setOwner(user);
+        article.setDeposit(100D);
+        article.setCostPerDay(50D);
+        when(articleServiceMock.findArticleById(articleId)).thenReturn(article);
+        when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
+        when(accountHandlerMock.hasValidFunds(eq(""), Mockito.anyDouble())).thenReturn(true);
+        doReturn(true).when(caseService).articleNotRented(any(), eq(st), eq(et));
+        final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
+
+        assertEquals(false,  caseService.requestArticle(articleId, st, et, username));
+    }
+
+    @Test
     public void requestArticleWithoutEnoughMoney() {
         final Long articleId = 0L;
-        final Long st = 5L;
-        final Long et = 10L;
+        final Long st = new Date().getTime()+100L;
+        final Long et = new Date().getTime()+200L;
         final String username = "";
         final Article article = new Article();
         article.setDeposit(100D);
@@ -188,8 +224,8 @@ public class CaseServiceTest {
     @Test(expected = Exception.class)
     public void requestArticleCatchException() {
         final Long articleId = 0L;
-        final Long st = 5L;
-        final Long et = 10L;
+        final Long st = new Date().getTime()+100L;
+        final Long et = new Date().getTime()+200L;
         final String username = "";
         when(articleServiceMock.findArticleById(articleId)).thenReturn(null);
         when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
@@ -376,12 +412,20 @@ public class CaseServiceTest {
     public void onlyRequestCases() {
         final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUESTED);
+        c1.setArticle(new Article());
+        c1.getArticle().setForSale(false);
         final Case c2 = new Case();
         c2.setRequestStatus(Case.REQUEST_ACCEPTED);
+        c2.setArticle(new Article());
+        c2.getArticle().setForSale(false);
         final Case c3 = new Case();
         c3.setRequestStatus(Case.REQUEST_DECLINED);
+        c3.setArticle(new Article());
+        c3.getArticle().setForSale(false);
         final Case c4 = new Case();
         c4.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
+        c4.setArticle(new Article());
+        c4.getArticle().setForSale(false);
         final ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
         when(caseRepositoryMock.findAllByArticleOwnerId(0L)).thenReturn(cases);
 
@@ -407,12 +451,20 @@ public class CaseServiceTest {
     @Test
     public void twoRequestCases() {
         final Case c1 = new Case();
+        c1.setArticle(new Article());
+        c1.getArticle().setForSale(false);
         c1.setRequestStatus(Case.RUNNING);
         final Case c2 = new Case();
+        c2.setArticle(new Article());
+        c2.getArticle().setForSale(false);
         c2.setRequestStatus(Case.REQUEST_ACCEPTED);
         final Case c3 = new Case();
+        c3.setArticle(new Article());
+        c3.getArticle().setForSale(false);
         c3.setRequestStatus(Case.FINISHED);
         final Case c4 = new Case();
+        c4.setArticle(new Article());
+        c4.getArticle().setForSale(false);
         c4.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
         final ArrayList<Case> cases = new ArrayList<>(Arrays.asList(c1, c2, c3, c4));
         when(caseRepositoryMock.findAllByArticleOwnerId(0L)).thenReturn(cases);
