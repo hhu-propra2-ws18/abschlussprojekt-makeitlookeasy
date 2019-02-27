@@ -46,4 +46,10 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
             + "WHERE c.receiver.person.id = :id "
             + "AND c.article.forSale = false")
     List<Case> getLendCasesFromPersonReceiver(@Param("id") Long personId);
+
+    @Query("SELECT c FROM Case c "
+            + "WHERE c.article.forSale = true "
+            + "AND c.article.owner.id = :id "
+            + "AND c.requestStatus = 14")
+    List<Case> findAllSoldItemsByUserId(@Param("id") Long id);
 }

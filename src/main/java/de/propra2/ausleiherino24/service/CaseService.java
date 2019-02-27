@@ -348,4 +348,8 @@ public class CaseService {
         }
         return false;
     }
+
+    public List<Case> findAllSoldItemsByUserId(Long id) {
+        return caseRepository.findAllSoldItemsByUserId(id);
+    }
 }

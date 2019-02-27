@@ -98,6 +98,7 @@ public class UserController {
                 .findAllRequestedCasesByUserId(currentUser.getId());
         final List<Case> returnedArticles = caseService
                 .findAllExpiredCasesByUserId(currentUser.getId());
+        final List<Case> soldItems = caseService.findAllSoldItemsByUserId(currentUser.getId());
 
         final ModelAndView mav = new ModelAndView("/user/myOverview");
         mav.addObject(USER_STRING, currentUser);
@@ -107,6 +108,7 @@ public class UserController {
         mav.addObject("borrowed", borrowedArticles);
         mav.addObject("returned", returnedArticles);
         mav.addObject("requested", requestedArticles);
+        mav.addObject("sold", soldItems);
         return mav;
     }
 
