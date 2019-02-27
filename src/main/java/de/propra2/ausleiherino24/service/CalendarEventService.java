@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * This service is needed to deliver the needed calendar events to the FullCalendar.
+ */
 @Service
 public class CalendarEventService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleService.class);
@@ -27,6 +30,12 @@ public class CalendarEventService {
 
     }
 
+    /**
+     * Search all cases by article, than write them into a new CalendarEvent Object and return as
+     * arrayList.
+     * @param articleId
+     * @return
+     */
     public ArrayList<CalendarEvent> getAllEventsFromOneArticle (final Long articleId) {
         final Article article = articleService.findArticleById(articleId);
         ArrayList<Case> allCases = caseRepsitory.findAllByArticle(article);
