@@ -2,6 +2,7 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.model.Person;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ public class PersonService {
 
         if (!optionalPerson.isPresent()) {
             LOGGER.warn("Couldn't find person {} in database.", id);
-            throw new NullPointerException();
+            throw new NoSuchElementException();
         }
 
         return optionalPerson.get();
