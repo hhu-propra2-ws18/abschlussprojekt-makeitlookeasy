@@ -75,6 +75,9 @@ public class UserService {
 
     }
 
+    /**
+     * Finds user by its username.
+     */
     public User findUserByUsername(final String username) {
         final Optional<User> optionalUser = userRepository.findByUsername(username);
 
@@ -86,6 +89,9 @@ public class UserService {
         return optionalUser.get();
     }
 
+    /**
+     * Finds user by its principal.
+     */
     public User findUserByPrincipal(final Principal principal) {
         User user;
 

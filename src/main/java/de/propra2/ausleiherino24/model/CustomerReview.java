@@ -26,7 +26,7 @@ public class CustomerReview {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @NotNull
-    Case aCase;
+    Case acase;
 
     double stars;
 
@@ -42,8 +42,8 @@ public class CustomerReview {
      *
      * @param acase case to set
      */
-    public void setACase(final Case acase) {
-        setACase(acase, false);
+    public void setAcase(final Case acase) {
+        setAcase(acase, false);
     }
 
     /**
@@ -52,8 +52,8 @@ public class CustomerReview {
      * @param acase case to set
      * @param repetition for database error prevention
      */
-    public void setACase(final Case acase, final boolean repetition) {
-        this.aCase = acase;
+    public void setAcase(final Case acase, final boolean repetition) {
+        this.acase = acase;
         if (acase != null && !repetition) {
             acase.setReview(this, true);
         }

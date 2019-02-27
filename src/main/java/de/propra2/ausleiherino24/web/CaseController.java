@@ -146,10 +146,10 @@ public class CaseController {
         final Case opt = caseService.findCaseById(id);
 
         review.setTimestamp(new Date().getTime());
-        review.setACase(opt);
+        review.setAcase(opt);
         customerReviewService.saveReview(review);
 
-        caseService.saveCase(review.getACase());
+        caseService.saveCase(review.getAcase());
 
         System.out.println(review); // TODO: What happens here?
 
