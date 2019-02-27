@@ -27,7 +27,7 @@ public class ReservationHandler {
      *
      * @param caseRepository needed to update reservationIds of PPTransactions via Cases
      * @param restTemplate needed for propay requests accountHandler needed to transfer Funds in
-     *     between Reservations
+     *      between Reservations.
      */
     public ReservationHandler(final CaseRepository caseRepository,
             final RestTemplate restTemplate) {
@@ -38,10 +38,11 @@ public class ReservationHandler {
 
 
     /**
-     * createReservation when case is requested releases old reservation, calls transfer and
-     * creates new reservation for deposit if case was Accepted. Handling in one Method due to
-     * Test data compromising the process and for better usage saves ReservationId to remember
-     * which reservation belongs to the case/transaction
+     * createReservation when case is requested releases old reservation, calls transfer and creates
+     * new reservation for deposit if case was Accepted. Handling in one Method due to Test data
+     * compromising the process and for better usage saves ReservationId to remember which
+     * reservation belongs to the case/transaction
+     *
      * @param c contains all necessary data to process what should be done calls
      */
     public void handleReservedMoney(final Case c) {
@@ -69,6 +70,7 @@ public class ReservationHandler {
 
     /**
      * creates Reservation.
+     *
      * @param sourceUser user for which the reservation will be created
      * @param targetUser user the reservation is pointing to
      * @param amount amount that should be reserved from source to target user

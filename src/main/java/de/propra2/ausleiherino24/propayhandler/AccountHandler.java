@@ -18,6 +18,7 @@ public class AccountHandler {
 
     /**
      * Autowired constructor.
+     *
      * @param restTemplate used to send requests to propay
      */
     @Autowired
@@ -39,6 +40,7 @@ public class AccountHandler {
 
     /**
      * Checks the Funds of an account by the accountName.
+     *
      * @param accountName account for which funds are to be checked
      * @return returns amount of unreserved Funds
      */
@@ -62,6 +64,7 @@ public class AccountHandler {
     /**
      * Checks whether the account given by its accountName has more or equal money than
      * requestFunds.
+     *
      * @param accountName name of user to be checked
      * @param requestedFunds amount of requested Funds to be compared with actual free Funds
      * @return has requested Funds?

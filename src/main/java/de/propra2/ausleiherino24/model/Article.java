@@ -45,8 +45,7 @@ public class Article {
     private String location;
 
     /**
-     * true: Article will be sold.
-     * false: Article is available for rental.
+     * true: Article will be sold. false: Article is available for rental.
      */
     private boolean forSale;
 
@@ -75,24 +74,24 @@ public class Article {
      * <a href="https://notesonjava.wordpress.com/2008/11/03/managing-the-bidirectional-relationship/">hier</a>
      */
 
-    public void addCase(final Case aCase) {
-        addCase(aCase, false);
+    public void addCase(final Case thisCase) {
+        addCase(thisCase, false);
     }
 
-    void addCase(final Case aCase, final boolean repetition) {
-        if (aCase == null) {
+    void addCase(final Case thisCase, final boolean repetition) {
+        if (thisCase == null) {
             return;
         }
         if (cases == null) {
             cases = new ArrayList<>();
         }
-        if (cases.contains(aCase)) {
-            cases.set(cases.indexOf(aCase), aCase);
+        if (cases.contains(thisCase)) {
+            cases.set(cases.indexOf(thisCase), thisCase);
         } else {
-            cases.add(aCase);
+            cases.add(thisCase);
         }
         if (!repetition) {
-            aCase.setArticle(this, true);
+            thisCase.setArticle(this, true);
         }
     }
 
@@ -108,7 +107,7 @@ public class Article {
     }
 
     /**
-     * true: if article has only cases where the requeststatus is REQUEST_DECLINED,
+     * true: if article has only cases where the request status is REQUEST_DECLINED,
      * RENTAL_NOT_POSSIBLE or FINISHED. false: otherwise
      */
     public boolean allCasesClosed() {
