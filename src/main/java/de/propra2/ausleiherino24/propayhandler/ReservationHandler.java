@@ -43,29 +43,29 @@ public class ReservationHandler {
      * compromising the process and for better usage saves ReservationId to remember which
      * reservation belongs to the case/transaction
      *
-     * @param c contains all necessary data to process what should be done calls
+     * @param currentCase contains all necessary data to process what should be done calls
      */
-    public void handleReservedMoney(final Case c) {
+    public void handleReservedMoney(final Case currentCase) {
         Long reservationId = -1L;
 
-        if (c.getRequestStatus() == Case.REQUESTED) {
-            reservationId = createReservation(c.getReceiver().getUsername(),
-                    c.getOwner().getUsername(),
-                    c.getDeposit() + c.getPpTransaction().getLendingCost());
+        if (currentCase.getRequestStatus() == Case.REQUESTED) {
+            reservationId = createReservation(currentCase.getReceiver().getUsername(),
+                    currentCase.getOwner().getUsername(),
+                    currentCase.getDeposit() + currentCase.getPpTransaction().getLendingCost());
         }
 
-        if (c.getRequestStatus() == Case.REQUEST_ACCEPTED) {
-            if (c.getPpTransaction().getReservationId() != -1L) {
-                releaseReservationByCase(c);
+        if (currentCase.getRequestStatus() == Case.REQUEST_ACCEPTED) {
+            if (currentCase.getPpTransaction().getReservationId() != -1L) {
+                releaseReservationByCase(currentCase);
             }
-            accountHandler.transferFundsByCase(c);
-            reservationId = createReservation(c.getReceiver().getUsername(),
-                    c.getOwner().getUsername(),
-                    c.getDeposit());
+            accountHandler.transferFundsByCase(currentCase);
+            reservationId = createReservation(currentCase.getReceiver().getUsername(),
+                    currentCase.getOwner().getUsername(),
+                    currentCase.getDeposit());
         }
 
-        c.getPpTransaction().setReservationId(reservationId);
-        caseRepository.save(c);
+        currentCase.getPpTransaction().setReservationId(reservationId);
+        caseRepository.save(currentCase);
     }
 
     /**
@@ -90,13 +90,13 @@ public class ReservationHandler {
     /**
      * completely releases a reservation for a Case (calls method for case parameters).
      *
-     * @param c contains all necessary Data to release according reservation
+     * @param currentCase contains all necessary Data to release according reservation
      */
-    public void releaseReservationByCase(final Case c) {
-        if (c.getPpTransaction().getReservationId() != -1) {
-            releaseReservation(c.getReceiver().getUsername(),
-                    c.getPpTransaction().getReservationId());
-            c.getPpTransaction().setReservationId(-1L);
+    public void releaseReservationByCase(final Case currentCase) {
+        if (currentCase.getPpTransaction().getReservationId() != -1) {
+            releaseReservation(currentCase.getReceiver().getUsername(),
+                    currentCase.getPpTransaction().getReservationId());
+            currentCase.getPpTransaction().setReservationId(-1L);
         }
     }
 
@@ -115,11 +115,11 @@ public class ReservationHandler {
     /**
      * calls punishReservationByCase with case parameters.
      *
-     * @param c contains all necessary data to do request
+     * @param currentCase contains all necessary data to do request
      */
-    public void punishReservationByCase(final Case c) {
-        punishReservation(c.getReceiver().getUsername(),
-                c.getPpTransaction().getReservationId());
+    public void punishReservationByCase(final Case currentCase) {
+        punishReservation(currentCase.getReceiver().getUsername(),
+                currentCase.getPpTransaction().getReservationId());
     }
 
 

@@ -53,6 +53,11 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver")
     private List<Case> casesReceiver;
 
+    /**
+     * constructor to create userDetails.
+     *
+     * @param user containing data to be extracted
+     */
     public User(final User user) {
         this.username = user.getUsername();
         this.password = user.getPassword();

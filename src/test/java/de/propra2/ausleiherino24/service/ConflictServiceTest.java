@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.service;
 
+import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.ConflictRepository;
 import de.propra2.ausleiherino24.email.EmailSender;
 import de.propra2.ausleiherino24.model.Article;
@@ -61,29 +62,6 @@ public class ConflictServiceTest {
     }
 
     @Test(expected = Exception.class)
-    public void isConflictedArticleOwnerShouldThrowExceptionIfUserIsNull() throws Exception {
-        c1 = new Conflict();
-
-        conflictService.isConflictedArticleOwner(c1, null);
-    }
-
-    @Test
-    public void isConflictedArticleOwnerShouldReturnTrueIfUserIsOwnerOfConflictedArticle()
-            throws Exception {
-        art.setOwner(user);
-
-        Assertions.assertThat(conflictService.isConflictedArticleOwner(c1, user)).isTrue();
-    }
-
-    @Test
-    public void isConflictedArticleOwnerShouldReturnFalseIfUserIsOwnerOfConflictedArticle()
-            throws Exception {
-        art.setOwner(user);
-
-        Assertions.assertThat(conflictService.isConflictedArticleOwner(c1, user2)).isFalse();
-    }
-
-    @Test(expected = Exception.class)
     public void getConflictShouldThrowExceptionIfCalledWithWrongUser() throws Exception {
         Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
@@ -136,24 +114,6 @@ public class ConflictServiceTest {
         Assertions.assertThat(conflictParticipants).containsAll(Arrays.asList(user2, user));
     }
 
-    @Test
-    public void getAllConflictsByUserShouldReturnListOfAllCurrentConflictsByUser() {
-        final Article art2 = new Article();
-        art2.setOwner(new User());
-        final Case ca2 = new Case();
-        ca2.setArticle(art2);
-        ca2.setReceiver(user2);
-        final Conflict c2 = new Conflict();
-        c2.setConflictedCase(ca2);
-
-        Mockito.when(conflictRepository.findAllByArticleOwner(user2)).thenReturn(Arrays.asList(c1));
-        Mockito.when(conflictRepository.findAllByReceiver(user2)).thenReturn(Arrays.asList(c2));
-
-        final List<Conflict> allConflictsByUser = conflictService.getAllConflictsByUser(user2);
-
-        Assertions.assertThat(allConflictsByUser).containsAll(Arrays.asList(c2, c1));
-    }
-
     @Test(expected = Exception.class)
     public void saveConflictShouldThrowExceptionIfConflictIsNull() throws Exception {
         conflictService.saveConflict(null, user);
@@ -173,19 +133,8 @@ public class ConflictServiceTest {
         Mockito.verify(emailSender, Mockito.times(1)).sendConflictEmail(c1);
     }
 
-    @Test
-    public void deactivateConflictShouldDeactivateConflictIfUserIsConflictReporter()
-            throws Exception {
-        c1.setId(1L);
-        Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
-
-        conflictService.deactivateConflict(1L, user);
-
-        Mockito.verify(conflictRepository, Mockito.times(1)).delete(c1);
-    }
-
     @Test(expected = Exception.class)
-    public void deactivateConflictShouldNotDeactivateConflictIfUserIsNotConflictReporter()
+    public void deactivateConflictShouldNotDeactivateConflictIfUserIsNotAdmin()
             throws Exception {
         c1.setId(1L);
         Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
@@ -204,7 +153,10 @@ public class ConflictServiceTest {
 
         conflictService.deactivateConflict(1L, admin);
 
-        Mockito.verify(conflictRepository, Mockito.times(1)).delete(c1);
+        Mockito.verify(conflictRepository, Mockito.times(1)).deleteById(c1.getId());
+        Mockito.verify(emailSender, Mockito.times(1)).sendConflictEmail(c1);
+        Mockito.verify(conflictRepository, Mockito.times(1)).save(c1);
+        Assertions.assertThat(ca.getRequestStatus()).isEqualTo(Case.FINISHED);
     }
 
     @Test(expected = DataAccessException.class)
