@@ -383,7 +383,6 @@ public class CaseService {
             currentCase.setPpTransaction(transaction);
             caseRepository.save(currentCase);
             accountHandler.transferFundsByCase(currentCase);
-            //articleService.setSellStatusFromArticle(articleId, false);
             articleService.deactivateArticle(articleId);
             return true;
         }
@@ -392,5 +391,11 @@ public class CaseService {
 
     public List<Case> findAllSoldItemsByUserId(Long id) {
         return caseRepository.findAllSoldItemsByUserId(id);
+    }
+
+    public List<Case> findAllOutrunningCasesByUserId(Long id) {
+        return caseRepository.findAllOutrunningCasesByUserId(id,
+                new Date().getTime(),
+                new Date().getTime() + 86400000L);
     }
 }

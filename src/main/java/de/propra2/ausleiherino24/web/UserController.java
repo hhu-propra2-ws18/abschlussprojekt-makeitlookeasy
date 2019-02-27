@@ -87,6 +87,9 @@ public class UserController {
         }
     }
 
+    /**
+     * Mapping for userOverview.
+     */
     @GetMapping("/myOverview")
     public ModelAndView getMyArticlePage(final Principal principal) {
         final User currentUser = userService.findUserByPrincipal(principal);
@@ -99,6 +102,8 @@ public class UserController {
         final List<Case> returnedArticles = caseService
                 .findAllExpiredCasesByUserId(currentUser.getId());
         final List<Case> soldItems = caseService.findAllSoldItemsByUserId(currentUser.getId());
+        final List<Case> outrunningCases = caseService
+                .findAllOutrunningCasesByUserId(currentUser.getId());
 
         final ModelAndView mav = new ModelAndView("/user/myOverview");
         mav.addObject(USER_STRING, currentUser);
@@ -109,6 +114,8 @@ public class UserController {
         mav.addObject("returned", returnedArticles);
         mav.addObject("requested", requestedArticles);
         mav.addObject("sold", soldItems);
+
+        mav.addObject("outrunning", outrunningCases);
         return mav;
     }
 
