@@ -2,9 +2,8 @@ package de.propra2.ausleiherino24.propayhandler;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.PPTransaction;
+import de.propra2.ausleiherino24.model.PpTransaction;
 import de.propra2.ausleiherino24.model.User;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,14 +19,12 @@ public class ReservationHandlerTest {
 
     private static final String RESERVATION_URL = "http://localhost:8888/reservation";
     private Reservation reservation1;
-    private Reservation reservation2;
     private ResponseEntity<Reservation> reservationResp1;
-    private PPTransaction ppTransaction;
+    private PpTransaction ppTransaction;
     private User user;
     private User user2;
     private Case aCase;
     private RestTemplate restTemplate;
-    private List<Reservation> resList;
     private ReservationHandler reservationHandler;
     @MockBean
     private CaseRepository caseRepository;
@@ -40,7 +37,7 @@ public class ReservationHandlerTest {
         reservationResp1 = Mockito.mock(ResponseEntity.class);
         user = Mockito.mock(User.class);
         user2 = Mockito.mock(User.class);
-        ppTransaction = Mockito.mock(PPTransaction.class);
+        ppTransaction = Mockito.mock(PpTransaction.class);
         aCase = Mockito.mock(Case.class);
         restTemplate = Mockito.mock(RestTemplate.class);
         reservationHandler = new ReservationHandler(caseRepository, restTemplate);
@@ -66,7 +63,7 @@ public class ReservationHandlerTest {
         Mockito.verify(restTemplate, Mockito.times(1))
                 .exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
                         HttpMethod.POST, null,
-                        PPAccount.class, "user", "1");
+                        PpAccount.class, "user", "1");
     }
 
     @Test
@@ -76,7 +73,7 @@ public class ReservationHandlerTest {
         Mockito.verify(restTemplate, Mockito.times(1))
                 .exchange(RESERVATION_URL + "/punish/{account}?reservationId={reservationId}",
                         HttpMethod.POST, null,
-                        PPAccount.class, "user", "1");
+                        PpAccount.class, "user", "1");
     }
 
     @Test

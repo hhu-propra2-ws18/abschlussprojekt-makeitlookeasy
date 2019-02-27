@@ -28,6 +28,7 @@ public class ImageService {
 
     /**
      * Stores an image.
+     *
      * @return FileName
      */
     public String store(final MultipartFile file, final Long binningId) {
@@ -52,6 +53,7 @@ public class ImageService {
 
     /**
      * Stores an image inputted as File.
+     *
      * @return FileName
      */
     public String storeFile(final File inputFile, final Long binningId) {
@@ -85,6 +87,7 @@ public class ImageService {
 
     /**
      * Gets file by its name and its binningId.
+     *
      * @return requested File, if exists. Else, null
      */
     public File getFile(final String fileName, final Long binningId) {

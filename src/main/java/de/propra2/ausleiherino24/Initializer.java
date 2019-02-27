@@ -8,12 +8,13 @@ import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Category;
-import de.propra2.ausleiherino24.model.PPTransaction;
 import de.propra2.ausleiherino24.model.Person;
+import de.propra2.ausleiherino24.model.PpTransaction;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ImageService;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -289,7 +290,7 @@ public class Initializer implements ServletContextInitializer {
         aCase.setEndTime(endtime);
         aCase.setArticle(article);
         aCase.setRequestStatus(requestStatus);
-        final PPTransaction ppTransaction = new PPTransaction();
+        final PpTransaction ppTransaction = new PpTransaction();
         aCase.setPpTransaction(ppTransaction);
         ppTransaction.setReservationId(-1L);
         ppTransaction.setDate(10012010L);
@@ -305,7 +306,7 @@ public class Initializer implements ServletContextInitializer {
             final File resource = new ClassPathResource(
                     "static/Pokemon/names/" + pokedexId + ".txt").getFile();
             final String name = new String(Files
-                    .readAllBytes(resource.toPath()))
+                    .readAllBytes(resource.toPath()), Charset.forName("UTF-8"))
                     .trim();
             return name.substring(0, 1).toUpperCase(Locale.ENGLISH)
                     + name.substring(1).toLowerCase(Locale.ENGLISH);
