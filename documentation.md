@@ -60,7 +60,7 @@ It links a numeric rating (`stars` (higher is better)) and a corresponding descr
 The `CustomUserDetails` class is simply needed to use our own `User` class with spring security.
 
 ### PPTransaction
-The `PPTransaction` class represents a proPay transaction.
+The `PpTransaction` class represents a proPay transaction.
 
 ### ResolveConflict
 TODO: wright description

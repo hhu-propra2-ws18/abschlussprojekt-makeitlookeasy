@@ -41,7 +41,7 @@ public class Case {
     public static final int FINISHED = 14; //Verleih ist beendet
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    PPTransaction ppTransaction;
+    PpTransaction ppTransaction;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
