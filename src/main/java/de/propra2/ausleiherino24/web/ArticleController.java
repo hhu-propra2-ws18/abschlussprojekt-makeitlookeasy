@@ -197,6 +197,11 @@ public class ArticleController {
         mav.addObject("article", article);
     }
 
+    /**
+     * Return CalendarEvents as JSON for the calendar which shows all non available dates of an article.
+     * @param id
+     * @return
+     */
     @GetMapping("/events")
     @ResponseBody
     private ArrayList<CalendarEvent> getEventsForCalendar(final @RequestParam Long id){
