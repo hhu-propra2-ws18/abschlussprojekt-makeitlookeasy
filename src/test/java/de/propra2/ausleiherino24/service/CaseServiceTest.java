@@ -16,8 +16,8 @@ import static org.mockito.Mockito.when;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.PPTransaction;
 import de.propra2.ausleiherino24.model.Person;
+import de.propra2.ausleiherino24.model.PpTransaction;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
@@ -338,7 +338,7 @@ public class CaseServiceTest {
         verify(caseRepositoryMock).save(argument.capture());
         assertEquals(Case.REQUEST_DECLINED, argument.getValue().getRequestStatus());
         verify(reservationHandlerMock).releaseReservationByCase(argument.getValue());
-        assertEquals(new PPTransaction(), argument.getValue().getPpTransaction());
+        assertEquals(new PpTransaction(), argument.getValue().getPpTransaction());
     }
 
     @Test
@@ -425,27 +425,29 @@ public class CaseServiceTest {
     @Test
     public void twoPPTransactionsFromReceiver() {
         final Case c1 = new Case();
-        c1.setPpTransaction(new PPTransaction());
+        c1.setPpTransaction(new PpTransaction());
         final Case c2 = new Case();
-        c2.setPpTransaction(new PPTransaction());
+        c2.setPpTransaction(new PpTransaction());
         cases.addAll(Arrays.asList(c1, c2));
         doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
-        final List<PPTransaction> transactions = new ArrayList<>(
-                Arrays.asList(new PPTransaction(), new PPTransaction()));
+        final List<PpTransaction> transactions = new ArrayList<>(
+                Arrays.asList(new PpTransaction(), new PpTransaction()));
 
         assertEquals(transactions, caseService.findAllTransactionsFromPersonReceiver(0L));
     }
 
     @Test
-    public void twoUnavailableCases() {
+    public void twoUnavaibleCases() {
         final Case c1 = new Case();
-        c1.setPpTransaction(new PPTransaction());
+        c1.setPpTransaction(new PpTransaction());
         c1.setRequestStatus(Case.REQUEST_DECLINED);
         final Case c2 = new Case();
-        c2.setPpTransaction(new PPTransaction());
+        c2.setPpTransaction(new PpTransaction());
         c2.setRequestStatus(Case.RENTAL_NOT_POSSIBLE);
         cases.addAll(Arrays.asList(c1, c2));
         doReturn(cases).when(caseService).getLendCasesFromPersonReceiver(0L);
+        final List<PpTransaction> transactions = new ArrayList<>(
+                Arrays.asList(new PpTransaction(), new PpTransaction()));
 
         assertTrue(caseService.findAllTransactionsFromPersonReceiver(0L).isEmpty());
     }
@@ -457,7 +459,7 @@ public class CaseServiceTest {
         when(articleServiceMock.findArticleById(0L)).thenReturn(article);
         when(userServiceMock.findUserByPrincipal(any())).thenReturn(new User());
         when(accountHandlerMock.hasValidFunds(any(), anyDouble())).thenReturn(true);
-        PPTransaction transaction = new PPTransaction();
+        PpTransaction transaction = new PpTransaction();
         transaction.setLendingCost(10d);
         transaction.setDate(new Date().getTime());
         transaction.setCautionPaid(false);

@@ -2,7 +2,7 @@ package de.propra2.ausleiherino24.propayhandler;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.PPTransaction;
+import de.propra2.ausleiherino24.model.PpTransaction;
 import de.propra2.ausleiherino24.model.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +20,7 @@ public class ReservationHandlerTest {
     private static final String RESERVATION_URL = "http://localhost:8888/reservation";
     private Reservation reservation1;
     private ResponseEntity<Reservation> reservationResp1;
-    private PPTransaction ppTransaction;
+    private PpTransaction ppTransaction;
     private User user;
     private User user2;
     private Case aCase;
@@ -37,7 +37,7 @@ public class ReservationHandlerTest {
         reservationResp1 = Mockito.mock(ResponseEntity.class);
         user = Mockito.mock(User.class);
         user2 = Mockito.mock(User.class);
-        ppTransaction = Mockito.mock(PPTransaction.class);
+        ppTransaction = Mockito.mock(PpTransaction.class);
         aCase = Mockito.mock(Case.class);
         restTemplate = Mockito.mock(RestTemplate.class);
         reservationHandler = new ReservationHandler(caseRepository, restTemplate);
