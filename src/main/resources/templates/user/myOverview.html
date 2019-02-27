@@ -208,6 +208,16 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <!--Warnings for outrunning Cases-->
+      <div class="alert alert-warning absolue center alert-dismissible fade show" role="alert"
+           th:each="case: ${outrunning}"> You have to return
+        <a th:href="@{~/article(id=${case.article.id})}"><strong th:text="${case.article.name}"></strong></a> on
+        <span th:text="${case.getFormattedEndTime()}"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
 
       <!-- Frame for articles from User-->
       <div id="mainFrameOne"

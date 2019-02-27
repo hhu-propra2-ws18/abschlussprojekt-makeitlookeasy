@@ -53,4 +53,13 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
             + "AND c.article.owner.id = :id "
             + "AND c.requestStatus = 14")
     List<Case> findAllSoldItemsByUserId(@Param("id") Long id);
+
+    @Query("SELECT c FROM #{#entityName} c "
+            + "WHERE c.article.forSale = false "
+            + "AND c.receiver.id = :id "
+            + "AND c.endTime between :today AND :tomorrow")
+    List<Case> findAllOutrunningCasesByUserId(
+            @Param("id") Long id,
+            @Param("today") long today,
+            @Param("tomorrow") long tomorrow);
 }

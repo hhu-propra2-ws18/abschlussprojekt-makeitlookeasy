@@ -6,9 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-// TODO: Replace Powermock with JMockit
-//@RunWith(PowerMockRunner.class)
-//@PrepareForTest({PersonService.class})
 public class PersonServiceTest {
 
     private PersonService personService;

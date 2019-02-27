@@ -77,6 +77,7 @@ public class CaseService {
 
     /**
      * Checks if case exists.
+     *
      * @return true, if a case with the given id exists. Otherwise returns false.
      */
     public boolean isValidCase(final Long id) {
@@ -84,6 +85,8 @@ public class CaseService {
     }
 
     /**
+     * gets all cases owned by person.
+     *
      * @param personId personId of the owner of the lend article.
      * @return all cases, where the given id is the personId of the person who owns the article.
      */
@@ -93,41 +96,32 @@ public class CaseService {
     }
 
     /**
-     * @param userId userId of the owner of the lend article.
-     * @return all cases, where the given id is the userId of the person who owns the article.
-     */
-    List<Case> findAllCasesByUserId(final Long userId) {
-        return caseRepository.findAllByArticleOwnerId(userId);
-    }
-
-    // TODO: Only implemented in tests. Necessary?
-    List<Case> getLendCasesFromPersonOwner(final Long personId) {
-        final List<Case> cases = getAllCasesFromPersonOwner(personId);
-        return cases.stream()
-                .filter(c -> c.getReceiver() != null)
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    /**
      * Finds all Transactions from receiver by its personId.
      */
     public List<PpTransaction> findAllTransactionsForPerson(final Long personId) {
-        List<PpTransaction> ppTransactions = new ArrayList<>(
-                getAllCasesFromPersonOwner(personId).stream()
-                .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
-                        && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
-                .map(Case::getPpTransaction)
-                        .collect(Collectors.toList()));
-        ppTransactions.addAll(getLendCasesFromPersonReceiver(personId).stream()
-                .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
-                        && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
-                .map(Case::getPpTransaction)
-                .collect(Collectors.toList()));
-        return ppTransactions;
+
+        try {
+            List<PpTransaction> ppTransactions = new ArrayList<>(
+                    getAllCasesFromPersonOwner(personId).stream()
+                            .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
+                                    && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
+                            .map(Case::getPpTransaction)
+                            .collect(Collectors.toList()));
+            ppTransactions.addAll(getLendCasesFromPersonReceiver(personId).stream()
+                    .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
+                            && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
+                    .map(Case::getPpTransaction)
+                    .collect(Collectors.toList()));
+            return ppTransactions;
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
+
 
     /**
      * Gets all cases for articles a person has borrowed.
+     *
      * @param personId of person to obtain lend cases.
      * @return all cases borrowed by a person
      */
@@ -137,6 +131,7 @@ public class CaseService {
 
     /**
      * Creates ppTransaction and Case for request.
+     *
      * @return true, if param username has valid funds. else, otherwise.
      */
     public boolean requestArticle(final Long articleId, final Long startTime, final Long endTime,
@@ -175,6 +170,8 @@ public class CaseService {
     }
 
     /**
+     * gets cost for all days for time and articleid.
+     *
      * @return the total cost for lending the article in the given time.
      */
     private Double getCostForAllDays(final Long articleId, final Long startTime,
@@ -191,10 +188,9 @@ public class CaseService {
 
 
     /**
-     * // TODO: JavaDoc ... Checks, if article request is ok.
+     * Checks, if article request is ok.
      *
-     * @return 0: case could not be found 1: everything alright 2: the article is already rented in
-     * the given time 3: receiver does not have enough money on ProPay.
+     * @return 0: not found 1: ok 2: already rented 3: not enough Funds
      */
     public int acceptArticleRequest(final Long id) {
         final Optional<Case> optCase = caseRepository.findById(id);
@@ -224,11 +220,11 @@ public class CaseService {
     }
 
     /**
-     * Checks, if the article of the case isn't lend in the wanted time
+     * Checks, if the article of the case isn't lend in the wanted time.
+     *
      * @param id id of the case to check
-     * @return true: article isn't lend in the given time. false: article is lend in the given time
-     *      or the article doesn't exists in the database.
-     * */
+     * @return true: not lend in the given time. false: lend in the given time or does not exist
+     */
     boolean articleNotRented(final Long id) {
         final Optional<Case> currentCase = caseRepository.findById(id);
         if (!currentCase.isPresent()) {
@@ -269,6 +265,7 @@ public class CaseService {
 
     /**
      * Declines an article request.
+     *
      * @param id id of the case where the request should be declined.
      */
     public void declineArticleRequest(final Long id) {
@@ -292,6 +289,7 @@ public class CaseService {
 
     /**
      * If the given case exists, the status is changed to OPEN_CONFLICT.
+     *
      * @param id id of the case, where the status should be changed.
      */
     void conflictOpened(final Long id) {
@@ -305,6 +303,7 @@ public class CaseService {
 
     /**
      * Accepts the return of an Article.
+     *
      * @param id CaseId
      */
     public void acceptCaseReturn(final Long id) {
@@ -318,6 +317,7 @@ public class CaseService {
 
     /**
      * Finds all requested cases from one user by its id.
+     *
      * @param id userId
      */
     public List<Case> findAllRequestedCasesByUserId(final Long id) {
@@ -326,6 +326,7 @@ public class CaseService {
 
     /**
      * Finds all days where an article is reserved.
+     *
      * @param id articleId
      */
     public List<LocalDate> findAllReservedDaysByArticle(final Long id) {
@@ -383,7 +384,6 @@ public class CaseService {
             currentCase.setPpTransaction(transaction);
             caseRepository.save(currentCase);
             accountHandler.transferFundsByCase(currentCase);
-            //articleService.setSellStatusFromArticle(articleId, false);
             articleService.deactivateArticle(articleId);
             return true;
         }
@@ -392,5 +392,11 @@ public class CaseService {
 
     public List<Case> findAllSoldItemsByUserId(Long id) {
         return caseRepository.findAllSoldItemsByUserId(id);
+    }
+
+    public List<Case> findAllOutrunningCasesByUserId(Long id) {
+        return caseRepository.findAllOutrunningCasesByUserId(id,
+                new Date().getTime(),
+                new Date().getTime() + 86400000L);
     }
 }
