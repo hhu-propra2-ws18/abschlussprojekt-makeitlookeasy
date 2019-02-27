@@ -3,6 +3,7 @@ package de.propra2.ausleiherino24.data;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.User;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
@@ -25,7 +26,7 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
             + "ORDER BY c.requestStatus ASC")
     List<Case> findAllByArticleOwnerId(@Param("id") Long ownerId);
 
-    Optional<Case> findByArticle(Article article);
+    ArrayList<Case> findAllByArticle(Article article);
 
     List<Case> findAllByArticleAndRequestStatus(Article article, int status);
 

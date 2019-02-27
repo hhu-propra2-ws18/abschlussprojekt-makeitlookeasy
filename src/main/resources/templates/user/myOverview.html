@@ -222,13 +222,13 @@
                   articles
                 </button>
                 <button class="btn btn-outline-dark" onclick="twoFunction()"
-                        style="margin-bottom: 10px"> Borrowed
+                        style="margin-bottom: 10px">Borrowed
                 </button>
                 <button class="btn btn-outline-dark" onclick="threeFunction()"
-                        style="margin-bottom: 10px"> Returned
+                        style="margin-bottom: 10px">Returned
                 </button>
                 <button class="btn btn-outline-dark" onclick="fourFunction()"
-                        style="margin-bottom: 10px"> Requests
+                        style="margin-bottom: 10px">Requests
                 </button>
                 <button class="btn btn-outline-dark" onclick="fiveFunction()"
                         style="margin-bottom: 10px">Sold
@@ -330,7 +330,7 @@
                             <div class="col-sm-6 input-column">
                               <input class="form-control" id="price" name="costPerDay" required
                                      step="0.01"
-                                     th:value="${article.costPerDay}" type="number">
+                                     min="0" th:value="${article.costPerDay}" type="number">
                             </div>
                           </div>
                           <div class="form-row form-group">
@@ -339,7 +339,8 @@
                             </div>
                             <div class="col-sm-6 input-column">
                               <input class="form-control" id="deposit" name="deposit" required
-                                     step="0.01" th:value="${article.deposit}" type="number">
+                                     min="0" step="0.01" th:value="${article.deposit}"
+                                     type="number">
                             </div>
                           </div>
                           <div class="form-row form-group">
@@ -499,7 +500,7 @@
                             <div class="col-sm-6 input-column">
                               <input class="form-control" id="price" name="costPerDay" required
                                      step="0.01"
-                                     th:value="${article.costPerDay}" type="number">
+                                     min="0" th:value="${article.costPerDay}" type="number">
                             </div>
                           </div>
                           <div class="form-row form-group">

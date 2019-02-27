@@ -20,10 +20,17 @@ public class CustomerReviewService {
         this.caseService = caseService;
     }
 
-    void addCustomerReview(final CustomerReview customerReview) {
+    /**
+     * Saves the given customerReview in database.
+     **/
+    public void saveReview(final CustomerReview customerReview) {
         customerReviewRepository.save(customerReview);
     }
 
+    /**
+     * Returns list of all Reviews, in which cases the given person is the article owner.
+     * @param id personId
+     */
     List<CustomerReview> findAllReviewsByLenderId(final Long id) {
         final List<CustomerReview> reviews = customerReviewRepository.findAll();
         return reviews.stream()
@@ -32,10 +39,9 @@ public class CustomerReviewService {
                 .collect(Collectors.toList());
     }
 
-    public void saveReview(final CustomerReview review) {
-        customerReviewRepository.save(review);
-    }
-
+    /**
+     * Returns all customer reviews.
+     */
     public List<CustomerReview> findAllReviews() {
         return customerReviewRepository.findAll();
     }
