@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class PPTransaction {
+public class PpTransaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

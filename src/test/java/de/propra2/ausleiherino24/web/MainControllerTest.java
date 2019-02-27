@@ -6,8 +6,8 @@ import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.ConflictRepository;
 import de.propra2.ausleiherino24.data.CustomerReviewRepository;
-import de.propra2.ausleiherino24.data.PPTransactionRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
+import de.propra2.ausleiherino24.data.PpTransactionRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
 import de.propra2.ausleiherino24.email.EmailConfig;
 import de.propra2.ausleiherino24.email.EmailSender;
@@ -63,7 +63,7 @@ public class MainControllerTest {
     @MockBean
     private PersonRepository personRepository;
     @MockBean
-    private PPTransactionRepository ppTransactionRepository;
+    private PpTransactionRepository ppTransactionRepository;
     @MockBean
     private UserRepository userRepository;
 

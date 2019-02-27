@@ -27,7 +27,7 @@ public class ReservationHandler {
      *
      * @param caseRepository needed to update reservationIds of PPTransactions via Cases
      * @param restTemplate needed for propay requests accountHandler needed to transfer Funds in
-     *     between Reservations
+     *      between Reservations.
      */
     public ReservationHandler(final CaseRepository caseRepository,
             final RestTemplate restTemplate) {
@@ -38,36 +38,39 @@ public class ReservationHandler {
 
 
     /**
-     * @param acase contains all necessary data to process what should be done calls
-     *     createReservation when case is requested releases old reservation, calls transfer and
-     *     creates new reservation for deposit if case was Accepted. Handling in one Method due to
-     *     Test data compromising the process and for better usage saves ReservationId to remember
-     *     which reservation belongs to the case/transaction
+     * createReservation when case is requested releases old reservation, calls transfer and creates
+     * new reservation for deposit if case was Accepted. Handling in one Method due to Test data
+     * compromising the process and for better usage saves ReservationId to remember which
+     * reservation belongs to the case/transaction
+     *
+     * @param c contains all necessary data to process what should be done calls
      */
-    public void handleReservedMoney(final Case acase) {
+    public void handleReservedMoney(final Case c) {
         Long reservationId = -1L;
 
-        if (acase.getRequestStatus() == Case.REQUESTED) {
-            reservationId = createReservation(acase.getReceiver().getUsername(),
-                    acase.getOwner().getUsername(),
-                    acase.getDeposit() + acase.getPpTransaction().getLendingCost());
+        if (c.getRequestStatus() == Case.REQUESTED) {
+            reservationId = createReservation(c.getReceiver().getUsername(),
+                    c.getOwner().getUsername(),
+                    c.getDeposit() + c.getPpTransaction().getLendingCost());
         }
 
-        if (acase.getRequestStatus() == Case.REQUEST_ACCEPTED) {
-            if (acase.getPpTransaction().getReservationId() != -1L) {
-                releaseReservationByCase(acase);
+        if (c.getRequestStatus() == Case.REQUEST_ACCEPTED) {
+            if (c.getPpTransaction().getReservationId() != -1L) {
+                releaseReservationByCase(c);
             }
-            accountHandler.transferFundsByCase(acase);
-            reservationId = createReservation(acase.getReceiver().getUsername(),
-                    acase.getOwner().getUsername(),
-                    acase.getDeposit());
+            accountHandler.transferFundsByCase(c);
+            reservationId = createReservation(c.getReceiver().getUsername(),
+                    c.getOwner().getUsername(),
+                    c.getDeposit());
         }
 
-        acase.getPpTransaction().setReservationId(reservationId);
-        caseRepository.save(acase);
+        c.getPpTransaction().setReservationId(reservationId);
+        caseRepository.save(c);
     }
 
     /**
+     * creates Reservation.
+     *
      * @param sourceUser user for which the reservation will be created
      * @param targetUser user the reservation is pointing to
      * @param amount amount that should be reserved from source to target user
@@ -87,13 +90,13 @@ public class ReservationHandler {
     /**
      * completely releases a reservation for a Case (calls method for case parameters).
      *
-     * @param aCase contains all necessary Data to release according reservation
+     * @param c contains all necessary Data to release according reservation
      */
-    public void releaseReservationByCase(final Case aCase) {
-        if (aCase.getPpTransaction().getReservationId() != -1) {
-            releaseReservation(aCase.getReceiver().getUsername(),
-                    aCase.getPpTransaction().getReservationId());
-            aCase.getPpTransaction().setReservationId(-1L);
+    public void releaseReservationByCase(final Case c) {
+        if (c.getPpTransaction().getReservationId() != -1) {
+            releaseReservation(c.getReceiver().getUsername(),
+                    c.getPpTransaction().getReservationId());
+            c.getPpTransaction().setReservationId(-1L);
         }
     }
 
@@ -106,17 +109,17 @@ public class ReservationHandler {
     private void releaseReservation(final String account, final Long reservationId) {
         restTemplate.exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
                 HttpMethod.POST, null,
-                PPAccount.class, account, reservationId.toString());
+                PpAccount.class, account, reservationId.toString());
     }
 
     /**
      * calls punishReservationByCase with case parameters.
      *
-     * @param aCase contains all necessary data to do request
+     * @param c contains all necessary data to do request
      */
-    public void punishReservationByCase(final Case aCase) {
-        punishReservation(aCase.getReceiver().getUsername(),
-                aCase.getPpTransaction().getReservationId());
+    public void punishReservationByCase(final Case c) {
+        punishReservation(c.getReceiver().getUsername(),
+                c.getPpTransaction().getReservationId());
     }
 
 
@@ -131,7 +134,7 @@ public class ReservationHandler {
             final Long reservationId) {
         restTemplate.exchange(RESERVATION_URL + "/punish/{account}?reservationId={reservationId}",
                 HttpMethod.POST, null,
-                PPAccount.class,
+                PpAccount.class,
                 account, reservationId.toString());
     }
 
