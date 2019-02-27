@@ -1,14 +1,20 @@
 package de.propra2.ausleiherino24.web;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.CalendarEvent;
 import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.CustomerReview;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CalendarEventService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
 import de.propra2.ausleiherino24.service.ImageService;
 import de.propra2.ausleiherino24.service.UserService;
+import java.lang.reflect.Array;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,6 +43,7 @@ public class ArticleController {
     private final CustomerReviewService customerReviewService;
 
     private final List<Category> allCategories = Category.getAllCategories();
+    private final CalendarEventService calendarEventService;
 
     /**
      * Autowired ArticleController constructor.
@@ -47,11 +55,13 @@ public class ArticleController {
      */
     @Autowired
     public ArticleController(final ArticleService articleService, final UserService userService,
-            final ImageService imageService, final CustomerReviewService customerReviewService) {
+            final ImageService imageService, final CustomerReviewService customerReviewService,
+            CalendarEventService calendarEventService) {
         this.articleService = articleService;
         this.userService = userService;
         this.imageService = imageService;
         this.customerReviewService = customerReviewService;
+        this.calendarEventService = calendarEventService;
     }
 
     /**
@@ -185,6 +195,12 @@ public class ArticleController {
 
         mav.addObject("user", currentUser);
         mav.addObject("article", article);
+    }
+
+    @GetMapping("/events")
+    @ResponseBody
+    private ArrayList<CalendarEvent> getEventsForCalendar(final @RequestParam Long id){
+        return calendarEventService.getAllEventsFromOneArticle(id);
     }
 
 }
