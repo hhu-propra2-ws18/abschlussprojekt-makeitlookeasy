@@ -50,7 +50,7 @@ public class Case {
     private Double price;
     private Double deposit;
     private int requestStatus;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "aCase")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "acase")
     private CustomerReview customerReview;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn
@@ -87,7 +87,7 @@ public class Case {
     void setReview(final CustomerReview review, final boolean repetition) {
         this.review = review;
         if (review != null && !repetition) {
-            review.setACase(this, true);
+            review.setAcase(this, true);
         }
     }
 
