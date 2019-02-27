@@ -9,15 +9,15 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-public class PPAccountTest {
+public class PpAccountTest {
 
-    private PPAccount testAcc1;
+    private PpAccount testAcc1;
     private List<Reservation> reservations;
 
 
     @Before
     public void initialize() {
-        testAcc1 = new PPAccount("Acc1", 100.0, new ArrayList<>());
+        testAcc1 = new PpAccount("Acc1", 100.0, new ArrayList<>());
         reservations = new ArrayList<>();
         testAcc1.setReservations(reservations);
     }

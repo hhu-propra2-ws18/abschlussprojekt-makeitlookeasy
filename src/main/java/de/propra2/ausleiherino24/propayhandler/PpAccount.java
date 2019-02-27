@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class PPAccount {
+class PpAccount {
 
     String account;
     double amount;

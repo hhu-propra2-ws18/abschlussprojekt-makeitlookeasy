@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.NonNull;
 
-public interface PPTransactionRepository extends CrudRepository<PPTransaction, Long> {
+public interface PpTransactionRepository extends CrudRepository<PPTransaction, Long> {
 
     @NonNull
     List<PPTransaction> findAll();

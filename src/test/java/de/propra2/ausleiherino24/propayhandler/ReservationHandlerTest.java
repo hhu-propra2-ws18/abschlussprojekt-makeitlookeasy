@@ -63,7 +63,7 @@ public class ReservationHandlerTest {
         Mockito.verify(restTemplate, Mockito.times(1))
                 .exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
                         HttpMethod.POST, null,
-                        PPAccount.class, "user", "1");
+                        PpAccount.class, "user", "1");
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ReservationHandlerTest {
         Mockito.verify(restTemplate, Mockito.times(1))
                 .exchange(RESERVATION_URL + "/punish/{account}?reservationId={reservationId}",
                         HttpMethod.POST, null,
-                        PPAccount.class, "user", "1");
+                        PpAccount.class, "user", "1");
     }
 
     @Test
