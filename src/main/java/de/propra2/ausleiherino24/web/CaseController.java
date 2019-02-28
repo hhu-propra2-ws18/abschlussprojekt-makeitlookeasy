@@ -122,7 +122,9 @@ public class CaseController {
         }
     }
 
-    // TODO: JavaDoc
+    /**
+     * declines a Case.
+     */
     @PostMapping("/declineCase")
     public String declineCase(final @RequestParam Long id) {
         if (caseService.declineArticleRequest(id)) {
@@ -131,7 +133,9 @@ public class CaseController {
         return "redirect:/myOverview?request&propayUnavailable";
     }
 
-    // TODO: JavaDoc
+    /**
+     * accepts the return of a Case.
+     */
     @PostMapping("/acceptCaseReturn")
     public String acceptCaseReturn(final @RequestParam Long id) {
         if (caseService.acceptCaseReturn(id)) {
