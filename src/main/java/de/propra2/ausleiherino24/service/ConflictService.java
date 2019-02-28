@@ -61,6 +61,7 @@ public class ConflictService {
     }
 
     void sendConflictEmail(final Conflict conflict) {
+        emailSender.configureMailSender();
         emailSender.sendConflictEmail(conflict);
     }
 

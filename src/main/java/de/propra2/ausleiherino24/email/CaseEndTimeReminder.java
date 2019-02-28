@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,6 +41,7 @@ public class CaseEndTimeReminder {
     }
 
     private void sendRemindingEmail(final List<Case> activeCases) {
+        emailSender.configureMailSender();
         activeCases.forEach(c -> {
             emailSender.sendRemindingEmail(c);
             c.setRequestStatus(Case.RUNNING_EMAILSENT);
