@@ -140,19 +140,22 @@ Person with a User, a one-to-one relation is provided.
 
 ### ArticleController
 
-TODO: provide description
+The `ArticleController` maps requests to show, create, save, update and deactivate articles.
 
 ### CaseController
 
-TODO: provide description
+The `CaseController` maps requests to book and buy articles and create corresponding cases.
+In Addition it maps accept and declines cases, accept case returnes and writes reviews.
 
 ### ChatController
 
-The in essence the`ChatController` maps the received chat messages to the endpoints of the Spring `MessageBroker`.
+The in essence the `ChatController` maps the received chat messages to the endpoints of the 
+Spring `MessageBroker`.
 
 ### ConflictController
 
-TODO: provide description
+The `conflictController` maps requests to open a conflict and allows admins to view all existing
+conflicts and decide who receives the deposit.
 
 ### ImageController
 The `ImageController` essentially maps the services provided by the `ImageService` to appropriate
@@ -160,11 +163,14 @@ endpoints.
 
 ### MainController
 
-TODO: provide description
+The `MainController` maps requests that you can view without being logged in. Those include the
+index, index filtered by categories, the login page and the registration page.
 
 ### UserController
 
-TODO: provide description
+The `UserController` maps user specific requests. In particular those which you can access through
+the navigationbar. Furthermore you can save your profile, add money to your propay-account and
+access profile views. 
 
 ## Services
 
@@ -196,7 +202,7 @@ speed up the search for a specific image.
 
 ### PersonService
 
-TODO: provide description
+The `PersonService` provides methods to save and find a person.
 
 ### SearchUserService
 
@@ -204,7 +210,7 @@ TODO: provide description
 
 ### UserService
 
-TODO: provide description
+The `UserService` provides different methods to save and find a user.
 
 ## Security
 
