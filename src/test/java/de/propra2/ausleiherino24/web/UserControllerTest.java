@@ -1,16 +1,16 @@
 package de.propra2.ausleiherino24.web;
 
-import de.propra2.ausleiherino24.calendar.CalendarEventService;
-import de.propra2.ausleiherino24.chat.ChatController;
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.ConflictRepository;
 import de.propra2.ausleiherino24.data.CustomerReviewRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
-import de.propra2.ausleiherino24.email.EmailConfig;
-import de.propra2.ausleiherino24.email.EmailSender;
-import de.propra2.ausleiherino24.imageupload.ImageService;
+import de.propra2.ausleiherino24.features.calendar.CalendarEventService;
+import de.propra2.ausleiherino24.features.chat.ChatController;
+import de.propra2.ausleiherino24.features.email.EmailConfig;
+import de.propra2.ausleiherino24.features.email.EmailSender;
+import de.propra2.ausleiherino24.features.imageupload.ImageService;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.data.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.data.PpTransactionRepository;

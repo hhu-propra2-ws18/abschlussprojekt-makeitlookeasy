@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.category;
+package de.propra2.ausleiherino24.features.category;
 
 import java.util.Arrays;
 import java.util.List;

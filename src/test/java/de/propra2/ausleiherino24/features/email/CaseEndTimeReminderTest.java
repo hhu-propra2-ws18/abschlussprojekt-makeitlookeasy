@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.email;
+package de.propra2.ausleiherino24.features.email;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Case;

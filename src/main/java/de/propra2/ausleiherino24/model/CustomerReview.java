@@ -52,7 +52,7 @@ public class CustomerReview {
      * @param acase case to set
      * @param repetition for database error prevention
      */
-    public void setAcase(final Case acase, final boolean repetition) {
+    void setAcase(final Case acase, final boolean repetition) {
         this.acase = acase;
         if (acase != null && !repetition) {
             acase.setReview(this, true);

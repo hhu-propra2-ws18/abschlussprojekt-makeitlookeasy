@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.email;
+package de.propra2.ausleiherino24.features.email;
 
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
@@ -33,35 +33,29 @@ public class EmailSender {
     public void sendConflictEmail(final Conflict conflict) {
         final User reporter = conflict.getOwner();
         final User reported = conflict.getReceiver();
-        //Gmail does not allow arbitrary from Address
-        // therefore we specify the Email-sender in the Email-Body
-        //Mailtrap does allow arbitrary from Address
+        //GMail does not allow arbitrary from Address therefore we specify the Email-sender in the Email-Body
+        //MailTrap does allow arbitrary from Address
         message.setFrom(reporter.getEmail());
         message.setTo(
-                "ausleiherino24@gmail.com");
-        // FakeEmail -> does not matter what goes in here when using Mailtrap
+                "ausleiherino24@gmail.com"); // FakeEmail -> does not matter what goes in here when using MailTrap
         message.setSubject("Conflicting Case id: " + conflict.getConflictedCase().getId());
-        message.setText(
-                conflict.getConflictDescription() + " Email sent from: " + reporter.getEmail()
-                        + " Other participant: " + reported.getEmail());
+        message.setText(String.format("%s. | Email sent from: %s. | Other participant: %s",
+                conflict.getConflictDescription(), reporter.getEmail(), reported.getEmail()));
 
         mailSender.send(message);
     }
 
-    void sendRemindingEmail(final Case acase) {
+    void sendRemindingEmail(final Case thisCase) {
         message.setFrom("ausleiherino24@gmail.com");
-        message.setTo(acase.getReceiver().getEmail());
+        message.setTo(thisCase.getReceiver().getEmail());
         message.setSubject(
-                "Reminder: Article: " + acase.getArticle().getName()
+                "Reminder: Article: " + thisCase.getArticle().getName()
                         + " has to be returned tomorrow!");
         message.setText("Please do not forget to return the article on time!");
 
         mailSender.send(message);
     }
 
-    /**
-     * set the mail sender propertiers.
-     */
     public void configureMailSender() {
         final Properties properties = new Properties();
         properties.putAll(config.getProperties());

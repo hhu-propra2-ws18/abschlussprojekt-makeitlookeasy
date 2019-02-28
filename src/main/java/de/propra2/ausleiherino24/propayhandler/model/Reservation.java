@@ -6,8 +6,7 @@ import lombok.Data;
  * Reservierungen die in den Accounts von Propay enthalten sind.
  */
 @Data
-public
-class Reservation {
+public class Reservation {
 
     Long id;
     Double amount;

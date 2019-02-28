@@ -1,11 +1,11 @@
-package de.propra2.ausleiherino24.calendar;
+package de.propra2.ausleiherino24.features.calendar;
 
-import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.service.ArticleService;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,19 +15,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class CalendarEventService {
 
-
-    private final ArticleRepository articleRepository;
-    private final CaseRepository caseRepsitory;
+    private final CaseRepository caseRepository;
     private final ArticleService articleService;
 
     /**
-     * Autowired all needed repositorys and services.
+     * Autowired all needed repositories and services.
      */
     @Autowired
-    public CalendarEventService(ArticleRepository articleRepository,
-            CaseRepository caseRepository, ArticleService articleService) {
-        this.articleRepository = articleRepository;
-        this.caseRepsitory = caseRepository;
+    public CalendarEventService(CaseRepository caseRepository, ArticleService articleService) {
+        this.caseRepository = caseRepository;
         this.articleService = articleService;
 
     }
@@ -36,16 +32,16 @@ public class CalendarEventService {
      * Search all cases by article, than write them into a new CalendarEvent Object and return as
      * arrayList.
      */
-    public ArrayList<CalendarEvent> getAllEventsFromOneArticle(final Long articleId) {
+    public List<CalendarEvent> getAllEventsFromOneArticle(final Long articleId) {
         final Article article = articleService.findArticleById(articleId);
-        final ArrayList<Case> allCases = caseRepsitory.findAllByArticle(article);
-        final ArrayList<CalendarEvent> allCalendarevents = new ArrayList<CalendarEvent>();
+        final List<Case> allCases = caseRepository.findAllByArticle(article);
+        final List<CalendarEvent> allCalendarEvents = new ArrayList<>();
         for (final Case calendarCase : allCases) {
             final CalendarEvent calendarEvent = new CalendarEvent();
             calendarEvent.setStart(calendarCase.getStartTime());
             calendarEvent.setEnd(calendarCase.getEndTime());
         }
-        return allCalendarevents;
+        return allCalendarEvents;
     }
 
 }

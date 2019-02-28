@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.chat;
+package de.propra2.ausleiherino24.features.chat;
 
 import lombok.Data;
 

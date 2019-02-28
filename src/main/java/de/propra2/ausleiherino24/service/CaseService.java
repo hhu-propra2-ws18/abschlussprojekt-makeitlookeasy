@@ -57,8 +57,8 @@ public class CaseService {
     /**
      * Saves given case in database.
      */
-    public void saveCase(final Case acase) {
-        caseRepository.save(acase);
+    public void saveCase(final Case thisCase) {
+        caseRepository.save(thisCase);
     }
 
     /**

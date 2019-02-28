@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.email;
+package de.propra2.ausleiherino24.features.email;
 
 import java.util.Map;
 import lombok.Data;

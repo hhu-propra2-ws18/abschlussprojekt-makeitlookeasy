@@ -5,10 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-/*
-    PPAccounts received from Propay.
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,9 +14,6 @@ public class PpAccount {
     double amount;
     List<Reservation> reservations;
 
-    /*
-        returns amount of all reservations added up.
-     */
     public double reservationAmount() {
         double reserved = 0;
         for (final Reservation reservation : reservations) {

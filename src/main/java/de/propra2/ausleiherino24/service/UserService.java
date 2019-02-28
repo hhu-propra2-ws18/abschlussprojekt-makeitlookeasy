@@ -75,7 +75,6 @@ public class UserService {
         dbUser.setEmail(user.getEmail());
         dbUser.setPassword(pw1);
         this.saveUser(dbUser, "Save");
-        // personService.savePerson(person, "Save");
         return "Success";
     }
 
@@ -120,7 +119,7 @@ public class UserService {
     }
 
     /**
-     * Checks whether given username equals the given principalname.
+     * Checks whether given username equals the given principal's name.
      */
     public boolean isCurrentUser(final String username, final String currentPrincipalName) {
         return username.equals(currentPrincipalName);

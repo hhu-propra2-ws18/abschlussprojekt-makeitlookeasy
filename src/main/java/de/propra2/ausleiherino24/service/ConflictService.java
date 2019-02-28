@@ -1,7 +1,7 @@
 package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.ConflictRepository;
-import de.propra2.ausleiherino24.email.EmailSender;
+import de.propra2.ausleiherino24.features.email.EmailSender;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
@@ -70,13 +70,14 @@ public class ConflictService {
      *
      * @param id conflictId
      */
-    public void deactivateConflict(final Long id, final User user) throws AccessDeniedException {
+    public void deactivateConflict(final Long id, final User user) throws DataAccessException {
         final Optional<Conflict> conflictToDeactivate = conflictRepository.findById(id);
         if (!conflictToDeactivate.isPresent() || !isUserAdmin(user)) {
             throw new DataAccessException("No such conflict.") {
             };
         }
         final Conflict theConflictToDeactivate = conflictToDeactivate.get();
+
         theConflictToDeactivate
                 .setConflictDescription("Conflict with id: " + theConflictToDeactivate.getId()
                         + " was deactivated by :" + user.getUsername());
@@ -102,7 +103,7 @@ public class ConflictService {
      * @param id conflict id
      * @param user User, which want to access the data
      * @return conflict
-     * @throws AccessDeniedException in case the user has no rights to do so
+     * @throws DataAccessException in case the user has no rights to do so
      */
     public Conflict getConflict(final Long id, final User user) throws AccessDeniedException {
         final Optional<Conflict> conflict = conflictRepository.findById(id);
@@ -153,7 +154,7 @@ public class ConflictService {
      * @param conflictToSolve the conflict
      * @param user person, who solved the conflict
      * @param depositReceiver person, who gets the deposit
-     * @throws Exception if user has no permissions to solve a conflict
+     * @throws AccessDeniedException if user has no permissions to solve a conflict
      */
     public boolean solveConflict(final Conflict conflictToSolve, final User user,
             final User depositReceiver) throws AccessDeniedException {

@@ -1,6 +1,6 @@
 package de.propra2.ausleiherino24.web;
 
-import de.propra2.ausleiherino24.category.Category;
+import de.propra2.ausleiherino24.features.category.Category;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;

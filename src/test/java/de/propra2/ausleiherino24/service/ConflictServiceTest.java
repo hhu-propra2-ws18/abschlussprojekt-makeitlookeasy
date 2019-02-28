@@ -3,7 +3,7 @@ package de.propra2.ausleiherino24.service;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.propra2.ausleiherino24.data.ConflictRepository;
-import de.propra2.ausleiherino24.email.EmailSender;
+import de.propra2.ausleiherino24.features.email.EmailSender;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
@@ -66,7 +66,7 @@ public class ConflictServiceTest {
     }
 
     @Test
-    public void getConflictShouldThrowExceptionIfCalledWithWrongUser() throws Exception {
+    public void getConflictShouldThrowExceptionIfCalledWithWrongUser() {
 
         assertThrows(AccessDeniedException.class, () -> {
             Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
