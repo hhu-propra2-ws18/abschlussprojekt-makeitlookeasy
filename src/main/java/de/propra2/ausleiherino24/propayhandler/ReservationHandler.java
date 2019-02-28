@@ -143,4 +143,14 @@ public class ReservationHandler {
                 account, reservationId.toString());
     }
 
+    /**
+     * calls function of accountHandler to avoid using bean.
+     *
+     * @return availability of propay.
+     */
+    public boolean checkAvailability() {
+        return accountHandler.checkAvailability();
+
+    }
+
 }
