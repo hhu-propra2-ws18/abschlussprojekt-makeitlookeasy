@@ -54,10 +54,11 @@ public class ReservationHandlerTest {
         Mockito.when(aCase.getDeposit()).thenReturn(200D);
         Mockito.when(user.getUsername()).thenReturn("user");
         Mockito.when(user2.getUsername()).thenReturn("user2");
+
     }
 
     @Test
-    public void releaseReservationByCaseCallsNestedMethodAndSendsCorrectRequest() {
+    public void releaseReservationByCaseSendsCorrectRequest() {
 
         reservationHandler.releaseReservationByCase(aCase);
         Mockito.verify(restTemplate, Mockito.times(1))
@@ -67,7 +68,7 @@ public class ReservationHandlerTest {
     }
 
     @Test
-    public void punishReservationByCaseCallsNestedMethodAndSendsCorrectRequest() {
+    public void punishReservationByCaseSendsCorrectRequest() {
 
         reservationHandler.punishReservationByCase(aCase);
         Mockito.verify(restTemplate, Mockito.times(1))
@@ -79,12 +80,12 @@ public class ReservationHandlerTest {
     @Test
     public void handleReservedMoneyShouldCallCreateReservationWhenCaseIsRequested() {
 
+        Mockito.when(aCase.getRequestStatus()).thenReturn(Case.REQUESTED);
         Mockito.when(restTemplate
                 .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
                         HttpMethod.POST, null,
                         Reservation.class, "user", "user2", Double.toString(300)))
                 .thenReturn(reservationResp1);
-        Mockito.when(aCase.getRequestStatus()).thenReturn(Case.REQUESTED);
 
         reservationHandler.handleReservedMoney(aCase);
 
@@ -92,6 +93,41 @@ public class ReservationHandlerTest {
                 .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
                         HttpMethod.POST, null,
                         Reservation.class, "user", "user2", Double.toString(300));
+    }
+
+    @Test
+    public void handleReservedMoneyShouldCallCreateReservationWhenCaseIsAccepted() {
+        Mockito.when(aCase.getRequestStatus()).thenReturn(Case.REQUEST_ACCEPTED);
+        Mockito.when(restTemplate
+                .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
+                        HttpMethod.POST, null,
+                        Reservation.class, "user", "user2", Double.toString(200)))
+                .thenReturn(reservationResp1);
+
+        reservationHandler.handleReservedMoney(aCase);
+
+        Mockito.verify(restTemplate, Mockito.times(1))
+                .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
+                        HttpMethod.POST, null,
+                        Reservation.class, "user", "user2", Double.toString(200));
+    }
+
+    @Test
+    public void handleReservedMoneyShouldCallReleaseReservationWhenCaseIsAccepted() {
+
+        Mockito.when(aCase.getRequestStatus()).thenReturn(Case.REQUEST_ACCEPTED);
+        Mockito.when(restTemplate
+                .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
+                        HttpMethod.POST, null,
+                        Reservation.class, "user", "user2", Double.toString(200)))
+                .thenReturn(reservationResp1);
+
+        reservationHandler.handleReservedMoney(aCase);
+
+        Mockito.verify(restTemplate, Mockito.times(1))
+                .exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
+                        HttpMethod.POST, null,
+                        PpAccount.class, "user", "1");
     }
 
 }
