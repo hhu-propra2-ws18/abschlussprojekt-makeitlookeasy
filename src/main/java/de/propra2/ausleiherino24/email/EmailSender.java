@@ -36,7 +36,7 @@ public class EmailSender {
         //Gmail does not allow arbitrary from Address therefore we specify the Email-sender in the Email-Body
         //Mailtrap does allow arbitrary from Address
         message.setFrom(reporter.getEmail());
-        message.setTo("ausleiherino24@gmail.com"); // FakeEmail -> does not matter what goes in here
+        message.setTo("ausleiherino24@gmail.com"); // FakeEmail -> does not matter what goes in here when using Mailtrap
         message.setSubject("Conflicting Case id: " + conflict.getConflictedCase().getId());
         message.setText(conflict.getConflictDescription() +" Email sent from: "+reporter.getEmail()
                 +" Other participant: "+reported.getEmail());

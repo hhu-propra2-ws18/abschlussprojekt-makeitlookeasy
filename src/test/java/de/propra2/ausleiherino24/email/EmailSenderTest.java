@@ -20,24 +20,27 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 public class EmailSenderTest {
 
     private final static String USER_EMAIL = "test@mail.de";
-    private final static String SERVICE_EMAIL = "Clearing@Service.com";
+    private final static String SERVICE_EMAIL = "ausleiherino24@gmail.com";
     private EmailConfig emailConfigMock;
     private JavaMailSenderImpl javaMailSenderMock;
     private EmailSender emailSender;
-    private UserService userService;
     private Case conflictedCase;
     private Conflict conflict;
     private User conflictReporter;
+    private User otherUser;
 
     @BeforeEach
     public void init() {
         emailConfigMock = mock(EmailConfig.class);
         javaMailSenderMock = mock(JavaMailSenderImpl.class);
-        userService = mock(UserService.class);
-        emailSender = new EmailSender(emailConfigMock, javaMailSenderMock, new SimpleMailMessage(),
-                userService);
-
+        emailSender = new EmailSender(emailConfigMock, javaMailSenderMock, new SimpleMailMessage());
+        otherUser = new User();
+        otherUser.setEmail("test@mail.de");
+        final Article art = new Article();
+        art.setName("testArticle");
+        art.setOwner(otherUser);
         conflictedCase = new Case();
+        conflictedCase.setArticle(art);
         conflict = new Conflict();
         conflictReporter = new User();
         conflictReporter.setEmail(EmailSenderTest.USER_EMAIL);
@@ -56,13 +59,11 @@ public class EmailSenderTest {
 
     @Test
     public void sendConflictEmailShouldSendCorrectMail() {
-        when(userService.findUserByUsername("user2")).thenReturn(conflictReporter);
-
         final SimpleMailMessage expectedMessage = new SimpleMailMessage();
         expectedMessage.setFrom(EmailSenderTest.USER_EMAIL);
         expectedMessage.setTo(EmailSenderTest.SERVICE_EMAIL);
         expectedMessage.setSubject("Conflicting Case id: 1");
-        expectedMessage.setText("Dies hier ist ein einfacher Test");
+        expectedMessage.setText("Dies hier ist ein einfacher Test Email sent from: test@mail.de Other participant: test@mail.de");
 
         emailSender.sendConflictEmail(conflict);
 
@@ -70,11 +71,8 @@ public class EmailSenderTest {
     }
 
     @Test
-    public void sendConflictEmailShouldSetCorrectMailConfig() {
-
-        when(userService.findUserByUsername("user2")).thenReturn(conflictReporter);
-
-        emailSender.sendConflictEmail(conflict);
+    public void configureMailSenderShouldSetCorrectMailConfig() {
+        emailSender.configureMailSender();
         verify(javaMailSenderMock).setHost("TestHost");
         verify(javaMailSenderMock).setPort(4321);
         verify(javaMailSenderMock).setUsername("TestUsername");
@@ -85,38 +83,15 @@ public class EmailSenderTest {
     public void sendConflictEmailShouldThrowException() {
 
         assertThrows(MailSendException.class, () -> {
-            when(userService.findUserByUsername("user2")).thenReturn(conflictReporter);
-
             final SimpleMailMessage expectedMessage = new SimpleMailMessage();
             expectedMessage.setFrom(EmailSenderTest.USER_EMAIL);
             expectedMessage.setTo(EmailSenderTest.SERVICE_EMAIL);
             expectedMessage.setSubject("Conflicting Case id: 1");
-            expectedMessage.setText("Dies hier ist ein einfacher Test");
+            expectedMessage.setText("Dies hier ist ein einfacher Test Email sent from: test@mail.de Other participant: test@mail.de");
 
             doThrow(new MailSendException("")).when(javaMailSenderMock).send(expectedMessage);
             emailSender.sendConflictEmail(conflict);
         });
-
-    }
-
-    @Test
-    public void sendRemindingEmailShouldSendCorrectMail() {
-        final Article art = new Article();
-        art.setName("testArticle");
-        conflictedCase.setArticle(art);
-
-        final SimpleMailMessage expectedMessage = new SimpleMailMessage();
-        expectedMessage.setTo(EmailSenderTest.USER_EMAIL);
-        expectedMessage.setFrom(EmailSenderTest.SERVICE_EMAIL);
-        expectedMessage.setSubject("Reminder: Article: testArticle has to be returned tomorrow!");
-        expectedMessage.setText("Please do not forget to return the article on time!");
-
-        emailSender.sendRemindingEmail(conflictedCase);
-        verify(javaMailSenderMock).setHost("TestHost");
-        verify(javaMailSenderMock).setPort(4321);
-        verify(javaMailSenderMock).setUsername("TestUsername");
-        verify(javaMailSenderMock).setPassword("password");
-        verify(javaMailSenderMock).send(expectedMessage);
 
     }
 
