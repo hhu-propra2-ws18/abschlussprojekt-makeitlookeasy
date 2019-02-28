@@ -3,10 +3,10 @@ package de.propra2.ausleiherino24.service;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.PpTransaction;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.propayhandler.AccountHandler;
-import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
+import de.propra2.ausleiherino24.propayhandler.data.AccountHandler;
+import de.propra2.ausleiherino24.propayhandler.data.ReservationHandler;
+import de.propra2.ausleiherino24.propayhandler.model.PpTransaction;
 import java.security.Principal;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -57,8 +57,8 @@ public class CaseService {
     /**
      * Saves given case in database.
      */
-    public void saveCase(final Case acase) {
-        caseRepository.save(acase);
+    public void saveCase(final Case thisCase) {
+        caseRepository.save(thisCase);
     }
 
     /**

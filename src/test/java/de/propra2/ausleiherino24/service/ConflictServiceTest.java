@@ -3,12 +3,12 @@ package de.propra2.ausleiherino24.service;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.propra2.ausleiherino24.data.ConflictRepository;
-import de.propra2.ausleiherino24.email.EmailSender;
+import de.propra2.ausleiherino24.features.email.EmailSender;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
+import de.propra2.ausleiherino24.propayhandler.data.ReservationHandler;
 import java.nio.file.AccessDeniedException;
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +22,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class ConflictServiceTest {
+class ConflictServiceTest {
 
     private CaseService caseService;
     private EmailSender emailSender;
@@ -32,12 +32,11 @@ public class ConflictServiceTest {
 
     private User user;
     private User user2;
-    private Article art;
     private Case ca;
     private Conflict c1;
 
     @BeforeEach
-    public void init() {
+    void init() {
         caseService = Mockito.mock(CaseService.class);
         emailSender = Mockito.mock(EmailSender.class);
         conflictRepository = Mockito.mock(ConflictRepository.class);
@@ -48,7 +47,7 @@ public class ConflictServiceTest {
 
         user = new User();
         user2 = new User();
-        art = new Article();
+        Article art = new Article();
         ca = new Case();
         c1 = new Conflict();
 
@@ -66,7 +65,7 @@ public class ConflictServiceTest {
     }
 
     @Test
-    public void getConflictShouldThrowExceptionIfCalledWithWrongUser() throws Exception {
+    void getConflictShouldThrowExceptionIfCalledWithWrongUser() {
 
         assertThrows(AccessDeniedException.class, () -> {
             Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
@@ -76,9 +75,8 @@ public class ConflictServiceTest {
 
     }
 
-
     @Test
-    public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithArticleReceiver()
+    void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithArticleReceiver()
             throws Exception {
         Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
@@ -86,7 +84,7 @@ public class ConflictServiceTest {
     }
 
     @Test
-    public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithArticleOwner()
+    void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithArticleOwner()
             throws Exception {
         Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
 
@@ -94,8 +92,7 @@ public class ConflictServiceTest {
     }
 
     @Test
-    public void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithAdmin()
-            throws Exception {
+    void getConflictShouldReturnConflictCorrespondingToIdIfCalledWithAdmin() throws Exception {
         final User admin = new User();
         admin.setRole("admin");
         Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.of(c1));
@@ -103,7 +100,8 @@ public class ConflictServiceTest {
         Assertions.assertThat(conflictService.getConflict(1L, admin)).isEqualTo(c1);
     }
 
-    public void getConflictShouldThrowExceptionIfConflictIdNotValid() throws Exception {
+    @Test
+    void getConflictShouldThrowExceptionIfConflictIdNotValid() {
 
         assertThrows(DataAccessException.class, () -> {
             Mockito.when(conflictRepository.findById(1L)).thenReturn(Optional.empty());
@@ -113,17 +111,16 @@ public class ConflictServiceTest {
     }
 
     @Test
-    public void getConflictParticipantsShouldThrowExceptionIfCalledWithNull() throws Exception {
+    void getConflictParticipantsShouldThrowExceptionIfCalledWithNull() {
 
-        assertThrows(NullPointerException.class, () -> {
-            conflictService.getConflictParticipants(null);
-        });
+        assertThrows(NullPointerException.class,
+                () -> conflictService.getConflictParticipants(null));
 
 
     }
 
     @Test
-    public void getConflictParticipantsShouldReturnAllConflictParticipants() throws Exception {
+    void getConflictParticipantsShouldReturnAllConflictParticipants() {
         final List<User> conflictParticipants = conflictService.getConflictParticipants(c1);
 
         Assertions.assertThat(conflictParticipants.size()).isEqualTo(2);
@@ -131,30 +128,27 @@ public class ConflictServiceTest {
     }
 
     @Test
-    public void saveConflictShouldThrowExceptionIfConflictIsNull() throws Exception {
-        assertThrows(NullPointerException.class, () -> {
-            conflictService.saveConflict(null, user);
-        });
+    void saveConflictShouldThrowExceptionIfConflictIsNull() {
+        assertThrows(NullPointerException.class, () -> conflictService.saveConflict(null, user));
 
     }
 
     @Test
-    public void saveConflictShouldSaveConflictIfConflictIsNotNull() throws Exception {
+    void saveConflictShouldSaveConflictIfConflictIsNotNull() throws Exception {
         conflictService.saveConflict(c1, user);
 
         Mockito.verify(conflictRepository, Mockito.times(1)).save(c1);
     }
 
     @Test
-    public void sendConflictEmailShouldSendConflictEmail() throws Exception {
+    void sendConflictEmailShouldSendConflictEmail() {
         conflictService.sendConflictEmail(c1);
 
         Mockito.verify(emailSender, Mockito.times(1)).sendConflictEmail(c1);
     }
 
     @Test
-    public void deactivateConflictShouldNotDeactivateConflictIfUserIsNotAdmin()
-            throws Exception {
+    void deactivateConflictShouldNotDeactivateConflictIfUserIsNotAdmin() {
 
         assertThrows(DataAccessException.class, () -> {
             c1.setId(1L);
@@ -166,7 +160,7 @@ public class ConflictServiceTest {
     }
 
     @Test
-    public void deactivateConflictShouldDeactivateConflictIfUserIsAdmin() throws Exception {
+    void deactivateConflictShouldDeactivateConflictIfUserIsAdmin() {
         final User admin = new User();
         admin.setRole("admin");
         c1.setId(1L);
@@ -180,7 +174,8 @@ public class ConflictServiceTest {
         Assertions.assertThat(ca.getRequestStatus()).isEqualTo(Case.FINISHED);
     }
 
-    public void deactivateConflictShouldThrowExceptionIfConflictNotFound() throws Exception {
+    @Test
+    void deactivateConflictShouldThrowExceptionIfConflictNotFound() {
 
         assertThrows(DataAccessException.class, () -> {
             final User user = new User();
@@ -192,15 +187,16 @@ public class ConflictServiceTest {
 
     }
 
-    @Test()
-    public void openConflictTest() throws Exception {
+    @Test
+    void openConflictTest() throws Exception {
         conflictService.openConflict(ca, "TestDescription");
         Mockito.verify(caseService).conflictOpened(1L);
         Mockito.verify(conflictService).saveConflict(c1, user);
         Mockito.verify(conflictService).sendConflictEmail(c1);
     }
 
-    public void solveConflictShouldThrowExceptionIfUserNotAdmin() throws Exception {
+    @Test
+    void solveConflictShouldThrowExceptionIfUserNotAdmin() {
 
         assertThrows(AccessDeniedException.class, () -> {
             final User user = new User();
@@ -212,29 +208,29 @@ public class ConflictServiceTest {
     }
 
     @Test
-    public void solveConflictShouldPunishReservation() throws Exception {
-        final User depoReceiver = new User();
+    void solveConflictShouldPunishReservation() throws Exception {
+        final User depositReceiver = new User();
         final User admin = new User();
         admin.setRole("admin");
         final Conflict conflict = Mockito.mock(Conflict.class);
-        Mockito.when(conflict.getOwner()).thenReturn(depoReceiver);
+        Mockito.when(conflict.getOwner()).thenReturn(depositReceiver);
 
-        conflictService.solveConflict(conflict, admin, depoReceiver);
+        conflictService.solveConflict(conflict, admin, depositReceiver);
 
         Mockito.verify(reservationHandler).punishReservationByCase(null);
         Mockito.verify(reservationHandler, Mockito.times(0)).releaseReservationByCase(null);
     }
 
     @Test
-    public void solveConflictShouldReleaseReservation() throws Exception {
-        final User depoReceiver = new User();
-        depoReceiver.setUsername("Hans");
+    void solveConflictShouldReleaseReservation() throws Exception {
+        final User depositReceiver = new User();
+        depositReceiver.setUsername("Hans");
         final User admin = new User();
         admin.setRole("admin");
         final Conflict conflict = Mockito.mock(Conflict.class);
         Mockito.when(conflict.getOwner()).thenReturn(new User());
 
-        conflictService.solveConflict(conflict, admin, depoReceiver);
+        conflictService.solveConflict(conflict, admin, depositReceiver);
 
         Mockito.verify(reservationHandler, Mockito.times(0)).punishReservationByCase(null);
         Mockito.verify(reservationHandler).releaseReservationByCase(null);

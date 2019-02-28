@@ -1,7 +1,7 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.features.category.Category;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.CustomerReview;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-// TODO: Extract duplicate code. Fix!
 
 /**
  * 'CaseController' handles all requests Case-related. This includes booking of articles (and

@@ -15,29 +15,31 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class SearchUserServiceTest {
+class SearchUserServiceTest {
 
     private UserRepository users;
     private SearchUserService searchUserService;
     private User user1;
 
     @BeforeEach
-    public void init() {
+    void init() {
         users = Mockito.mock(UserRepository.class);
         user1 = new User();
         user1.setUsername("user1");
         searchUserService = new SearchUserService(users);
     }
 
+    // TODO: Rename!
     @Test
-    public void test() {
+    void test() {
         Mockito.when(users.findByUsername("user1")).thenReturn(Optional.of(user1));
         final CustomUserDetails expected = new CustomUserDetails(user1);
         Assertions.assertThat(searchUserService.loadUserByUsername("user1")).isEqualTo(expected);
     }
 
+    // TODO: Rename!
     @Test
-    public void test2() {
+    void test2() {
 
         assertThrows(UsernameNotFoundException.class, () -> {
             Mockito.when(users.findByUsername("user1")).thenThrow(UsernameNotFoundException.class);

@@ -18,10 +18,10 @@ import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Person;
-import de.propra2.ausleiherino24.model.PpTransaction;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.propayhandler.AccountHandler;
-import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
+import de.propra2.ausleiherino24.propayhandler.data.AccountHandler;
+import de.propra2.ausleiherino24.propayhandler.data.ReservationHandler;
+import de.propra2.ausleiherino24.propayhandler.model.PpTransaction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -35,7 +35,7 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class CaseServiceTest {
+class CaseServiceTest {
 
     private CaseRepository caseRepositoryMock;
     private PersonService personServiceMock;
@@ -47,7 +47,7 @@ public class CaseServiceTest {
     private List<Case> cases;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         accountHandlerMock = mock(AccountHandler.class);
         reservationHandlerMock = mock(ReservationHandler.class);
         caseRepositoryMock = mock(CaseRepository.class);
@@ -61,7 +61,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void ownerWithThreeCases() {
+    void ownerWithThreeCases() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
@@ -74,7 +74,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void ownerWithThreeCases2() {
+    void ownerWithThreeCases2() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 1L, null, null, 0D, 0D, 0, null, null, null, null, null));
@@ -89,7 +89,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void ownerWithTwoLendCases() {
+    void ownerWithTwoLendCases() {
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, new User(), null, null, null));
         cases.add(new Case(null, 0L, null, null, 0D, 0D, 0, null, null, null, null, null));
@@ -105,7 +105,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void requestArticle() {
+    void requestArticle() {
         final Long articleId = 0L;
         final Long st = new Date().getTime() + 100L;
         final Long et = new Date().getTime() + 200L;
@@ -134,7 +134,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void requestArticleButTimeIsLowerThanActualTime() {
+    void requestArticleButTimeIsLowerThanActualTime() {
         final Long articleId = 0L;
         final Long st = 100L;
         final Long et = 200L;
@@ -154,7 +154,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void requestArticleButUserEqualsReceiver() {
+    void requestArticleButUserEqualsReceiver() {
         final Long articleId = 0L;
         final Long st = 100L;
         final Long et = 200L;
@@ -174,7 +174,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void requestArticleButStartTimeIsHigherThanEndTime() {
+    void requestArticleButStartTimeIsHigherThanEndTime() {
         final Long articleId = 0L;
         final Long st = 300L;
         final Long et = 200L;
@@ -194,7 +194,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void requestArticleWithoutEnoughMoney() {
+    void requestArticleWithoutEnoughMoney() {
         final Long articleId = 0L;
         final Long st = new Date().getTime() + 100L;
         final Long et = new Date().getTime() + 200L;
@@ -212,7 +212,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void requestArticleCatchException() {
+    void requestArticleCatchException() {
 
         assertThrows(NullPointerException.class, () -> {
             final Long articleId = 0L;
@@ -230,7 +230,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void articleAlreadyRequestedInTheTime() {
+    void articleAlreadyRequestedInTheTime() {
         final Article article = new Article();
         final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUEST_ACCEPTED);
@@ -249,7 +249,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void articleAlreadyRequestedInTheTime2() {
+    void articleAlreadyRequestedInTheTime2() {
         final Article article = new Article();
         final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUEST_ACCEPTED);
@@ -268,7 +268,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void articleAlreadyRequestedInTheTime3() {
+    void articleAlreadyRequestedInTheTime3() {
         final Article article = new Article();
         final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUEST_ACCEPTED);
@@ -287,7 +287,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void articleNotRequestedInTheTime() {
+    void articleNotRequestedInTheTime() {
         final Article article = new Article();
         final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUEST_ACCEPTED);
@@ -306,7 +306,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void acceptingRequestPossible() {
+    void acceptingRequestPossible() {
         final Article article = new Article();
         final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUEST_ACCEPTED);
@@ -329,7 +329,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void acceptingRequestNotPossible() {
+    void acceptingRequestNotPossible() {
         final Article article = new Article();
         final Case c1 = new Case();
         c1.setRequestStatus(Case.REQUEST_ACCEPTED);
@@ -352,14 +352,14 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void acceptNotExistingRequest() {
+    void acceptNotExistingRequest() {
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.empty());
 
         assertEquals(0, caseService.acceptArticleRequest(0L));
     }
 
     @Test
-    public void declineRequest() {
+    void declineRequest() {
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(new Case()));
         final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
@@ -372,7 +372,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void declineNotExistingRequest() {
+    void declineNotExistingRequest() {
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.empty());
 
         caseService.declineArticleRequest(0L);
@@ -381,7 +381,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void openConflict() {
+    void openConflict() {
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(new Case()));
         final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
@@ -392,7 +392,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void finishCase() {
+    void finishCase() {
         when(caseRepositoryMock.findById(0L)).thenReturn(Optional.of(new Case()));
         final ArgumentCaptor<Case> argument = ArgumentCaptor.forClass(Case.class);
 
@@ -403,7 +403,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void twoPPTransactionsFromReceiver() {
+    void twoPPTransactionsFromReceiver() {
         final Case c1 = new Case();
         c1.setPpTransaction(new PpTransaction());
         final Case c2 = new Case();
@@ -417,7 +417,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void twoUnavailableCases() {
+    void twoUnavailableCases() {
         final Case c1 = new Case();
         c1.setPpTransaction(new PpTransaction());
         c1.setRequestStatus(Case.REQUEST_DECLINED);
@@ -431,7 +431,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void sellArticle() {
+    void sellArticle() {
         final Article article = new Article();
         article.setCostPerDay(10d);
         when(articleServiceMock.findArticleById(0L)).thenReturn(article);
@@ -459,7 +459,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void twoCasesWithOpenConflicts() {
+    void twoCasesWithOpenConflicts() {
         cases.add(new Case(null, 0L, null, 0L, 0D, 0D, Case.OPEN_CONFLICT, null, null, null, null,
                 null));
         cases.add(new Case(null, 0L, null, 1L, 0D, 0D, 0, null, null, null, null, null));

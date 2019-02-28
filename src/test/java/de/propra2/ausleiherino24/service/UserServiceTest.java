@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
     @Mocked
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
@@ -31,7 +31,7 @@ public class UserServiceTest {
     private User user;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         users = Mockito.mock(UserRepository.class);
         personService = Mockito.mock(PersonService.class);
         user = new User();
@@ -42,12 +42,12 @@ public class UserServiceTest {
     }
 
     @Test
-    public void findUserByUsernameTest() {
+    void findUserByUsernameTest() {
         Assertions.assertThat(userService.findUserByUsername("user1")).isEqualTo(user);
     }
 
     @Test
-    public void findUserByUsernameTest2() {
+    void findUserByUsernameTest2() {
 
         assertThrows(NoSuchElementException.class, () -> {
             userService.findUserByUsername("user2");
@@ -61,7 +61,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void saveUserWithProfileTest() {
+    void saveUserWithProfileTest() {
         final Person person = new Person();
         person.setId(1L);
         userService.saveUserWithProfile(user, person, "str");
@@ -74,7 +74,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void findUserByPrincipalTest() {
+    void findUserByPrincipalTest() {
         final Principal principal = Mockito.mock(Principal.class);
         Mockito.when(principal.getName()).thenReturn("");
         final User expected = new User();
@@ -86,7 +86,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void findUserByPrincipalTest2() {
+    void findUserByPrincipalTest2() {
         final Principal principal = Mockito.mock(Principal.class);
         Mockito.when(principal.getName()).thenReturn(null);
         final User expected = new User();
@@ -97,7 +97,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void findUserByPrincipalTest3() {
+    void findUserByPrincipalTest3() {
         final User expected = new User();
         expected.setUsername("");
         expected.setRole("");
@@ -106,14 +106,14 @@ public class UserServiceTest {
     }
 
     @Test
-    public void saveUserUnequalPasswords() {
+    void saveUserUnequalPasswords() {
         Assertions.assertThat(
                 userService.saveUserIfPasswordsAreEqual("", new User(), new Person(), "1", "2"))
                 .isEqualTo("PasswordNotEqual");
     }
 
     @Test
-    public void saveNotExistingUserWithEqualPasswords() {
+    void saveNotExistingUserWithEqualPasswords() {
         Mockito.when(users.findByUsername("")).thenReturn(Optional.empty());
 
         Assertions.assertThat(
@@ -122,7 +122,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void saveExistingUserWithEqualPasswords() {
+    void saveExistingUserWithEqualPasswords() {
         final String pw = "1";
         final Person person = new Person();
         final User user = new User();

@@ -9,9 +9,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
+import de.propra2.ausleiherino24.features.category.Category;
+import de.propra2.ausleiherino24.features.imageupload.ImageService;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Category;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +29,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(SpringExtension.class)
-public class ArticleServiceTest {
+class ArticleServiceTest {
 
     private ArticleService articleService;
     private ArticleRepository articleRepositoryMock;
@@ -40,7 +41,7 @@ public class ArticleServiceTest {
     private Article article04;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         articleRepositoryMock = mock(ArticleRepository.class);
         articleService = new ArticleService(articleRepositoryMock, mock(ImageService.class));
 
@@ -56,14 +57,14 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void saveNewArticle() {
+    void saveNewArticle() {
         articleService.saveArticle(new Article(), "");
 
         verify(articleRepositoryMock).save(new Article());
     }
 
     @Test
-    public void tripleArticle() {
+    void tripleArticle() {
         article02.setActive(false);
         article03.setActive(false);
 
@@ -80,7 +81,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void twoArticlesForRental() {
+    void twoArticlesForRental() {
         final Case c = new Case();
         c.setRequestStatus(Case.RUNNING);  //requestStatus = RUNNING
         article03.setCases(Arrays.asList(c));
@@ -97,7 +98,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void threeToys() {
+    void threeToys() {
         articles.add(article01);
         articles.add(article02);
         articles.add(article03);
@@ -108,7 +109,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void threeToys2() {
+    void threeToys2() {
         articles.add(article01);
         articles.add(article02);
         articles.add(article03);
@@ -119,7 +120,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void twoToysTwoTools() {
+    void twoToysTwoTools() {
         article02.setCategory(Category.TOOLS);
         article04.setCategory(Category.TOOLS);
 
@@ -137,7 +138,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void twoToysTwoTools2() {
+    void twoToysTwoTools2() {
         article02.setCategory(Category.TOOLS);
         article04.setCategory(Category.TOOLS);
 
@@ -155,7 +156,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactivateArticle() {
+    void deactivateArticle() {
         final Optional<Article> op = Optional.of(article01);
         when(articleRepositoryMock.findById(0L)).thenReturn(op);
 
@@ -167,7 +168,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactivateLendArticle() {
+    void deactivateLendArticle() {
         final Case c = new Case();
         c.setRequestStatus(Case.RUNNING);  //requestStatus = RUNNING
         article01.setCases(Arrays.asList(c));
@@ -179,7 +180,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactivateArticleWithConflict() {
+    void deactivateArticleWithConflict() {
         final Case c = new Case();
         c.setRequestStatus(Case.OPEN_CONFLICT);  //requestStatus = OPEN_CONFLICT
         article01.setCases(Arrays.asList(c));
@@ -191,7 +192,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactivateFinishedArticle() {
+    void deactivateFinishedArticle() {
         final Case c = new Case();
         c.setRequestStatus(Case.FINISHED);  //requestStatus = FINISHED
         article01.setCases(Arrays.asList(c));
@@ -206,7 +207,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactivateNotExistingArticle() {
+    void deactivateNotExistingArticle() {
 
         assertThrows(NoSuchElementException.class, () -> {
             when(articleRepositoryMock.findById(0L)).thenReturn(Optional.empty());
@@ -216,7 +217,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void updateArticle() {
+    void updateArticle() {
         final Article article = new Article();
         article.setForRental(true);
         article.setDeposit(0D);
@@ -227,6 +228,7 @@ public class ArticleServiceTest {
         when(articleRepositoryMock.findById(0L)).thenReturn(Optional.of(article));
         final ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
 
+        // TODO ??
         articleService.updateArticle(0L, article, new MultipartFile() {
             @Override
             public String getName() {
@@ -274,7 +276,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void setForSaleToFalse() {
+    void setForSaleToFalse() {
         when(articleRepositoryMock.findById(0L)).thenReturn(Optional.of(new Article()));
         final ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
 
