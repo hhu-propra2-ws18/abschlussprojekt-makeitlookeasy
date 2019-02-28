@@ -134,7 +134,6 @@ public class UserServiceTest {
 
         Assertions.assertThat(userService.saveUserIfPasswordsAreEqual("", user, person, pw, pw))
                 .isEqualTo("Success");
-        Mockito.verify(personService).savePerson(Mockito.eq(person), Mockito.eq("Save"));
         Mockito.verify(users).save(argument.capture());
         Assertions.assertThat(argument.getValue().getPassword()).isEqualTo(pw);
         Assertions.assertThat(argument.getValue().getEmail()).isEqualTo("test@mail.de");
