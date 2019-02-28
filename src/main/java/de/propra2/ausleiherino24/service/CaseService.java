@@ -143,7 +143,7 @@ public class CaseService {
                 && articleNotRented(articleService.findArticleById(articleId), startTime,
                 endTime) && new Date().getTime() < startTime && startTime < endTime
                 && !articleService.findArticleById(articleId).getOwner().getUsername()
-                .equals(username)) {
+                .equals(username) && accountHandler.checkAvailability()) {
 
             final PpTransaction ppTransaction = new PpTransaction();
             ppTransaction.setLendingCost(totalCost);
@@ -190,14 +190,19 @@ public class CaseService {
     /**
      * Checks, if article request is ok.
      *
-     * @return 0: not found 1: ok 2: already rented 3: not enough Funds
+     * @return 0: not found 1: ok 2: already rented 3: not enough Funds 4: Propay unavailable
      */
     public int acceptArticleRequest(final Long id) {
+
         final Optional<Case> optCase = caseRepository.findById(id);
         if (!optCase.isPresent()) {
             return 0;
         }
         final Case currentCase = optCase.get();
+
+        if (!accountHandler.checkAvailability()) {
+            return 4;
+        }
 
         //Check whether the article is not reserved in this period of time
         final boolean articleRented = articleNotRented(id);
@@ -268,16 +273,20 @@ public class CaseService {
      *
      * @param id id of the case where the request should be declined.
      */
-    public void declineArticleRequest(final Long id) {
+    public boolean declineArticleRequest(final Long id) {
+        if (!accountHandler.checkAvailability()) {
+            return false;
+        }
         final Optional<Case> optCase = caseRepository.findById(id);
         if (!optCase.isPresent()) {
-            return;
+            return false;
         }
         final Case currentCase = optCase.get();
         currentCase.setRequestStatus(Case.REQUEST_DECLINED);
         reservationHandler.releaseReservationByCase(currentCase);
         currentCase.setPpTransaction(new PpTransaction());
         caseRepository.save(currentCase);
+        return true;
     }
 
     /**
@@ -306,13 +315,17 @@ public class CaseService {
      *
      * @param id CaseId
      */
-    public void acceptCaseReturn(final Long id) {
+    public boolean acceptCaseReturn(final Long id) {
+        if (!accountHandler.checkAvailability()) {
+            return false;
+        }
         final Optional<Case> opt = caseRepository.findById(id);
         if (opt.isPresent()) {
             final Case currentCase = opt.get();
             currentCase.setRequestStatus(Case.FINISHED);
             caseRepository.save(currentCase);
         }
+        return true;
     }
 
     /**
@@ -367,6 +380,10 @@ public class CaseService {
     public boolean sellArticle(final Long articleId, final Principal principal) {
         final Article article = articleService.findArticleById(articleId);
         final User costumer = userService.findUserByPrincipal(principal);
+
+        if (!accountHandler.checkAvailability()) {
+            return false;
+        }
 
         if (accountHandler.hasValidFunds(costumer.getUsername(),
                 articleService.findArticleById(articleId).getCostPerDay())) {

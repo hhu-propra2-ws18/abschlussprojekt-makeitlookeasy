@@ -31,6 +31,22 @@ public class AccountHandler {
         this.restTemplate = restTemplate;
     }
 
+    /**
+     * used to check if Propay is online in order to not have to return status code for all
+     * requests.
+     *
+     * @return is propay available?
+     */
+    public boolean checkAvailability() {
+        try {
+            getAccountData("AvailabilityAcc");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
 
     /**
      * Gets Propay Account.

@@ -57,6 +57,7 @@ public class CaseServiceTest {
         caseService = spy(new CaseService(caseRepositoryMock, articleServiceMock, personServiceMock,
                 userServiceMock, accountHandlerMock, reservationHandlerMock));
         cases = new ArrayList<>();
+        Mockito.when(accountHandlerMock.checkAvailability()).thenReturn(true);
     }
 
     @Test

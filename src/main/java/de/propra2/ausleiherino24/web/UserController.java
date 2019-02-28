@@ -85,7 +85,6 @@ public class UserController {
             userService.saveUserWithProfile(user, person, "Updated");
 
             final ModelAndView mav = new ModelAndView("/user/profile");
-            mav.addObject("proPayAcc", accountHandler.checkFunds(currentPrincipalName));
             mav.addObject(USER_STRING, user);
             return mav;
         } else {
@@ -151,7 +150,14 @@ public class UserController {
         mav.addObject(CATEGORIES, Category.getAllCategories());
         mav.addObject("transactions", caseService.findAllTransactionsForPerson(
                 userService.findUserByPrincipal(principal).getPerson().getId()));
-        mav.addObject("pp", accountHandler.checkFunds(principal.getName()));
+        if (accountHandler.checkAvailability()) {
+            mav.addObject("pp", accountHandler.checkFunds(principal.getName()));
+            mav.addObject("propayUnavailable", false);
+        } else {
+            LOGGER.warn("ProPay not available");
+            mav.addObject("propayUnavailable", true);
+            mav.addObject("pp", 0D);
+        }
         mav.addObject("user", userService.findUserByPrincipal(principal));
         mav.addObject(USER_STRING, userService.findUserByPrincipal(principal));
         mav.addObject("allArticles", articleService);
@@ -184,7 +190,12 @@ public class UserController {
      */
     @PostMapping("/addMoney")
     public String addMoneyToUserAccount(final Principal principal, final double money) {
-        accountHandler.addFunds(principal.getName(), money);
+        if (accountHandler.checkAvailability()) {
+            accountHandler.addFunds(principal.getName(), money);
+        } else {
+            LOGGER.warn("ProPay not available");
+            return "redirect:/bankAccount?propayUnavailable";
+        }
         return "redirect:/bankAccount?success";
     }
 }
