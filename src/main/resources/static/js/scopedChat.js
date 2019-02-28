@@ -60,7 +60,7 @@ function initializeChat(subscriptionUrl, withSession, addUserUrl, messageUrl) {
   }
 
   function retrieveSessionId(frame) {
-    console.log(stompClient.ws._transport.url)
+    console.log(stompClient.ws._transport.url);
     var url = stompClient.ws._transport.url
     .replace("ws://localhost:8080" + endpoint + "/", "")
     .replace("/websocket", "")
@@ -125,7 +125,6 @@ function initializeChat(subscriptionUrl, withSession, addUserUrl, messageUrl) {
       if (index < destructedMessage.length) {
         textElement.appendChild(document.createElement('br'))
       }
-      ;
     });
     return textElement;
   }

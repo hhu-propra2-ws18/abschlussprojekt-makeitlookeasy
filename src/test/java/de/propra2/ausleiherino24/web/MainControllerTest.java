@@ -2,40 +2,22 @@ package de.propra2.ausleiherino24.web;
 
 import static org.mockito.Mockito.mock;
 
-import de.propra2.ausleiherino24.data.ArticleRepository;
-import de.propra2.ausleiherino24.data.CaseRepository;
-import de.propra2.ausleiherino24.data.ConflictRepository;
-import de.propra2.ausleiherino24.data.CustomerReviewRepository;
-import de.propra2.ausleiherino24.data.PersonRepository;
-import de.propra2.ausleiherino24.data.PpTransactionRepository;
-import de.propra2.ausleiherino24.data.UserRepository;
-import de.propra2.ausleiherino24.email.EmailConfig;
-import de.propra2.ausleiherino24.email.EmailSender;
+import de.propra2.ausleiherino24.Ausleiherino24Application;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.propayhandler.AccountHandler;
-import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
-import de.propra2.ausleiherino24.service.ArticleService;
-import de.propra2.ausleiherino24.service.CalendarEventService;
-import de.propra2.ausleiherino24.service.CaseService;
-import de.propra2.ausleiherino24.service.ConflictService;
-import de.propra2.ausleiherino24.service.CustomerReviewService;
-import de.propra2.ausleiherino24.service.ImageService;
-import de.propra2.ausleiherino24.service.PersonService;
-import de.propra2.ausleiherino24.service.SearchUserService;
 import de.propra2.ausleiherino24.service.UserService;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -43,82 +25,32 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest
 @ActiveProfiles(profiles = "test")
-public class MainControllerTest {
+@SpringBootTest(classes = Ausleiherino24Application.class)
+@AutoConfigureMockMvc
+class MainControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
-    @MockBean
-    private Principal principal;
-    @MockBean
-    private CalendarEventService calendarEventService;
-
-    @MockBean
-    private ArticleRepository articleRepository;
-    @MockBean
-    private CaseRepository caseRepository;
-    @MockBean
-    private ConflictRepository conflictRepository;
-    @MockBean
-    private CustomerReviewRepository customerReviewRepository;
-    @MockBean
-    private PersonRepository personRepository;
-    @MockBean
-    private PpTransactionRepository ppTransactionRepository;
-    @MockBean
-    private UserRepository userRepository;
-
-    @MockBean
-    private ArticleService articleService;
-    @MockBean
-    private CaseService caseService;
-    @MockBean
-    private ConflictService conflictService;
-    @MockBean
-    private CustomerReviewService customerReviewService;
-    @MockBean
-    private ImageService imageService;
-    @MockBean
-    private PersonService personService;
-    @MockBean
-    private SearchUserService searchUserService;
-    @MockBean
     private UserService userService;
 
-    @MockBean
-    private EmailConfig emailConfig;
-    @MockBean
-    private EmailSender emailSender;
-    @MockBean
-    private AccountHandler accountHandler;
-    @MockBean
-    private ReservationHandler reservationHandler;
-
-    @MockBean
-    private ChatController chatController;
-
-    @Disabled
-    @Test
-    public void getIndex() throws Exception {
-        principal = mock(Principal.class);
+    @BeforeEach
+    void setup() {
         userService = mock(UserService.class);
-        final User user = new User();//mock(User.class);
-        user.setRole("user");
-        Mockito.when(principal.getName()).thenReturn("tom");
-        Mockito.when(userService.findUserByUsername("tom")).thenReturn(user);
-        mvc.perform(MockMvcRequestBuilders.get("/").flashAttr("principal", principal))
+    }
+
+    @Test
+    void getMainPageTest() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(MockMvcResultMatchers
                         .status().isOk())
                 .andExpect(MockMvcResultMatchers
                         .view().name("index"));
     }
 
-
-    @Disabled
     @Test
-    public void getLogin() throws Exception {
+    void getLoginFormTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/login"))
                 .andExpect(MockMvcResultMatchers
                         .status().isOk())
@@ -126,42 +58,21 @@ public class MainControllerTest {
                         .view().name("login"));
     }
 
-    @Disabled
     @Test
-    public void getRegistration() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/signup"))
+    void getRegistrationFormTest() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/signUp"))
                 .andExpect(MockMvcResultMatchers
                         .status().isOk())
                 .andExpect(MockMvcResultMatchers
-                        .view().name("registration"));
-    }
-
-    @Disabled
-    @Test
-    public void getRegistrationModelTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/signup"))
+                        .view().name("registration"))
                 .andExpect(MockMvcResultMatchers
                         .model().attribute("user", Matchers.instanceOf(User.class)))
                 .andExpect(MockMvcResultMatchers
                         .model().attribute("person", Matchers.instanceOf(Person.class)));
     }
 
-    @Disabled
     @Test
-    public void registerNewUserStatusTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/registerNewUser"))
-                .andExpect(MockMvcResultMatchers
-                        .status().is3xxRedirection());
-        Mockito.verify(userService, Mockito.times(1))
-                .saveUserWithProfile(
-                        ArgumentMatchers.refEq(new User()),
-                        ArgumentMatchers.refEq(new Person()),
-                        ArgumentMatchers.refEq("Created"));
-    }
-
-    @Disabled
-    @Test
-    public void registerNewUserModelTest() throws Exception {
+    void registerNewUserModelTest() throws Exception {
         final Person person = new Person();
         final User user = new User();
         final Map<String, Object> map = new HashMap<>();
@@ -171,12 +82,23 @@ public class MainControllerTest {
         map.put("person", person);
         map.put("user", user);
 
-        mvc.perform(MockMvcRequestBuilders.get("/signup").flashAttrs(map))
+        mvc.perform(MockMvcRequestBuilders.get("/signUp").flashAttrs(map))
                 .andExpect(MockMvcResultMatchers
                         .model().attribute("user", Matchers.instanceOf(User.class)))
                 .andExpect(MockMvcResultMatchers
                         .model().attribute("person", Matchers.instanceOf(Person.class)));
-        //Mockito.verify(us, Mockito.times(1)).createUserWithProfile(ArgumentMatchers.refEq(user), ArgumentMatchers.refEq(person));
+    }
+
+    @Disabled
+    @Test
+    void registerNewUserStatusTest() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.post("/registerNewUser")).andExpect(MockMvcResultMatchers
+                .status().is3xxRedirection());
+        Mockito.verify(userService, Mockito.times(1))
+                .saveUserWithProfile(
+                        ArgumentMatchers.refEq(new User()),
+                        ArgumentMatchers.refEq(new Person()),
+                        ArgumentMatchers.refEq("Created"));
     }
 
 }

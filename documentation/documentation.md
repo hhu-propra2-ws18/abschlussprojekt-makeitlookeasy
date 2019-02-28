@@ -223,22 +223,18 @@ TODO: provide description
 TODO: provide description
 
 ### Reservation
-
 TODO: provide description
 
 ### Reservation Handler
-
 TODO: provide description
 
 ## Deviations from the task descriptions
-
 * According to our architectural idea the available offers are **visible even when not logged in.**
-
 
 ## Committed production file.
 We have noticed, that a production file had been pushed to the 'master'-branch, even though the
 folder containing it had been *explicitly* ignored in the project's _.gitignore_.
 In order to not majorly disrupt the team's workflow and to ensure a qualitative end result,
-we have consulted with [Mr. David Schneider](https://github.com/bivab) to not revert the git-history
+we have consulted with [Dr. Bendisposto]() [Mr. David Schneider](https://github.com/bivab) to not revert the git-history
 and keep it as is, but we have deleted the unwanted file from the repository in commit
 [c90bb08](https://github.com/hhu-propra2/abschlussprojekt-makeitlookeasy/commit/c90bb08f5ef96a8248156b6f9da2e6f95dc6d4a9).

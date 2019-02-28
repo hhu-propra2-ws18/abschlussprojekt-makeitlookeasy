@@ -17,7 +17,7 @@ spotbugs {
 checkstyle {
     toolVersion = "8.18"
     sourceSets = [sourceSets.main]
-    configFile = file ("./config/checkstyle/checkstyle-google.xml")
+    configFile = file("./config/checkstyle/checkstyle-google.xml")
 }
 
 tasks.withType(Checkstyle) {
