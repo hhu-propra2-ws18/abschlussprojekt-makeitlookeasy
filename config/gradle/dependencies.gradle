@@ -9,24 +9,7 @@ dependencies {
             }
         }
     }
-
-    def junit4Version        = '4.12'
-    def junitVintageVersion  = '5.4.0'
-    def junitJupiterVersion  = '5.4.0'
-    def junitPlatformVersion = '1.4.0'
-
-    // JUnit Jupiter API and TestEngine implementation
-    testImplementation("org.junit.jupiter:junit-jupiter:${junitJupiterVersion}")
-
-//    testCompile("junit:junit:${junit4Version}")
-//    testRuntime("org.junit.vintage:junit-vintage-engine:${junitVintageVersion}") {
-//        because 'allows JUnit 3 and JUnit 4 tests to run'
-//    }
-
-    testRuntime("org.junit.platform:junit-platform-launcher:${junitPlatformVersion}") {
-        because 'allows tests to run from IDEs that bundle older version of launcher'
-    }
-
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     implementation 'com.github.javafaker:javafaker:0.17.2'
     implementation 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.8.0'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -45,8 +28,9 @@ dependencies {
     testCompile 'org.assertj:assertj-core:3.12.0'
     testCompile 'org.jmockit:jmockit:1.45'
     testCompile "org.mockito:mockito-core:2.+"
-//    testImplementation'org.junit.jupiter:junit-jupiter:5.4.0'
+    testImplementation("org.junit.jupiter:junit-jupiter:5.4.0")
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.springframework.security:spring-security-test'
+    testRuntime("org.junit.platform:junit-platform-launcher:1.4.0")
 }

@@ -62,6 +62,7 @@ bootRun {
     classpath = sourceSets.main.runtimeClasspath + configurations.developmentOnly
 }
 
+
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
     group = "verification"
     reports {
@@ -88,14 +89,9 @@ test {
         events "passed", "skipped", "failed"
     }
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
-    // outputs.upToDateWhen { false }  // this forces to always rerun all tests, even if task status was
+//     outputs.upToDateWhen { false }  // this forces to always rerun all tests, even if task status was
     // already successful (and cached) in the past. TODO(quicklink) force-test-rerun-switch    
 }
 
-
 test.finalizedBy jacocoTestReport
 check.dependsOn('jacocoTestCoverageVerification', 'reportCoverage')
-
-configurations.all {
-    exclude module: 'slf4j-log4j12'
-}
