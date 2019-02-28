@@ -67,6 +67,7 @@ public class UserService {
 
         final User dbUser = optionalUser.get();
         final Person dbPerson = dbUser.getPerson();
+
         dbPerson.setFirstName(person.getFirstName());
         dbPerson.setLastName(person.getLastName());
         dbPerson.setAddress(person.getAddress());
@@ -74,7 +75,7 @@ public class UserService {
         dbUser.setEmail(user.getEmail());
         dbUser.setPassword(pw1);
         this.saveUser(dbUser, "Save");
-        personService.savePerson(person, "Save");
+        // personService.savePerson(person, "Save");
         return "Success";
     }
 
