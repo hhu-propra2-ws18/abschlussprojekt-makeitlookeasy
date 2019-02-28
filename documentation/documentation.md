@@ -13,40 +13,38 @@ The key aspects are:
 * Payment of borrowed articles using ProPay
 * Conflict resolution
 
+
+
 ## Management
 
 * To provide a convenient overview of our project we used **javadocs** throughout the project.
 * Since the project requires a certain amount of configuration we started our own **wiki** in github. Here we describe the different configurations and the initial setup.
 
+
+
 ## Functionality
 
 ### Main page
-
 The main age is visible for everybody, even if not logged in. It displays all available Products.
 If a product is rented it is not displayed. The Articles are categorized and the category of the
 displayed articles can be selected. Additionally the articles can be searched by name.
 
 ### Detailed article view
-
 The detailed article view are only accessible to logged in users.
 Next to the article details it displays the article reviews and provides a button to rent or buy the article.
 
 ### Booking modal
-
 As soon as a article shall be booked (by pressing the booking button), a modal is displayed.
 As soon the booking period was selected the booking can be confirmed.
 
 ### Bank account
-
 In the personal bank account the current balance can be viewed,
 new money can be requested and past transactions be viewed.
 
 ### Profile
-
 On the profile page, personal information can be viewed and edited.
 
 ### Overview
-
 The overview page provides a set of functionality:
 * **My articles:** Overview over own articles with the options to update or delete them.
 * **Borrowed:** Overview over borrowed articles.
@@ -55,12 +53,10 @@ The overview page provides a set of functionality:
 * **Sold:** Overview over sold articles.
 
 ### Add Item
-
 On the Add item page a new item can be created. Special notice is to be taken to the `For Sale` check box.
 This checkbox determines if a article is for sale or if it only can be borrowed.
 
 ### Returning an article
-
 A user can return an article at every time he likes.
 If a User does not return a article before the end of the rental period, the person retrieves
 a remainder in form of an email. The availability of the article does not update automatically but
@@ -68,8 +64,9 @@ lies in the responsibility of the renting person.
 If somebody wants to rent an article that has not been returned yet, the renting person can simply decline it.
 
 ### Chat (beta feature)
-
 A chat can be reached at `/chatBoard`. Messages can be sent to other users in the chat by providing the username. 
+
+
 
 ## Project overview
 
@@ -85,6 +82,8 @@ The project structure follows the design pattern with model, view and controller
 packages. Logic to interact with ProPay is located in a separate ProPay-handler package.
 
 ![](./ausleiherino24-UML-full.png)
+
+
 
 ## Model
 
@@ -138,24 +137,21 @@ Additional user information, like name or contact is stored in the class `Person
 Person with a User, a one-to-one relation is provided.
 
 
+
 ## Controller
 
 ### ArticleController
-
 The `ArticleController` maps requests to show, create, save, update and deactivate articles.
 
 ### CaseController
-
 The `CaseController` maps requests to book and buy articles and create corresponding cases.
-In Addition it maps accept and declines cases, accept case returnes and writes reviews.
+In Addition it maps accept and declines cases, accept case returns and writes reviews.
 
 ### ChatController
-
 The in essence the `ChatController` maps the received chat messages to the endpoints of the 
 Spring `MessageBroker`.
 
 ### ConflictController
-
 The `conflictController` maps requests to open a conflict and allows admins to view all existing
 conflicts and decide who receives the deposit.
 
@@ -164,32 +160,28 @@ The `ImageController` essentially maps the services provided by the `ImageServic
 endpoints.
 
 ### MainController
-
 The `MainController` maps requests that you can view without being logged in. Those include the
 index, index filtered by categories, the login page and the registration page.
 
 ### UserController
-
 The `UserController` maps user specific requests. In particular those which you can access through
 the navigationbar. Furthermore you can save your profile, add money to your propay-account and
 access profile views. 
 
+
+
 ## Services
 
 ### ArticleService
-
 TODO: provide description
 
 ### CaseService
-
 TODO: provide description
 
 ### ConflictService
-
 TODO: provide description
 
 ### CustomerReviewService
-
 TODO: provide description
 
 ### ImageService
@@ -203,29 +195,27 @@ is used to store files in a specific subdirectory. This leads to a B-tree like s
 speed up the search for a specific image.
 
 ### PersonService
-
 The `PersonService` provides methods to save and find a person.
 
 ### SearchUserService
-
 TODO: provide description
 
 ### UserService
-
 The `UserService` provides different methods to save and find a user.
 
-## Security
 
+
+## Security
 TODO: provide short description about the spring security configuration
+
+
 
 ## PropayHandler
 
 ### AccountHandler
-
 TODO: provide description
 
 ### PpAccount
-
 TODO: provide description
 
 ### Reservation
@@ -234,8 +224,12 @@ TODO: provide description
 ### Reservation Handler
 TODO: provide description
 
+
+
 ## Deviations from the task descriptions
 * According to our architectural idea the available offers are **visible even when not logged in.**
+
+
 
 ## Committed production file.
 We have noticed, that a production file had been pushed to the 'master'-branch, even though the
