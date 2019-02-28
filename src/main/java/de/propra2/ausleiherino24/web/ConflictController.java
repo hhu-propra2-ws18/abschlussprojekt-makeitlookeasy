@@ -74,7 +74,7 @@ public class ConflictController {
         final Conflict conflictToSolve = conflictService
                 .getConflict(currentCase.getConflict().getId(), user);
 
-        if (conflictService.solveConflict(conflictToSolve, user, currentCase.getOwner())) {
+        if (!conflictService.solveConflict(conflictToSolve, user, currentCase.getOwner())) {
             return "redirect:/conflicts?propayUnavailable";
         }
         conflictService.deactivateConflict(currentCase.getConflict().getId(), user);
@@ -94,7 +94,7 @@ public class ConflictController {
         final Conflict conflictToSolve = conflictService
                 .getConflict(currentCase.getConflict().getId(), user);
 
-        if (conflictService.solveConflict(conflictToSolve, user, currentCase.getReceiver())) {
+        if (!conflictService.solveConflict(conflictToSolve, user, currentCase.getReceiver())) {
             return "redirect:/conflicts?propayUnavailable";
         }
         conflictService.deactivateConflict(currentCase.getConflict().getId(), user);
