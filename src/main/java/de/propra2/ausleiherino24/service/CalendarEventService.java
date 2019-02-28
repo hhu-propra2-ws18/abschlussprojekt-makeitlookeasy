@@ -6,6 +6,7 @@ import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.CalendarEvent;
 import de.propra2.ausleiherino24.model.Case;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,7 @@ public class CalendarEventService {
      * Search all cases by article, than write them into a new CalendarEvent Object and return as
      * arrayList.
      */
-    public ArrayList<CalendarEvent> getAllEventsFromOneArticle(final Long articleId) {
+    public List<CalendarEvent> getAllEventsFromOneArticle(final Long articleId) {
         final Article article = articleService.findArticleById(articleId);
         final ArrayList<Case> allCases = caseRepsitory.findAllByArticle(article);
         final ArrayList<CalendarEvent> allCalendarevents = new ArrayList<CalendarEvent>();

@@ -185,7 +185,7 @@ public class ArticleController {
      */
     @GetMapping("/events")
     @ResponseBody
-    private ArrayList<CalendarEvent> getEventsForCalendar(final @RequestParam Long id) {
+    private List<CalendarEvent> getEventsForCalendar(final @RequestParam Long id) {
         return calendarEventService.getAllEventsFromOneArticle(id);
     }
 
