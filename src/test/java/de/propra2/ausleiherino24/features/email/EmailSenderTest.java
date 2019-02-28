@@ -16,7 +16,8 @@ import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-public class EmailSenderTest {
+// TODO: Keine Annotation?
+class EmailSenderTest {
 
     private final static String USER_EMAIL = "test@mail.de";
     private final static String SERVICE_EMAIL = "ausleiherino24@gmail.com";
@@ -25,7 +26,7 @@ public class EmailSenderTest {
     private Conflict conflict;
 
     @BeforeEach
-    public void init() {
+    void init() {
         EmailConfig emailConfigMock = mock(EmailConfig.class);
         javaMailSenderMock = mock(JavaMailSenderImpl.class);
         emailSender = new EmailSender(emailConfigMock, javaMailSenderMock, new SimpleMailMessage());
@@ -53,7 +54,7 @@ public class EmailSenderTest {
     }
 
     @Test
-    public void sendConflictEmailShouldSendCorrectMail() {
+    void sendConflictEmailShouldSendCorrectMail() {
         final SimpleMailMessage expectedMessage = new SimpleMailMessage();
         expectedMessage.setFrom(EmailSenderTest.USER_EMAIL);
         expectedMessage.setTo(EmailSenderTest.SERVICE_EMAIL);
@@ -67,7 +68,7 @@ public class EmailSenderTest {
     }
 
     @Test
-    public void configureMailSenderShouldSetCorrectMailConfig() {
+    void configureMailSenderShouldSetCorrectMailConfig() {
         emailSender.configureMailSender();
         verify(javaMailSenderMock).setHost("TestHost");
         verify(javaMailSenderMock).setPort(4321);
@@ -76,7 +77,7 @@ public class EmailSenderTest {
     }
 
     @Test
-    public void sendConflictEmailShouldThrowException() {
+    void sendConflictEmailShouldThrowException() {
 
         assertThrows(MailSendException.class, () -> {
             final SimpleMailMessage expectedMessage = new SimpleMailMessage();

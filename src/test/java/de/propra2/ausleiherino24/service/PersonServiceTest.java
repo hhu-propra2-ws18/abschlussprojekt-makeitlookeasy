@@ -9,20 +9,20 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class PersonServiceTest {
+class PersonServiceTest {
 
     private PersonService personService;
     private PersonRepository persons;
 
     @BeforeEach
-    public void init() {
+    void init() {
 
         persons = Mockito.mock(PersonRepository.class);
         personService = new PersonService(persons);
     }
 
     @Test
-    public void savePersonShouldSavePerson() throws Exception {
+    void savePersonShouldSavePerson() {
         final Person person = new Person();
         person.setId(1L);
 

@@ -17,7 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
 @ExtendWith(SpringExtension.class)
-public class AccountHandlerTest {
+class AccountHandlerTest {
 
     private static final String ACCOUNT_URL = "http://localhost:8888/account";
     private static final String ACCOUNT_DEFAULT = "/{account}";
@@ -26,25 +26,20 @@ public class AccountHandlerTest {
     private RestTemplate restTemplate;
 
     private PpAccount testAcc1;
-    private PpAccount testAcc2;
-    private PpAccount testAcc3;
-    private PpTransaction ppTransaction;
-    private User user;
-    private User user2;
     private Case aCase;
     private Double amount;
 
     @BeforeEach
-    public void initialize() {
+    void initialize() {
         restTemplate = Mockito.mock(RestTemplate.class);
         accountHandler = new AccountHandler(restTemplate);
-        user = Mockito.mock(User.class);
-        user2 = Mockito.mock(User.class);
-        ppTransaction = Mockito.mock(PpTransaction.class);
+        User user = Mockito.mock(User.class);
+        User user2 = Mockito.mock(User.class);
+        PpTransaction ppTransaction = Mockito.mock(PpTransaction.class);
         aCase = Mockito.mock(Case.class);
         testAcc1 = new PpAccount("Acc1", 100.0, new ArrayList<>());
-        testAcc2 = new PpAccount("Acc2", 1000.0, new ArrayList<>());
-        testAcc3 = new PpAccount("Acc3", 0.0, new ArrayList<>());
+        PpAccount testAcc2 = new PpAccount("Acc2", 1000.0, new ArrayList<>());
+        PpAccount testAcc3 = new PpAccount("Acc3", 0.0, new ArrayList<>());
         amount = 100D;
 
         final List<Reservation> reservations = new ArrayList<>();
@@ -71,7 +66,7 @@ public class AccountHandlerTest {
     }
 
     @Test
-    public void checkGetAccountData() {
+    void checkGetAccountData() {
 
         Assertions.assertThat(accountHandler.getAccountData("Acc1")).isEqualTo(testAcc1);
         Mockito.verify(restTemplate, Mockito.times(1))
@@ -80,7 +75,7 @@ public class AccountHandlerTest {
 
 
     @Test
-    public void checkFundsTestIfZero() {
+    void checkFundsTestIfZero() {
 
         Assertions.assertThat(accountHandler.checkFunds("Acc3")).isZero();
         Mockito.verify(restTemplate, Mockito.times(1))
@@ -88,7 +83,7 @@ public class AccountHandlerTest {
     }
 
     @Test
-    public void checkFundsTestIfAmount() {
+    void checkFundsTestIfAmount() {
 
         Assertions.assertThat(accountHandler.checkFunds("Acc1")).isEqualByComparingTo(100.0);
         Mockito.verify(restTemplate, Mockito.times(1))
@@ -96,21 +91,21 @@ public class AccountHandlerTest {
     }
 
     @Test
-    public void hasValidFundsWorksWithoutReservationsIfValid() {
+    void hasValidFundsWorksWithoutReservationsIfValid() {
         Assertions.assertThat(accountHandler.hasValidFunds("Acc1", 99.0)).isTrue();
         Mockito.verify(restTemplate, Mockito.times(1))
                 .getForObject(ACCOUNT_URL + "/{account}", PpAccount.class, "Acc1");
     }
 
     @Test
-    public void hasValidFundsFailsWithoutReservationsIfFundsNotValid() {
+    void hasValidFundsFailsWithoutReservationsIfFundsNotValid() {
         Assertions.assertThat(accountHandler.hasValidFunds("Acc1", 101.0)).isFalse();
         Mockito.verify(restTemplate, Mockito.times(1))
                 .getForObject(ACCOUNT_URL + "/{account}", PpAccount.class, "Acc1");
     }
 
     @Test
-    public void hasValidFundsWorksWithReservationsIfValid() {
+    void hasValidFundsWorksWithReservationsIfValid() {
 
         Assertions.assertThat(accountHandler.hasValidFunds("Acc2", 39.0)).isTrue();
         Mockito.verify(restTemplate, Mockito.times(1))
@@ -118,7 +113,7 @@ public class AccountHandlerTest {
     }
 
     @Test
-    public void hasValidFundsFailsWithReservationsIfFundsNotValid() {
+    void hasValidFundsFailsWithReservationsIfFundsNotValid() {
 
         Assertions.assertThat(accountHandler.hasValidFunds("Acc2", 41.0)).isFalse();
         Mockito.verify(restTemplate, Mockito.times(1))
@@ -126,7 +121,7 @@ public class AccountHandlerTest {
     }
 
     @Test
-    public void addFundsPostsCorrectRequest() {
+    void addFundsPostsCorrectRequest() {
 
         accountHandler.addFunds("Acc1", amount);
         Mockito.verify(restTemplate, Mockito.times(1))
@@ -136,7 +131,7 @@ public class AccountHandlerTest {
     }
 
     @Test
-    public void transferFundsByCasePostsCorrectRequest() {
+    void transferFundsByCasePostsCorrectRequest() {
         accountHandler.transferFundsByCase(aCase);
         Mockito.verify(restTemplate, Mockito.times(1))
                 .postForLocation(
@@ -144,6 +139,5 @@ public class AccountHandlerTest {
                                 + amount
                                 .toString(), null, "user", "user2");
     }
-
 
 }

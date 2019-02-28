@@ -1,6 +1,5 @@
-package de.propra2.ausleiherino24.features.reviews;
+package de.propra2.ausleiherino24.model;
 
-import de.propra2.ausleiherino24.model.Case;
 import java.text.SimpleDateFormat;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

@@ -14,6 +14,11 @@ public class PpAccount {
     double amount;
     List<Reservation> reservations;
 
+    /**
+     * TODO.
+     *
+     * @return .
+     */
     public double reservationAmount() {
         double reserved = 0;
         for (final Reservation reservation : reservations) {

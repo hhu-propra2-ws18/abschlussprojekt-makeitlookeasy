@@ -1,6 +1,6 @@
 package de.propra2.ausleiherino24.data;
 
-import de.propra2.ausleiherino24.features.reviews.CustomerReview;
+import de.propra2.ausleiherino24.model.CustomerReview;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.NonNull;

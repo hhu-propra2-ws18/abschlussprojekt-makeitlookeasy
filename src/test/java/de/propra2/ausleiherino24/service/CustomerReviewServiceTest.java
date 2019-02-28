@@ -1,10 +1,10 @@
-package de.propra2.ausleiherino24.features.reviews;
+package de.propra2.ausleiherino24.service;
 
 import static org.mockito.Mockito.mock;
 
 import de.propra2.ausleiherino24.data.CustomerReviewRepository;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.service.CaseService;
+import de.propra2.ausleiherino24.model.CustomerReview;
 import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
@@ -16,7 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class CustomerReviewServiceTest {
+class CustomerReviewServiceTest {
 
     private CustomerReviewRepository customerReviewRepository;
 
@@ -26,7 +26,7 @@ public class CustomerReviewServiceTest {
     private List<CustomerReview> customerReviews;
 
     @BeforeEach
-    public void init() {
+    void init() {
         customerReviewRepository = mock(CustomerReviewRepository.class);
         caseService = mock(CaseService.class);
         customerReviewService = new CustomerReviewService(customerReviewRepository, caseService);
@@ -56,25 +56,27 @@ public class CustomerReviewServiceTest {
 
     @Disabled
     @Test
-    public void findAllReviewsByLenderIdFindsAllReviews() {
+    void findAllReviewsByLenderIdFindsAllReviews() {
         Mockito.when(customerReviewRepository.findAll()).thenReturn(customerReviews);
         Mockito.when(caseService.getAllCasesFromPersonOwner(1L)).thenReturn(cases);
 
-        final List<CustomerReview> crvws = customerReviewService.findAllReviewsByLenderId(1L);
-        Assertions.assertThat(crvws.size()).isEqualTo(3);
-        Assertions.assertThat(crvws.get(0)).isEqualTo(customerReviews.get(0));
+        final List<CustomerReview> customerReviews = customerReviewService
+                .findAllReviewsByLenderId(1L);
+        Assertions.assertThat(customerReviews.size()).isEqualTo(3);
+        Assertions.assertThat(customerReviews.get(0)).isEqualTo(this.customerReviews.get(0));
     }
 
     @Test
-    public void findAllReviewsByLenderIdFindsZeroReviews() {
+    void findAllReviewsByLenderIdFindsZeroReviews() {
         Mockito.when(customerReviewRepository.findAll()).thenReturn(new ArrayList<>());
 
-        final List<CustomerReview> crvws = customerReviewService.findAllReviewsByLenderId(1L);
-        Assertions.assertThat(crvws.size()).isEqualTo(0);
+        final List<CustomerReview> customerReviews = customerReviewService
+                .findAllReviewsByLenderId(1L);
+        Assertions.assertThat(customerReviews.size()).isEqualTo(0);
     }
 
     @Test
-    public void saveCustomerReviewShouldSaveCustomerReview() {
+    void saveCustomerReviewShouldSaveCustomerReview() {
         customerReviewService.saveReview(customerReviews.get(0));
         Mockito.verify(customerReviewRepository, Mockito.times(1)).save(customerReviews.get(0));
     }

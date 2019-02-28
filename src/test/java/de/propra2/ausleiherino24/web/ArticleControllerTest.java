@@ -5,12 +5,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import de.propra2.ausleiherino24.features.category.Category;
-import de.propra2.ausleiherino24.features.reviews.CustomerReview;
-import de.propra2.ausleiherino24.features.reviews.CustomerReviewService;
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.CustomerReview;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CustomerReviewService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
 import java.util.ArrayList;

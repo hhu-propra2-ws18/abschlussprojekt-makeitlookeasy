@@ -12,14 +12,6 @@ public class Reservation {
     Double amount;
 
     /**
-     * base constructor.
-     */
-    Reservation() {
-        this.id = 0L;
-        this.amount = 0D;
-    }
-
-    /**
      * Full constructor.
      *
      * @param reservationId id of reservation in Propay.

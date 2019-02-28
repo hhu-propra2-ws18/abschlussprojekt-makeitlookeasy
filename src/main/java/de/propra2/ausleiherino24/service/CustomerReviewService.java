@@ -1,7 +1,7 @@
-package de.propra2.ausleiherino24.features.reviews;
+package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.CustomerReviewRepository;
-import de.propra2.ausleiherino24.service.CaseService;
+import de.propra2.ausleiherino24.model.CustomerReview;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;

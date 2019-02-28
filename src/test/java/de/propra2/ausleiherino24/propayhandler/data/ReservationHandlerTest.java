@@ -17,29 +17,23 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
 @ExtendWith(SpringExtension.class)
-public class ReservationHandlerTest {
+class ReservationHandlerTest {
 
     private static final String RESERVATION_URL = "http://localhost:8888/reservation";
-    private Reservation reservation1;
     private ResponseEntity<Reservation> reservationResp1;
-    private PpTransaction ppTransaction;
-    private User user;
-    private User user2;
     private Case aCase;
     private RestTemplate restTemplate;
     private ReservationHandler reservationHandler;
     @MockBean
     private CaseRepository caseRepository;
-    @MockBean
-    private AccountHandler accountHandler;
 
     @BeforeEach
-    public void init() {
-        reservation1 = Mockito.mock(Reservation.class);
+    void init() {
+        Reservation reservation1 = Mockito.mock(Reservation.class);
         reservationResp1 = Mockito.mock(ResponseEntity.class);
-        user = Mockito.mock(User.class);
-        user2 = Mockito.mock(User.class);
-        ppTransaction = Mockito.mock(PpTransaction.class);
+        User user = Mockito.mock(User.class);
+        User user2 = Mockito.mock(User.class);
+        PpTransaction ppTransaction = Mockito.mock(PpTransaction.class);
         aCase = Mockito.mock(Case.class);
         restTemplate = Mockito.mock(RestTemplate.class);
         reservationHandler = new ReservationHandler(caseRepository, restTemplate);
@@ -60,7 +54,7 @@ public class ReservationHandlerTest {
     }
 
     @Test
-    public void releaseReservationByCaseSendsCorrectRequest() {
+    void releaseReservationByCaseSendsCorrectRequest() {
 
         reservationHandler.releaseReservationByCase(aCase);
         Mockito.verify(restTemplate, Mockito.times(1))
@@ -70,7 +64,7 @@ public class ReservationHandlerTest {
     }
 
     @Test
-    public void punishReservationByCaseSendsCorrectRequest() {
+    void punishReservationByCaseSendsCorrectRequest() {
 
         reservationHandler.punishReservationByCase(aCase);
         Mockito.verify(restTemplate, Mockito.times(1))
@@ -80,7 +74,7 @@ public class ReservationHandlerTest {
     }
 
     @Test
-    public void handleReservedMoneyShouldCallCreateReservationWhenCaseIsRequested() {
+    void handleReservedMoneyShouldCallCreateReservationWhenCaseIsRequested() {
 
         Mockito.when(aCase.getRequestStatus()).thenReturn(Case.REQUESTED);
         Mockito.when(restTemplate
@@ -98,7 +92,7 @@ public class ReservationHandlerTest {
     }
 
     @Test
-    public void handleReservedMoneyShouldCallCreateReservationWhenCaseIsAccepted() {
+    void handleReservedMoneyShouldCallCreateReservationWhenCaseIsAccepted() {
         Mockito.when(aCase.getRequestStatus()).thenReturn(Case.REQUEST_ACCEPTED);
         Mockito.when(restTemplate
                 .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
@@ -115,7 +109,7 @@ public class ReservationHandlerTest {
     }
 
     @Test
-    public void handleReservedMoneyShouldCallReleaseReservationWhenCaseIsAccepted() {
+    void handleReservedMoneyShouldCallReleaseReservationWhenCaseIsAccepted() {
 
         Mockito.when(aCase.getRequestStatus()).thenReturn(Case.REQUEST_ACCEPTED);
         Mockito.when(restTemplate

@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class PpTransactionRepoTest {
 
     @Autowired
-    private PpTransactionRepository ppts;
+    private PpTransactionRepository ppTransactionRepository;
 
     private PpTransaction trans1;
     private PpTransaction trans2;
@@ -28,12 +28,12 @@ public class PpTransactionRepoTest {
         trans1 = new PpTransaction();
         trans2 = new PpTransaction();
 
-        ppts.saveAll(Arrays.asList(trans1, trans2));
+        ppTransactionRepository.saveAll(Arrays.asList(trans1, trans2));
     }
 
     @Test
     public void databaseShouldSaveAndFindAllEntities() {
-        final List<PpTransaction> us = ppts.findAll();
+        final List<PpTransaction> us = ppTransactionRepository.findAll();
         Assertions.assertThat(us.size()).isEqualTo(2);
         Assertions.assertThat(us.get(0)).isEqualTo(trans1);
         Assertions.assertThat(us.get(1)).isEqualTo(trans2);

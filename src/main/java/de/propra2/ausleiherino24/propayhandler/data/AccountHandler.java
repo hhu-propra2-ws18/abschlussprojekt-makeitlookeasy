@@ -48,14 +48,13 @@ public class AccountHandler {
 
     }
 
-
     /**
      * Gets Propay Account.
      *
      * @param accountName name of account to get
      * @return returns all data of PropayAccount
      */
-    public PpAccount getAccountData(final String accountName) {
+    PpAccount getAccountData(final String accountName) {
         return restTemplate
                 .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PpAccount.class, accountName);
     }

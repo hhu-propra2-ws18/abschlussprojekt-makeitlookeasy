@@ -19,51 +19,51 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(SpringExtension.class)
-public class ImageServiceTest {
+class ImageServiceTest {
 
     private ImageService imageService;
     private String path = "imageStoreTest";
 
     @BeforeEach
-    public void init() {
+    void init() {
         imageService = spy(new ImageService(path));
     }
 
     @AfterEach
-    public void clean() {
+    void clean() {
         cleanDir(new File(path));
     }
 
     @Test
-    public void uploadDirectoryDontExists() {
+    void uploadDirectoryDontExists() {
         imageService.createUploadDirectoryIfNotExists();
         assertTrue(new File("/").exists());
     }
 
     @Test
-    public void extensionOfTxt() {
+    void extensionOfTxt() {
         assertEquals("txt", imageService.getFileExtension("test.txt"));
     }
 
     @Test
-    public void extensionOfPng() {
+    void extensionOfPng() {
         assertEquals("png", imageService.getFileExtension("test.png"));
     }
 
     @Test
-    public void extensionOfEmptySting() {
+    void extensionOfEmptySting() {
         assertEquals("", imageService.getFileExtension(null));
     }
 
     @Test
-    public void createDirectory() {
+    void createDirectory() {
         imageService.createBinningDirectory("x");
         assertTrue(new File(path + "/x").exists());
         assertEquals(1, new File(path).listFiles().length);
     }
 
     @Test
-    public void createDirectoryTwice() {
+    void createDirectoryTwice() {
         imageService.createBinningDirectory("x");
         imageService.createBinningDirectory("x");
         assertTrue(new File(path + "/x").exists());
@@ -71,7 +71,7 @@ public class ImageServiceTest {
     }
 
     @Test
-    public void createTwoDirectories() {
+    void createTwoDirectories() {
         imageService.createBinningDirectory("x");
         imageService.createBinningDirectory("y");
         assertTrue(new File(path + "/x").exists());
@@ -80,7 +80,7 @@ public class ImageServiceTest {
     }
 
     @Test
-    public void createDirectoryTree() {
+    void createDirectoryTree() {
         imageService.createBinningDirectory("x");
         imageService.createBinningDirectory("x/y");
         assertTrue(new File(path + "/x").exists());
@@ -90,21 +90,21 @@ public class ImageServiceTest {
     }
 
     @Test
-    public void testBinning() {
+    void testBinning() {
         imageService.ensureBinning(0L);
         assertTrue(new File(path + "/0").exists());
         assertEquals(1, new File(path).listFiles().length);
     }
 
     @Test
-    public void testBinning2() {
+    void testBinning2() {
         imageService.ensureBinning(100L);
         assertTrue(new File(path + "/0").exists());
         assertEquals(1, new File(path).listFiles().length);
     }
 
     @Test
-    public void testBinning3() {
+    void testBinning3() {
         imageService.ensureBinning(0L);
         imageService.ensureBinning(100L);
         assertTrue(new File(path + "/0").exists());
@@ -112,7 +112,7 @@ public class ImageServiceTest {
     }
 
     @Test
-    public void fileExists() throws IOException {
+    void fileExists() throws IOException {
         final File file = new File(path + "/x.txt");
         file.createNewFile();
 
@@ -120,12 +120,12 @@ public class ImageServiceTest {
     }
 
     @Test
-    public void fileDoesNotExists() {
+    void fileDoesNotExists() {
         assertFalse(imageService.fileExists(path + "/x.txt"));
     }
 
     @Test
-    public void onlyDirectoryExists() {
+    void onlyDirectoryExists() {
         final File file = new File(path + "/x");
         file.mkdir();
 
@@ -133,14 +133,14 @@ public class ImageServiceTest {
     }
 
     @Test
-    public void buildPath() {
+    void buildPath() {
         when(imageService.getUploadDirectoryPath()).thenReturn("/");
 
         assertEquals("/test/abc.txt", imageService.buildPath("abc.txt", "test"));
     }
 
     @Test
-    public void findFile() throws IOException {
+    void findFile() throws IOException {
         new File(path + "/0").mkdir();
         final File file = new File(path + "/0/test.txt");
         file.createNewFile();
@@ -150,7 +150,7 @@ public class ImageServiceTest {
     }
 
     @Test
-    public void findFileWithoutBinningId() throws IOException {
+    void findFileWithoutBinningId() throws IOException {
         final File file = new File(path + "/test.txt");
         file.createNewFile();
         when(imageService.getUploadDirectoryPath()).thenReturn(path);
@@ -159,12 +159,12 @@ public class ImageServiceTest {
     }
 
     @Test
-    public void findNotExistingFile() {
+    void findNotExistingFile() {
         assertNull(imageService.getFile("test.txt", null));
     }
 
     @Test
-    public void storeMultipartFile() throws IOException {
+    void storeMultipartFile() throws IOException {
         final MultipartFile file = mock(MultipartFile.class);
         when(file.getOriginalFilename()).thenReturn("test.txt");
         when(imageService.generateFilePath("0", "txt")).thenReturn(path + "/0/test.txt");

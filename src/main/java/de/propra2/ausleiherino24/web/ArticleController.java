@@ -4,11 +4,11 @@ import de.propra2.ausleiherino24.features.calendar.CalendarEvent;
 import de.propra2.ausleiherino24.features.calendar.CalendarEventService;
 import de.propra2.ausleiherino24.features.category.Category;
 import de.propra2.ausleiherino24.features.imageupload.ImageService;
-import de.propra2.ausleiherino24.features.reviews.CustomerReview;
-import de.propra2.ausleiherino24.features.reviews.CustomerReviewService;
 import de.propra2.ausleiherino24.model.Article;
+import de.propra2.ausleiherino24.model.CustomerReview;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CustomerReviewService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
 import java.util.List;
@@ -180,7 +180,7 @@ public class ArticleController {
 
     /**
      * Return CalendarEvents as JSON for the calendar which shows all non available dates of an
-     * article. TODO
+     * article.
      */
     @GetMapping("/events")
     @ResponseBody

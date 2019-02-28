@@ -56,6 +56,9 @@ public class EmailSender {
         mailSender.send(message);
     }
 
+    /**
+     * TODO.
+     */
     public void configureMailSender() {
         final Properties properties = new Properties();
         properties.putAll(config.getProperties());

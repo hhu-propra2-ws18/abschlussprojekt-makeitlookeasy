@@ -13,7 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class CaseEndTimeReminderTest {
+class CaseEndTimeReminderTest {
 
     private DateTimeFormatter formatter;
     private EmailSender es;
@@ -23,7 +23,7 @@ public class CaseEndTimeReminderTest {
     private CaseRepository caseRepository;
 
     @BeforeEach
-    public void init() {
+    void init() {
         formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         es = Mockito.mock(EmailSender.class);
         caseRepository = Mockito.mock(CaseRepository.class);
@@ -35,7 +35,7 @@ public class CaseEndTimeReminderTest {
     }
 
     @Test
-    public void sendRemindingEmailShouldSendEmailIfCaseEndTimeIsTomorrow() {
+    void sendRemindingEmailShouldSendEmailIfCaseEndTimeIsTomorrow() {
         final LocalDateTime tomorrow = today.plusDays(1L);
         final String s = tomorrow.format(formatter);
         Mockito.when(a.getFormattedEndTime()).thenReturn(s);
@@ -45,7 +45,7 @@ public class CaseEndTimeReminderTest {
     }
 
     @Test
-    public void sendRemindingEmailShouldNotSendEmailIfCaseEndTimeIsToday() {
+    void sendRemindingEmailShouldNotSendEmailIfCaseEndTimeIsToday() {
         final String s = today.format(formatter);
         Mockito.when(a.getFormattedEndTime()).thenReturn(s);
         r.getRunningCasesOneDayBeforeEndTime();
@@ -54,7 +54,7 @@ public class CaseEndTimeReminderTest {
     }
 
     @Test
-    public void sendRemindingEmailShouldNotSendEmailIfCaseEndTimeWasYesterday() {
+    void sendRemindingEmailShouldNotSendEmailIfCaseEndTimeWasYesterday() {
         final LocalDateTime yesterday = today.minusDays(1L);
         final String s = yesterday.format(formatter);
         Mockito.when(a.getFormattedEndTime()).thenReturn(s);
@@ -64,7 +64,7 @@ public class CaseEndTimeReminderTest {
     }
 
     @Test
-    public void sendRemindingEmailShouldSendOnlyOneEmailIfCaseEndTimeIsTomorrow() {
+    void sendRemindingEmailShouldSendOnlyOneEmailIfCaseEndTimeIsTomorrow() {
         final LocalDateTime tomorrow = today.plusDays(1L);
         final String s = tomorrow.format(formatter);
         Mockito.when(a.getFormattedEndTime()).thenReturn(s);

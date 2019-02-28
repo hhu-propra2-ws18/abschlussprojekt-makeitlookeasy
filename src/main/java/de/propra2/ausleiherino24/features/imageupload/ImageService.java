@@ -100,7 +100,7 @@ public class ImageService {
     }
 
     /**
-     * gernerates the Path for a file.
+     * Generates the Path for a file.
      *
      * @param prefix file prefix
      * @param fileEnding file suffix
@@ -117,7 +117,7 @@ public class ImageService {
     }
 
     /**
-     * checks whether given file exists.
+     * Checks whether given file exists.
      */
     boolean fileExists(final String path) {
         final File file = new File(path);
@@ -125,17 +125,17 @@ public class ImageService {
     }
 
     /**
-     * returns path to the given file.
+     * Returns path to the given file.
      *
      * @param fileName target file
-     * @param prefix positiom of target file in upload directory
+     * @param prefix position of target file in upload directory
      */
     String buildPath(final String fileName, final String prefix) {
         return Paths.get(getUploadDirectoryPath(), prefix, fileName).toString();
     }
 
     /**
-     * returns absolut path of upload directory.
+     * Returns absolute path of upload directory.
      */
     String getUploadDirectoryPath() {
         final String rootPath = Paths.get(".").toAbsolutePath().normalize().toString();
@@ -143,7 +143,7 @@ public class ImageService {
     }
 
     /**
-     * returns and random file name with given file ending.
+     * Returns and random file name with given file ending.
      */
     private String buildFilename(final String fileEnding) {
         return UUID.randomUUID() + "." + fileEnding;
@@ -167,7 +167,7 @@ public class ImageService {
     /**
      * Creates new directory in upload directory.
      *
-     * @param name relativ path of the directory that should be created.
+     * @param name relative path of the directory that should be created.
      */
     void createBinningDirectory(final String name) {
         final String binPath = Paths.get(getUploadDirectoryPath(), name).toString();
@@ -191,7 +191,7 @@ public class ImageService {
     }
 
     /**
-     * returns file extension of given filename.
+     * Returns file extension of given filename.
      */
     String getFileExtension(final String fileName) {
         if (fileName == null) {

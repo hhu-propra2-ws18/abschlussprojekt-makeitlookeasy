@@ -20,7 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
-public class ArticleRepoTest {
+public class ArticleRepositoryTest {
 
     @Autowired
     private ArticleRepository articles;

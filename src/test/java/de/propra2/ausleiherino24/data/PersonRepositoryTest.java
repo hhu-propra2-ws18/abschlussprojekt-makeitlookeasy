@@ -17,7 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
 
-public class PersonRepoTest {
+public class PersonRepositoryTest {
 
     @Autowired
     private PersonRepository persons;

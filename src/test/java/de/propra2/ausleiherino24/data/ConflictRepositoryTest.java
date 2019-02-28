@@ -18,21 +18,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
-public class ConflictRepoTest {
+public class ConflictRepositoryTest {
 
     @Autowired
     private ConflictRepository conflicts;
-    @Autowired
-    private CaseRepository cases;
 
     private User user1;
     private User user2;
 
-    private Case case1;
-    private Case case2;
-
     private Conflict c1;
-    private Conflict c2;
 
     @BeforeEach
     public void init() {
@@ -43,7 +37,7 @@ public class ConflictRepoTest {
 
         final Article case1Art = new Article();
         case1Art.setOwner(user2);
-        case1 = new Case();
+        Case case1 = new Case();
         case1.setReceiver(user1);
         case1.setArticle(case1Art);
         case1.setPrice(80D);
@@ -53,7 +47,7 @@ public class ConflictRepoTest {
 
         final Article case2Art = new Article();
         case2Art.setOwner(user1);
-        case2 = new Case();
+        Case case2 = new Case();
         case2.setReceiver(user2);
         case2.setArticle(case2Art);
         case2.setPrice(60D);
@@ -67,7 +61,7 @@ public class ConflictRepoTest {
         c1.setConflictReporterUsername(case1.getReceiver().getUsername());
         c1.setConflictDescription("Article not as described");
 
-        c2 = new Conflict();
+        Conflict c2 = new Conflict();
         case2.setConflict(c2);
         c2.setConflictedCase(case2);
         c2.setConflictReporterUsername(case2.getOwner().getUsername());
