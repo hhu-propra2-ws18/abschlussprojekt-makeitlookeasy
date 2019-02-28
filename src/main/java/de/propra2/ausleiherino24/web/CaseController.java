@@ -1,10 +1,10 @@
 package de.propra2.ausleiherino24.web;
 
 import de.propra2.ausleiherino24.features.category.Category;
+import de.propra2.ausleiherino24.features.reviews.CustomerReview;
+import de.propra2.ausleiherino24.features.reviews.CustomerReviewService;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.CustomerReview;
 import de.propra2.ausleiherino24.service.CaseService;
-import de.propra2.ausleiherino24.service.CustomerReviewService;
 import java.beans.PropertyEditorSupport;
 import java.security.Principal;
 import java.text.ParseException;

@@ -1,7 +1,7 @@
-package de.propra2.ausleiherino24.data;
+package de.propra2.ausleiherino24.features.reviews;
 
+import de.propra2.ausleiherino24.data.CustomerReviewRepository;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.CustomerReview;
 import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;

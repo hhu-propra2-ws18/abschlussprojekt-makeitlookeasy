@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.model;
 
+import de.propra2.ausleiherino24.features.reviews.CustomerReview;
 import de.propra2.ausleiherino24.propayhandler.model.PpTransaction;
 import java.text.SimpleDateFormat;
 import javax.persistence.CascadeType;
@@ -85,7 +86,7 @@ public class Case {
         setReview(review, false);
     }
 
-    void setReview(final CustomerReview review, final boolean repetition) {
+    public void setReview(final CustomerReview review, final boolean repetition) {
         this.review = review;
         if (review != null && !repetition) {
             review.setAcase(this, true);

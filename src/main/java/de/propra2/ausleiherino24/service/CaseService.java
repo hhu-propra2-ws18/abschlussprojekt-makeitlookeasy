@@ -90,7 +90,7 @@ public class CaseService {
      * @param personId personId of the owner of the lend article.
      * @return all cases, where the given id is the personId of the person who owns the article.
      */
-    List<Case> getAllCasesFromPersonOwner(final Long personId) {
+    public List<Case> getAllCasesFromPersonOwner(final Long personId) {
         return caseRepository
                 .findAllByArticleOwner(personService.findPersonById(personId).getUser());
     }
