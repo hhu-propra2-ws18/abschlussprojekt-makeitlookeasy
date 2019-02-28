@@ -154,16 +154,21 @@ public class ConflictService {
      * @param depositReceiver person, who gets the deposit
      * @throws Exception if user has no permissions to solve a conflict
      */
-    public void solveConflict(final Conflict conflictToSolve, final User user,
+    public boolean solveConflict(final Conflict conflictToSolve, final User user,
             final User depositReceiver) throws AccessDeniedException {
+
+        if (!reservationHandler.checkAvailability()) {
+            return false;
+        }
         if (!isUserAdmin(user)) {
             throw new AccessDeniedException("No permission!");
         }
         if (depositReceiver.equals(conflictToSolve.getOwner())) {
             reservationHandler.punishReservationByCase(conflictToSolve.getConflictedCase());
-            return;
+            return true;
         }
         reservationHandler.releaseReservationByCase(conflictToSolve.getConflictedCase());
+        return true;
     }
 
     public int size() {

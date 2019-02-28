@@ -61,6 +61,8 @@ public class ConflictServiceTest {
         c1.setConflictedCase(ca);
         c1.setConflictReporterUsername("user1");
         c1.setConflictDescription("TestDescription");
+
+        Mockito.when(reservationHandler.checkAvailability()).thenReturn(true);
     }
 
     @Test

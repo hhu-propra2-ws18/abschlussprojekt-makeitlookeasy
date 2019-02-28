@@ -84,6 +84,8 @@ pattern (MVCS).
 The project structure follows the design pattern with model, view and controller (here named web)
 packages. Logic to interact with ProPay is located in a separate ProPay-handler package.
 
+![](./ausleiherino24-UML-full.png)
+
 ## Model
 
 ### Article
