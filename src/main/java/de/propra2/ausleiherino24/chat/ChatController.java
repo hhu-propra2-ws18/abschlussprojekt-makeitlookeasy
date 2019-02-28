@@ -1,6 +1,5 @@
-package de.propra2.ausleiherino24.web;
+package de.propra2.ausleiherino24.chat;
 
-import de.propra2.ausleiherino24.model.ChatMessage;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;

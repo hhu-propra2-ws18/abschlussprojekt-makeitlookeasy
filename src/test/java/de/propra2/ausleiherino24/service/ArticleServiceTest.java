@@ -8,10 +8,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.propra2.ausleiherino24.category.Category;
 import de.propra2.ausleiherino24.data.ArticleRepository;
+import de.propra2.ausleiherino24.imageupload.ImageService;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Category;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

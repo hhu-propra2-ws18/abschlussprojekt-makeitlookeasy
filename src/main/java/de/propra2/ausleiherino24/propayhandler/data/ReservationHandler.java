@@ -1,7 +1,9 @@
-package de.propra2.ausleiherino24.propayhandler;
+package de.propra2.ausleiherino24.propayhandler.data;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Case;
+import de.propra2.ausleiherino24.propayhandler.model.PpAccount;
+import de.propra2.ausleiherino24.propayhandler.model.Reservation;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

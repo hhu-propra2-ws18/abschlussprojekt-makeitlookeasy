@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.propayhandler;
+package de.propra2.ausleiherino24.propayhandler.model;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-class PpAccount {
+public class PpAccount {
 
     String account;
     double amount;
@@ -21,7 +21,7 @@ class PpAccount {
     /*
         returns amount of all reservations added up.
      */
-    double reservationAmount() {
+    public double reservationAmount() {
         double reserved = 0;
         for (final Reservation reservation : reservations) {
             reserved += reservation.getAmount();

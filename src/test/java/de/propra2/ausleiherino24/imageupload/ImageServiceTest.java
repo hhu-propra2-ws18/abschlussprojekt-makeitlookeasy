@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.service;
+package de.propra2.ausleiherino24.imageupload;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;

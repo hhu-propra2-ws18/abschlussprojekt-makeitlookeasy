@@ -1,8 +1,9 @@
 package de.propra2.ausleiherino24.service;
 
+import de.propra2.ausleiherino24.category.Category;
 import de.propra2.ausleiherino24.data.ArticleRepository;
+import de.propra2.ausleiherino24.imageupload.ImageService;
 import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
 import java.util.ArrayList;
 import java.util.List;

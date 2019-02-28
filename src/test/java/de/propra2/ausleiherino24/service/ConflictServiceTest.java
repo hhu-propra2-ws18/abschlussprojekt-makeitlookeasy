@@ -8,7 +8,7 @@ import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
+import de.propra2.ausleiherino24.propayhandler.data.ReservationHandler;
 import java.nio.file.AccessDeniedException;
 import java.util.Arrays;
 import java.util.List;

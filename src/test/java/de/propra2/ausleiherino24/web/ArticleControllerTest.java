@@ -4,8 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import de.propra2.ausleiherino24.category.Category;
 import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.CustomerReview;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;

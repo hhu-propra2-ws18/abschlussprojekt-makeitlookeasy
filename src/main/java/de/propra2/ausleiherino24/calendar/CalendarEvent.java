@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.model;
+package de.propra2.ausleiherino24.calendar;
 
 import lombok.Data;
 

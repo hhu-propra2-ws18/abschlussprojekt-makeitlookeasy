@@ -1,6 +1,6 @@
-package de.propra2.ausleiherino24.data;
+package de.propra2.ausleiherino24.propayhandler.data;
 
-import de.propra2.ausleiherino24.model.PpTransaction;
+import de.propra2.ausleiherino24.propayhandler.model.PpTransaction;
 import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.Assertions;

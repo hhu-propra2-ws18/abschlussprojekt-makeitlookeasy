@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.propayhandler;
+package de.propra2.ausleiherino24.propayhandler.model;
 
 import java.util.ArrayList;
 import java.util.List;

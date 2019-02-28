@@ -1,6 +1,5 @@
-package de.propra2.ausleiherino24.web;
+package de.propra2.ausleiherino24.imageupload;
 
-import de.propra2.ausleiherino24.service.ImageService;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class ImageController {
 
-    private static final String URL = "/imageUpload";
+    private static final String URL = "/imageupload";
     private final ImageService imageService;
 
     @Autowired

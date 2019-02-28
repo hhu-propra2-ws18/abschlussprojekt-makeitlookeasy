@@ -1,9 +1,11 @@
-package de.propra2.ausleiherino24.propayhandler;
+package de.propra2.ausleiherino24.propayhandler.data;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.PpTransaction;
 import de.propra2.ausleiherino24.model.User;
+import de.propra2.ausleiherino24.propayhandler.model.PpAccount;
+import de.propra2.ausleiherino24.propayhandler.model.PpTransaction;
+import de.propra2.ausleiherino24.propayhandler.model.Reservation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

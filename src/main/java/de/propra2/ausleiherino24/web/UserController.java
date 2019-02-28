@@ -1,11 +1,11 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.category.Category;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.propayhandler.AccountHandler;
+import de.propra2.ausleiherino24.propayhandler.data.AccountHandler;
 import de.propra2.ausleiherino24.service.ArticleService;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.UserService;

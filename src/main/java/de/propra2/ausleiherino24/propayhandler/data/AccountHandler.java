@@ -1,6 +1,7 @@
-package de.propra2.ausleiherino24.propayhandler;
+package de.propra2.ausleiherino24.propayhandler.data;
 
 import de.propra2.ausleiherino24.model.Case;
+import de.propra2.ausleiherino24.propayhandler.model.PpAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -54,7 +55,7 @@ public class AccountHandler {
      * @param accountName name of account to get
      * @return returns all data of PropayAccount
      */
-    PpAccount getAccountData(final String accountName) {
+    public PpAccount getAccountData(final String accountName) {
         return restTemplate
                 .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PpAccount.class, accountName);
     }

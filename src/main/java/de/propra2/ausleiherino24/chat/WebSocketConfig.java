@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24;
+package de.propra2.ausleiherino24.chat;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

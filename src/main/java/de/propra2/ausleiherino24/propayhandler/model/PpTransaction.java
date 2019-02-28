@@ -1,5 +1,6 @@
-package de.propra2.ausleiherino24.model;
+package de.propra2.ausleiherino24.propayhandler.model;
 
+import de.propra2.ausleiherino24.model.Case;
 import java.text.SimpleDateFormat;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

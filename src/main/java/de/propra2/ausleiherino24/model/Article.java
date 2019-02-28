@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.model;
 
+import de.propra2.ausleiherino24.category.Category;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.service;
+package de.propra2.ausleiherino24.imageupload;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -106,7 +106,7 @@ public class ImageService {
      * @param fileEnding file suffix
      * @return generated path.
      */
-    String generateFilePath(final String prefix, final String fileEnding) {
+    public String generateFilePath(final String prefix, final String fileEnding) {
         String uniqueFilepath = buildPath(buildFilename(fileEnding), prefix);
 
         while (fileExists(uniqueFilepath)) {
@@ -119,7 +119,7 @@ public class ImageService {
     /**
      * checks whether given file exists.
      */
-    boolean fileExists(final String path) {
+    public boolean fileExists(final String path) {
         final File file = new File(path);
         return file.exists() && !file.isDirectory();
     }
@@ -130,14 +130,14 @@ public class ImageService {
      * @param fileName target file
      * @param prefix positiom of target file in upload directory
      */
-    String buildPath(final String fileName, final String prefix) {
+    public String buildPath(final String fileName, final String prefix) {
         return Paths.get(getUploadDirectoryPath(), prefix, fileName).toString();
     }
 
     /**
      * returns absolut path of upload directory.
      */
-    String getUploadDirectoryPath() {
+    public String getUploadDirectoryPath() {
         final String rootPath = Paths.get(".").toAbsolutePath().normalize().toString();
         return Paths.get(rootPath, this.uploadDirectoryPath).toString();
     }
@@ -149,7 +149,7 @@ public class ImageService {
         return UUID.randomUUID() + "." + fileEnding;
     }
 
-    String ensureBinning(final Long binningId) {
+    public String ensureBinning(final Long binningId) {
         if (binningId == null) {
             return "";
         }
@@ -169,7 +169,7 @@ public class ImageService {
      *
      * @param name relativ path of the directory that should be created.
      */
-    void createBinningDirectory(final String name) {
+    public void createBinningDirectory(final String name) {
         final String binPath = Paths.get(getUploadDirectoryPath(), name).toString();
 
         final File binningDir = new File(binPath);
@@ -182,7 +182,7 @@ public class ImageService {
     /**
      * Creates upload directory if it doesn't exists.
      */
-    void createUploadDirectoryIfNotExists() {
+    public void createUploadDirectoryIfNotExists() {
         final File uploadDir = new File(getUploadDirectoryPath());
 
         if (!uploadDir.exists()) {
@@ -193,7 +193,7 @@ public class ImageService {
     /**
      * returns file extension of given filename.
      */
-    String getFileExtension(final String fileName) {
+    public String getFileExtension(final String fileName) {
         if (fileName == null) {
             return "";
         }

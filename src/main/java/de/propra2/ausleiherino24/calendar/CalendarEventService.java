@@ -1,10 +1,10 @@
-package de.propra2.ausleiherino24.service;
+package de.propra2.ausleiherino24.calendar;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.CalendarEvent;
 import de.propra2.ausleiherino24.model.Case;
+import de.propra2.ausleiherino24.service.ArticleService;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

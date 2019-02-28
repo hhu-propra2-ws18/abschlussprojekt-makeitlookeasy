@@ -1,4 +1,4 @@
-package de.propra2.ausleiherino24.propayhandler;
+package de.propra2.ausleiherino24.propayhandler.model;
 
 import lombok.Data;
 
@@ -6,6 +6,7 @@ import lombok.Data;
  * Reservierungen die in den Accounts von Propay enthalten sind.
  */
 @Data
+public
 class Reservation {
 
     Long id;
@@ -25,7 +26,7 @@ class Reservation {
      * @param reservationId id of reservation in Propay.
      * @param amount amount of reservation.
      */
-    Reservation(final Long reservationId, final Double amount) {
+    public Reservation(final Long reservationId, final Double amount) {
         this.id = reservationId;
         this.amount = amount;
     }
