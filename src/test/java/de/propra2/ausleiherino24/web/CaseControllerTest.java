@@ -20,6 +20,7 @@ import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.propayhandler.AccountHandler;
 import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
 import de.propra2.ausleiherino24.service.ArticleService;
+import de.propra2.ausleiherino24.service.CalendarEventService;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ConflictService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
@@ -31,26 +32,28 @@ import java.security.Principal;
 import java.util.ArrayList;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.multipart.MultipartFile;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest
+@ExtendWith(SpringExtension.class)
 @ActiveProfiles(profiles = "test")
+@SpringBootTest
+@AutoConfigureMockMvc
 public class CaseControllerTest {
 
     @Autowired
@@ -74,6 +77,8 @@ public class CaseControllerTest {
     @MockBean
     private UserRepository userRepository;
 
+    @MockBean
+    private CalendarEventService calendarEventService;
     @MockBean
     private ArticleService articleService;
     @MockBean
@@ -106,7 +111,7 @@ public class CaseControllerTest {
     private User user;
     private Article article;
 
-    @Before
+    @BeforeEach
     public void setup() {
         user = new User();
         user.setUsername("user");
@@ -117,7 +122,7 @@ public class CaseControllerTest {
         article.setId(1L);
     }
 
-    @Ignore
+    @Disabled
     @Test
     @WithMockUser(roles = "user")
     public void successfulDisplayArticleStatusTest() throws Exception {
@@ -136,7 +141,7 @@ public class CaseControllerTest {
                         .model().attribute("user", user));
     }
 
-    @Ignore
+    @Disabled
     @Test
     @WithMockUser(roles = "user")
     public void createNewArticleStatusTest() throws Exception {
@@ -151,7 +156,7 @@ public class CaseControllerTest {
                         .model().attribute("article", Matchers.isA(Article.class)));
     }
 
-    @Ignore
+    @Disabled
     @Test
     @WithMockUser(roles = "user")
     public void saveNewArticleStatusTest() throws Exception {
@@ -167,7 +172,7 @@ public class CaseControllerTest {
                         .view().name("redirect:/"));
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void saveNewCaseAndArticleModelTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/saveNewArticle").flashAttr("article", article))
@@ -180,7 +185,7 @@ public class CaseControllerTest {
                 .saveArticle(ArgumentMatchers.refEq(article), "Created");
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void saveEditedCaseAndArticleStatusTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/saveEditedArticle"))
@@ -188,7 +193,7 @@ public class CaseControllerTest {
                         .status().isOk());
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void saveEditedCaseAndArticleViewTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/saveEditedArticle"))
@@ -196,7 +201,7 @@ public class CaseControllerTest {
                         .view().name("article"));
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void saveEditedCaseAndArticleModelTest() throws Exception {
         final Article article = new Article();
@@ -208,7 +213,7 @@ public class CaseControllerTest {
         Mockito.verify(articleRepository, Mockito.times(1)).save(ArgumentMatchers.refEq(article));
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void deactivateArticleStatusTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/deactivateArticle"))
@@ -216,7 +221,7 @@ public class CaseControllerTest {
                         .status().isOk());
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void deactivateArticleViewTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.put("/deactivateArticle"))
@@ -224,7 +229,7 @@ public class CaseControllerTest {
                         .view().name("index"));
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void deactivateArticleModelTest() throws Exception {
         final Article article = new Article();

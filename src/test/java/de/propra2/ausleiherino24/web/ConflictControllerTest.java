@@ -27,23 +27,25 @@ import de.propra2.ausleiherino24.service.UserService;
 import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest
+@ExtendWith(SpringExtension.class)
 @ActiveProfiles(profiles = "test")
+@SpringBootTest
+@AutoConfigureMockMvc
 public class ConflictControllerTest {
 
     @Autowired
@@ -105,7 +107,7 @@ public class ConflictControllerTest {
     private Case ca;
     private Conflict c1;
 
-    @Before
+    @BeforeEach
     public void init() {
         user = new User();
         user2 = new User();
@@ -149,7 +151,8 @@ public class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "user")
-    public void sendConflictShouldNotSendConflictIfCorrespondingCaseIdIsNotValid() throws Exception {
+    public void sendConflictShouldNotSendConflictIfCorrespondingCaseIdIsNotValid()
+            throws Exception {
         Mockito.when(caseService.isValidCase(1L)).thenReturn(false);
 
         mvc.perform(MockMvcRequestBuilders.post("/openconflict?id=1")
@@ -166,7 +169,8 @@ public class ConflictControllerTest {
     public void sendConflictShouldNotSendConflictIfExceptionIsThrown() throws Exception {
         Mockito.when(caseService.isValidCase(1L)).thenReturn(true);
         Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
-        Mockito.doThrow(new AccessDeniedException("")).when(conflictService).openConflict(ca,"TestDescription");
+        Mockito.doThrow(new AccessDeniedException("")).when(conflictService)
+                .openConflict(ca, "TestDescription");
 
         mvc.perform(MockMvcRequestBuilders.post("/openconflict?id=1")
                 .param("conflictDescription", "TestDescription"))

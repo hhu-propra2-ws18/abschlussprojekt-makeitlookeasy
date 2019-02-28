@@ -2,19 +2,19 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.model.Person;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-// TODO: Replace Powermock with JMockit
-//@RunWith(PowerMockRunner.class)
-//@PrepareForTest({PersonService.class})
+@ExtendWith(SpringExtension.class)
 public class PersonServiceTest {
 
     private PersonService personService;
     private PersonRepository persons;
 
-    @Before
+    @BeforeEach
     public void init() {
 
         persons = Mockito.mock(PersonRepository.class);

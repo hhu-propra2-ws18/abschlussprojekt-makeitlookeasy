@@ -6,8 +6,6 @@ import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.CalendarEvent;
 import de.propra2.ausleiherino24.model.Case;
 import java.util.ArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +14,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CalendarEventService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ArticleService.class);
+
 
     private final ArticleRepository articleRepository;
     private final CaseRepository caseRepsitory;
     private final ArticleService articleService;
 
+    /**
+     * Autowired all needed repositorys and services.
+     */
     @Autowired
-    public CalendarEventService(final ArticleRepository articleRepository, CaseRepository caseRepository,ArticleService articleService) {
+    public CalendarEventService(ArticleRepository articleRepository,
+            CaseRepository caseRepository, ArticleService articleService) {
         this.articleRepository = articleRepository;
         this.caseRepsitory = caseRepository;
         this.articleService = articleService;
@@ -33,17 +35,15 @@ public class CalendarEventService {
     /**
      * Search all cases by article, than write them into a new CalendarEvent Object and return as
      * arrayList.
-     * @param articleId
-     * @return
      */
-    public ArrayList<CalendarEvent> getAllEventsFromOneArticle (final Long articleId) {
+    public ArrayList<CalendarEvent> getAllEventsFromOneArticle(final Long articleId) {
         final Article article = articleService.findArticleById(articleId);
-        ArrayList<Case> allCases = caseRepsitory.findAllByArticle(article);
-        ArrayList<CalendarEvent> allCalendarevents = new ArrayList<CalendarEvent>();
-        for(Case c : allCases){
-            CalendarEvent calendarEvent = new CalendarEvent();
-            calendarEvent.setStart(c.getStartTime());
-            calendarEvent.setEnd(c.getEndTime());
+        final ArrayList<Case> allCases = caseRepsitory.findAllByArticle(article);
+        final ArrayList<CalendarEvent> allCalendarevents = new ArrayList<CalendarEvent>();
+        for (final Case calendarCase : allCases) {
+            final CalendarEvent calendarEvent = new CalendarEvent();
+            calendarEvent.setStart(calendarCase.getStartTime());
+            calendarEvent.setEnd(calendarCase.getEndTime());
         }
         return allCalendarevents;
     }

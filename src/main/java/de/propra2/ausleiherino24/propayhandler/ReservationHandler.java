@@ -16,15 +16,18 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ReservationHandler {
 
+    // TODO: Link not working inside Docker!
+    // Innerhalb des Dockers ist Propay auf http://propay:8888/account erreichbar.
+    // Es gibt ein Whitelabel, wenn man auf buchen klickt, hier muss  eine andere Loesung her!
     private static final String RESERVATION_URL = "http://localhost:8888/reservation";
+    // private static final String RESERVATION_URL = "http://propay:8888/reservation";
     private final RestTemplate restTemplate;
     private final AccountHandler accountHandler;
     private final CaseRepository caseRepository;
 
 
     /**
-     * Constructor.
-     * accountHandler needed to transfer Funds in between Reservations.
+     * Constructor. accountHandler needed to transfer Funds in between Reservations.
      *
      * @param caseRepository needed to update reservationIds of PPTransactions via Cases
      * @param restTemplate needed for propay requests
@@ -118,8 +121,10 @@ public class ReservationHandler {
      * @param currentCase contains all necessary data to do request
      */
     public void punishReservationByCase(final Case currentCase) {
-        punishReservation(currentCase.getReceiver().getUsername(),
-                currentCase.getPpTransaction().getReservationId());
+        if (currentCase.getPpTransaction().getReservationId() != -1) {
+            punishReservation(currentCase.getReceiver().getUsername(),
+                    currentCase.getPpTransaction().getReservationId());
+        }
     }
 
 
@@ -136,6 +141,16 @@ public class ReservationHandler {
                 HttpMethod.POST, null,
                 PpAccount.class,
                 account, reservationId.toString());
+    }
+
+    /**
+     * calls function of accountHandler to avoid using bean.
+     *
+     * @return availability of propay.
+     */
+    public boolean checkAvailability() {
+        return accountHandler.checkAvailability();
+
     }
 
 }

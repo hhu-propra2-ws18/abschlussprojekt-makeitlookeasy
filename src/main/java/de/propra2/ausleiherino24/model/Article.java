@@ -114,9 +114,9 @@ public class Article {
 
         if (getCases() != null) {
             return getCases().stream()
-                    .filter(c -> c.getRequestStatus() != Case.REQUEST_DECLINED
-                            && c.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE
-                            && c.getRequestStatus() != Case.FINISHED)
+                    .filter(closedCases -> closedCases.getRequestStatus() != Case.REQUEST_DECLINED
+                            && closedCases.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE
+                            && closedCases.getRequestStatus() != Case.FINISHED)
                     .collect(Collectors.toList()).isEmpty();
         }
 

@@ -77,13 +77,11 @@ public class MainController {
 
     /**
      * Saves new User and Person object in database after user has completed the registration
-     * process. They will then be redirected to the login page.
+     * process. They will then be redirected to the login page. TODO: auto login after registration
      *
      * @param user User object with attributes parsed from HTML form.
      * @param person Person object with attributes parsed fro HTML form.
      * @return Spring security login form.
-     *
-     * TODO: Automate login after registration.
      */
     @PostMapping("/registerNewUser")
     public ModelAndView registerNewUser(final @ModelAttribute @Valid User user,

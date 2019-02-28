@@ -4,17 +4,17 @@ import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.PpTransaction;
 import de.propra2.ausleiherino24.model.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class ReservationHandlerTest {
 
     private static final String RESERVATION_URL = "http://localhost:8888/reservation";
@@ -31,7 +31,7 @@ public class ReservationHandlerTest {
     @MockBean
     private AccountHandler accountHandler;
 
-    @Before
+    @BeforeEach
     public void init() {
         reservation1 = Mockito.mock(Reservation.class);
         reservationResp1 = Mockito.mock(ResponseEntity.class);
@@ -54,10 +54,11 @@ public class ReservationHandlerTest {
         Mockito.when(aCase.getDeposit()).thenReturn(200D);
         Mockito.when(user.getUsername()).thenReturn("user");
         Mockito.when(user2.getUsername()).thenReturn("user2");
+
     }
 
     @Test
-    public void releaseReservationByCaseCallsNestedMethodAndSendsCorrectRequest() {
+    public void releaseReservationByCaseSendsCorrectRequest() {
 
         reservationHandler.releaseReservationByCase(aCase);
         Mockito.verify(restTemplate, Mockito.times(1))
@@ -67,7 +68,7 @@ public class ReservationHandlerTest {
     }
 
     @Test
-    public void punishReservationByCaseCallsNestedMethodAndSendsCorrectRequest() {
+    public void punishReservationByCaseSendsCorrectRequest() {
 
         reservationHandler.punishReservationByCase(aCase);
         Mockito.verify(restTemplate, Mockito.times(1))
@@ -79,12 +80,12 @@ public class ReservationHandlerTest {
     @Test
     public void handleReservedMoneyShouldCallCreateReservationWhenCaseIsRequested() {
 
+        Mockito.when(aCase.getRequestStatus()).thenReturn(Case.REQUESTED);
         Mockito.when(restTemplate
                 .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
                         HttpMethod.POST, null,
                         Reservation.class, "user", "user2", Double.toString(300)))
                 .thenReturn(reservationResp1);
-        Mockito.when(aCase.getRequestStatus()).thenReturn(Case.REQUESTED);
 
         reservationHandler.handleReservedMoney(aCase);
 
@@ -94,5 +95,39 @@ public class ReservationHandlerTest {
                         Reservation.class, "user", "user2", Double.toString(300));
     }
 
+    @Test
+    public void handleReservedMoneyShouldCallCreateReservationWhenCaseIsAccepted() {
+        Mockito.when(aCase.getRequestStatus()).thenReturn(Case.REQUEST_ACCEPTED);
+        Mockito.when(restTemplate
+                .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
+                        HttpMethod.POST, null,
+                        Reservation.class, "user", "user2", Double.toString(200)))
+                .thenReturn(reservationResp1);
+
+        reservationHandler.handleReservedMoney(aCase);
+
+        Mockito.verify(restTemplate, Mockito.times(1))
+                .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
+                        HttpMethod.POST, null,
+                        Reservation.class, "user", "user2", Double.toString(200));
+    }
+
+    @Test
+    public void handleReservedMoneyShouldCallReleaseReservationWhenCaseIsAccepted() {
+
+        Mockito.when(aCase.getRequestStatus()).thenReturn(Case.REQUEST_ACCEPTED);
+        Mockito.when(restTemplate
+                .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
+                        HttpMethod.POST, null,
+                        Reservation.class, "user", "user2", Double.toString(200)))
+                .thenReturn(reservationResp1);
+
+        reservationHandler.handleReservedMoney(aCase);
+
+        Mockito.verify(restTemplate, Mockito.times(1))
+                .exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
+                        HttpMethod.POST, null,
+                        PpAccount.class, "user", "1");
+    }
 
 }

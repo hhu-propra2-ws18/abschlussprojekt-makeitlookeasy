@@ -28,6 +28,9 @@ public class ChatController {
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
+    /**
+     * sends a chat message. TODO: add params
+     */
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
     public ChatMessage sendMessage(final @Payload ChatMessage chatMessage,
@@ -37,6 +40,9 @@ public class ChatController {
         return chatMessage;
     }
 
+    /**
+     * adds user to chat. TODO: add params
+     */
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")
     public ChatMessage addUser(final @Payload ChatMessage chatMessage,
@@ -50,6 +56,9 @@ public class ChatController {
         return chatMessage;
     }
 
+    /**
+     * custom description. TODO: description and params
+     */
     @GetMapping("/chatBoard")
     public ModelAndView chatBoard(final @Header("simpSessionId") String sessionId) {
         final ModelAndView mav = new ModelAndView("/chatBoard");
@@ -57,7 +66,9 @@ public class ChatController {
         return mav;
     }
 
-    /* user chat */
+    /**
+     * user chat. TODO: add params
+     */
     @MessageMapping("/chat.privateMessage")
     public void sendSpecific(final @Payload ChatMessage msg, final Principal principal) {
         final User user = userService.findUserByPrincipal(principal);

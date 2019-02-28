@@ -115,23 +115,33 @@ public class CaseController {
                 return "redirect:/myOverview?requests&alreadyRented";
             case 3:
                 return "redirect:/myOverview?requests&receiverOutOfMoney";
+            case 4:
+                return "redirect:/myOverview?requests&propayUnavailable";
             default:
                 return "redirect:/myOverview?requests&error";
         }
     }
 
-    // TODO: JavaDoc
+    /**
+     * declines a Case.
+     */
     @PostMapping("/declineCase")
     public String declineCase(final @RequestParam Long id) {
-        caseService.declineArticleRequest(id);
-        return "redirect:/myOverview?requests&declined";
+        if (caseService.declineArticleRequest(id)) {
+            return "redirect:/myOverview?requests&declined";
+        }
+        return "redirect:/myOverview?request&propayUnavailable";
     }
 
-    // TODO: JavaDoc
+    /**
+     * accepts the return of a Case.
+     */
     @PostMapping("/acceptCaseReturn")
     public String acceptCaseReturn(final @RequestParam Long id) {
-        caseService.acceptCaseReturn(id);
-        return "redirect:/myOverview?returned&successfullyReturned";
+        if (caseService.acceptCaseReturn(id)) {
+            return "redirect:/myOverview?returned&successfullyReturned";
+        }
+        return "redirect:/myOverview?returned&propayUnavailable";
     }
 
     /**
@@ -150,8 +160,6 @@ public class CaseController {
         customerReviewService.saveReview(review);
 
         caseService.saveCase(review.getAcase());
-
-        System.out.println(review); // TODO: What happens here?
 
         return "redirect:/myOverview?borrowed";
     }

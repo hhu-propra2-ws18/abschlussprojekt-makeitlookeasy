@@ -3,19 +3,19 @@ package de.propra2.ausleiherino24.propayhandler;
 import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class PpAccountTest {
 
     private PpAccount testAcc1;
     private List<Reservation> reservations;
 
 
-    @Before
+    @BeforeEach
     public void initialize() {
         testAcc1 = new PpAccount("Acc1", 100.0, new ArrayList<>());
         reservations = new ArrayList<>();

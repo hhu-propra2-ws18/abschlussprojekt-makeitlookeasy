@@ -1,8 +1,9 @@
 package de.propra2.ausleiherino24.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.eq;
@@ -26,11 +27,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@ExtendWith(SpringExtension.class)
 public class CaseServiceTest {
 
     private CaseRepository caseRepositoryMock;
@@ -42,7 +46,7 @@ public class CaseServiceTest {
     private ReservationHandler reservationHandlerMock;
     private List<Case> cases;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         accountHandlerMock = mock(AccountHandler.class);
         reservationHandlerMock = mock(ReservationHandler.class);
@@ -53,6 +57,7 @@ public class CaseServiceTest {
         caseService = spy(new CaseService(caseRepositoryMock, articleServiceMock, personServiceMock,
                 userServiceMock, accountHandlerMock, reservationHandlerMock));
         cases = new ArrayList<>();
+        Mockito.when(accountHandlerMock.checkAvailability()).thenReturn(true);
     }
 
     @Test
@@ -206,18 +211,22 @@ public class CaseServiceTest {
         verify(caseRepositoryMock, times(0)).save(any());
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void requestArticleCatchException() {
-        final Long articleId = 0L;
-        final Long st = new Date().getTime() + 100L;
-        final Long et = new Date().getTime() + 200L;
-        final String username = "";
-        when(articleServiceMock.findArticleById(articleId)).thenReturn(null);
-        when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
 
-        caseService.requestArticle(articleId, st, et, username);
+        assertThrows(NullPointerException.class, () -> {
+            final Long articleId = 0L;
+            final Long st = new Date().getTime() + 100L;
+            final Long et = new Date().getTime() + 200L;
+            final String username = "";
+            when(articleServiceMock.findArticleById(articleId)).thenReturn(null);
+            when(userServiceMock.findUserByUsername(username)).thenReturn(new User());
 
-        verify(caseRepositoryMock, times(0)).save(any());
+            caseService.requestArticle(articleId, st, et, username);
+
+            verify(caseRepositoryMock, times(0)).save(any());
+        });
+
     }
 
     @Test
@@ -450,10 +459,12 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void twoCasesWithOpenConflicts(){
-        cases.add(new Case(null, 0L, null, 0L, 0D, 0D, Case.OPEN_CONFLICT, null, null, null, null, null));
+    public void twoCasesWithOpenConflicts() {
+        cases.add(new Case(null, 0L, null, 0L, 0D, 0D, Case.OPEN_CONFLICT, null, null, null, null,
+                null));
         cases.add(new Case(null, 0L, null, 1L, 0D, 0D, 0, null, null, null, null, null));
-        cases.add(new Case(null, 0L, null, 2L, 0D, 0D, Case.OPEN_CONFLICT, null, null, null, null, null));
+        cases.add(new Case(null, 0L, null, 2L, 0D, 0D, Case.OPEN_CONFLICT, null, null, null, null,
+                null));
         when(caseRepositoryMock.findAll()).thenReturn(cases);
         cases.remove(1);
 

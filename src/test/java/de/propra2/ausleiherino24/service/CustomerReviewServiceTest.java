@@ -8,11 +8,14 @@ import de.propra2.ausleiherino24.model.CustomerReview;
 import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@ExtendWith(SpringExtension.class)
 public class CustomerReviewServiceTest {
 
     private CustomerReviewRepository customerReviewRepository;
@@ -22,7 +25,7 @@ public class CustomerReviewServiceTest {
     private List<Case> cases;
     private List<CustomerReview> customerReviews;
 
-    @Before
+    @BeforeEach
     public void init() {
         customerReviewRepository = mock(CustomerReviewRepository.class);
         caseService = mock(CaseService.class);
@@ -51,7 +54,7 @@ public class CustomerReviewServiceTest {
         cases.add(case3);
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void findAllReviewsByLenderIdFindsAllReviews() {
         Mockito.when(customerReviewRepository.findAll()).thenReturn(customerReviews);

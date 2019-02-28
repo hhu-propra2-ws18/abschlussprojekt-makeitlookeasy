@@ -7,15 +7,15 @@ import de.propra2.ausleiherino24.model.User;
 import java.util.Arrays;
 import java.util.List;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
 public class ConflictRepoTest {
@@ -34,7 +34,7 @@ public class ConflictRepoTest {
     private Conflict c1;
     private Conflict c2;
 
-    @Before
+    @BeforeEach
     public void init() {
         user2 = new User();
         user2.setUsername("user2");

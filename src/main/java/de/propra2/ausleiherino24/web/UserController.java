@@ -35,6 +35,9 @@ public class UserController {
     private final UserService userService;
     private final List<Category> allCategories = Category.getAllCategories();
 
+    /**
+     * constructor.
+     */
     @Autowired
     public UserController(final UserService userService, final ArticleService articleService,
             final AccountHandler accountHandler, final CaseService caseService) {
@@ -44,6 +47,9 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * profile overview.
+     */
     @GetMapping("/profile/{username}")
     public ModelAndView getUserProfile(final @PathVariable String username,
             final Principal principal) {
@@ -66,6 +72,9 @@ public class UserController {
         return mav;
     }
 
+    /**
+     * edit profile view.
+     */
     @PutMapping("/editProfile")
     public ModelAndView editUserProfile(final @ModelAttribute @Valid User user,
             final @ModelAttribute @Valid Person person, final Principal principal) {
@@ -76,7 +85,6 @@ public class UserController {
             userService.saveUserWithProfile(user, person, "Updated");
 
             final ModelAndView mav = new ModelAndView("/user/profile");
-            mav.addObject("proPayAcc", accountHandler.checkFunds(currentPrincipalName));
             mav.addObject(USER_STRING, user);
             return mav;
         } else {
@@ -87,6 +95,9 @@ public class UserController {
         }
     }
 
+    /**
+     * profile overview.
+     */
     @GetMapping("/myOverview")
     public ModelAndView getMyArticlePage(final Principal principal) {
         final User currentUser = userService.findUserByPrincipal(principal);
@@ -99,6 +110,8 @@ public class UserController {
         final List<Case> returnedArticles = caseService
                 .findAllExpiredCasesByUserId(currentUser.getId());
         final List<Case> soldItems = caseService.findAllSoldItemsByUserId(currentUser.getId());
+        final List<Case> outrunningCases = caseService
+                .findAllOutrunningCasesByUserId(currentUser.getId());
 
         final ModelAndView mav = new ModelAndView("/user/myOverview");
         mav.addObject(USER_STRING, currentUser);
@@ -109,9 +122,14 @@ public class UserController {
         mav.addObject("returned", returnedArticles);
         mav.addObject("requested", requestedArticles);
         mav.addObject("sold", soldItems);
+
+        mav.addObject("outrunning", outrunningCases);
         return mav;
     }
 
+    /**
+     * create new Item.
+     */
     @GetMapping("/newItem")
     public ModelAndView getNewItemPage(final Principal principal) {
         final User currentUser = userService.findUserByPrincipal(principal);
@@ -123,19 +141,32 @@ public class UserController {
         return mav;
     }
 
+    /**
+     * bank account overview.
+     */
     @GetMapping("/bankAccount")
     public ModelAndView getBankAccountPage(final Principal principal) {
         final ModelAndView mav = new ModelAndView("/user/bankAccount");
         mav.addObject(CATEGORIES, Category.getAllCategories());
         mav.addObject("transactions", caseService.findAllTransactionsForPerson(
                 userService.findUserByPrincipal(principal).getPerson().getId()));
-        mav.addObject("pp", accountHandler.checkFunds(principal.getName()));
+        if (accountHandler.checkAvailability()) {
+            mav.addObject("pp", accountHandler.checkFunds(principal.getName()));
+            mav.addObject("propayUnavailable", false);
+        } else {
+            LOGGER.warn("ProPay not available");
+            mav.addObject("propayUnavailable", true);
+            mav.addObject("pp", 0D);
+        }
         mav.addObject("user", userService.findUserByPrincipal(principal));
         mav.addObject(USER_STRING, userService.findUserByPrincipal(principal));
         mav.addObject("allArticles", articleService);
         return mav;
     }
 
+    /**
+     * save profile after editing.
+     */
     @PostMapping("accessed/user/saveProfile")
     public String saveEditedUserProfile(final Principal principal, final User user,
             final Person person,
@@ -154,9 +185,17 @@ public class UserController {
         }
     }
 
+    /**
+     * add Money to Propay Account.
+     */
     @PostMapping("/addMoney")
     public String addMoneyToUserAccount(final Principal principal, final double money) {
-        accountHandler.addFunds(principal.getName(), money);
+        if (accountHandler.checkAvailability()) {
+            accountHandler.addFunds(principal.getName(), money);
+        } else {
+            LOGGER.warn("ProPay not available");
+            return "redirect:/bankAccount?propayUnavailable";
+        }
         return "redirect:/bankAccount?success";
     }
 }
