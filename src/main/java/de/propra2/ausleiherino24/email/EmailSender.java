@@ -33,13 +33,17 @@ public class EmailSender {
     public void sendConflictEmail(final Conflict conflict) {
         final User reporter = conflict.getOwner();
         final User reported = conflict.getReceiver();
-        //Gmail does not allow arbitrary from Address therefore we specify the Email-sender in the Email-Body
+        //Gmail does not allow arbitrary from Address
+        // therefore we specify the Email-sender in the Email-Body
         //Mailtrap does allow arbitrary from Address
         message.setFrom(reporter.getEmail());
-        message.setTo("ausleiherino24@gmail.com"); // FakeEmail -> does not matter what goes in here when using Mailtrap
+        message.setTo(
+                "ausleiherino24@gmail.com");
+        // FakeEmail -> does not matter what goes in here when using Mailtrap
         message.setSubject("Conflicting Case id: " + conflict.getConflictedCase().getId());
-        message.setText(conflict.getConflictDescription() +" Email sent from: "+reporter.getEmail()
-                +" Other participant: "+reported.getEmail());
+        message.setText(
+                conflict.getConflictDescription() + " Email sent from: " + reporter.getEmail()
+                        + " Other participant: " + reported.getEmail());
 
         mailSender.send(message);
     }
@@ -55,6 +59,9 @@ public class EmailSender {
         mailSender.send(message);
     }
 
+    /**
+     * set the mail sender propertiers.
+     */
     public void configureMailSender() {
         final Properties properties = new Properties();
         properties.putAll(config.getProperties());
