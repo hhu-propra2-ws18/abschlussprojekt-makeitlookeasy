@@ -47,7 +47,6 @@ public class AccountHandlerTest {
         testAcc3 = new PpAccount("Acc3", 0.0, new ArrayList<>());
         amount = 100D;
 
-
         final List<Reservation> reservations = new ArrayList<>();
         reservations.add(new Reservation(1L, 950.0));
         reservations.add(new Reservation(2L, 10.0));
