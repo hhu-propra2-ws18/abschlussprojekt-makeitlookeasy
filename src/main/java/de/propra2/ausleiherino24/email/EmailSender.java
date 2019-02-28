@@ -3,7 +3,6 @@ package de.propra2.ausleiherino24.email;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.service.UserService;
 import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,40 +15,37 @@ public class EmailSender {
     private final EmailConfig config;
     private final JavaMailSenderImpl mailSender;
     private final SimpleMailMessage message;
-    private final UserService userService;
 
     /**
      * Autowired constructor.
      */
     @Autowired
     public EmailSender(final EmailConfig config, final JavaMailSenderImpl mailSender,
-            final SimpleMailMessage message, final UserService userService) {
+            final SimpleMailMessage message) {
         this.config = config;
         this.mailSender = mailSender;
         this.message = message;
-        this.userService = userService;
     }
 
     /**
      * Sends an email to the ConflictReporter.
      */
     public void sendConflictEmail(final Conflict conflict) {
-        configureMailSender();
-
-        final User user = userService.findUserByUsername(conflict.getConflictReporterUsername());
-
-        message.setFrom(user.getEmail());
-        message.setTo("Clearing@Service.com"); // FakeEmail -> does not matter what goes in here
+        final User reporter = conflict.getOwner();
+        final User reported = conflict.getReceiver();
+        //Gmail does not allow arbitrary from Address therefore we specify the Email-sender in the Email-Body
+        //Mailtrap does allow arbitrary from Address
+        message.setFrom(reporter.getEmail());
+        message.setTo("ausleiherino24@gmail.com"); // FakeEmail -> does not matter what goes in here
         message.setSubject("Conflicting Case id: " + conflict.getConflictedCase().getId());
-        message.setText(conflict.getConflictDescription());
+        message.setText(conflict.getConflictDescription() +" Email sent from: "+reporter.getEmail()
+                +" Other participant: "+reported.getEmail());
 
         mailSender.send(message);
     }
 
     void sendRemindingEmail(final Case acase) {
-        configureMailSender();
-
-        message.setFrom("Clearing@Service.com");
+        message.setFrom("ausleiherino24@gmail.com");
         message.setTo(acase.getReceiver().getEmail());
         message.setSubject(
                 "Reminder: Article: " + acase.getArticle().getName()
@@ -59,7 +55,7 @@ public class EmailSender {
         mailSender.send(message);
     }
 
-    private void configureMailSender() {
+    public void configureMailSender() {
         final Properties properties = new Properties();
         properties.putAll(config.getProperties());
         mailSender.setHost(config.getHost());

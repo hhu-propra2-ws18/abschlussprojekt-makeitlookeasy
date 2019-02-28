@@ -87,11 +87,6 @@ public class User {
         }
     }
 
-    public void removeArticle(final Article article) {
-        articleList.remove(article);
-        article.setOwner(null);
-    }
-
     public void setPerson(final Person person) {
         setPerson(person, false);
     }

@@ -119,10 +119,6 @@ public class UserService {
         return user;
     }
 
-    User findUserById(final Long userId) {
-        return userRepository.findById(userId).orElse(null);
-    }
-
     /**
      * Checks whether given username equals the given principalname.
      */

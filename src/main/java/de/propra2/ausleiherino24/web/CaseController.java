@@ -164,8 +164,6 @@ public class CaseController {
         return "redirect:/myOverview?borrowed";
     }
 
-    // TODO: What is this method used for? (JavaDoc)
-
     /**
      * Provides a for springboot method to correctly receive and connect Article.category.
      */

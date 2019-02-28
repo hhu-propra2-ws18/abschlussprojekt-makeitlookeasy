@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,9 +32,8 @@ public class CaseEndTimeReminder {
                 .parse(LocalDateTime.now().format(formatter), formatter).atStartOfDay();
         final List<Case> activeCases = cases.findAll()
                 .stream()
-                .filter(cases -> cases.getRequestStatus() == Case.RUNNING)
-                .filter(cases -> LocalDate.parse(cases.getFormattedEndTime(), formatter)
-                        .atStartOfDay()
+                .filter(c -> c.getRequestStatus() == Case.RUNNING)
+                .filter(c -> LocalDate.parse(c.getFormattedEndTime(), formatter).atStartOfDay()
                         .isEqual(currentTime.plusDays(CaseEndTimeReminder.ONE_DAY)))
                 .collect(Collectors.toList());
 
@@ -41,10 +41,11 @@ public class CaseEndTimeReminder {
     }
 
     private void sendRemindingEmail(final List<Case> activeCases) {
-        activeCases.forEach(caseActive -> {
-            emailSender.sendRemindingEmail(caseActive);
-            caseActive.setRequestStatus(Case.RUNNING_EMAILSENT);
-            cases.save(caseActive);
+        emailSender.configureMailSender();
+        activeCases.forEach(c -> {
+            emailSender.sendRemindingEmail(c);
+            c.setRequestStatus(Case.RUNNING_EMAILSENT);
+            cases.save(c);
         });
     }
 
