@@ -59,10 +59,23 @@ The overview page provides a set of functionality:
 On the Add item page a new item can be created. Special notice is to be taken to the `For Sale` check box.
 This checkbox determines if a article is for sale or if it only can be borrowed.
 
+### Returning an article
+
+A user can return an article at every time he likes.
+If a User does not return a article before the end of the rental period, the person retrieves
+a remainder in form of an email. The availability of the article does not update automatically but
+lies in the responsibility of the renting person.
+If somebody wants to rent an article that has not been returned yet, the renting person can simply decline it.
+
+### Chat (beta feature)
+
+A chat can be reached at `/chatBoard`. Messages can be sent to other users in the chat by providing the username. 
+
 ## Project overview
 
 ### Design pattern
-The design pattern we are aiming for is the classical Model-View-Controller (MVC) pattern. To outsource shared code from the controllers we introduced a additional service layer.
+The design pattern we are aiming for is the classical Model-View-Controller (MVC) pattern.
+To outsource shared code from the controllers we introduced a additional service layer.
 Although this is conform with the MVC pattern it is also referred to as
 [Model-View-Controller-Service](https://glossar.hs-augsburg.de/Model-View-Controller-Service-Paradigma)
 pattern (MVCS).
