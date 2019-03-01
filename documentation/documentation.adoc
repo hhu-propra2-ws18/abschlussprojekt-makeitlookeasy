@@ -121,9 +121,6 @@ The `CustomUserDetails` class is simply needed to use our own `User` class with 
 === PPTransaction
 The `PpTransaction` class represents a proPay transaction.
 
-=== ResolveConflict
-TODO: wright description
-
 === User/Person
 To represent customers of our platform we decided to split the required information into two
 classes, `User` and  `Person`.
@@ -173,16 +170,18 @@ access profile views.
 == Services
 
 === ArticleService
-TODO: provide description
+The `ArticleService` provides methods to save, update, deactivate articles and find different
+subsets of all Articles.
 
 === CaseService
-TODO: provide description
+The `CaseService` provides methods to handle requests, to sell Articles and to find subsets of all
+existing cases.
 
 === ConflictService
-TODO: provide description
+The `ConflictService` provides methods to deactivate, open and solve conflicts.
 
 === CustomerReviewService
-TODO: provide description
+The `CustomerReviewService` provides methods to save and find reviews.
 
 === ImageService
 The `ImageService` is used to upload images to a file system and retrieve them.
@@ -198,7 +197,7 @@ speed up the search for a specific image.
 The `PersonService` provides methods to save and find a person.
 
 === SearchUserService
-TODO: provide description
+The `SearchUserService` provides a method to find a user for login.
 
 === UserService
 The `UserService` provides different methods to save and find a user.
@@ -213,7 +212,8 @@ TODO: provide short description about the spring security configuration
 == PropayHandler
 
 === AccountHandler
-TODO: provide description
+The `AcountHandler` gets Propay account Data, adds and transfers Funds except for reservation
+punishments.
 
 === PpAccount
 TODO: provide description
@@ -222,7 +222,7 @@ TODO: provide description
 TODO: provide description
 
 === Reservation Handler
-TODO: provide description
+The `Reservation Handler` handles Propay-Reservations.
 
 
 
