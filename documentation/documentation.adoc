@@ -64,9 +64,12 @@ lies in the responsibility of the renting person.
 If somebody wants to rent an article that has not been returned yet, the renting person can simply decline it.
 
 === Chat (beta feature)
-A chat can be reached at `/chatBoard`. Messages can be sent to other users in the chat by providing the username. 
+A chat can be reached at `/chatBoard`. Messages can be sent to other users in the chat by providing the username.
 
 
+TIP: To test and explore the application, we have to two logins:
+ Hans, who is a base user and is able to borrow, lend and sell articles, and the Admin, who is also able
+ to resolve conflicts.
 
 == Project overview
 
@@ -234,6 +237,8 @@ TODO: provide description
 
 == Deviations from the task descriptions
 * According to our architectural idea the available offers are **visible even when not logged in.**
+* A customer who lend an article isn't able to return it before the agreed endtime.
+* When a customer returns an article too late, the availability time for the article isn't updated.
 
 
 
