@@ -8,13 +8,11 @@ import de.propra2.ausleiherino24.features.calendar.CalendarEvent;
 import de.propra2.ausleiherino24.features.calendar.CalendarEventService;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 
 public class CalendarServiceTest {
 
@@ -40,7 +38,7 @@ public class CalendarServiceTest {
         acase.setEndTime(date.getTime() + 87000000);
         ArrayList<Case> cases = new ArrayList<Case>();
         cases.add(acase);
-        when(caseRepsitory.findAllByArticle(article)).thenReturn(cases);
+        when(caseRepsitory.findAllByArticleWhereStatusIsGreater7(article)).thenReturn(cases);
         List<CalendarEvent> cal = calendarEventService.getAllEventsFromOneArticle(0L);
         assertEquals(cal.get(0).getStart(), java.util.Optional.of(date.getTime()).get());
     }
