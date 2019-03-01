@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,10 @@ import org.springframework.web.client.RestTemplate;
 @ExtendWith(SpringExtension.class)
 class ReservationHandlerTest {
 
-    private static final String RESERVATION_URL = "http://localhost:8888/reservation";
+    @Value("${PP_RESERVATION_URL}")
+    private String RESERVATION_URL;
+    @Value("${PP_ACCOUNT_URL}")
+    private String ACCOUNT_URL;
     private ResponseEntity<Reservation> reservationResp1;
     private Case aCase;
     private RestTemplate restTemplate;
@@ -36,7 +40,8 @@ class ReservationHandlerTest {
         PpTransaction ppTransaction = Mockito.mock(PpTransaction.class);
         aCase = Mockito.mock(Case.class);
         restTemplate = Mockito.mock(RestTemplate.class);
-        reservationHandler = new ReservationHandler(caseRepository, restTemplate);
+        reservationHandler = new ReservationHandler(caseRepository, restTemplate, RESERVATION_URL,
+                ACCOUNT_URL);
 
         Mockito.when(reservationResp1.getBody()).thenReturn(reservation1);
         Mockito.when(reservation1.getId()).thenReturn(1L);
