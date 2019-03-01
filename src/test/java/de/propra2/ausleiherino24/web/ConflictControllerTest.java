@@ -11,7 +11,6 @@ import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -121,7 +120,6 @@ class ConflictControllerTest {
         Mockito.verify(conflictService, Mockito.times(1)).openConflict(ca, "TestDescription");
     }
 
-    @Disabled
     @Test
     @WithMockUser(roles = "admin")
     void solveConflictOwnerShouldSolveConflictForOwner() throws Exception {
@@ -129,6 +127,7 @@ class ConflictControllerTest {
                 .thenReturn(admin);
         Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
         Mockito.when(conflictService.getConflict(2L, admin)).thenReturn(c1);
+        Mockito.when(conflictService.solveConflict(c1, admin, c1.getOwner())).thenReturn(true);
 
         mvc.perform(MockMvcRequestBuilders.post("/decideforowner?id=1"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
@@ -138,7 +137,6 @@ class ConflictControllerTest {
         Mockito.verify(conflictService, Mockito.times(1)).deactivateConflict(2L, admin);
     }
 
-    @Disabled
     @Test
     @WithMockUser(roles = "admin")
     void solveConflictReceiverShouldSolveConflictForOwner() throws Exception {
@@ -146,6 +144,7 @@ class ConflictControllerTest {
                 .thenReturn(admin);
         Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
         Mockito.when(conflictService.getConflict(2L, admin)).thenReturn(c1);
+        Mockito.when(conflictService.solveConflict(c1, admin, c1.getOwner())).thenReturn(true);
 
         mvc.perform(MockMvcRequestBuilders.post("/decideforowner?id=1"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
