@@ -19,7 +19,6 @@ The key aspects are:
 
 
 == Functionality
-
 === Main page
 The main age is visible for everybody, even if not logged in. It displays all available Products.
 If a product is rented it is not displayed. The Articles are categorized and the category of the
@@ -68,7 +67,6 @@ TIP: To test and explore the application, we have created two separate accounts 
  to resolve conflicts.
 
 == Project overview
-
 === Design pattern
 The design pattern we are aiming for is the classical Model-View-Controller (MVC) pattern.
 To outsource shared code from the controllers we introduced a additional service layer.
@@ -219,7 +217,6 @@ a strong encryption by applying the BCrypt-Hashfunction.
 
 
 == ProPayHandler
-
 === AccountHandler
 The AccountHandler is responsible for all requests to ProPay,
 which target the /account URL.
@@ -267,6 +264,8 @@ is on the following day.
 * According to our architectural idea the available offers are **visible even when not logged in.**
 * A customer who lend an article isn't able to return it before the agreed end time.
 * When a customer returns an article too late, the availability time for the article isn't updated.
+* If a customer disables a listing, it will not be visible at all in the view for everyone else,
+  instead of showing a "not available" icon.
 
 
 == Committed production file.
@@ -276,3 +275,9 @@ In order to not majorly disrupt the team's workflow and to ensure a qualitative 
 we have consulted with https://github.com/bendisposto[Dr. Bendisposto] and https://github.com/bivab[Mr. David Schneider] to not revert the git-history
 and keep it as is, but we have deleted the unwanted file from the repository in commit
 https://github.com/hhu-propra2/abschlussprojekt-makeitlookeasy/commit/c90bb08f5ef96a8248156b6f9da2e6f95dc6d4a9[c90bb08].
+
+== Persistence and general configuration
+Even in development-mode, persistence is realized through a bind mount configuration for all running services. In
+production-mode persistence is guaranteed through unnamed docker-volumes, only port 8080 of the application itself
+is exposed to the local-machine, while the remaining services function by being linked to the main app, only
+exposing their ports inside the docker environment but not to the local host.
