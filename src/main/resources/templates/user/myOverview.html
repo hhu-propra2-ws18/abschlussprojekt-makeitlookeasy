@@ -229,7 +229,8 @@
         </button>
       </div>
       <!--Warnings for outrunning Cases-->
-      <div class="alert alert-warning absolue center alert-dismissible fade show" role="alert">
+      <div class="alert alert-warning absolue center alert-dismissible fade show" role="alert"
+      th:if="${outrunning.size() > 0}">
         You have to return <span th:text="${outrunning.size()}"></span> items tomorrow.
         <a onclick="warningFunction()" style="display: block" id="link1"><strong>Show all</strong></a>
         <a onclick="warningFunction()" style="display: none" id="link2"><strong>Hide all</strong></a>
