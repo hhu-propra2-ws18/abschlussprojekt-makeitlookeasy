@@ -5,11 +5,13 @@ import static org.junit.Assert.*;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.features.calendar.CalendarEvent;
+import de.propra2.ausleiherino24.features.calendar.CalendarEventService;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -39,7 +41,7 @@ public class CalendarServiceTest {
         ArrayList<Case> cases = new ArrayList<Case>();
         cases.add(acase);
         when(caseRepsitory.findAllByArticle(article)).thenReturn(cases);
-        ArrayList<CalendarEvent> cal = calendarEventService.getAllEventsFromOneArticle(0L);
+        List<CalendarEvent> cal = calendarEventService.getAllEventsFromOneArticle(0L);
         assertEquals(cal.get(0).getStart(), java.util.Optional.of(date.getTime()).get());
     }
 }
