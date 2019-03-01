@@ -56,7 +56,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:class="${user.id==transaction.acase.receiver.id }? 'bg-danger' :  'bg-success'"
+        <tr th:class="${user.id==transaction.acase.receiver.id }? 'bg-success' :  'bg-danger'"
             th:each="transaction : ${transactions}">
           <th scope="col" th:text="${transaction.acase.article.name}"></th>
           <th scope="col" th:text="${transaction.getFormattedDate()}"></th>
