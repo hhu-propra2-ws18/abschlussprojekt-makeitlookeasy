@@ -4,7 +4,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import de.propra2.ausleiherino24.features.calendar.CalendarEvent;
+import de.propra2.ausleiherino24.features.calendar.CalendarEventService;
 import de.propra2.ausleiherino24.features.category.Category;
+import de.propra2.ausleiherino24.features.imageupload.ImageService;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.CustomerReview;
 import de.propra2.ausleiherino24.model.Person;
@@ -14,14 +17,17 @@ import de.propra2.ausleiherino24.service.CustomerReviewService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -37,19 +43,21 @@ class ArticleControllerTest {
 
     @Autowired
     private MockMvc mvc;
-
+    @MockBean
     private ArticleService articleService;
+    @MockBean
     private UserService userService;
+    @MockBean
     private CustomerReviewService customerReviewService;
+    @MockBean
+    private CalendarEventService calendarEventService;
+    @MockBean
+    private ImageService imageService;
     private User user;
     private Article article;
 
     @BeforeEach
     void setup() {
-        articleService = mock(ArticleService.class);
-        customerReviewService = mock(CustomerReviewService.class);
-        userService = mock(UserService.class);
-
         user = new User();
         user.setUsername("user");
         user.setRole("user");
@@ -60,7 +68,6 @@ class ArticleControllerTest {
         article.setOwner(user);
     }
 
-    @Disabled
     @Test
     @WithMockUser(roles = "user")
     void successfullyDisplayArticleTest() throws Exception {
@@ -84,6 +91,112 @@ class ArticleControllerTest {
                         .model().attribute("categories", allCategories))
                 .andExpect(MockMvcResultMatchers
                         .model().attribute("review", allReviews));
+    }
+
+    @Test
+    @WithMockUser(roles = "user")
+    void createNewArticleShouldCreateNewArticle() throws Exception {
+        final List<Category> allCategories = Category.getAllCategories();
+
+        when(userService.findUserByPrincipal(any(Principal.class))).thenReturn(user);
+
+        mvc.perform(MockMvcRequestBuilders.get("/article/create"))
+                .andExpect(MockMvcResultMatchers
+                        .status().isOk())
+                .andExpect(MockMvcResultMatchers
+                        .view().name("/shop/newItem"))
+                .andExpect(MockMvcResultMatchers
+                        .model().attribute("user", user))
+                .andExpect(MockMvcResultMatchers
+                        .model().attribute("article", new Article()))
+                .andExpect(MockMvcResultMatchers
+                        .model().attribute("categories", allCategories));
+    }
+
+    @Test
+    @WithMockUser(roles = "user")
+    void saveNewArticleShouldSaveArticleAndImageIfImageIsNotNull() throws Exception {
+        Article expected = new Article();
+        expected.setId(1L);
+        expected.setOwner(user);
+        expected.setActive(true);
+        expected.setForRental(true);
+        expected.setForSale(false);
+        expected.setImage("test");
+        String name = "image";
+        byte[] data = new byte[1];
+        MockMultipartFile imageMock = new MockMultipartFile(name, data);
+
+        when(imageService.store(imageMock, null)).thenReturn("test");
+        when(userService.findUserByPrincipal(any(Principal.class))).thenReturn(user);
+        mvc.perform(MockMvcRequestBuilders.multipart("/article/saveNew")
+                .file(imageMock)
+                .flashAttr("article", article))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/"));
+        Mockito.verify(articleService, Mockito.times(1)).saveArticle(expected, "Created");
+    }
+
+    @Test
+    @WithMockUser(roles = "user")
+    void saveUpdatedShouldSaveUpdatedArticle() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.put("/article/saveUpdated")
+                .flashAttr("article", article))
+                .andExpect(MockMvcResultMatchers
+                        .status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers
+                        .redirectedUrl("/myOverview?articles&updatedArticle"));
+        Mockito.verify(articleService, Mockito.times(1)).saveArticle(article, "Updated");
+    }
+
+    @Test
+    @WithMockUser(roles = "user")
+    void deactivateArticleShouldDeactivateArticleIfAllArticleCasesAreClosed() throws Exception {
+        when(articleService.deactivateArticle(1L)).thenReturn(true);
+
+        mvc.perform(MockMvcRequestBuilders.put("/article/deactivate?id=1"))
+                .andExpect(MockMvcResultMatchers
+                        .status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers
+                        .redirectedUrl("/myOverview?articles&deactivatedArticle"));
+        Mockito.verify(articleService, Mockito.times(1)).deactivateArticle(1L);
+    }
+
+    @Test
+    @WithMockUser(roles = "user")
+    void deactivateArticleShouldNotDeactivateArticleIfSomeArticleCasesAreNotClosed()
+            throws Exception {
+        when(articleService.deactivateArticle(1L)).thenReturn(false);
+
+        mvc.perform(MockMvcRequestBuilders.put("/article/deactivate?id=1"))
+                .andExpect(MockMvcResultMatchers
+                        .status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers
+                        .redirectedUrl("/myOverview?articles&deactivationFailed"));
+        Mockito.verify(articleService, Mockito.times(1)).deactivateArticle(1L);
+    }
+
+    @Test
+    @WithMockUser(roles = "user")
+    void getEventsForCalendarShouldReturnAllEventsFromOneArticle() throws Exception {
+        CalendarEvent event1 = new CalendarEvent();
+        event1.setEnd(123456L);
+        event1.setTitle("title1");
+        event1.setStart(12345L);
+        CalendarEvent event2 = new CalendarEvent();
+        event2.setEnd(12345678L);
+        event2.setTitle("title2");
+        event2.setStart(1234567L);
+        Mockito.when(calendarEventService.getAllEventsFromOneArticle(1L))
+                .thenReturn(Arrays.asList(event1, event2));
+        mvc.perform(MockMvcRequestBuilders.get("/article/events?id=1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].end").value(123456L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].title").value("title1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].start").value(12345L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].end").value(12345678L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].title").value("title2"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].start").value(1234567L));
+
     }
 
 }
