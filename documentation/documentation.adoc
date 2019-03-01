@@ -13,13 +13,9 @@ The key aspects are:
 * Payment of borrowed articles using ProPay
 * Conflict resolution
 
-
-
 == Management
-
 * To provide a convenient overview of our project we used **javadocs** throughout the project.
 * Since the project requires a certain amount of configuration we started our own **wiki** in github. Here we describe the different configurations and the initial setup. The **Logins** are also located there.
-
 
 
 == Functionality
@@ -119,6 +115,8 @@ conflicted case with a description and a user who is responsible to resolve the 
 A simple rating mechanism is implemented using the `CustomerReview` class.
 It links a numeric rating (`stars` (higher is better)) and a corresponding description to a case.
 
+NOTE: The star-feature is _beta_ and not fully working.
+
 === CustomUserDetails
 The `CustomUserDetails` class is simply needed to use our own `User` class with spring security.
 
@@ -141,9 +139,7 @@ Additional user information, like name or contact is stored in the class `Person
 Person with a User, a one-to-one relation is provided.
 
 
-
 == Controller
-
 === ArticleController
 The `ArticleController` maps requests to show, create, save, update and deactivate articles.
 
@@ -172,10 +168,7 @@ The `UserController` maps user specific requests. In particular those which you 
 the navigationbar. Furthermore you can save your profile, add money to your propay-account and
 access profile views.
 
-
-
 == Services
-
 === ArticleService
 The 'ArticleService' provides besides basic functions like saving and updating articles methods to
 find Articles and Lists of Articles by different attributes, for example the name, the id or by user.
@@ -214,15 +207,15 @@ The 'SearchUserService' has a method that gives user details to a given username
 The `UserService` provides different methods to save, create and find a user.
 
 == Security
-Alle URLs außer _index_, _login_ und _registration_ sind für nicht eingeloggte
-User gesperrt.
+All URLs except _index_, _login_ and _registration_ are locked for Users not
+logged in.
 
-Die Applikation differenziert zwischen Admin und Userberechtigungen. Dies wird
-über entsprechende Rollen in der Spring-Security-Konfiguration realisiert.
+The application differentiates between admin and user permissions. This is
+realized through corresponding role-definitions in the Spring-Security-Configuration.
 
-Für Passwörter verwenden wir einen Encoder namens _BCryptPasswordEncoder_. Dieser
-kodiert/dekodiert die Passwörter bei Registrierung/Login und sorgt außerdem
-für eine starke Verschlüssellung, durch die BCrypt-Hashfunktion.
+For all passwords the a Encoder, namely _BCryptPasswordEncoder_ implemented. It
+encodes/decodes the passwords on registration/login and additionally provides
+a strong encryption by applying the BCrypt-Hashfunction.
 
 
 == PropayHandler
@@ -252,7 +245,6 @@ Reservation.
 Most Functions do not check or return the status code,
 because they can never be called if Propay is not available or
 the Request could not be performed.
-
 
 
 == Deviations from the task descriptions
