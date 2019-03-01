@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,8 +24,7 @@ public class CaseEndTimeReminder {
         this.emailSender = emailSender;
     }
 
-    //TODO: uncomment in production
-    //@Scheduled(fixedDelay = 5000, initialDelay = 20000)
+    @Scheduled(fixedDelay = 5000, initialDelay = 20000)
     void getRunningCasesOneDayBeforeEndTime() {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         final LocalDateTime currentTime = LocalDate

@@ -247,6 +247,22 @@ because they can never be called if ProPay is not available or
 the Request could not be performed.
 
 
+== Email
+
+=== EmailConfig
+This class injects the Email-Configuration-Properties (which are declared in the
+application.properties) in to its instance variables of the same name.
+
+=== EmailSender
+This class configures the JavaMailSenderImpl to use the correct properties provided
+by its EmailConfig instance variable. Furtermore it sets the Email-Information (From, To, ...)
+as well as the Email-body depending on the method called and finally sends the Email.
+
+=== CaseEndTimeReminder
+This class sends out reminding-Emails to every case-Receiver whos case-endTime
+is on the following day.
+
+
 == Deviations from the task descriptions
 * According to our architectural idea the available offers are **visible even when not logged in.**
 * A customer who lend an article isn't able to return it before the agreed end time.
