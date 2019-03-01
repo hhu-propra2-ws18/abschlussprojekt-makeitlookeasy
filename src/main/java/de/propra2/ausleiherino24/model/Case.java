@@ -84,6 +84,9 @@ public class Case {
         setReview(review, false);
     }
 
+    /**
+     * sets which Review belongs to case.
+     */
     public void setReview(final CustomerReview review, final boolean repetition) {
         this.review = review;
         if (review != null && !repetition) {
