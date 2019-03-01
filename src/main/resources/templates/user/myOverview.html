@@ -26,6 +26,19 @@
 
   <!-- Functions to change view -->
   <script>
+    function warningFunction() {
+      var item = document.getElementById("warnings");
+      var link1 = document.getElementById("link1");
+      var link2 = document.getElementById("link2");
+
+      item.style.display = (
+          item.style.display == "block" ? "none" : "block");
+      link1.style.display = (
+          link1.style.display == "block" ? "none" : "block");
+      link2.style.display = (
+          link2.style.display == "block" ? "none" : "block");
+    }
+
     function oneFunction() {
       var mainFrameOne = document.getElementById("mainFrameOne");
       var mainFrameTwo = document.getElementById("mainFrameTwo");
@@ -44,19 +57,6 @@
       mainFrameFive.style.display = (
           mainFrameFive.style.display == "none" ? "none" : "none");
 
-    }
-
-    function warningFunction() {
-      var item = document.getElementById("warnings");
-      var link1 = document.getElementById("link1");
-      var link2 = document.getElementById("link2");
-
-      item.style.display = (
-          item.style.display == "block" ? "none" : "block");
-      link1.style.display = (
-          link1.style.display == "block" ? "none" : "block");
-      link2.style.display = (
-          link2.style.display == "block" ? "none" : "block");
     }
 
     function twoFunction() {
