@@ -64,9 +64,12 @@ lies in the responsibility of the renting person.
 If somebody wants to rent an article that has not been returned yet, the renting person can simply decline it.
 
 === Chat (beta feature)
-A chat can be reached at `/chatBoard`. Messages can be sent to other users in the chat by providing the username. 
+A chat can be reached at `/chatBoard`. Messages can be sent to other users in the chat by providing the username.
 
 
+TIP: To test and explore the application, we have to two logins:
+ Hans, who is a base user and is able to borrow, lend and sell articles, and the Admin, who is also able
+ to resolve conflicts.
 
 == Project overview
 
@@ -121,6 +124,9 @@ The `CustomUserDetails` class is simply needed to use our own `User` class with 
 === PPTransaction
 The `PpTransaction` class represents a proPay transaction.
 
+=== ResolveConflict
+TODO: wright description
+
 === User/Person
 To represent customers of our platform we decided to split the required information into two
 classes, `User` and  `Person`.
@@ -170,18 +176,22 @@ access profile views.
 == Services
 
 === ArticleService
-The `ArticleService` provides methods to save, update, deactivate articles and find different
-subsets of all Articles.
+The 'ArticleService' provides besides basic functions like saving and updating articles methods to
+find Articles and Lists of Articles by different attributes, for example the name, the id or by user.
+The service also contains methods to deactivate or sell articles.
 
 === CaseService
-The `CaseService` provides methods to handle requests, to sell Articles and to find subsets of all
-existing cases.
+The 'CaseService' handles all actions associated with cases. That includes saving cases in the database,
+find cases by different attributes and methods to check different flags/variables of cases.
+It also provides functions to request to lend an article, declining or accepting those requests,
+selling articles or opening conflicts.
 
 === ConflictService
-The `ConflictService` provides methods to deactivate, open and solve conflicts.
+The 'ConflictService' manages the conflicts that may occur when a article is lend. It is responsible
+for creating conflicts, deleting and deactivating conflicts and solving conflicts.
 
 === CustomerReviewService
-The `CustomerReviewService` provides methods to save and find reviews.
+The 'CustomReviewService' provides functions to save and find customer review.
 
 === ImageService
 The `ImageService` is used to upload images to a file system and retrieve them.
@@ -197,10 +207,10 @@ speed up the search for a specific image.
 The `PersonService` provides methods to save and find a person.
 
 === SearchUserService
-The `SearchUserService` provides a method to find a user for login.
+The 'SearchUserService' has a method that gives user details to a given username.
 
 === UserService
-The `UserService` provides different methods to save and find a user.
+The `UserService` provides different methods to save, create and find a user.
 
 
 
@@ -242,6 +252,8 @@ the Request could not be performed.
 
 == Deviations from the task descriptions
 * According to our architectural idea the available offers are **visible even when not logged in.**
+* A customer who lend an article isn't able to return it before the agreed endtime.
+* When a customer returns an article too late, the availability time for the article isn't updated.
 
 
 

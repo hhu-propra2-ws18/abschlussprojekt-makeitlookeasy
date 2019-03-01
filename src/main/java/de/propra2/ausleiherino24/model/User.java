@@ -16,7 +16,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// TODO: Extract duplicate code.
 
 /**
  * User hat neben Person eine eigene ID, um diesen als Plattformbenutzer explizit separat ansteuern
@@ -97,6 +96,4 @@ public class User {
             person.setUser(this, true);
         }
     }
-
-    //TODO: override setPassword to hash password
 }
