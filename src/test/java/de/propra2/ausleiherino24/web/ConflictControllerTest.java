@@ -1,116 +1,58 @@
 package de.propra2.ausleiherino24.web;
 
-import de.propra2.ausleiherino24.data.ArticleRepository;
-import de.propra2.ausleiherino24.data.CaseRepository;
-import de.propra2.ausleiherino24.data.ConflictRepository;
-import de.propra2.ausleiherino24.data.CustomerReviewRepository;
-import de.propra2.ausleiherino24.data.PersonRepository;
-import de.propra2.ausleiherino24.data.PpTransactionRepository;
-import de.propra2.ausleiherino24.data.UserRepository;
-import de.propra2.ausleiherino24.email.EmailConfig;
-import de.propra2.ausleiherino24.email.EmailSender;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.propayhandler.AccountHandler;
-import de.propra2.ausleiherino24.propayhandler.ReservationHandler;
-import de.propra2.ausleiherino24.service.ArticleService;
-import de.propra2.ausleiherino24.service.CalendarEventService;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.ConflictService;
-import de.propra2.ausleiherino24.service.CustomerReviewService;
-import de.propra2.ausleiherino24.service.ImageService;
-import de.propra2.ausleiherino24.service.PersonService;
-import de.propra2.ausleiherino24.service.SearchUserService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest
+@ExtendWith(SpringExtension.class)
 @ActiveProfiles(profiles = "test")
-public class ConflictControllerTest {
+@SpringBootTest
+@AutoConfigureMockMvc
+class ConflictControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private Principal principal;
-
-    @MockBean
-    private ArticleRepository articleRepository;
-    @MockBean
-    private CaseRepository caseRepository;
-    @MockBean
-    private ConflictRepository conflictRepository;
-    @MockBean
-    private CustomerReviewRepository customerReviewRepository;
-    @MockBean
-    private PersonRepository personRepository;
-    @MockBean
-    private PpTransactionRepository ppTransactionRepository;
-    @MockBean
-    private UserRepository userRepository;
-
-    @MockBean
-    private CalendarEventService calendarEventService;
-    @MockBean
-    private ArticleService articleService;
-    @MockBean
     private CaseService caseService;
     @MockBean
     private ConflictService conflictService;
     @MockBean
-    private CustomerReviewService customerReviewService;
-    @MockBean
-    private ImageService imageService;
-    @MockBean
-    private PersonService personService;
-    @MockBean
-    private SearchUserService searchUserService;
-    @MockBean
     private UserService userService;
 
-    @MockBean
-    private EmailConfig emailConfig;
-    @MockBean
-    private EmailSender emailSender;
-    @MockBean
-    private AccountHandler accountHandler;
-    @MockBean
-    private ReservationHandler reservationHandler;
-
-    @MockBean
-    private ChatController chatController;
-
     private User user;
-    private User user2;
     private User admin;
-    private Article art;
     private Case ca;
     private Conflict c1;
 
-    @Before
-    public void init() {
+    @BeforeEach
+    void init() {
         user = new User();
-        user2 = new User();
+        User user2 = new User();
         admin = new User();
-        art = new Article();
+        Article art = new Article();
         ca = new Case();
         c1 = new Conflict();
 
@@ -135,7 +77,7 @@ public class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "user")
-    public void sendConflictShouldSendConflictIfCorrespondingCaseIdIsValid() throws Exception {
+    void sendConflictShouldSendConflictIfCorrespondingCaseIdIsValid() throws Exception {
         Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
         Mockito.when(caseService.isValidCase(1L)).thenReturn(true);
 
@@ -149,7 +91,8 @@ public class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "user")
-    public void sendConflictShouldNotSendConflictIfCorrespondingCaseIdIsNotValid() throws Exception {
+    void sendConflictShouldNotSendConflictIfCorrespondingCaseIdIsNotValid()
+            throws Exception {
         Mockito.when(caseService.isValidCase(1L)).thenReturn(false);
 
         mvc.perform(MockMvcRequestBuilders.post("/openconflict?id=1")
@@ -163,10 +106,11 @@ public class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "user")
-    public void sendConflictShouldNotSendConflictIfExceptionIsThrown() throws Exception {
+    void sendConflictShouldNotSendConflictIfExceptionIsThrown() throws Exception {
         Mockito.when(caseService.isValidCase(1L)).thenReturn(true);
         Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
-        Mockito.doThrow(new AccessDeniedException("")).when(conflictService).openConflict(ca,"TestDescription");
+        Mockito.doThrow(new AccessDeniedException("")).when(conflictService)
+                .openConflict(ca, "TestDescription");
 
         mvc.perform(MockMvcRequestBuilders.post("/openconflict?id=1")
                 .param("conflictDescription", "TestDescription"))
@@ -177,9 +121,27 @@ public class ConflictControllerTest {
         Mockito.verify(conflictService, Mockito.times(1)).openConflict(ca, "TestDescription");
     }
 
+    @Disabled
     @Test
     @WithMockUser(roles = "admin")
-    public void solveConflictOwnerShouldSolveConflictForOwner() throws Exception {
+    void solveConflictOwnerShouldSolveConflictForOwner() throws Exception {
+        Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class)))
+                .thenReturn(admin);
+        Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
+        Mockito.when(conflictService.getConflict(2L, admin)).thenReturn(c1);
+
+        mvc.perform(MockMvcRequestBuilders.post("/decideforowner?id=1"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers
+                        .redirectedUrl("/conflicts"));
+        Mockito.verify(conflictService, Mockito.times(1)).solveConflict(c1, admin, user);
+        Mockito.verify(conflictService, Mockito.times(1)).deactivateConflict(2L, admin);
+    }
+
+    @Disabled
+    @Test
+    @WithMockUser(roles = "admin")
+    void solveConflictReceiverShouldSolveConflictForOwner() throws Exception {
         Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class)))
                 .thenReturn(admin);
         Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
@@ -195,23 +157,7 @@ public class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "admin")
-    public void solveConflictReceiverShouldSolveConflictForOwner() throws Exception {
-        Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class)))
-                .thenReturn(admin);
-        Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
-        Mockito.when(conflictService.getConflict(2L, admin)).thenReturn(c1);
-
-        mvc.perform(MockMvcRequestBuilders.post("/decideforowner?id=1"))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers
-                        .redirectedUrl("/conflicts"));
-        Mockito.verify(conflictService, Mockito.times(1)).solveConflict(c1, admin, user);
-        Mockito.verify(conflictService, Mockito.times(1)).deactivateConflict(2L, admin);
-    }
-
-    @Test
-    @WithMockUser(roles = "admin")
-    public void solveConflicts() throws Exception {
+    void solveConflicts() throws Exception {
         Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class)))
                 .thenReturn(admin);
         Mockito.when(caseService.findAllCasesWithOpenConflicts()).thenReturn(Arrays.asList(ca));

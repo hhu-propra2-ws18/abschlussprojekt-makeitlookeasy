@@ -1,7 +1,7 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.features.category.Category;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.CustomerReview;
 import de.propra2.ausleiherino24.service.CaseService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-// TODO: Extract duplicate code. Fix!
 
 /**
  * 'CaseController' handles all requests Case-related. This includes booking of articles (and
@@ -115,23 +113,33 @@ public class CaseController {
                 return "redirect:/myOverview?requests&alreadyRented";
             case 3:
                 return "redirect:/myOverview?requests&receiverOutOfMoney";
+            case 4:
+                return "redirect:/myOverview?requests&propayUnavailable";
             default:
                 return "redirect:/myOverview?requests&error";
         }
     }
 
-    // TODO: JavaDoc
+    /**
+     * declines a Case.
+     */
     @PostMapping("/declineCase")
     public String declineCase(final @RequestParam Long id) {
-        caseService.declineArticleRequest(id);
-        return "redirect:/myOverview?requests&declined";
+        if (caseService.declineArticleRequest(id)) {
+            return "redirect:/myOverview?requests&declined";
+        }
+        return "redirect:/myOverview?request&propayUnavailable";
     }
 
-    // TODO: JavaDoc
+    /**
+     * accepts the return of a Case.
+     */
     @PostMapping("/acceptCaseReturn")
     public String acceptCaseReturn(final @RequestParam Long id) {
-        caseService.acceptCaseReturn(id);
-        return "redirect:/myOverview?returned&successfullyReturned";
+        if (caseService.acceptCaseReturn(id)) {
+            return "redirect:/myOverview?returned&successfullyReturned";
+        }
+        return "redirect:/myOverview?returned&propayUnavailable";
     }
 
     /**
@@ -151,12 +159,8 @@ public class CaseController {
 
         caseService.saveCase(review.getAcase());
 
-        System.out.println(review); // TODO: What happens here?
-
         return "redirect:/myOverview?borrowed";
     }
-
-    // TODO: What is this method used for? (JavaDoc)
 
     /**
      * Provides a for springboot method to correctly receive and connect Article.category.

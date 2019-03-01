@@ -1,7 +1,7 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.features.category.Category;
 import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
@@ -77,8 +77,7 @@ public class MainController {
 
     /**
      * Saves new User and Person object in database after user has completed the registration
-     * process. They will then be redirected to the login page.
-     * TODO: auto login after registration
+     * process. They will then be redirected to the login page. TODO: auto login after registration
      *
      * @param user User object with attributes parsed from HTML form.
      * @param person Person object with attributes parsed fro HTML form.

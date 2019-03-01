@@ -1,11 +1,10 @@
 package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
+import de.propra2.ausleiherino24.features.category.Category;
+import de.propra2.ausleiherino24.features.imageupload.ImageService;
 import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.CalendarEvent;
-import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.User;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -41,7 +40,8 @@ public class ArticleService {
     }
 
     /**
-     * Finds an article by its id. Throws NullPointerException in cases, the article is not present.
+     * Finds an article by its id. Throws NullPointerException in cases, the article is not
+     * present.
      */
     public Article findArticleById(final Long articleId) {
         final Optional<Article> article = articleRepository.findById(articleId);
@@ -74,6 +74,7 @@ public class ArticleService {
 
     /**
      * Filters articles and checks whether they are included in given category.
+     *
      * @return all Articles, which are not reserved and are of given category
      */
     public List<Article> findAllArticlesByCategory(final Category category) {
@@ -84,6 +85,7 @@ public class ArticleService {
 
     /**
      * Returns all active articles.
+     *
      * @return all active articles.
      */
     List<Article> findAllActiveArticles() {
@@ -93,6 +95,7 @@ public class ArticleService {
 
     /**
      * Finds all article which have active=true and forRental=true.
+     *
      * @return all non-active, not rented articles.
      */
     public List<Article> findAllActiveAndForRentalArticles() {
@@ -107,14 +110,15 @@ public class ArticleService {
      * article is present by looking for ID key. If fails, throw Exception. If article is not being
      * reserved (a.k.a bound to running case) and free to book, deactivate article. Else, throw
      * Exception.
+     *
      * @param articleId ID of article to be "deleted".
      * @return boolean True, if succeeded. False, if encountered error while processing request.
      */
     public boolean deactivateArticle(final Long articleId) {
 
-        final Article article = findArticleById(articleId); //optionalArticle.get();
+        final Article article = findArticleById(articleId);
 
-        //only able to deactive if article has only cases where the requeststatus is
+        //only able to deactivate if article has only cases where the request status is
         // REQUEST_DECLINED, RENTAL_NOT_POSSIBLE or FINISHED
         if (!article.allCasesClosed()) {
             LOGGER.warn("Article {} is still reserved, lent or has an open conflict.", articleId);
@@ -129,13 +133,14 @@ public class ArticleService {
 
     /**
      * Updates an article given by the id with the information from given article.
+     *
      * @param articleId id for article, that is about to be updated
      * @param article new article
      */
-    public void updateArticle(final Long articleId, final Article article,
+    void updateArticle(final Long articleId, final Article article,
             final MultipartFile image) {
 
-        final Article originalArticle = findArticleById(articleId); //optionalArticle.get();
+        final Article originalArticle = findArticleById(articleId);
 
         originalArticle.setForRental(article.isForRental());
         originalArticle.setDeposit(article.getDeposit());
@@ -150,8 +155,8 @@ public class ArticleService {
     }
 
     /**
-     * Returns List of all articles, which name contains the given searchstring.
-     * Case of letters is ignored.
+     * Returns List of all articles, which name contains the given search string. Case of letters is
+     * ignored.
      */
     public List<Article> findAllArticlesByName(final String searchString) {
         return articleRepository.findByActiveTrueAndNameContainsIgnoreCase(searchString);

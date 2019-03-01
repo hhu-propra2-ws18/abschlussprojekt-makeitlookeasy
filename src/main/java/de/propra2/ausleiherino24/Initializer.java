@@ -5,13 +5,13 @@ import de.propra2.ausleiherino24.data.ArticleRepository;
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.data.UserRepository;
+import de.propra2.ausleiherino24.features.category.Category;
+import de.propra2.ausleiherino24.features.imageupload.ImageService;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.Person;
-import de.propra2.ausleiherino24.model.PpTransaction;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.service.ImageService;
+import de.propra2.ausleiherino24.propayhandler.model.PpTransaction;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -165,23 +165,23 @@ public class Initializer implements ServletContextInitializer {
                         "Hans",
                         "Peter"), USER);
 
-        List<Article> articles = persons
+        final List<Article> articles = persons
                 .stream()
-                .map(p -> p.getUser().getArticleList())
-                .flatMap(a -> a.stream())
+                .map(person -> person.getUser().getArticleList())
+                .flatMap(article -> article.stream())
                 .collect(Collectors.toList());
 
         //Hans leiht sich 10 zufällige Artikel aus
         IntStream.range(0, 10)
                 .mapToObj(articles::get)
                 .forEach(article -> {
-                    Case c = createCase(
+                    final Case initcase = createCase(
                             article,
                             hans,
                             convertDateAsLong(1, 1, 2019),
                             new Date().getTime() + 3600 * 24 * 1000,
                             Case.RUNNING);
-                    article.addCase(c);
+                    article.addCase(initcase);
                 });
 
         IntStream.range(0, 7)
@@ -202,7 +202,7 @@ public class Initializer implements ServletContextInitializer {
                 });
 
         hans.getArticleList().forEach(article ->
-                IntStream.range(0, 2).forEach(a -> {
+                IntStream.range(0, 2).forEach(hansArticles -> {
                     final Case aCase = createCase(
                             article,
                             persons.get(faker.random().nextInt(0, persons.size() - 1)).getUser(),
@@ -220,7 +220,7 @@ public class Initializer implements ServletContextInitializer {
                 })
         );
         hans.getArticleList().forEach(article ->
-                IntStream.range(0, 1).forEach(a -> {
+                IntStream.range(0, 1).forEach(hansArticles -> {
                     final int startDay = faker.random().nextInt(0, 31);
                     final int startMonth = faker.random().nextInt(0, 11);
                     final Case aCase = createCase(
@@ -260,7 +260,7 @@ public class Initializer implements ServletContextInitializer {
      * Creates a user from parameters.
      */
     private User createUser(final String email, final String username, final Person person,
-            String role) {
+            final String role) {
         final User user = new User();
         user.setEmail(email);
         user.setUsername(username);

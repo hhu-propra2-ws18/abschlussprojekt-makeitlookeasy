@@ -29,7 +29,7 @@ addons:
 #  - docker -v
 
 script:
-  - ./gradlew sonarqube
+  - ./gradlew clean sonarqube
   - ./gradlew check
   - ./gradlew pitest
 
@@ -41,7 +41,8 @@ cache:
   directories:
     - '$HOME/.m2/repository'
     - '$HOME/.sonar/cache'
-    - '$HOME/.gradle'
-    - '.gradle'
     - '$HOME/.gradle/caches/'
     - '$HOME/.gradle/wrapper/'
+
+notifications:
+  email: false

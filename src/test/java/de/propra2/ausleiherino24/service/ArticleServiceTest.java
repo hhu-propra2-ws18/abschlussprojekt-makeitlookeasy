@@ -1,29 +1,35 @@
 package de.propra2.ausleiherino24.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.propra2.ausleiherino24.data.ArticleRepository;
+import de.propra2.ausleiherino24.features.category.Category;
+import de.propra2.ausleiherino24.features.imageupload.ImageService;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
-import de.propra2.ausleiherino24.model.Category;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 
-public class ArticleServiceTest {
+@ExtendWith(SpringExtension.class)
+class ArticleServiceTest {
 
     private ArticleService articleService;
     private ArticleRepository articleRepositoryMock;
@@ -34,8 +40,8 @@ public class ArticleServiceTest {
     private Article article03;
     private Article article04;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         articleRepositoryMock = mock(ArticleRepository.class);
         articleService = new ArticleService(articleRepositoryMock, mock(ImageService.class));
 
@@ -51,14 +57,14 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void saveNewArticle() {
+    void saveNewArticle() {
         articleService.saveArticle(new Article(), "");
 
         verify(articleRepositoryMock).save(new Article());
     }
 
     @Test
-    public void tripleArticle() {
+    void tripleArticle() {
         article02.setActive(false);
         article03.setActive(false);
 
@@ -75,7 +81,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void twoArticlesForRental() {
+    void twoArticlesForRental() {
         final Case c = new Case();
         c.setRequestStatus(Case.RUNNING);  //requestStatus = RUNNING
         article03.setCases(Arrays.asList(c));
@@ -92,7 +98,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void threeToys() {
+    void threeToys() {
         articles.add(article01);
         articles.add(article02);
         articles.add(article03);
@@ -103,7 +109,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void threeToys2() {
+    void threeToys2() {
         articles.add(article01);
         articles.add(article02);
         articles.add(article03);
@@ -114,7 +120,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void twoToysTwoTools() {
+    void twoToysTwoTools() {
         article02.setCategory(Category.TOOLS);
         article04.setCategory(Category.TOOLS);
 
@@ -132,7 +138,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void twoToysTwoTools2() {
+    void twoToysTwoTools2() {
         article02.setCategory(Category.TOOLS);
         article04.setCategory(Category.TOOLS);
 
@@ -150,7 +156,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactivateArticle() {
+    void deactivateArticle() {
         final Optional<Article> op = Optional.of(article01);
         when(articleRepositoryMock.findById(0L)).thenReturn(op);
 
@@ -162,7 +168,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactivateLendArticle() {
+    void deactivateLendArticle() {
         final Case c = new Case();
         c.setRequestStatus(Case.RUNNING);  //requestStatus = RUNNING
         article01.setCases(Arrays.asList(c));
@@ -174,7 +180,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactivateArticleWithConflict() {
+    void deactivateArticleWithConflict() {
         final Case c = new Case();
         c.setRequestStatus(Case.OPEN_CONFLICT);  //requestStatus = OPEN_CONFLICT
         article01.setCases(Arrays.asList(c));
@@ -186,7 +192,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void deactivateFinishedArticle() {
+    void deactivateFinishedArticle() {
         final Case c = new Case();
         c.setRequestStatus(Case.FINISHED);  //requestStatus = FINISHED
         article01.setCases(Arrays.asList(c));
@@ -200,15 +206,18 @@ public class ArticleServiceTest {
         assertFalse(argument.getValue().isActive());
     }
 
-    @Test(expected = Exception.class)
-    public void deactivateNotExistingArticle() {
-        when(articleRepositoryMock.findById(0L)).thenReturn(Optional.empty());
+    @Test
+    void deactivateNotExistingArticle() {
 
-        articleService.deactivateArticle(0L);
+        assertThrows(NoSuchElementException.class, () -> {
+            when(articleRepositoryMock.findById(0L)).thenReturn(Optional.empty());
+            articleService.deactivateArticle(0L);
+        });
+
     }
 
     @Test
-    public void updateArticle() {
+    void updateArticle() {
         final Article article = new Article();
         article.setForRental(true);
         article.setDeposit(0D);
@@ -219,6 +228,7 @@ public class ArticleServiceTest {
         when(articleRepositoryMock.findById(0L)).thenReturn(Optional.of(article));
         final ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
 
+        // TODO ??
         articleService.updateArticle(0L, article, new MultipartFile() {
             @Override
             public String getName() {
@@ -266,7 +276,7 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void setForSaleToFalse() {
+    void setForSaleToFalse() {
         when(articleRepositoryMock.findById(0L)).thenReturn(Optional.of(new Article()));
         final ArgumentCaptor<Article> argument = ArgumentCaptor.forClass(Article.class);
 

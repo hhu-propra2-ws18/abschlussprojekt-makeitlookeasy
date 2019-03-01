@@ -47,7 +47,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private List<Article> articleList;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
     private Person person;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver")
@@ -85,11 +85,6 @@ public class User {
         if (!repetition) {
             article.setOwner(this, true);
         }
-    }
-
-    public void removeArticle(final Article article) {
-        articleList.remove(article);
-        article.setOwner(null);
     }
 
     public void setPerson(final Person person) {

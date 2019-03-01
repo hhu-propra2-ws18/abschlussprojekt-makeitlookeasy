@@ -2,24 +2,27 @@ package de.propra2.ausleiherino24.service;
 
 import de.propra2.ausleiherino24.data.PersonRepository;
 import de.propra2.ausleiherino24.model.Person;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-public class PersonServiceTest {
+@ExtendWith(SpringExtension.class)
+class PersonServiceTest {
 
     private PersonService personService;
     private PersonRepository persons;
 
-    @Before
-    public void init() {
+    @BeforeEach
+    void init() {
 
         persons = Mockito.mock(PersonRepository.class);
         personService = new PersonService(persons);
     }
 
     @Test
-    public void savePersonShouldSavePerson() throws Exception {
+    void savePersonShouldSavePerson() {
         final Person person = new Person();
         person.setId(1L);
 

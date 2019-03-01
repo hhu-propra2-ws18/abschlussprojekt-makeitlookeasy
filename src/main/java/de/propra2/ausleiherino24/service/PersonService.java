@@ -23,6 +23,7 @@ public class PersonService {
 
     /**
      * Saves created/updated Person object to database.
+     *
      * @param person Person object that gets stored in databased.
      * @param msg String with message for LOGGER. Either "Created" or "Updated".
      */
@@ -33,6 +34,7 @@ public class PersonService {
 
     /**
      * returns person with given id.
+     *
      * @param id personId
      */
     Person findPersonById(final Long id) {

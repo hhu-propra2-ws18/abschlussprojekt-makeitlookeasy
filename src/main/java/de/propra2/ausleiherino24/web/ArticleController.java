@@ -1,17 +1,16 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.features.calendar.CalendarEvent;
+import de.propra2.ausleiherino24.features.calendar.CalendarEventService;
+import de.propra2.ausleiherino24.features.category.Category;
+import de.propra2.ausleiherino24.features.imageupload.ImageService;
 import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.CalendarEvent;
-import de.propra2.ausleiherino24.model.Category;
 import de.propra2.ausleiherino24.model.CustomerReview;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.ArticleService;
-import de.propra2.ausleiherino24.service.CalendarEventService;
 import de.propra2.ausleiherino24.service.CustomerReviewService;
-import de.propra2.ausleiherino24.service.ImageService;
 import de.propra2.ausleiherino24.service.UserService;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +52,7 @@ public class ArticleController {
     @Autowired
     public ArticleController(final ArticleService articleService, final UserService userService,
             final ImageService imageService, final CustomerReviewService customerReviewService,
-            CalendarEventService calendarEventService) {
+            final CalendarEventService calendarEventService) {
         this.articleService = articleService;
         this.userService = userService;
         this.imageService = imageService;
@@ -69,7 +68,7 @@ public class ArticleController {
      * @return Specific article view.
      */
     @GetMapping("")
-    public ModelAndView displayArticle(final @RequestParam("id") Long id,
+    public ModelAndView displayArticle(final @RequestParam(value = "id") Long id,
             final Principal principal) {
         final Article article = articleService.findArticleById(id);
         final List<CustomerReview> allReviews = customerReviewService.findAllReviews();
@@ -180,6 +179,16 @@ public class ArticleController {
     }
 
     /**
+     * Return CalendarEvents as JSON for the calendar which shows all non available dates of an
+     * article.
+     */
+    @GetMapping("/events")
+    @ResponseBody
+    private List<CalendarEvent> getEventsForCalendar(final @RequestParam Long id) {
+        return calendarEventService.getAllEventsFromOneArticle(id);
+    }
+
+    /**
      * Extracted method to reduce code duplication.
      *
      * @param mav ModelAndView object to be returned in implementing methods.
@@ -192,16 +201,6 @@ public class ArticleController {
 
         mav.addObject("user", currentUser);
         mav.addObject("article", article);
-    }
-
-    /**
-     * Return CalendarEvents as JSON for the calendar which shows all non available dates of an
-     * article.
-     */
-    @GetMapping("/events")
-    @ResponseBody
-    private ArrayList<CalendarEvent> getEventsForCalendar(final @RequestParam Long id) {
-        return calendarEventService.getAllEventsFromOneArticle(id);
     }
 
 }

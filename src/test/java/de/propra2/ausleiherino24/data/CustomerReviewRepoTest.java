@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
 
@@ -25,7 +25,7 @@ public class CustomerReviewRepoTest {
 
     private List<CustomerReview> customerReviewList;
 
-    @Before
+    @BeforeEach
     public void init() {
         final CustomerReview customerReview1 = new CustomerReview();
         final CustomerReview customerReview2 = new CustomerReview();

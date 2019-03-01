@@ -6,7 +6,7 @@ services:
     image: propra/propay:latest
     restart: always
     volumes:
-      - ./PPdata:/code/data
+      - ppdata:/code/data
 
   ausleiherino24:
     container_name: ausleiherino24
@@ -22,9 +22,9 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./scripts:/app/scripts
-      - ./config:/app/config
-    command: dockerize -wait tcp://db:5432 -timeout 60s -wait tcp://propay:8888 -timeout 60s java -jar app.jar
+      - uploads:/app/uploads
+    entrypoint: dockerize -wait tcp://db:5432 -timeout 60s -wait tcp://propay:8888 -timeout 60s
+    command: java -cp /app/resources:/app/classes:/app/libs/* de.propra2.ausleiherino24.Ausleiherino24Application
 
   db:
     container_name: pgsql-01
@@ -33,5 +33,9 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./pgsql-01/data:/var/lib/postgresql/data
-      - ./pgsql-01/conf:/config
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+  uploads:
+  ppdata:
