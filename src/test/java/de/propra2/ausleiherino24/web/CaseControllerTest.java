@@ -1,24 +1,16 @@
 package de.propra2.ausleiherino24.web;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 
-import de.propra2.ausleiherino24.data.ArticleRepository;
-import de.propra2.ausleiherino24.data.CaseRepository;
-import de.propra2.ausleiherino24.features.imageupload.ImageService;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
-import de.propra2.ausleiherino24.service.ArticleService;
-import de.propra2.ausleiherino24.service.UserService;
+import de.propra2.ausleiherino24.service.CaseService;
+import de.propra2.ausleiherino24.service.CustomerReviewService;
 import java.security.Principal;
-import java.util.ArrayList;
-import org.assertj.core.api.Assertions;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -33,7 +25,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.multipart.MultipartFile;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -45,15 +36,11 @@ class CaseControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private ArticleRepository articleRepository;
+    private CustomerReviewService customerReviewService;
+
     @MockBean
-    private CaseRepository caseRepository;
-    @MockBean
-    private ArticleService articleService;
-    @MockBean
-    private ImageService imageService;
-    @MockBean
-    private UserService userService;
+    private CaseService caseService;
+
 
     private User user;
     private Article article;
@@ -69,139 +56,65 @@ class CaseControllerTest {
         article.setId(1L);
     }
 
-    @Disabled
     @Test
     @WithMockUser(roles = "user")
-    void successfulDisplayArticleStatusTest() throws Exception {
-        Mockito.when(article.getOwner()).thenReturn(user);
-        Mockito.when(userService.findUserByPrincipal(any(Principal.class))).thenReturn(user);
-        Mockito.when(articleService.findArticleById(1L)).thenReturn(article);
+    void successfulRedirectionBookArticle() throws Exception {
+        Mockito.when(caseService.requestArticle(1L, 1L, 2L,
+                "user")).thenReturn(true);
 
-        mvc.perform(MockMvcRequestBuilders.get("/article?id=1"))
-                .andExpect(MockMvcResultMatchers
-                        .status().isOk())
-                .andExpect(MockMvcResultMatchers
-                        .view().name("/shop/item"))
-                .andExpect(MockMvcResultMatchers
-                        .model().attribute("article", article))
-                .andExpect(MockMvcResultMatchers
-                        .model().attribute("user", user));
+        mvc.perform(MockMvcRequestBuilders.post("/bookArticle").param("id", "1")
+                .param("startDate", "1", "endDate", "2"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
-    @Disabled
     @Test
     @WithMockUser(roles = "user")
-    void createNewArticleStatusTest() throws Exception {
-        Mockito.when(userService.findUserByPrincipal(any(Principal.class))).thenReturn(user);
+    void successfulRedirectionBuyArticle() throws Exception {
+        Mockito.when(caseService.sellArticle(ArgumentMatchers.eq(1L), any(Principal.class)))
+                .thenReturn(true);
 
-        mvc.perform(MockMvcRequestBuilders.get("/newArticle"))
-                .andExpect(MockMvcResultMatchers
-                        .status().isOk())
-                .andExpect(MockMvcResultMatchers
-                        .view().name("/shop/newItem"))
-                .andExpect(MockMvcResultMatchers
-                        .model().attribute("article", Matchers.isA(Article.class)));
+        mvc.perform(MockMvcRequestBuilders.post("/buyArticle").param("articleId", "1"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
-    @Disabled
     @Test
     @WithMockUser(roles = "user")
-    void saveNewArticleStatusTest() throws Exception {
-        final MultipartFile file = mock(MultipartFile.class);
+    void successfulRedirectionAcceptCase() throws Exception {
+        Mockito.when(caseService.acceptArticleRequest(ArgumentMatchers.eq(1L))).thenReturn(1);
 
-        Mockito.when(userService.findUserByPrincipal(any(Principal.class))).thenReturn(user);
-        Mockito.when(imageService.store(any(MultipartFile.class), eq(null))).thenReturn("");
-
-        mvc.perform(MockMvcRequestBuilders.multipart("/saveNewArticle?image=" + file))
-                .andExpect(MockMvcResultMatchers
-                        .status().isOk())
-                .andExpect(MockMvcResultMatchers
-                        .view().name("redirect:/"));
+        mvc.perform(MockMvcRequestBuilders.post("/acceptCase").param("id", "1"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
-    @Disabled
+
     @Test
-    void saveNewCaseAndArticleModelTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.post("/saveNewArticle").flashAttr("article", article))
-                .andExpect(MockMvcResultMatchers
-                        .model().attribute("case", Matchers.isA(Case.class)))
-                .andExpect(MockMvcResultMatchers
-                        .model().attribute("case",
-                                Matchers.hasProperty("article", Matchers.equalTo(article))));
-        Mockito.verify(articleService, Mockito.times(1))
-                .saveArticle(ArgumentMatchers.refEq(article), "Created");
+    @WithMockUser(roles = "user")
+    void successfulRedirectionDeclineCase() throws Exception {
+        Mockito.when(caseService.declineArticleRequest(ArgumentMatchers.eq(1L))).thenReturn(true);
+
+        mvc.perform(MockMvcRequestBuilders.post("/declineCase").param("id", "1"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
-    @Disabled
+
     @Test
-    void saveEditedCaseAndArticleStatusTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/saveEditedArticle"))
-                .andExpect(MockMvcResultMatchers
-                        .status().isOk());
+    @WithMockUser(roles = "user")
+    void successfulRedirectionAcceptCaseReturn() throws Exception {
+        Mockito.when(caseService.acceptCaseReturn(ArgumentMatchers.eq(1L))).thenReturn(true);
+
+        mvc.perform(MockMvcRequestBuilders.post("/acceptCaseReturn").param("id", "1"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
-    @Disabled
+
     @Test
-    void saveEditedCaseAndArticleViewTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/saveEditedArticle"))
-                .andExpect(MockMvcResultMatchers
-                        .view().name("article"));
+    @WithMockUser(roles = "user")
+    void successfulRedirectionWriteReview() throws Exception {
+        Mockito.when(caseService.findCaseById(ArgumentMatchers.eq(1L))).thenReturn(new Case());
+
+        mvc.perform(MockMvcRequestBuilders.post("/acceptCase").param("id", "1"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
-    @Disabled
-    @Test
-    void saveEditedCaseAndArticleModelTest() throws Exception {
-        final Article article = new Article();
-        article.setId(1L);
-
-        mvc.perform(MockMvcRequestBuilders.put("/saveEditedArticle").flashAttr("article", article))
-                .andExpect(MockMvcResultMatchers
-                        .model().attribute("article", Matchers.equalTo(article)));
-        Mockito.verify(articleRepository, Mockito.times(1)).save(ArgumentMatchers.refEq(article));
-    }
-
-    @Disabled
-    @Test
-    void deactivateArticleStatusTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/deactivateArticle"))
-                .andExpect(MockMvcResultMatchers
-                        .status().isOk());
-    }
-
-    @Disabled
-    @Test
-    void deactivateArticleViewTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.put("/deactivateArticle"))
-                .andExpect(MockMvcResultMatchers
-                        .view().name("index"));
-    }
-
-    @Disabled
-    @Test
-    void deactivateArticleModelTest() throws Exception {
-        final Article article = new Article();
-        article.setId(1L);
-        final Article article2 = new Article();
-        article2.setId(2L);
-        final Article article3 = new Article();
-        article3.setId(3L);
-        final Case c1 = new Case();
-        c1.setArticle(article);
-        final Case c2 = new Case();
-        c2.setArticle(article2);
-        final Case c3 = new Case();
-        c3.setArticle(article3);
-        final ArrayList<Case> cas = new ArrayList<>();
-        cas.add(c1);
-        cas.add(c2);
-        cas.add(c3);
-
-        Mockito.when(caseRepository.findAll()).thenReturn(cas);
-        mvc.perform(MockMvcRequestBuilders.put("/deactivateArticle").flashAttr("article", article));
-        Mockito.verify(articleRepository, Mockito.times(1)).save(ArgumentMatchers.refEq(article));
-        Mockito.verify(caseRepository, Mockito.times(1)).save(ArgumentMatchers.refEq(c1));
-        Assertions.assertThat(c1.isActive()).isFalse();
-        Assertions.assertThat(article.isActive()).isFalse();
-    }
 
 }
