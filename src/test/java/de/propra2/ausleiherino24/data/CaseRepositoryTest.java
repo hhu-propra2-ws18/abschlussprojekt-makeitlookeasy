@@ -2,6 +2,7 @@ package de.propra2.ausleiherino24.data;
 
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
+import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +27,9 @@ public class CaseRepositoryTest {
 
     @Autowired
     private UserRepository users;
+
+    @Autowired
+    private PersonRepository persons;
 
     private Case case1;
     private Case case2;
@@ -229,5 +233,63 @@ public class CaseRepositoryTest {
                 .findAllRequestedCasesByUserId(case1.getArticle().getOwner().getId());
 
         Assertions.assertThat(actualCases.isEmpty()).isTrue();
+    }
+
+    @Test
+    public void customQueryGetLendCasesFromPersonReceiverShouldReturnOneCase() {
+        Person person = new Person();
+        persons.save(person);
+
+        case1.getArticle().setForSale(true);
+        case1.getReceiver().setPerson(person);
+
+        case2.getArticle().setForSale(false);
+        case2.getReceiver().setPerson(person);
+
+        final List<Case> actualCases = cases
+                .getLendCasesFromPersonReceiver(case2.getReceiver().getPerson().getId());
+        final List<Case> expectedCases = new ArrayList<>(Arrays.asList(case2));
+
+        Assertions.assertThat(actualCases).isEqualTo(expectedCases);
+    }
+
+    @Test
+    public void customQueryfindAllSoldItemsByUserIdShouldReturnOneCases() {
+        User user1 = new User();
+        users.save(user1);
+
+        case1.getArticle().setForSale(false);
+        case1.getArticle().setOwner(new User());
+        case1.setRequestStatus(1);
+
+        case2.getArticle().setForSale(true);
+        case2.getArticle().setOwner(user1);
+        case2.setRequestStatus(14);
+
+        final List<Case> actualCases = cases
+                .findAllSoldItemsByUserId(case2.getArticle().getOwner().getId());
+        final List<Case> expectedCases = new ArrayList<>(Arrays.asList(case2));
+
+        Assertions.assertThat(actualCases).isEqualTo(expectedCases);
+    }
+
+    @Test
+    public void customQueryfindAllOutrunningCasesByUserIdShouldReturnOneCases() {
+        User user1 = new User();
+        users.save(user1);
+
+        case1.getArticle().setForSale(false);
+        case1.setReceiver(user1);
+        case1.setEndTime(2L);
+
+        case2.getArticle().setForSale(true);
+        case2.setReceiver(new User());
+        case2.setEndTime(4L);
+
+        final List<Case> actualCases = cases
+                .findAllOutrunningCasesByUserId(case1.getReceiver().getId(), 1L, 3L);
+        final List<Case> expectedCases = new ArrayList<>(Arrays.asList(case1));
+
+        Assertions.assertThat(actualCases).isEqualTo(expectedCases);
     }
 }
