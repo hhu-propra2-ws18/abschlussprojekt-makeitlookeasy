@@ -46,6 +46,19 @@
 
     }
 
+    function warningFunction() {
+      var item = document.getElementById("warnings");
+      var link1 = document.getElementById("link1");
+      var link2 = document.getElementById("link2");
+
+      item.style.display = (
+          item.style.display == "block" ? "none" : "block");
+      link1.style.display = (
+          link1.style.display == "block" ? "none" : "block");
+      link2.style.display = (
+          link2.style.display == "block" ? "none" : "block");
+    }
+
     function twoFunction() {
       var mainFrameOne = document.getElementById("mainFrameOne");
       var mainFrameTwo = document.getElementById("mainFrameTwo");
@@ -216,11 +229,19 @@
         </button>
       </div>
       <!--Warnings for outrunning Cases-->
-      <div class="alert alert-warning absolue center alert-dismissible fade show" role="alert"
-           th:each="case: ${outrunning}"> You have to return
-        <a th:href="@{~/article(id=${case.article.id})}"><strong
-            th:text="${case.article.name}"></strong></a> on
-        <span th:text="${case.getFormattedEndTime()}"></span>
+      <div class="alert alert-warning absolue center alert-dismissible fade show" role="alert">
+        You have to return <span th:text="${outrunning.size()}"></span> items tomorrow.
+        <a onclick="warningFunction()" style="display: block" id="link1"><strong>Show all</strong></a>
+        <a onclick="warningFunction()" style="display: none" id="link2"><strong>Hide all</strong></a>
+        <div id="warnings" style="display: none">
+          <ul style="list-style-type:none;">
+            <li th:each="case: ${outrunning}">
+              <a th:href="@{~/article(id=${case.article.id})}"><strong
+                  th:text="${case.article.name}"></strong></a> on
+              <span th:text="${case.getFormattedEndTime()}"></span>
+            </li>
+          </ul>
+        </div>
         <button aria-label="Close" class="close" data-dismiss="alert" type="button">
           <span aria-hidden="true">&times;</span>
         </button>
