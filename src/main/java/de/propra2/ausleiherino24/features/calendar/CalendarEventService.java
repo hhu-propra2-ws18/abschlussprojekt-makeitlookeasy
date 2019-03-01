@@ -4,7 +4,10 @@ import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Article;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.service.ArticleService;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,17 +32,22 @@ public class CalendarEventService {
     }
 
     /**
-     * Search all cases by article, than write them into a new CalendarEvent Object and return as
-     * arrayList.
+     * Search all cases by article, then write them into a new CalendarEvent Object and return as
+     * arrayList. End day need to be set to a time greater than 0:0 because the calendar otherwise
+     * does not mark the last day.
      */
     public List<CalendarEvent> getAllEventsFromOneArticle(final Long articleId) {
         final Article article = articleService.findArticleById(articleId);
         final List<Case> allCases = caseRepository.findAllByArticleWhereStatusIsGreater7(article);
         final List<CalendarEvent> allCalendarEvents = new ArrayList<>();
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         for (final Case calendarCase : allCases) {
             final CalendarEvent calendarEvent = new CalendarEvent();
-            calendarEvent.setStart(calendarCase.getStartTime());
-            calendarEvent.setEnd(calendarCase.getEndTime());
+            Date start = new Date(calendarCase.getStartTime());
+            Date end = new Date(calendarCase.getEndTime());
+            calendarEvent.setStart(formatter.format(start));
+            ;
+            calendarEvent.setEnd(formatter.format(end) + "T23:59:59.008");
             allCalendarEvents.add(calendarEvent);
         }
         return allCalendarEvents;

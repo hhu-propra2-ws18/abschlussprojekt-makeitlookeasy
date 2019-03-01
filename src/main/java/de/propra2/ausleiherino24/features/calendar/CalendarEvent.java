@@ -10,9 +10,9 @@ public class CalendarEvent {
 
     protected String title;
 
-    protected Long start;
+    protected String start;
 
-    protected long end;
+    protected String end;
 
     public CalendarEvent() {
         this.title = "Booked";
