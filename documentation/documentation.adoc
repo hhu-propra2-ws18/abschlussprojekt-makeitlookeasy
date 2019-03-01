@@ -269,6 +269,8 @@ is on the following day.
 * As discussed with https://github.com/n2o[Christian Meter] we included the javadocs for our application,
   which we could generate because they were properly implemented throughout the whole source-code, even through,
   according to the main task given, generated files must not be checked in.
+* The given main-task demanded to use _int_ for the prices. As discussed with the organizers we used _double_
+  to provide a more precise calculation.
 
 == Committed production file.
 We have noticed, that a production file had been pushed to the 'master'-branch, even though the

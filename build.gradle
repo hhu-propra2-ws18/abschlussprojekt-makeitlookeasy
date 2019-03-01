@@ -112,7 +112,7 @@ test {
     }
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
 //     outputs.upToDateWhen { false }  // this forces to always rerun all tests, even if task status was
-    // already successful (and cached) in the past. TODO(quicklink) force-test-rerun-switch    
+//     already successful (and cached) in the past. TODO(quicklink) force-test-rerun-switch    
 }
 
 test.finalizedBy jacocoTestReport

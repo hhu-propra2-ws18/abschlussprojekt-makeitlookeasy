@@ -3,7 +3,7 @@
 i=""
 j=`pwd`
 
-for i in $j/{build/logs/services,build/logs/container-logs,pgsql-01/data,pgsql-01/conf,/PPdata}
+for i in $j/{build/logs/services,build/logs/container-logs,pgsql-01/data,pgsql-01/conf,PPdata,uploads}
 do
         if [[ ! -d "$i" ]]; then
           echo creating... "$i"
