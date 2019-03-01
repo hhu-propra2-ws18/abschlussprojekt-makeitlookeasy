@@ -41,6 +41,5 @@ public class CalendarServiceTest {
         when(caseRepsitory.findAllByArticle(article)).thenReturn(cases);
         ArrayList<CalendarEvent> cal = calendarEventService.getAllEventsFromOneArticle(0L);
         assertEquals(cal.get(0).getStart(), java.util.Optional.of(date.getTime()).get());
-        System.out.println(cal);
     }
 }

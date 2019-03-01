@@ -141,7 +141,7 @@ public class CaseService {
         if (accountHandler.hasValidFunds(username,
                 totalCost + articleService.findArticleById(articleId).getDeposit())
                 && articleNotRented(articleService.findArticleById(articleId), startTime,
-                endTime) && new Date().getTime() < startTime && startTime < endTime
+                endTime) && new Date().getTime()-86000000 < startTime && startTime < endTime
                 && !articleService.findArticleById(articleId).getOwner().getUsername()
                 .equals(username)) {
 
