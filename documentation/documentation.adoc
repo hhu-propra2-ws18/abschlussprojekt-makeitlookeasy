@@ -164,7 +164,7 @@ The `MainController` maps requests that you can view without being logged in. Th
 index, index filtered by categories, the login page and the registration page.
 
 === UserController
-The `UserController` maps user specific requests. In particular those which you can access through
+The `UserController` maps user specific requests. In particular those which you can access throughs
 the navigationbar. Furthermore you can save your profile, add money to your propay-account and
 access profile views. 
 
@@ -173,16 +173,22 @@ access profile views.
 == Services
 
 === ArticleService
-TODO: provide description
+The 'ArticleService' provides besides basic functions like saving and updating articles methods to
+find Articles and Lists of Articles by different attributes, for example the name, the id or by user.
+The service also contains methods to deactivate or sell articles.
 
 === CaseService
-TODO: provide description
+The 'CaseService' handles all actions associated with cases. That includes saving cases in the database,
+find cases by different attributes and methods to check different flags/variables of cases.
+It also provides functions to request to lend an article, declining or accepting those requests,
+selling articles or opening conflicts.
 
 === ConflictService
-TODO: provide description
+The 'ConflictService' manages the conflicts that may occur when a article is lend. It is responsible
+for creating conflicts, deleting and deactivating conflicts and solving conflicts.
 
 === CustomerReviewService
-TODO: provide description
+The 'CustomReviewService' provides functions to save and find customer review.
 
 === ImageService
 The `ImageService` is used to upload images to a file system and retrieve them.
@@ -198,10 +204,10 @@ speed up the search for a specific image.
 The `PersonService` provides methods to save and find a person.
 
 === SearchUserService
-TODO: provide description
+The 'SearchUserService' has a method that gives user details to a given username.
 
 === UserService
-The `UserService` provides different methods to save and find a user.
+The `UserService` provides different methods to save, create and find a user.
 
 
 
