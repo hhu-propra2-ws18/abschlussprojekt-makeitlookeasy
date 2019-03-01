@@ -18,7 +18,7 @@ public class AccountHandler {
 
     private final RestTemplate restTemplate;
 
-    private final String ACCOUNT_URL;
+    private final String accountUrl;
 
     /**
      * Autowired constructor.
@@ -27,9 +27,9 @@ public class AccountHandler {
      */
     @Autowired
     public AccountHandler(final RestTemplate restTemplate,
-            @Value("${PP_ACCOUNT_URL}") String ACCOUNT_URL) {
+            @Value("${PP_ACCOUNT_URL}") String accountUrl) {
         this.restTemplate = restTemplate;
-        this.ACCOUNT_URL = ACCOUNT_URL;
+        this.accountUrl = accountUrl;
     }
 
     /**
@@ -56,7 +56,7 @@ public class AccountHandler {
      */
     PpAccount getAccountData(final String accountName) {
         return restTemplate
-                .getForObject(ACCOUNT_URL + ACCOUNT_DEFAULT, PpAccount.class, accountName);
+                .getForObject(accountUrl + ACCOUNT_DEFAULT, PpAccount.class, accountName);
     }
 
     /**
@@ -102,7 +102,7 @@ public class AccountHandler {
      */
     public void addFunds(final String username, final Double amount) {
 
-        restTemplate.postForLocation(ACCOUNT_URL + ACCOUNT_DEFAULT + "?amount=" + amount.toString(),
+        restTemplate.postForLocation(accountUrl + ACCOUNT_DEFAULT + "?amount=" + amount.toString(),
                 null, username);
     }
 
@@ -128,7 +128,7 @@ public class AccountHandler {
             final Double amount) {
 
         restTemplate.postForLocation(
-                ACCOUNT_URL + "/{sourceAccount}/transfer/{targetAccount}" + "?amount=" + amount
+                accountUrl + "/{sourceAccount}/transfer/{targetAccount}" + "?amount=" + amount
                         .toString(), null, sourceUser, targetUser);
     }
 

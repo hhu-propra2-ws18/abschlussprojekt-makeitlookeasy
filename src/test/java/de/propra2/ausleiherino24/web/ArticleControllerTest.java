@@ -19,6 +19,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,7 +70,7 @@ class ArticleControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "user")
+    @WithMockUser(roles = "user", username = "")
     void successfullyDisplayArticleTest() throws Exception {
         final List<Category> allCategories = Category.getAllCategories();
         final List<CustomerReview> allReviews = new ArrayList<>();
@@ -84,13 +85,14 @@ class ArticleControllerTest {
                 .andExpect(MockMvcResultMatchers
                         .view().name("/shop/item"))
                 .andExpect(MockMvcResultMatchers
-                        .model().attribute("user", user))
+                        .model().attribute("user", Matchers.is(Matchers.equalTo(user))))
                 .andExpect(MockMvcResultMatchers
-                        .model().attribute("article", article))
+                        .model().attribute("article", Matchers.is(Matchers.equalTo(article))))
                 .andExpect(MockMvcResultMatchers
-                        .model().attribute("categories", allCategories))
+                        .model()
+                        .attribute("categories", Matchers.is(Matchers.equalTo(allCategories))))
                 .andExpect(MockMvcResultMatchers
-                        .model().attribute("review", allReviews));
+                        .model().attribute("review", Matchers.is(Matchers.equalTo(allReviews))));
     }
 
     @Test
@@ -106,11 +108,12 @@ class ArticleControllerTest {
                 .andExpect(MockMvcResultMatchers
                         .view().name("/shop/newItem"))
                 .andExpect(MockMvcResultMatchers
-                        .model().attribute("user", user))
+                        .model().attribute("user", Matchers.is(Matchers.equalTo(user))))
                 .andExpect(MockMvcResultMatchers
-                        .model().attribute("article", new Article()))
+                        .model().attribute("article", Matchers.is(Matchers.equalTo(new Article()))))
                 .andExpect(MockMvcResultMatchers
-                        .model().attribute("categories", allCategories));
+                        .model()
+                        .attribute("categories", Matchers.is(Matchers.equalTo(allCategories))));
     }
 
     @Test

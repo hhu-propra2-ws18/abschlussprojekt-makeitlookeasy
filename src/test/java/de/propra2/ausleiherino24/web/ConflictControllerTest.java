@@ -10,6 +10,7 @@ import de.propra2.ausleiherino24.service.UserService;
 import java.nio.file.AccessDeniedException;
 import java.security.Principal;
 import java.util.Arrays;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,11 +46,12 @@ class ConflictControllerTest {
     private User admin;
     private Case ca;
     private Conflict c1;
+    private User user2;
 
     @BeforeEach
     void init() {
         user = new User();
-        User user2 = new User();
+        user2 = new User();
         admin = new User();
         Article art = new Article();
         ca = new Case();
@@ -122,12 +124,12 @@ class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "admin")
-    void solveConflictOwnerShouldSolveConflictForOwner() throws Exception {
+    void solveConflictOwnerShouldSolveConflictForOwnerIfPropayIsAvailable() throws Exception {
         Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class)))
                 .thenReturn(admin);
         Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
         Mockito.when(conflictService.getConflict(2L, admin)).thenReturn(c1);
-        Mockito.when(conflictService.solveConflict(c1, admin, c1.getOwner())).thenReturn(true);
+        Mockito.when(conflictService.solveConflict(c1, admin, user)).thenReturn(true);
 
         mvc.perform(MockMvcRequestBuilders.post("/decideforowner?id=1"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
@@ -139,19 +141,54 @@ class ConflictControllerTest {
 
     @Test
     @WithMockUser(roles = "admin")
-    void solveConflictReceiverShouldSolveConflictForOwner() throws Exception {
+    void solveConflictOwnerShouldNotSolveConflictForOwnerIfProparyIsUnavailable() throws Exception {
         Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class)))
                 .thenReturn(admin);
         Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
         Mockito.when(conflictService.getConflict(2L, admin)).thenReturn(c1);
-        Mockito.when(conflictService.solveConflict(c1, admin, c1.getOwner())).thenReturn(true);
+        Mockito.when(conflictService.solveConflict(c1, admin, user)).thenReturn(false);
 
         mvc.perform(MockMvcRequestBuilders.post("/decideforowner?id=1"))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers
-                        .redirectedUrl("/conflicts"));
+                        .redirectedUrl("/conflicts?propayUnavailable"));
         Mockito.verify(conflictService, Mockito.times(1)).solveConflict(c1, admin, user);
+        Mockito.verify(conflictService, Mockito.times(0)).deactivateConflict(2L, admin);
+    }
+
+    @Test
+    @WithMockUser(roles = "admin")
+    void solveConflictReceiverShouldSolveConflictForReceiverIfPropayIsAvailable() throws Exception {
+        Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class)))
+                .thenReturn(admin);
+        Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
+        Mockito.when(conflictService.getConflict(2L, admin)).thenReturn(c1);
+        Mockito.when(conflictService.solveConflict(c1, admin, user2)).thenReturn(true);
+
+        mvc.perform(MockMvcRequestBuilders.post("/decideforreceiver?id=1"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers
+                        .redirectedUrl("/conflicts"));
+        Mockito.verify(conflictService, Mockito.times(1)).solveConflict(c1, admin, user2);
         Mockito.verify(conflictService, Mockito.times(1)).deactivateConflict(2L, admin);
+    }
+
+    @Test
+    @WithMockUser(roles = "admin")
+    void solveConflictReceiverShouldNotSolveConflictForReceiverIfProparyIsUnavailable()
+            throws Exception {
+        Mockito.when(userService.findUserByPrincipal(Mockito.any(Principal.class)))
+                .thenReturn(admin);
+        Mockito.when(caseService.findCaseById(1L)).thenReturn(ca);
+        Mockito.when(conflictService.getConflict(2L, admin)).thenReturn(c1);
+        Mockito.when(conflictService.solveConflict(c1, admin, user2)).thenReturn(false);
+
+        mvc.perform(MockMvcRequestBuilders.post("/decideforreceiver?id=1"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers
+                        .redirectedUrl("/conflicts?propayUnavailable"));
+        Mockito.verify(conflictService, Mockito.times(1)).solveConflict(c1, admin, user2);
+        Mockito.verify(conflictService, Mockito.times(0)).deactivateConflict(2L, admin);
     }
 
     @Test
@@ -163,8 +200,10 @@ class ConflictControllerTest {
 
         mvc.perform(MockMvcRequestBuilders.get("/conflicts"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.model().attribute("user", admin))
-                .andExpect(MockMvcResultMatchers.model().attribute("conflicts", Arrays.asList(ca)))
+                .andExpect(MockMvcResultMatchers.model()
+                        .attribute("user", Matchers.is(Matchers.equalTo(admin))))
+                .andExpect(MockMvcResultMatchers.model()
+                        .attribute("conflicts", Matchers.is(Matchers.equalTo(Arrays.asList(ca)))))
                 .andExpect(MockMvcResultMatchers.view().name("/admin/conflict"));
     }
 }
