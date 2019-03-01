@@ -1,11 +1,10 @@
 dockerCompose {
     useComposeFiles = ['docker-compose-dev.yml']
-    startedServices = ['propay', 'db'] // TODO(quicklink) docker-services-to-start
+    startedServices = ['propay', 'db'] 
 //  forceRecreate = false
 //  buildAdditionalArgs = ['--force-rm']
     waitForTcpPorts = true
     tcpPortsToIgnoreWhenWaiting = []
-    // TODO(quicklink)  docker-log-switch (enable to print output of all running services to stdout)
     captureContainersOutput = false
     captureContainersOutputToFile = project.file('./build/logs/containers.log')
     captureContainersOutputToFiles = './build/logs/services/'

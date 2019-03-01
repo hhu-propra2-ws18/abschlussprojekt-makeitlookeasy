@@ -180,8 +180,8 @@
                 th:text="|${article.getOwner().getUsername()}|">Mick Potzkai</a></p>
             <div class="ml-auto">
               <!-- Button trigger Modal -->
-              <button class="btn btn-success" data-target="#modal" data-toggle="modal"
-                      type="button">Book now
+              <button class="btn btn-success" data-target="#modal" data-toggle="modal" type="button"
+                      th:if="not ${user.username.equals(article.owner.username)}">Book now
               </button>
 
               <!-- Modal -->
@@ -260,7 +260,8 @@
               <!-- Button to buy article -->
               <form method="post" th:action="@{~/buyArticle}">
                 <input name="articleId" th:value="${article.id}" type="hidden">
-                <button class="btn btn-success" type="submit">Buy Now</button>
+                <button class="btn btn-success" type="submit"
+                        th:if="not ${user.username.equals(article.owner.username)}">Buy Now</button>
               </form>
 
             </div>
@@ -284,9 +285,9 @@
           <hr>
         </div>
       </div>
+      <div id="calendar"></div>
       <!-- /.card -->
     </div>
-    <div id="calendar"></div>
     <!-- /.col-lg-9 -->
     <!-- Modal -->
   </div>
@@ -308,7 +309,7 @@
   });
   var d = new Date();
   var now = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  var tomorrow  = new Date(d.getFullYear(), d.getMonth(), d.getDate()+1);
+  var tomorrow = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
   $('#startDate').datepicker('update', now);
   jQuery('#endDate').datepicker({
     format: 'dd-mm-yyyy',
@@ -324,9 +325,5 @@
 
 
 </script>
-
-<!--
-<script th:href="@{~/vendor/jquery/jquery.min.js}"></script>
-<script th:href="@{~/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script> -->
 </body>
 </html>

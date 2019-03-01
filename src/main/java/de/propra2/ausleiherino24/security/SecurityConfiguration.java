@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -46,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "/index", "/login", "/signUp", "/categories",
                         "/registerNewUser", "/search", "/css/**", "/img/**", "/vendor/**", "/js/**",
-                        "/Pokemon/images/**", "/Pokemon/names/**","/images/**").permitAll()
+                        "/Pokemon/images/**", "/Pokemon/names/**", "/images/**").permitAll()
                 .antMatchers("/conflicts").hasRole("admin")
                 .antMatchers("/**").hasAnyRole("admin", "user")
                 .and()
@@ -65,8 +65,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      * @return passwordEncoder Entity to be used
      */
     @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return new PasswordEncoder() {
+    public BCryptPasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder() {
             @Override
             public String encode(final CharSequence rawPassword) {
                 return rawPassword.toString();

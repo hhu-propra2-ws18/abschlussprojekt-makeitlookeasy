@@ -29,17 +29,15 @@ class SearchUserServiceTest {
         searchUserService = new SearchUserService(users);
     }
 
-    // TODO: Rename!
     @Test
-    void test() {
+    void loadUser() {
         Mockito.when(users.findByUsername("user1")).thenReturn(Optional.of(user1));
         final CustomUserDetails expected = new CustomUserDetails(user1);
         Assertions.assertThat(searchUserService.loadUserByUsername("user1")).isEqualTo(expected);
     }
 
-    // TODO: Rename!
     @Test
-    void test2() {
+    void loadNotExistingUser() {
 
         assertThrows(UsernameNotFoundException.class, () -> {
             Mockito.when(users.findByUsername("user1")).thenThrow(UsernameNotFoundException.class);

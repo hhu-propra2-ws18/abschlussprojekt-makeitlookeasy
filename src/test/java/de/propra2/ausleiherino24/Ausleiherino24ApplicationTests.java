@@ -6,13 +6,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
+
 @SpringBootTest
 @ActiveProfiles(profiles = "test")
+@ExtendWith(SpringExtension.class)
 class Ausleiherino24ApplicationTests {
 
     @Test
     void contextLoads() {
     }
+
 }
 

@@ -12,11 +12,13 @@ import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-// TODO: Keine Annotation?
+@ExtendWith(SpringExtension.class)
 class EmailSenderTest {
 
     private final static String USER_EMAIL = "test@mail.de";

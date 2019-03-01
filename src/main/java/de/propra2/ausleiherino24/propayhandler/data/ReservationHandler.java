@@ -23,7 +23,7 @@ public class ReservationHandler {
     private final AccountHandler accountHandler;
     private final CaseRepository caseRepository;
 
-    private String RESERVATION_URL;
+    private String reservationUrl;
 
 
     /**
@@ -33,12 +33,12 @@ public class ReservationHandler {
      * @param restTemplate needed for propay requests
      */
     public ReservationHandler(final CaseRepository caseRepository,
-            final RestTemplate restTemplate, @Value("${PP_RESERVATION_URL}") String RESERVATION_URL,
-            @Value("${PP_ACCOUNT_URL}") String ACCOUNT_URL) {
+            final RestTemplate restTemplate, @Value("${PP_RESERVATION_URL}") String reservationUrl,
+            @Value("${PP_ACCOUNT_URL}") String accountUrl) {
         this.restTemplate = restTemplate;
         this.caseRepository = caseRepository;
-        this.RESERVATION_URL = RESERVATION_URL;
-        accountHandler = new AccountHandler(restTemplate, ACCOUNT_URL);
+        this.reservationUrl = reservationUrl;
+        accountHandler = new AccountHandler(restTemplate, accountUrl);
     }
 
 
@@ -85,7 +85,7 @@ public class ReservationHandler {
             final Double amount) {
 
         final ResponseEntity<Reservation> responseEntity = restTemplate
-                .exchange(RESERVATION_URL + "/reserve/{account}/{targetAccount}?amount={amount}",
+                .exchange(reservationUrl + "/reserve/{account}/{targetAccount}?amount={amount}",
                         HttpMethod.POST,
                         null, Reservation.class, sourceUser, targetUser, amount.toString());
 
@@ -112,7 +112,7 @@ public class ReservationHandler {
      * @param reservationId id of reservation to be released
      */
     private void releaseReservation(final String account, final Long reservationId) {
-        restTemplate.exchange(RESERVATION_URL + "/release/{account}?reservationId={reservationId}",
+        restTemplate.exchange(reservationUrl + "/release/{account}?reservationId={reservationId}",
                 HttpMethod.POST, null,
                 PpAccount.class, account, reservationId.toString());
     }
@@ -139,7 +139,7 @@ public class ReservationHandler {
      */
     private void punishReservation(final String account,
             final Long reservationId) {
-        restTemplate.exchange(RESERVATION_URL + "/punish/{account}?reservationId={reservationId}",
+        restTemplate.exchange(reservationUrl + "/punish/{account}?reservationId={reservationId}",
                 HttpMethod.POST, null,
                 PpAccount.class,
                 account, reservationId.toString());

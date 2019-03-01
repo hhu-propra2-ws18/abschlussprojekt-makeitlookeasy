@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -52,18 +51,6 @@ class CustomerReviewServiceTest {
         cases.add(case1);
         cases.add(case2);
         cases.add(case3);
-    }
-
-    @Disabled
-    @Test
-    void findAllReviewsByLenderIdFindsAllReviews() {
-        Mockito.when(customerReviewRepository.findAll()).thenReturn(customerReviews);
-        Mockito.when(caseService.getAllCasesFromPersonOwner(1L)).thenReturn(cases);
-
-        final List<CustomerReview> customerReviews = customerReviewService
-                .findAllReviewsByLenderId(1L);
-        Assertions.assertThat(customerReviews.size()).isEqualTo(3);
-        Assertions.assertThat(customerReviews.get(0)).isEqualTo(this.customerReviews.get(0));
     }
 
     @Test

@@ -13,13 +13,9 @@ The key aspects are:
 * Payment of borrowed articles using ProPay
 * Conflict resolution
 
-
-
 == Management
-
 * To provide a convenient overview of our project we used **javadocs** throughout the project.
-* Since the project requires a certain amount of configuration we started our own **wiki** in github. Here we describe the different configurations and the initial setup.
-
+* Since the project requires a certain amount of configuration we started our own **wiki** in github. Here we describe the different configurations and the initial setup. The **Logins** are also located there.
 
 
 == Functionality
@@ -64,9 +60,12 @@ lies in the responsibility of the renting person.
 If somebody wants to rent an article that has not been returned yet, the renting person can simply decline it.
 
 === Chat (beta feature)
-A chat can be reached at `/chatBoard`. Messages can be sent to other users in the chat by providing the username. 
+A chat can be reached at `/chatBoard`. Messages can be sent to other users in the chat by providing the username.
 
 
+TIP: To test and explore the application, we have to two logins:
+ Hans, who is a base user and is able to borrow, lend and sell articles, and the Admin, who is also able
+ to resolve conflicts.
 
 == Project overview
 
@@ -81,7 +80,8 @@ pattern (MVCS).
 The project structure follows the design pattern with model, view and controller (here named web)
 packages. Logic to interact with ProPay is located in a separate ProPay-handler package.
 
-![](./ausleiherino24-UML-full.png)
+==== UML-Diagram (best to open it separately)
+image::ausleiherino24-UML-full.png[GitHub mascot]
 
 
 
@@ -112,14 +112,19 @@ To manage conflicts in the rental process the `Conflict` class was introduced. I
 conflicted case with a description and a user who is responsible to resolve the conflict.
 
 === CustomerReview
-A simple rating mechanism is implemented using the `CustomerReview` class. 
+A simple rating mechanism is implemented using the `CustomerReview` class.
 It links a numeric rating (`stars` (higher is better)) and a corresponding description to a case.
+
+NOTE: The star-feature is _beta_ and not fully working.
 
 === CustomUserDetails
 The `CustomUserDetails` class is simply needed to use our own `User` class with spring security.
 
 === PPTransaction
 The `PpTransaction` class represents a proPay transaction.
+
+=== ResolveConflict
+TODO: wright description
 
 === User/Person
 To represent customers of our platform we decided to split the required information into two
@@ -134,9 +139,7 @@ Additional user information, like name or contact is stored in the class `Person
 Person with a User, a one-to-one relation is provided.
 
 
-
 == Controller
-
 === ArticleController
 The `ArticleController` maps requests to show, create, save, update and deactivate articles.
 
@@ -145,7 +148,7 @@ The `CaseController` maps requests to book and buy articles and create correspon
 In Addition it maps accept and declines cases, accept case returns and writes reviews.
 
 === ChatController
-The in essence the `ChatController` maps the received chat messages to the endpoints of the 
+The in essence the `ChatController` maps the received chat messages to the endpoints of the
 Spring `MessageBroker`.
 
 === ConflictController
@@ -163,25 +166,26 @@ index, index filtered by categories, the login page and the registration page.
 === UserController
 The `UserController` maps user specific requests. In particular those which you can access through
 the navigationbar. Furthermore you can save your profile, add money to your propay-account and
-access profile views. 
-
-
+access profile views.
 
 == Services
-
 === ArticleService
-The `ArticleService` provides methods to save, update, deactivate articles and find different
-subsets of all Articles.
+The 'ArticleService' provides besides basic functions like saving and updating articles methods to
+find Articles and Lists of Articles by different attributes, for example the name, the id or by user.
+The service also contains methods to deactivate or sell articles.
 
 === CaseService
-The `CaseService` provides methods to handle requests, to sell Articles and to find subsets of all
-existing cases.
+The 'CaseService' handles all actions associated with cases. That includes saving cases in the database,
+find cases by different attributes and methods to check different flags/variables of cases.
+It also provides functions to request to lend an article, declining or accepting those requests,
+selling articles or opening conflicts.
 
 === ConflictService
-The `ConflictService` provides methods to deactivate, open and solve conflicts.
+The 'ConflictService' manages the conflicts that may occur when a article is lend. It is responsible
+for creating conflicts, deleting and deactivating conflicts and solving conflicts.
 
 === CustomerReviewService
-The `CustomerReviewService` provides methods to save and find reviews.
+The 'CustomReviewService' provides functions to save and find customer review.
 
 === ImageService
 The `ImageService` is used to upload images to a file system and retrieve them.
@@ -197,16 +201,21 @@ speed up the search for a specific image.
 The `PersonService` provides methods to save and find a person.
 
 === SearchUserService
-The `SearchUserService` provides a method to find a user for login.
+The 'SearchUserService' has a method that gives user details to a given username.
 
 === UserService
-The `UserService` provides different methods to save and find a user.
-
-
+The `UserService` provides different methods to save, create and find a user.
 
 == Security
-TODO: provide short description about the spring security configuration
+All URLs except _index_, _login_ and _registration_ are locked for Users not
+logged in.
 
+The application differentiates between admin and user permissions. This is
+realized through corresponding role-definitions in the Spring-Security-Configuration.
+
+For all passwords the a Encoder, namely _BCryptPasswordEncoder_ implemented. It
+encodes/decodes the passwords on registration/login and additionally provides
+a strong encryption by applying the BCrypt-Hashfunction.
 
 
 == PropayHandler
@@ -238,11 +247,10 @@ because they can never be called if Propay is not available or
 the Request could not be performed.
 
 
-
-
 == Deviations from the task descriptions
 * According to our architectural idea the available offers are **visible even when not logged in.**
-
+* A customer who lend an article isn't able to return it before the agreed endtime.
+* When a customer returns an article too late, the availability time for the article isn't updated.
 
 
 == Committed production file.

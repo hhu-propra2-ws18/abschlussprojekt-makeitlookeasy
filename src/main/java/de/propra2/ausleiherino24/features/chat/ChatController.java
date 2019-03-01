@@ -28,7 +28,10 @@ public class ChatController {
     }
 
     /**
-     * sends a chat message. TODO: add params
+     * sends a chat message.
+     *
+     * @param principal user that sends the message
+     * @param chatMessage message that is send
      */
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
@@ -40,7 +43,11 @@ public class ChatController {
     }
 
     /**
-     * adds user to chat. TODO: add params
+     * adds user to chat.
+     *
+     * @param principal user which should be added to chat
+     * @param headerAccessor SimpleMessageHeaderAccessor
+     * @param chatMessage chat message
      */
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/public")
@@ -56,7 +63,9 @@ public class ChatController {
     }
 
     /**
-     * custom description. TODO: description and params
+     * shows chatboard.
+     *
+     * @param sessionId id of the session
      */
     @GetMapping("/chatBoard")
     public ModelAndView chatBoard(final @Header("simpSessionId") String sessionId) {
@@ -66,7 +75,10 @@ public class ChatController {
     }
 
     /**
-     * user chat. TODO: add params
+     * user chat.
+     *
+     * @param principal sender of the message
+     * @param msg message that should be send
      */
     @MessageMapping("/chat.privateMessage")
     public void sendSpecific(final @Payload ChatMessage msg, final Principal principal) {
