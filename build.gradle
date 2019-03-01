@@ -7,7 +7,7 @@ plugins {
     id "com.github.ksoichiro.console.reporter" version "0.6.2"
     id "com.adarshr.test-logger" version "1.6.0"
     id "net.rdrei.android.buildtimetracker" version "0.11.0"
-//    id "info.solidsoft.pitest" version "1.4.0" not supported by junit 5 :(
+//    id "info.solidsoft.pitest" version "1.4.0" not supported by junit5, but passes (see builds pre junit5 implementation)
     id 'checkstyle'
     id 'jacoco'
     id 'pmd'

@@ -1,8 +1,13 @@
 de.propra2.ausleiherino24
 de.propra2.ausleiherino24.data
+de.propra2.ausleiherino24.features.calendar
+de.propra2.ausleiherino24.features.category
+de.propra2.ausleiherino24.features.chat
 de.propra2.ausleiherino24.features.email
+de.propra2.ausleiherino24.features.imageupload
 de.propra2.ausleiherino24.model
-de.propra2.ausleiherino24.propayhandler
+de.propra2.ausleiherino24.propayhandler.data
+de.propra2.ausleiherino24.propayhandler.model
 de.propra2.ausleiherino24.security
 de.propra2.ausleiherino24.service
 de.propra2.ausleiherino24.web

@@ -31,7 +31,7 @@ addons:
 script:
   - ./gradlew clean sonarqube
   - ./gradlew check
-#  - ./gradlew pitest not supported by junit5 :(
+#  - ./gradlew pitest not supported by junit5, but passes (see builds pre junit5 implementation)
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
