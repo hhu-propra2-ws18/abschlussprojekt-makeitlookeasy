@@ -23,7 +23,6 @@ public class ReservationHandler {
     private final AccountHandler accountHandler;
     private final CaseRepository caseRepository;
 
-    @Value("${PP_RESERVATION_URL}")
     private String RESERVATION_URL;
 
 
@@ -34,10 +33,12 @@ public class ReservationHandler {
      * @param restTemplate needed for propay requests
      */
     public ReservationHandler(final CaseRepository caseRepository,
-            final RestTemplate restTemplate) {
+            final RestTemplate restTemplate, @Value("${PP_RESERVATION_URL}") String RESERVATION_URL,
+            @Value("${PP_ACCOUNT_URL}") String ACCOUNT_URL) {
         this.restTemplate = restTemplate;
         this.caseRepository = caseRepository;
-        accountHandler = new AccountHandler(restTemplate);
+        this.RESERVATION_URL = RESERVATION_URL;
+        accountHandler = new AccountHandler(restTemplate, ACCOUNT_URL);
     }
 
 

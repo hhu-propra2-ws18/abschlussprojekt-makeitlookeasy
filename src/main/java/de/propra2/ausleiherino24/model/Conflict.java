@@ -26,7 +26,7 @@ public class Conflict {
     Case conflictedCase;
 
     @NotNull
-    @Size(min = 15, max = 2048)
+    @Size(max = 2048)
     String conflictDescription;
 
     @NotNull

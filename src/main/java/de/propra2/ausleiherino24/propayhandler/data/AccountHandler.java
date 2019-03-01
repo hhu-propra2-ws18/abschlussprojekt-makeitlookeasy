@@ -18,8 +18,7 @@ public class AccountHandler {
 
     private final RestTemplate restTemplate;
 
-    @Value("${PP_ACCOUNT_URL}")
-    private String ACCOUNT_URL;
+    private final String ACCOUNT_URL;
 
     /**
      * Autowired constructor.
@@ -27,8 +26,10 @@ public class AccountHandler {
      * @param restTemplate used to send requests to propay
      */
     @Autowired
-    public AccountHandler(final RestTemplate restTemplate) {
+    public AccountHandler(final RestTemplate restTemplate,
+            @Value("${PP_ACCOUNT_URL}") String ACCOUNT_URL) {
         this.restTemplate = restTemplate;
+        this.ACCOUNT_URL = ACCOUNT_URL;
     }
 
     /**

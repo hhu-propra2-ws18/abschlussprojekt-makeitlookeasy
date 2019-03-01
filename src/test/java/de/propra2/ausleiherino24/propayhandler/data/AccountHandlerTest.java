@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +20,8 @@ import org.springframework.web.client.RestTemplate;
 @ExtendWith(SpringExtension.class)
 class AccountHandlerTest {
 
-    private static final String ACCOUNT_URL = "http://localhost:8888/account";
+    @Value("${PP_ACCOUNT_URL}")
+    private String ACCOUNT_URL;
     private static final String ACCOUNT_DEFAULT = "/{account}";
     private AccountHandler accountHandler;
     @MockBean
@@ -32,7 +34,7 @@ class AccountHandlerTest {
     @BeforeEach
     void initialize() {
         restTemplate = Mockito.mock(RestTemplate.class);
-        accountHandler = new AccountHandler(restTemplate);
+        accountHandler = new AccountHandler(restTemplate, ACCOUNT_URL);
         User user = Mockito.mock(User.class);
         User user2 = Mockito.mock(User.class);
         PpTransaction ppTransaction = Mockito.mock(PpTransaction.class);
