@@ -26,7 +26,11 @@ public interface CaseRepository extends CrudRepository<Case, Long> {
             + "ORDER BY c.requestStatus ASC")
     List<Case> findAllByArticleOwnerId(@Param("id") Long ownerId);
 
-    List<Case> findAllByArticle(Article article);
+    @Query("SELECT c FROM #{#entityName} c "
+            + "WHERE c.article.forSale = false "
+            + "AND c.article = :article "
+            + "AND c.requestStatus in (7, 8, 10, 14)")
+    List<Case> findAllByArticleWhereStatusIsGreater7(@Param("article") Article article);
 
     List<Case> findAllByArticleAndRequestStatus(Article article, int status);
 

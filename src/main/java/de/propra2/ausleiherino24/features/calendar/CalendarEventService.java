@@ -34,12 +34,13 @@ public class CalendarEventService {
      */
     public List<CalendarEvent> getAllEventsFromOneArticle(final Long articleId) {
         final Article article = articleService.findArticleById(articleId);
-        final List<Case> allCases = caseRepository.findAllByArticle(article);
+        final List<Case> allCases = caseRepository.findAllByArticleWhereStatusIsGreater7(article);
         final List<CalendarEvent> allCalendarEvents = new ArrayList<>();
         for (final Case calendarCase : allCases) {
             final CalendarEvent calendarEvent = new CalendarEvent();
             calendarEvent.setStart(calendarCase.getStartTime());
             calendarEvent.setEnd(calendarCase.getEndTime());
+            allCalendarEvents.add(calendarEvent);
         }
         return allCalendarEvents;
     }

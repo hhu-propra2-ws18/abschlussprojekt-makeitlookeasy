@@ -217,7 +217,7 @@
                             <div>End</div>
                             <div class='input-group date' id='endDate'>
                               <input class="form-control" id="endDateInput" name="endDate"
-                                     onchange="cal()" type='text'/>
+                                     onchange="cal()" type='text' value="03.02.2019"/>
                               <span class="input-group-addon"><span
                                   class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -308,6 +308,7 @@
   });
   var d = new Date();
   var now = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  var tomorrow  = new Date(d.getFullYear(), d.getMonth(), d.getDate()+1);
   $('#startDate').datepicker('update', now);
   jQuery('#endDate').datepicker({
     format: 'dd-mm-yyyy',
@@ -317,8 +318,11 @@
     var date = e.date;
     date.setDate(date.getDate() - 1);
     jQuery('#startDate').datepicker("setEndDate", e.date);
+    cal();
   });
-  $('#endDate').datepicker('update', now);
+  $('#endDate').datepicker('update', tomorrow)
+
+
 </script>
 
 <!--
