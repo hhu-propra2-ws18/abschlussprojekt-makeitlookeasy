@@ -167,7 +167,7 @@ The `MainController` maps requests that you can view without being logged in. Th
 index, index filtered by categories, the login page and the registration page.
 
 === UserController
-The `UserController` maps user specific requests. In particular those which you can access throughs
+The `UserController` maps user specific requests. In particular those which you can access through
 the navigationbar. Furthermore you can save your profile, add money to your propay-account and
 access profile views. 
 
@@ -222,16 +222,31 @@ TODO: provide short description about the spring security configuration
 == PropayHandler
 
 === AccountHandler
-TODO: provide description
+The AccountHandler is responsible for all requests to Propay,
+which target the /account URL.
+Most Functions do not check or return the status code,
+because they can never be called if Propay is not available or
+the Request could not be performed.
 
 === PpAccount
-TODO: provide description
+This class provides the model for the Accounts received by Propay.
+The only Method implemented is used to show the Funds,
+which are actually free to user and not reserved.
 
 === Reservation
-TODO: provide description
+This class provides the model for the Reservations in the PpAccount.
 
 === Reservation Handler
-TODO: provide description
+The ReservationHandler is responsible for all requests to Propay,
+which target the /reservation URL.
+The transfer Method is also called here by using the Local AccountHandler.
+This way we ensured that no Funds are blocked or used in between releasing
+the initial Reservation for the deposit and Price and creating the new deposit
+Reservation.
+Most Functions do not check or return the status code,
+because they can never be called if Propay is not available or
+the Request could not be performed.
+
 
 
 

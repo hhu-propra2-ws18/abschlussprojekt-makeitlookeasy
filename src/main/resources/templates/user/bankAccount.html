@@ -26,15 +26,15 @@
     <!-- Categories -->
     <div name="categorie" th:replace="/../fragments/categories ::categories"></div>
 
-    <div class="alert alert-danger absolue center alert-dismissible fade show" role="alert"
-         th:if="${propayUnavailable}">
-      Propay is not available.
-      <button aria-label="Close" class="close" data-dismiss="alert" type="button">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-
     <div class="col-lg 9 text-center" style="margin-top: 50px">
+      <div class="alert alert-danger absolue center alert-dismissible fade show" role="alert"
+           th:if="${propayUnavailable} or ${param.propayUnavailable}">
+        Propay is not available.
+        <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
       <h1 style="margin-bottom: 20px" th:text="|Your bank amount is : ${pp} €|"></h1>
       <form method="post" th:action="@{~/addMoney}">
         <label>Money :</label>
@@ -56,7 +56,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:class="${user.id==transaction.acase.receiver.id }? 'bg-danger' :  'bg-success'"
+        <tr th:class="${user.id==transaction.acase.receiver.id }? 'bg-success' :  'bg-danger'"
             th:each="transaction : ${transactions}">
           <th scope="col" th:text="${transaction.acase.article.name}"></th>
           <th scope="col" th:text="${transaction.getFormattedDate()}"></th>

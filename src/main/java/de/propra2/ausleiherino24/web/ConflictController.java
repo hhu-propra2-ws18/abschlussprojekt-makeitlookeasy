@@ -1,5 +1,6 @@
 package de.propra2.ausleiherino24.web;
 
+import de.propra2.ausleiherino24.features.category.Category;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.model.Conflict;
 import de.propra2.ausleiherino24.model.User;
@@ -114,6 +115,7 @@ public class ConflictController {
 
         mav.addObject(USER_STRING, currentUser);
         mav.addObject("conflicts", conflicts);
+        mav.addObject("categories", Category.getAllCategories());
         return mav;
     }
 }
