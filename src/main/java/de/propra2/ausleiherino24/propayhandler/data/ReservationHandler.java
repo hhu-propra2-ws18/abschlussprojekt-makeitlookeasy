@@ -4,6 +4,7 @@ import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.model.Case;
 import de.propra2.ausleiherino24.propayhandler.model.PpAccount;
 import de.propra2.ausleiherino24.propayhandler.model.Reservation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -18,14 +19,12 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ReservationHandler {
 
-    // TODO: Link not working inside Docker!
-    // Innerhalb des Dockers ist Propay auf http://propay:8888/account erreichbar.
-    // Es gibt ein Whitelabel, wenn man auf buchen klickt, hier muss  eine andere Loesung her!
-    private static final String RESERVATION_URL = "http://localhost:8888/reservation";
-    // private static final String RESERVATION_URL = "http://propay:8888/reservation";
     private final RestTemplate restTemplate;
     private final AccountHandler accountHandler;
     private final CaseRepository caseRepository;
+
+    @Value("${PP_RESERVATION_URL}")
+    private String RESERVATION_URL;
 
 
     /**

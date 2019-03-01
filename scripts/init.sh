@@ -3,7 +3,7 @@
 i=""
 j=`pwd`
 
-for i in $j/{build/logs/services,build/logs/container-logs,pgsql-01/data,pgsql-01/conf}
+for i in $j/{build/logs/services,build/logs/container-logs,pgsql-01/data,pgsql-01/conf,/PPdata}
 do
         if [[ ! -d "$i" ]]; then
           echo creating... "$i"
@@ -19,4 +19,4 @@ if [[ ! -d "$HOME/jenkins_home" ]]; then
     echo OK
 fi
 
-chmod +x ./scripts/*.sh
+chmod +x $j/scripts/*.sh

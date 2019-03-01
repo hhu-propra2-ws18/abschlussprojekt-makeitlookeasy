@@ -47,6 +47,20 @@ gradle.taskGraph.whenReady { graph ->
     proc.waitForProcessOutput(System.out, System.err)
 }
 
+Properties localBootRunProperties() {
+    Properties p = new Properties()
+    p.load(new FileInputStream(
+            file(project.projectDir).absolutePath + "/src/main/resources/application-dev.properties"))
+    return p
+}
+
+bootRun {
+    doFirst {
+        classpath = sourceSets.main.runtimeClasspath + configurations.developmentOnly
+        bootRun.systemProperties = localBootRunProperties()
+    }
+}
+
 javadoc {
     source = sourceSets.main.allJava
 }
@@ -57,11 +71,6 @@ configurations {
         extendsFrom developmentOnly
     }
 }
-
-bootRun {
-    classpath = sourceSets.main.runtimeClasspath + configurations.developmentOnly
-}
-
 
 tasks.withType(com.github.spotbugs.SpotBugsTask) {
     group = "verification"
