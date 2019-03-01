@@ -403,20 +403,6 @@ class CaseServiceTest {
     }
 
     @Test
-    void twoPPTransactionsFromReceiver() {
-        final Case c1 = new Case();
-        c1.setPpTransaction(new PpTransaction());
-        final Case c2 = new Case();
-        c2.setPpTransaction(new PpTransaction());
-        cases.addAll(Arrays.asList(c1, c2));
-        doReturn(cases).when(caseService).getAllCasesFromPersonOwner(0L);
-        final List<PpTransaction> transactions = new ArrayList<>(
-                Arrays.asList(new PpTransaction(), new PpTransaction()));
-
-        assertEquals(transactions, caseService.findAllTransactionsForPerson(0L));
-    }
-
-    @Test
     void twoUnavailableCases() {
         final Case c1 = new Case();
         c1.setPpTransaction(new PpTransaction());
