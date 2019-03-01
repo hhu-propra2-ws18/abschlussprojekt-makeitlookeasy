@@ -13,16 +13,15 @@ public class Reservation {
     Long id;
     Double amount;
 
+
     /**
      * Full constructor.
      *
-     * @param reservationId id of reservation in Propay.
+     * @param id id of reservation in Propay.
      * @param amount amount of reservation.
      */
-
-
-    public Reservation(final Long reservationId, final Double amount) {
-        this.id = reservationId;
+    public Reservation(final Long id, final Double amount) {
+        this.id = id;
         this.amount = amount;
     }
 

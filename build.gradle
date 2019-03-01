@@ -54,10 +54,23 @@ Properties localBootRunProperties() {
     return p
 }
 
+Properties localTestProperties() {
+    Properties p = new Properties()
+    p.load(new FileInputStream(
+            file(project.projectDir).absolutePath + "/src/main/resources/application-test.properties"))
+    return p
+}
+
 bootRun {
     doFirst {
         classpath = sourceSets.main.runtimeClasspath + configurations.developmentOnly
         bootRun.systemProperties = localBootRunProperties()
+    }
+}
+
+test {
+    doFirst{
+        test.systemProperties = localTestProperties()
     }
 }
 
