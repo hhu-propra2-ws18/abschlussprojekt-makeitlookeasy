@@ -15,9 +15,7 @@ public class PpAccount {
     List<Reservation> reservations;
 
     /**
-     * TODO.
-     *
-     * @return .
+     * calculates the total amount of all reservations.
      */
     public double reservationAmount() {
         double reserved = 0;
