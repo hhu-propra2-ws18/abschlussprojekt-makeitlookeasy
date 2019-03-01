@@ -124,7 +124,6 @@ public class Article {
         return true;
     }
 
-    //TODO: Löschen, falls nicht mehr gebraucht
     @Override
     public String toString() {
         return "Article: \n"

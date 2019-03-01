@@ -77,7 +77,6 @@ public class CaseController {
             LOGGER.error("Could not book article {}.", id, e);
         }
 
-        // TODO: Show the user, whether the request was successful or not.
         return url;
     }
 
@@ -94,7 +93,6 @@ public class CaseController {
         if (caseService.sellArticle(articleId, principal)) {
             return "redirect:/?access";
         }
-        // TODO: Show the user, whether the request was successful or not.
         return "redirect:/?failed";
     }
 
@@ -170,7 +168,6 @@ public class CaseController {
         webDataBinder.registerCustomEditor(Category.class, new CategoryConverter());
     }
 
-    // TODO: What is this method used for? (JavaDoc)
     private static class CategoryConverter extends PropertyEditorSupport {
 
         @Override

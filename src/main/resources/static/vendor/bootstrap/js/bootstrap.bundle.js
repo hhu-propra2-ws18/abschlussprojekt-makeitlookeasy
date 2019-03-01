@@ -183,7 +183,6 @@
     triggerTransitionEnd: function triggerTransitionEnd(element) {
       $(element).trigger(TRANSITION_END);
     },
-    // TODO: Remove in v5
     supportsTransitionEnd: function supportsTransitionEnd() {
       return Boolean(TRANSITION_END);
     },
@@ -5218,7 +5217,7 @@
           }
         }; // ----------------------------------------------------------------------
         // the following methods are used to handle overflowing modals
-        // todo (fat): these should probably be refactored out of modal.js
+        //
         // ----------------------------------------------------------------------
 
         _proto._adjustDialog = function _adjustDialog() {
@@ -6409,7 +6408,6 @@
               var targetBCR = target.getBoundingClientRect();
 
               if (targetBCR.width || targetBCR.height) {
-                // TODO (fat): remove sketch reliance on jQuery position/offset
                 return [$(target)[offsetMethod]().top + offsetBase,
                   targetSelector];
               }

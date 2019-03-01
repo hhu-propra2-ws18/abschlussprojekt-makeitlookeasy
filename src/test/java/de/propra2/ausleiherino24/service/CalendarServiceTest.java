@@ -1,7 +1,8 @@
 package de.propra2.ausleiherino24.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
 import de.propra2.ausleiherino24.features.calendar.CalendarEvent;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
