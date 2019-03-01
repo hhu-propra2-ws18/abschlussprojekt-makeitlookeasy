@@ -20,9 +20,9 @@ import org.springframework.web.client.RestTemplate;
 @ExtendWith(SpringExtension.class)
 class AccountHandlerTest {
 
+    private static final String ACCOUNT_DEFAULT = "/{account}";
     @Value("${PP_ACCOUNT_URL}")
     private String ACCOUNT_URL;
-    private static final String ACCOUNT_DEFAULT = "/{account}";
     private AccountHandler accountHandler;
     @MockBean
     private RestTemplate restTemplate;

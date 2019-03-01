@@ -73,137 +73,137 @@
 
       <table class="table">
         <thead>
-          <tr>
-            <th scope="col">Conflict-Id</th>
-            <th scope="col">Article</th>
-            <th scope="col">EndTime</th>
-            <th scope="col"></th>
-          </tr>
+        <tr>
+          <th scope="col">Conflict-Id</th>
+          <th scope="col">Article</th>
+          <th scope="col">EndTime</th>
+          <th scope="col"></th>
+        </tr>
         </thead>
         <tbody>
-          <tr th:each="case: ${conflicts}">
-            <td th:text="${case.conflict.id}"></td>
-            <td><a th:href="@{/article(id=${case.article.getId()})}"
-                   th:text="${case.article.name}"></a>
-            </td>
-            <td th:text="${case.getFormattedEndTime()}"></td>
-            <td style="white-space: nowrap">
-              <div class="ml-auto flex-md-row">
-                <button class="btn btn-primary btn-sm" data-toggle="modal"
-                        style="height:30px;width:120px" th:data-target="${'#'+case.id+'solve'}"
-                        type="button">solve Conflict
-                </button>
+        <tr th:each="case: ${conflicts}">
+          <td th:text="${case.conflict.id}"></td>
+          <td><a th:href="@{/article(id=${case.article.getId()})}"
+                 th:text="${case.article.name}"></a>
+          </td>
+          <td th:text="${case.getFormattedEndTime()}"></td>
+          <td style="white-space: nowrap">
+            <div class="ml-auto flex-md-row">
+              <button class="btn btn-primary btn-sm" data-toggle="modal"
+                      style="height:30px;width:120px" th:data-target="${'#'+case.id+'solve'}"
+                      type="button">solve Conflict
+              </button>
 
-                <!-- Modal -->
-                <div aria-hidden="true" aria-labelledby="conflictModalLabel" class="modal fade"
-                     role="dialog" tabindex="-1" th:id="${case.id+'solve'}">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5>Information about Conflict</h5>
-                        <button aria-label="Close" class="close" data-dismiss="modal"
-                                type="button">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
+              <!-- Modal -->
+              <div aria-hidden="true" aria-labelledby="conflictModalLabel" class="modal fade"
+                   role="dialog" tabindex="-1" th:id="${case.id+'solve'}">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5>Information about Conflict</h5>
+                      <button aria-label="Close" class="close" data-dismiss="modal"
+                              type="button">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+
+                    <div class="modal-body text-left">
+                      <div class="form-row form-group">
+                        <div class="col-sm-4 label-column">
+                          <label class="text-left">Owner:</label>
+                        </div>
+                        <div class="col-sm-6 input-column">
+                          <span class="text-left" th:text="${case.article.owner.username}"></span>
+                        </div>
                       </div>
 
-                      <div class="modal-body text-left">
-                        <div class="form-row form-group">
-                          <div class="col-sm-4 label-column">
-                            <label class="text-left">Owner:</label>
-                          </div>
-                          <div class="col-sm-6 input-column">
-                            <span class="text-left" th:text="${case.article.owner.username}"></span>
-                          </div>
+                      <div class="form-row form-group">
+                        <div class="col-sm-4 label-column">
+                          <label class="text-left">Receiver:</label>
                         </div>
-
-                        <div class="form-row form-group">
-                          <div class="col-sm-4 label-column">
-                            <label class="text-left">Receiver:</label>
-                          </div>
-                          <div class="col-sm-6 input-column">
-                            <span class="text-left" th:text="${case.receiver.username}"></span>
-                          </div>
+                        <div class="col-sm-6 input-column">
+                          <span class="text-left" th:text="${case.receiver.username}"></span>
                         </div>
+                      </div>
 
-                        <div class="form-row form-group">
-                          <div class="col-sm-4 label-column">
-                            <label class="text-left">From...To:</label>
-                          </div>
-                          <div class="col-sm-6 input-column">
+                      <div class="form-row form-group">
+                        <div class="col-sm-4 label-column">
+                          <label class="text-left">From...To:</label>
+                        </div>
+                        <div class="col-sm-6 input-column">
                             <span class="label label-"
                                   th:text="${case.getFormattedStartTime()}"></span>
-                            <span> ... </span>
-                            <span class="text-left" th:text="${case.getFormattedEndTime()}"></span>
-                          </div>
+                          <span> ... </span>
+                          <span class="text-left" th:text="${case.getFormattedEndTime()}"></span>
                         </div>
+                      </div>
 
-                        <div class="form-row form-group">
-                          <div class="col-sm-4 label-column">
-                            <label class="text-left">Deposit:</label>
-                          </div>
-                          <div class="col-sm-6 input-column">
-                            <span class="text-left" th:text="${case.deposit + '€'}"></span>
-                          </div>
+                      <div class="form-row form-group">
+                        <div class="col-sm-4 label-column">
+                          <label class="text-left">Deposit:</label>
                         </div>
-
-                        <div class="form-row form-group">
-                          <div class="col-sm-4 label-column">
-                            <label class="text-left">Cost Per Day:</label>
-                          </div>
-                          <div class="col-sm-6 input-column">
-                            <span class="text-left" th:text="${case.price + '€'}"></span>
-                          </div>
+                        <div class="col-sm-6 input-column">
+                          <span class="text-left" th:text="${case.deposit + '€'}"></span>
                         </div>
+                      </div>
 
-                        <div class="form-row form-group">
-                          <div class="col-sm-4 label-column">
-                            <label class="text-left">Total Costs:</label>
-                          </div>
-                          <div class="col-sm-6 input-column">
+                      <div class="form-row form-group">
+                        <div class="col-sm-4 label-column">
+                          <label class="text-left">Cost Per Day:</label>
+                        </div>
+                        <div class="col-sm-6 input-column">
+                          <span class="text-left" th:text="${case.price + '€'}"></span>
+                        </div>
+                      </div>
+
+                      <div class="form-row form-group">
+                        <div class="col-sm-4 label-column">
+                          <label class="text-left">Total Costs:</label>
+                        </div>
+                        <div class="col-sm-6 input-column">
                             <span class="text-left"
                                   th:text="${((case.endTime-case.startTime)/(1000*3600*24)*case.price)+'€'}">
                             </span>
-                          </div>
                         </div>
+                      </div>
 
-                        <div class="form-row form-group">
-                          <div class="col-sm-4 label-column">
-                            <label class="text-left">Conflict description:</label>
-                          </div>
-                          <div class="col-sm-6 input-column">
+                      <div class="form-row form-group">
+                        <div class="col-sm-4 label-column">
+                          <label class="text-left">Conflict description:</label>
+                        </div>
+                        <div class="col-sm-6 input-column">
                             <textarea class="text-left form-control" disabled
                                       th:text="${case.conflict.conflictDescription}"></textarea>
-                          </div>
-                        </div>
-
-                      </div>
-
-                      <div class="modal-body">
-                        <div class="col-sm-4 label-column">
-                          <label class="text-left">Decide who will receive the deposit:</label>
                         </div>
                       </div>
 
-                      <div class="modal-footer">
-                        <div class="ml-auto flex-md-row">
-                          <form method="post" style="display:inline-block"
-                                th:action="@{~/decideforowner(id = ${case.id})}">
-                            <button class="btn btn-primary btn-sm" type="submit">Owner</button>
-                          </form>
-                          <span>  </span>
-                          <form method="post" style="display:inline-block"
-                                th:action="@{~/decideforreceiver(id = ${case.id})}">
-                            <button class="btn btn-primary btn-sm" type="submit">Receiver</button>
-                          </form>
-                        </div>
+                    </div>
+
+                    <div class="modal-body">
+                      <div class="col-sm-4 label-column">
+                        <label class="text-left">Decide who will receive the deposit:</label>
+                      </div>
+                    </div>
+
+                    <div class="modal-footer">
+                      <div class="ml-auto flex-md-row">
+                        <form method="post" style="display:inline-block"
+                              th:action="@{~/decideforowner(id = ${case.id})}">
+                          <button class="btn btn-primary btn-sm" type="submit">Owner</button>
+                        </form>
+                        <span>  </span>
+                        <form method="post" style="display:inline-block"
+                              th:action="@{~/decideforreceiver(id = ${case.id})}">
+                          <button class="btn btn-primary btn-sm" type="submit">Receiver</button>
+                        </form>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </td>
-          </tr>
+            </div>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>

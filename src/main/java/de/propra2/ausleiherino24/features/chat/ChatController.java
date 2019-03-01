@@ -29,6 +29,7 @@ public class ChatController {
 
     /**
      * sends a chat message.
+     *
      * @param principal user that sends the message
      * @param chatMessage message that is send
      */
@@ -43,6 +44,7 @@ public class ChatController {
 
     /**
      * adds user to chat.
+     *
      * @param principal user which should be added to chat
      * @param headerAccessor SimpleMessageHeaderAccessor
      * @param chatMessage chat message
@@ -62,6 +64,7 @@ public class ChatController {
 
     /**
      * shows chatboard.
+     *
      * @param sessionId id of the session
      */
     @GetMapping("/chatBoard")
@@ -73,6 +76,7 @@ public class ChatController {
 
     /**
      * user chat.
+     *
      * @param principal sender of the message
      * @param msg message that should be send
      */
