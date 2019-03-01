@@ -14,7 +14,7 @@ The key aspects are:
 * Conflict resolution
 
 == Management
-* To provide a convenient overview of our project we used **javadocs** throughout the project.
+* To provide a convenient overview of our project we used **Javadocs** throughout the project.
 * Since the project requires a certain amount of configuration we started our own **wiki** in github. Here we describe the different configurations and the initial setup. The **Logins** are also located there.
 
 
@@ -63,7 +63,7 @@ If somebody wants to rent an article that has not been returned yet, the renting
 A chat can be reached at `/chatBoard`. Messages can be sent to other users in the chat by providing the username.
 
 
-TIP: To test and explore the application, we have to two logins:
+TIP: To test and explore the application, we have created two separate accounts to log in:
  Hans, who is a base user and is able to borrow, lend and sell articles, and the Admin, who is also able
  to resolve conflicts.
 
@@ -73,7 +73,7 @@ TIP: To test and explore the application, we have to two logins:
 The design pattern we are aiming for is the classical Model-View-Controller (MVC) pattern.
 To outsource shared code from the controllers we introduced a additional service layer.
 Although this is conform with the MVC pattern it is also referred to as
-[Model-View-Controller-Service](https://glossar.hs-augsburg.de/Model-View-Controller-Service-Paradigma)
+https://glossar.hs-augsburg.de/Model-View-Controller-Service-Paradigma[Model-View-Controller-Service]
 pattern (MVCS).
 
 === Project structure
@@ -121,10 +121,10 @@ NOTE: The star-feature is _beta_ and not fully working.
 The `CustomUserDetails` class is simply needed to use our own `User` class with spring security.
 
 === PPTransaction
-The `PpTransaction` class represents a proPay transaction.
+The `PpTransaction` class represents a ProPay transaction.
 
 === ResolveConflict
-TODO: wright description
+TODO: Write description.
 
 === User/Person
 To represent customers of our platform we decided to split the required information into two
@@ -165,7 +165,7 @@ index, index filtered by categories, the login page and the registration page.
 
 === UserController
 The `UserController` maps user specific requests. In particular those which you can access through
-the navigationbar. Furthermore you can save your profile, add money to your propay-account and
+the navigation bar. Furthermore you can save your profile, add money to your ProPay account and
 access profile views.
 
 == Services
@@ -218,17 +218,17 @@ encodes/decodes the passwords on registration/login and additionally provides
 a strong encryption by applying the BCrypt-Hashfunction.
 
 
-== PropayHandler
+== ProPayHandler
 
 === AccountHandler
-The AccountHandler is responsible for all requests to Propay,
+The AccountHandler is responsible for all requests to ProPay,
 which target the /account URL.
 Most Functions do not check or return the status code,
-because they can never be called if Propay is not available or
+because they can never be called if ProPay is not available or
 the Request could not be performed.
 
 === PpAccount
-This class provides the model for the Accounts received by Propay.
+This class provides the model for the Accounts received by ProPay.
 The only Method implemented is used to show the Funds,
 which are actually free to user and not reserved.
 
@@ -236,20 +236,20 @@ which are actually free to user and not reserved.
 This class provides the model for the Reservations in the PpAccount.
 
 === Reservation Handler
-The ReservationHandler is responsible for all requests to Propay,
+The ReservationHandler is responsible for all requests to ProPay,
 which target the /reservation URL.
 The transfer Method is also called here by using the Local AccountHandler.
 This way we ensured that no Funds are blocked or used in between releasing
 the initial Reservation for the deposit and Price and creating the new deposit
 Reservation.
 Most Functions do not check or return the status code,
-because they can never be called if Propay is not available or
+because they can never be called if ProPay is not available or
 the Request could not be performed.
 
 
 == Deviations from the task descriptions
 * According to our architectural idea the available offers are **visible even when not logged in.**
-* A customer who lend an article isn't able to return it before the agreed endtime.
+* A customer who lend an article isn't able to return it before the agreed end time.
 * When a customer returns an article too late, the availability time for the article isn't updated.
 
 
@@ -257,6 +257,6 @@ the Request could not be performed.
 We have noticed, that a production file had been pushed to the 'master'-branch, even though the
 folder containing it had been *explicitly* ignored in the project's _.gitignore_.
 In order to not majorly disrupt the team's workflow and to ensure a qualitative end result,
-we have consulted with [Dr. Bendisposto]() [Mr. David Schneider](https://github.com/bivab) to not revert the git-history
+we have consulted with https://github.com/bendisposto[Dr. Bendisposto] and https://github.com/bivab[Mr. David Schneider] to not revert the git-history
 and keep it as is, but we have deleted the unwanted file from the repository in commit
-[c90bb08](https://github.com/hhu-propra2/abschlussprojekt-makeitlookeasy/commit/c90bb08f5ef96a8248156b6f9da2e6f95dc6d4a9).
+https://github.com/hhu-propra2/abschlussprojekt-makeitlookeasy/commit/c90bb08f5ef96a8248156b6f9da2e6f95dc6d4a9[c90bb08].

@@ -1,6 +1,6 @@
 dockerCompose {
     useComposeFiles = ['docker-compose-dev.yml']
-    startedServices = ['propay', 'db'] 
+    startedServices = ['propay', 'db']
 //  forceRecreate = false
 //  buildAdditionalArgs = ['--force-rm']
     waitForTcpPorts = true

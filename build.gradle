@@ -69,7 +69,7 @@ bootRun {
 }
 
 test {
-    doFirst{
+    doFirst {
         test.systemProperties = localTestProperties()
     }
 }
