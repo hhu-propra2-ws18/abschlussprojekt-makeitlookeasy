@@ -57,7 +57,7 @@ public class EmailSender {
     }
 
     /**
-     * TODO.
+     * configures the mailSender.
      */
     public void configureMailSender() {
         final Properties properties = new Properties();
