@@ -226,7 +226,7 @@ Most Functions do not check or return the status code,
 because they can never be called if ProPay is not available or
 the Request could not be performed.
 
-=== PpAccount
+=== PPAccount
 This class provides the model for the Accounts received by ProPay.
 The only Method implemented is used to show the Funds,
 which are actually free to user and not reserved.
@@ -285,3 +285,7 @@ Even in development-mode, persistence is realized through a bind mount configura
 production-mode persistence is guaranteed through unnamed docker-volumes, only port 8080 of the application itself
 is exposed to the local-machine, while the remaining services function by being linked to the main app, only
 exposing their ports inside the docker environment but not to the local host.
+
+== final note
+We implemented piTest and it passed all builds during the time we used junit4 (see travis build history).
+Unfortunately it had to be disabled after upgrading to junit5, as the current piTest release does not support this version yet.
