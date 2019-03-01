@@ -180,22 +180,22 @@ class ArticleControllerTest {
     @WithMockUser(roles = "user")
     void getEventsForCalendarShouldReturnAllEventsFromOneArticle() throws Exception {
         CalendarEvent event1 = new CalendarEvent();
-        event1.setEnd(123456L);
+        event1.setEnd("1998/02/18");
         event1.setTitle("title1");
-        event1.setStart(12345L);
+        event1.setStart("1998/02/16");
         CalendarEvent event2 = new CalendarEvent();
-        event2.setEnd(12345678L);
+        event2.setEnd("1998/02/20");
         event2.setTitle("title2");
-        event2.setStart(1234567L);
+        event2.setStart("1998/02/19");
         Mockito.when(calendarEventService.getAllEventsFromOneArticle(1L))
                 .thenReturn(Arrays.asList(event1, event2));
         mvc.perform(MockMvcRequestBuilders.get("/article/events?id=1"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].end").value(123456L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].end").value("1998/02/18"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].title").value("title1"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].start").value(12345L))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].end").value(12345678L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].start").value("1998/02/16"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].end").value("1998/02/20"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[1].title").value("title2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].start").value(1234567L));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.[1].start").value("1998/02/19"));
 
     }
 
