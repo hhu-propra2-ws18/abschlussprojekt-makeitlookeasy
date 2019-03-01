@@ -212,17 +212,31 @@ TODO: provide short description about the spring security configuration
 == PropayHandler
 
 === AccountHandler
-The `AcountHandler` gets Propay account Data, adds and transfers Funds except for reservation
-punishments.
+The AccountHandler is responsible for all requests to Propay,
+which target the /account URL.
+Most Functions do not check or return the status code,
+because they can never be called if Propay is not available or
+the Request could not be performed.
 
 === PpAccount
-TODO: provide description
+This class provides the model for the Accounts received by Propay.
+The only Method implemented is used to show the Funds,
+which are actually free to user and not reserved.
 
 === Reservation
-TODO: provide description
+This class provides the model for the Reservations in the PpAccount.
 
 === Reservation Handler
-The `Reservation Handler` handles Propay-Reservations.
+The ReservationHandler is responsible for all requests to Propay,
+which target the /reservation URL.
+The transfer Method is also called here by using the Local AccountHandler.
+This way we ensured that no Funds are blocked or used in between releasing
+the initial Reservation for the deposit and Price and creating the new deposit
+Reservation.
+Most Functions do not check or return the status code,
+because they can never be called if Propay is not available or
+the Request could not be performed.
+
 
 
 
