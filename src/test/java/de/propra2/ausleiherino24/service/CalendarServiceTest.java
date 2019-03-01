@@ -4,8 +4,8 @@ import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 import de.propra2.ausleiherino24.data.CaseRepository;
+import de.propra2.ausleiherino24.features.calendar.CalendarEvent;
 import de.propra2.ausleiherino24.model.Article;
-import de.propra2.ausleiherino24.model.CalendarEvent;
 import de.propra2.ausleiherino24.model.Case;
 import java.lang.reflect.Array;
 import java.util.ArrayList;

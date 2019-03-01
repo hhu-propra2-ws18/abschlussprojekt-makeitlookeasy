@@ -40,6 +40,7 @@ public class CalendarEventService {
             final CalendarEvent calendarEvent = new CalendarEvent();
             calendarEvent.setStart(calendarCase.getStartTime());
             calendarEvent.setEnd(calendarCase.getEndTime());
+            allCalendarEvents.add(calendarEvent);
         }
         return allCalendarEvents;
     }
