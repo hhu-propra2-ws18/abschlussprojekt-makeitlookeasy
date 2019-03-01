@@ -87,12 +87,23 @@ public class CaseService {
     /**
      * gets all cases owned by person.
      *
-     * @param personId personId of the owner of the lend article.
+     * @param personId personId of the owner of the article.
      * @return all cases, where the given id is the personId of the person who owns the article.
      */
     List<Case> getAllCasesFromPersonOwner(final Long personId) {
         return caseRepository
                 .findAllByArticleOwner(personService.findPersonById(personId).getUser());
+    }
+
+    /**
+     * gets all cases received by person.
+     *
+     * @param personId personId of the receiver of the lend/bought article.
+     * @return all cases, where the id is the id of the person who lends/bought the article.
+     */
+    private List<Case> getAllCasesFromPersonReceiver(final Long personId) {
+        return caseRepository
+                .findAllByReceiver(personService.findPersonById(personId).getUser());
     }
 
     /**
@@ -107,7 +118,7 @@ public class CaseService {
                                     && cases.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
                             .map(Case::getPpTransaction)
                             .collect(Collectors.toList()));
-            ppTransactions.addAll(getLendCasesFromPersonReceiver(personId).stream()
+            ppTransactions.addAll(getAllCasesFromPersonReceiver(personId).stream()
                     .filter(crequest -> crequest.getRequestStatus() != Case.REQUEST_DECLINED
                             && crequest.getRequestStatus() != Case.RENTAL_NOT_POSSIBLE)
                     .map(Case::getPpTransaction)
@@ -141,7 +152,7 @@ public class CaseService {
         if (accountHandler.hasValidFunds(username,
                 totalCost + articleService.findArticleById(articleId).getDeposit())
                 && articleNotRented(articleService.findArticleById(articleId), startTime,
-                endTime) && new Date().getTime()-86000000 < startTime && startTime < endTime
+                endTime) && new Date().getTime() - 86000000 < startTime && startTime < endTime
                 && !articleService.findArticleById(articleId).getOwner().getUsername()
                 .equals(username) && accountHandler.checkAvailability()) {
 
