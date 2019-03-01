@@ -1,23 +1,26 @@
 package de.propra2.ausleiherino24.web;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import de.propra2.ausleiherino24.Ausleiherino24Application;
 import de.propra2.ausleiherino24.model.Person;
 import de.propra2.ausleiherino24.model.User;
 import de.propra2.ausleiherino24.service.UserService;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,15 +36,23 @@ class MainControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @MockBean
     private UserService userService;
+
+    private User user;
 
     @BeforeEach
     void setup() {
-        userService = mock(UserService.class);
+        user = new User();
+        user.setUsername("user");
+        user.setRole("user");
+        user.setPerson(mock(Person.class));
     }
 
     @Test
+    @WithMockUser(roles = "user")
     void getMainPageTest() throws Exception {
+        when(userService.findUserByPrincipal(any(Principal.class))).thenReturn(user);
         mvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(MockMvcResultMatchers
                         .status().isOk())
@@ -89,16 +100,13 @@ class MainControllerTest {
                         .model().attribute("person", Matchers.instanceOf(Person.class)));
     }
 
-    @Disabled
     @Test
     void registerNewUserStatusTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/registerNewUser")).andExpect(MockMvcResultMatchers
                 .status().is3xxRedirection());
         Mockito.verify(userService, Mockito.times(1))
                 .saveUserWithProfile(
-                        ArgumentMatchers.refEq(new User()),
-                        ArgumentMatchers.refEq(new Person()),
-                        ArgumentMatchers.refEq("Created"));
+                        new User(), new Person(), "Created");
     }
 
 }
